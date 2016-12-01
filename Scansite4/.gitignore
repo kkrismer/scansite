@@ -1,0 +1,14 @@
+*~
+.gwt
+.settings
+
+*old*
+target
+lib
+temp
+scansite4_temp
+/target/
+misc
+src/main/resources/cfg
+.classpath
+.project
