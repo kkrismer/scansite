@@ -2,7 +2,7 @@
 .gwt
 .settings
 
-*old*
+src/main/webapp/img/old
 target
 lib
 temp
