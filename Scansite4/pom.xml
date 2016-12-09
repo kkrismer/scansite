@@ -67,18 +67,19 @@
 			<artifactId>axis2-adb</artifactId>
 			<version>1.6.2</version>
 		</dependency>
+
+        <dependency>
+            <groupId>org.biojava</groupId>
+            <artifactId>biojava-core</artifactId>
+            <version>4.2.4</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.biojava</groupId>
-			<artifactId>biojava3-core</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<artifactId>biojava-alignment</artifactId>
+			<version>4.2.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.biojava</groupId>
-			<artifactId>biojava3-alignment</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>

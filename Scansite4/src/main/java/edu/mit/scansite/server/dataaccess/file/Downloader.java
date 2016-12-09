@@ -8,15 +8,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLConnection;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.updater.ScansiteUpdaterException;
 
+import javax.net.ssl.*;
+
 /**
  * @author Tobieh
+ * @author Thomas
  */
 public class Downloader {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -26,9 +33,33 @@ public class Downloader {
 	public Downloader() {
 	}
 
-	public void setEncoding(String enc) {
-		ENCODING = enc;
+	//NEVER USED!
+//	public void setEncoding(String enc) {
+//		ENCODING = enc;
+//	}
+
+	/**
+      * Edits the SSL default context in a way that allows any self signed encryption certificate
+      * This is OK at this point since the data source is known and trusted
+      * Any other way one would have to edit the code each time the certificate would change
+      *
+      * @param url URL which is used for connecting to the data source
+      *
+      * @return HttpsURLConnection Actual connection which is used for downloading
+      *
+      * @throws NoSuchAlgorithmException Based on used SSLContext functions
+      * @throws KeyManagementException Based on used SSLContext functions
+      * @throws IOException Based on used SSLContext functions
+      */
+	private HttpsURLConnection prepareConnection(URL url) throws
+			NoSuchAlgorithmException, KeyManagementException, IOException {
+		SSLContext ctx = SSLContext.getInstance("TLS");
+		ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
+		SSLContext.setDefault(ctx);
+
+		return (HttpsURLConnection) url.openConnection();
 	}
+
 
 	/**
 	 * Downloads the file specified by the given URL and saves it in the given
@@ -36,7 +67,7 @@ public class Downloader {
 	 * 
 	 * @param fileUrl
 	 *            URL of the file that is going to be downloaded.
-	 * @param outputPath
+	 * @param localOutputPath
 	 *            The path+filename where the new file is going to be saved.
 	 * @throws ScansiteUpdaterException
 	 */
@@ -44,7 +75,7 @@ public class Downloader {
 			throws ScansiteUpdaterException {
 		final int BUFFER_SIZE = 1024;
 		OutputStream outstream = null;
-		URLConnection URLConn = null;
+		HttpsURLConnection URLConn = null;
 		InputStream instream = null;
 		try {
 			byte[] buffer;
@@ -53,7 +84,7 @@ public class Downloader {
 			File f = new File(localOutputPath);
 			outstream = new BufferedOutputStream(new FileOutputStream(f));
 
-			URLConn = fileUrl.openConnection();
+			URLConn = prepareConnection(fileUrl);
 			instream = URLConn.getInputStream();
 			logger.info("downloading large file...");
 
@@ -89,7 +120,7 @@ public class Downloader {
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
 			throw new ScansiteUpdaterException(e.getMessage(), e);
-		} catch (IOException e) {
+		} catch (IOException | NoSuchAlgorithmException | KeyManagementException e) {
 			logger.error(e.getMessage(), e);
 			throw new ScansiteUpdaterException(e.getMessage(), e);
 		} finally {
@@ -117,13 +148,13 @@ public class Downloader {
 	 */
 	public String downloadString(URL fileUrl) throws ScansiteUpdaterException {
 		final int BUFFER_SIZE = 1024;
-		URLConnection URLConn = null;
+		HttpsURLConnection URLConn = null;
 		InputStream instream = null;
 		StringBuilder s = new StringBuilder();
 		try {
 			byte[] buffer;
 
-			URLConn = fileUrl.openConnection();
+			URLConn = prepareConnection(fileUrl);
 			instream = URLConn.getInputStream();
 			buffer = new byte[BUFFER_SIZE];
 
@@ -137,7 +168,13 @@ public class Downloader {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new ScansiteUpdaterException(e.getMessage(), e);
-		} finally {
+		} catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
+            throw new ScansiteUpdaterException(e.getMessage(), e);
+        } catch (KeyManagementException e) {
+            logger.error(e.getMessage(), e);
+            throw new ScansiteUpdaterException(e.getMessage(), e);
+        } finally {
 			try {
 				if (instream != null) {
 					instream.close();
@@ -146,6 +183,21 @@ public class Downloader {
 				logger.error(e.getMessage(), e);
 				throw new ScansiteUpdaterException(e.getMessage(), e);
 			}
+		}
+	}
+
+
+	private static class DefaultTrustManager implements X509TrustManager {
+
+		@Override
+		public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
 		}
 	}
 }
