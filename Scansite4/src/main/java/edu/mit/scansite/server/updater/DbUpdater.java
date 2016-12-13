@@ -1,11 +1,6 @@
 package edu.mit.scansite.server.updater;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -14,6 +9,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -171,7 +167,7 @@ public abstract class DbUpdater implements Runnable {
 		}
 
 		// clean up, remove old tables and delete temporary files
-		cleanup();
+		cleanup(f);
 	}
 
 	private void saveDataSource(DataSource dataSource) {
@@ -332,9 +328,9 @@ public abstract class DbUpdater implements Runnable {
 	/**
 	 * Deletes all the files that have been created before.
 	 * 
-	 * @param ssTransliterator
+	 * @param f
 	 */
-	protected void cleanup() {
+	protected void cleanup(File f) {
 		try {
 			for (BufferedReader reader : readers) {
 				reader.close();
@@ -344,14 +340,20 @@ public abstract class DbUpdater implements Runnable {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		// TODO delete files
-		// File f;
-		// for (String dbFileName : dbFileNames) {
-		// f = new File(getFilePath(dbFileName));
-		// f.delete();
-		// }
-		// f = new File(getFilePath(tempFileName));
-		// f.delete();
+		File dir;
+		if (f.isDirectory()){
+            dir = f;
+        } else {
+            dir = f.getParentFile();
+            f.delete();
+        }
+
+        try {
+            FileUtils.deleteDirectory(dir);
+        } catch (IOException e) {
+            logger.warn(e.getMessage());
+            logger.warn("Could not delete the temporary directory [" + dir.getAbsolutePath() + "]! Please do so manually!");
+        }
 	}
 
 	protected String getFilePath(String filename) {
