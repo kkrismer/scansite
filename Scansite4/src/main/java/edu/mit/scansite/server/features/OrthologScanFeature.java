@@ -7,20 +7,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//new imports
-import org.biojava.nbio.alignment.Alignments; //PairwiseSequenceAlignerType enclosing class: alignments
+import org.biojava.nbio.alignment.Alignments;
 import org.biojava.nbio.alignment.SimpleGapPenalty;
-import org.biojava.nbio.core.alignment.matrices.SimpleSubstitutionMatrix;
+import org.biojava.nbio.alignment.template.GapPenalty;
 import org.biojava.nbio.core.alignment.matrices.SubstitutionMatrixHelper;
 import org.biojava.nbio.core.alignment.template.AlignedSequence;
-import org.biojava.nbio.alignment.template.GapPenalty;
 import org.biojava.nbio.core.alignment.template.Profile;
 import org.biojava.nbio.core.alignment.template.SequencePair;
 import org.biojava.nbio.core.alignment.template.SubstitutionMatrix;
 import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
 import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,42 +55,29 @@ public class OrthologScanFeature {
 	private static char GAP_SYMBOL = '-';
 
 	private interface ProteinProcessor {
-		List<Integer> findPhosphoSitePositions(LightWeightProtein protein)
-				throws DataAccessException;
+		List<Integer> findPhosphoSitePositions(LightWeightProtein protein) throws DataAccessException;
 
-		List<ScanResultSite> checkSite(Protein protein,
-				PhosphoSitesFeature phosphoSiteFinder, int position,
+		List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
 				boolean publicOnly) throws DataAccessException;
 
 		int findSiteForAlignment(LightWeightProtein protein);
 
-		boolean init(List<Protein> proteins,
-				PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
+		boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
 				throws DataAccessException;
 	}
 
-	public OrthologScanSequencePatternResult scanOrthologsBySequencePattern(
-			SequencePattern sequencePattern, DataSource orthologyDataSource,
-			LightWeightProtein lightWeightProtein,
-			HistogramStringency stringency, int alignmentRadius, boolean publicOnly)
-			throws DatabaseException {
-		Protein protein = ServiceLocator
-				.getInstance()
-				.getDaoFactory(dbConnector)
-				.getProteinDao()
-				.get(lightWeightProtein.getIdentifier(),
-						lightWeightProtein.getDataSource());
+	public OrthologScanSequencePatternResult scanOrthologsBySequencePattern(SequencePattern sequencePattern,
+			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
+			int alignmentRadius, boolean publicOnly) throws DatabaseException {
+		Protein protein = ServiceLocator.getInstance().getDaoFactory(dbConnector).getProteinDao()
+				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanSequencePatternResult(
-					"No protein with protein identifier "
-							+ lightWeightProtein.getIdentifier()
-							+ " and data source "
-							+ lightWeightProtein.getDataSource()
-									.getDisplayName() + " found");
+					"No protein with protein identifier " + lightWeightProtein.getIdentifier() + " and data source "
+							+ lightWeightProtein.getDataSource().getDisplayName() + " found");
 		}
 		final OrthologScanSequencePatternResult result = new OrthologScanSequencePatternResult(
-				new OrthologScanResult(orthologyDataSource, protein,
-						stringency, alignmentRadius));
+				new OrthologScanResult(orthologyDataSource, protein, stringency, alignmentRadius));
 		final SubstitutionMatrix<AminoAcidCompound> matrix = SubstitutionMatrixHelper.getBlosum80();
 		final GapPenalty penalty = new SimpleGapPenalty();
 
@@ -103,26 +87,21 @@ public class OrthologScanFeature {
 			private String targetSequence;
 
 			@Override
-			public List<Integer> findPhosphoSitePositions(
-					LightWeightProtein protein) throws DataAccessException {
+			public List<Integer> findPhosphoSitePositions(LightWeightProtein protein) throws DataAccessException {
 				List<Integer> positions = new LinkedList<Integer>();
 				List<Integer> patternStartPositions = new LinkedList<Integer>();
-				Pattern regex = Pattern.compile(result.getSequencePattern()
-						.getRegEx(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL
-						| Pattern.MULTILINE);
+				Pattern regex = Pattern.compile(result.getSequencePattern().getRegEx(),
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
 				Matcher matcher = regex.matcher(protein.getSequence());
 
 				while (matcher.find()) {
 					patternStartPositions.add(matcher.start());
 				}
 
-				if (result.getSequencePattern()
-						.hasExpectedPhosphorylationSites()) {
+				if (result.getSequencePattern().hasExpectedPhosphorylationSites()) {
 					for (Integer patternStartPosition : patternStartPositions) {
-						for (int j = 0; j < result.getSequencePattern()
-								.getPositions().size(); ++j) {
-							if (result.getSequencePattern().getPositions()
-									.get(j).isExpectedPhosphorylationSite()) {
+						for (int j = 0; j < result.getSequencePattern().getPositions().size(); ++j) {
+							if (result.getSequencePattern().getPositions().get(j).isExpectedPhosphorylationSite()) {
 								positions.add(patternStartPosition + j);
 							}
 						}
@@ -132,40 +111,34 @@ public class OrthologScanFeature {
 			}
 
 			@Override
-			public List<ScanResultSite> checkSite(Protein protein,
-					PhosphoSitesFeature phosphoSiteFinder, int position,
+			public List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
 					boolean publicOnly) throws DataAccessException {
-				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(
-						protein, position, result.getStringency(), publicOnly);
+				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(protein, position, result.getStringency(),
+						publicOnly);
 			}
 
 			@Override
 			public int findSiteForAlignment(LightWeightProtein protein) {
-                try {
-                    return localizeSite(new ProteinSequence(targetSequence),
-                            new ProteinSequence(protein.getSequence()), matrix,
-                            penalty);
-                } catch (CompoundNotFoundException ex) {
-                    logger.error(ex.getMessage(), ex);
-                    return -1;
-                }
-            }
+				try {
+					return localizeSite(new ProteinSequence(targetSequence), new ProteinSequence(protein.getSequence()),
+							matrix, penalty);
+				} catch (CompoundNotFoundException ex) {
+					logger.error(ex.getMessage(), ex);
+					return -1;
+				}
+			}
 
 			@Override
-			public boolean init(List<Protein> proteins,
-					PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
+			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
 					throws DataAccessException {
-				Protein queryProtein = getProteinById(proteins, result
-						.getProtein().getIdentifier());
+				Protein queryProtein = getProteinById(proteins, result.getProtein().getIdentifier());
 				List<Integer> queryProteinPhosphoSites = findPhosphoSitePositions(queryProtein);
 				List<ScanResultSite> sites = new LinkedList<ScanResultSite>();
 				for (Integer phosphoSite : queryProteinPhosphoSites) {
-					sites.addAll(checkSite(queryProtein, phosphoSiteFinder,
-							phosphoSite, publicOnly));
+					sites.addAll(checkSite(queryProtein, phosphoSiteFinder, phosphoSite, publicOnly));
 				}
 				if (sites.size() > 0) {
-					targetSequence = sites.get(0).getSiteSequence()
-							.toUpperCase();
+					targetSequence = sites.get(0).getSiteSequence().toUpperCase();
 					return true;
 				} else {
 					return false;
@@ -178,28 +151,18 @@ public class OrthologScanFeature {
 		return result;
 	}
 
-	public OrthologScanMotifResult scanOrthologsByMotifGroup(int sitePosition,
-			LightWeightMotifGroup motifGroup, DataSource orthologyDataSource,
-			LightWeightProtein lightWeightProtein,
-			HistogramStringency stringency, int alignmentRadius, boolean publicOnly)
-			throws DatabaseException {
-		Protein protein = ServiceLocator
-				.getInstance()
-				.getDaoFactory(dbConnector)
-				.getProteinDao()
-				.get(lightWeightProtein.getIdentifier(),
-						lightWeightProtein.getDataSource());
+	public OrthologScanMotifResult scanOrthologsByMotifGroup(int sitePosition, LightWeightMotifGroup motifGroup,
+			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
+			int alignmentRadius, boolean publicOnly) throws DatabaseException {
+		Protein protein = ServiceLocator.getInstance().getDaoFactory(dbConnector).getProteinDao()
+				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanMotifResult(
-					"No protein with protein identifier "
-							+ lightWeightProtein.getIdentifier()
-							+ " and data source "
-							+ lightWeightProtein.getDataSource()
-									.getDisplayName() + " found");
+					"No protein with protein identifier " + lightWeightProtein.getIdentifier() + " and data source "
+							+ lightWeightProtein.getDataSource().getDisplayName() + " found");
 		}
 		final OrthologScanMotifResult result = new OrthologScanMotifResult(
-				new OrthologScanResult(orthologyDataSource, protein,
-						stringency, alignmentRadius));
+				new OrthologScanResult(orthologyDataSource, protein, stringency, alignmentRadius));
 		final SubstitutionMatrix<AminoAcidCompound> matrix = SubstitutionMatrixHelper.getBlosum80();
 		final GapPenalty penalty = new SimpleGapPenalty();
 
@@ -211,14 +174,11 @@ public class OrthologScanFeature {
 			private String targetSequence;
 
 			@Override
-			public List<Integer> findPhosphoSitePositions(
-					LightWeightProtein protein) throws DataAccessException {
+			public List<Integer> findPhosphoSitePositions(LightWeightProtein protein) throws DataAccessException {
 				List<Integer> positions = new LinkedList<Integer>();
 				try {
-					lastPosition = localizeSite(
-                            new ProteinSequence(targetSequence),
-                            new ProteinSequence(protein.getSequence()), matrix,
-                            penalty);
+					lastPosition = localizeSite(new ProteinSequence(targetSequence),
+							new ProteinSequence(protein.getSequence()), matrix, penalty);
 				} catch (CompoundNotFoundException ex) {
 					logger.error(ex.getMessage(), ex);
 					return new LinkedList<Integer>();
@@ -228,11 +188,9 @@ public class OrthologScanFeature {
 			}
 
 			@Override
-			public List<ScanResultSite> checkSite(Protein protein,
-					PhosphoSitesFeature phosphoSiteFinder, int position,
+			public List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
 					boolean publicOnly) throws DataAccessException {
-				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(
-						protein, position, result.getStringency(),
+				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(protein, position, result.getStringency(),
 						result.getMotifGroup(), publicOnly);
 			}
 
@@ -242,11 +200,9 @@ public class OrthologScanFeature {
 			}
 
 			@Override
-			public boolean init(List<Protein> proteins,
-					PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly) {
+			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly) {
 				try {
-					targetSequence = extractSiteSequence(result.getProtein()
-							.getSequence(), result.getSitePosition());
+					targetSequence = extractSiteSequence(result.getProtein().getSequence(), result.getSitePosition());
 					return true;
 				} catch (IllegalArgumentException ex) {
 					return false;
@@ -261,15 +217,10 @@ public class OrthologScanFeature {
 
 	private void findSites(ProteinProcessor processor, OrthologScanResult result, boolean publicOnly)
 			throws DatabaseException {
-		List<Protein> proteins = ServiceLocator
-				.getInstance()
-				.getDaoFactory(dbConnector)
-				.getOrthologDao()
-				.getOrthologs(result.getOrthologyDataSource(),
-						result.getProtein().getDataSource(),
-						result.getProtein().getIdentifier());
-		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature(
-				dbConnector);
+		List<Protein> proteins = ServiceLocator.getInstance().getDaoFactory(dbConnector).getOrthologDao().getOrthologs(
+				result.getOrthologyDataSource(), result.getProtein().getDataSource(),
+				result.getProtein().getIdentifier());
+		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature(dbConnector);
 		List<Ortholog> orthologs = new LinkedList<Ortholog>();
 		List<OrthologScanSiteRegion> siteRegions = new LinkedList<OrthologScanSiteRegion>();
 		Ortholog ortholog = null;
@@ -279,32 +230,24 @@ public class OrthologScanFeature {
 			Collections.sort(proteins, new Comparator<Protein>() {
 				@Override
 				public int compare(Protein proteinA, Protein proteinB) {
-					return proteinA.getIdentifier().compareTo(
-							proteinB.getIdentifier());
+					return proteinA.getIdentifier().compareTo(proteinB.getIdentifier());
 				}
 			});
 
 			if (processor.init(proteins, phosphoSiteFinder, publicOnly)) {
 				for (Protein protein : proteins) {
 					ortholog = new Ortholog();
-					List<Integer> phosphoSitePositions = processor
-							.findPhosphoSitePositions(protein);
+					List<Integer> phosphoSitePositions = processor.findPhosphoSitePositions(protein);
 					List<ScanResultSite> phosphoSites = new LinkedList<ScanResultSite>();
 					List<Integer> nonhitPositions = new LinkedList<Integer>();
 
-					protein.setSpecies(ServiceLocator
-							.getInstance()
-							.getDaoFactory(dbConnector)
-							.getTaxonDao()
-							.getById(protein.getSpecies().getId(),
-									result.getProtein().getDataSource()));
+					protein.setSpecies(ServiceLocator.getInstance().getDaoFactory(dbConnector).getTaxonDao()
+							.getById(protein.getSpecies().getId(), result.getProtein().getDataSource()));
 
 					for (Integer sitePosition : phosphoSitePositions) {
-						List<ScanResultSite> currentPhosphoSites = processor
-								.checkSite(protein, phosphoSiteFinder,
-										sitePosition, publicOnly);
-						if (currentPhosphoSites != null
-								&& currentPhosphoSites.size() > 0) {
+						List<ScanResultSite> currentPhosphoSites = processor.checkSite(protein, phosphoSiteFinder,
+								sitePosition, publicOnly);
+						if (currentPhosphoSites != null && currentPhosphoSites.size() > 0) {
 							phosphoSites.addAll(currentPhosphoSites);
 						} else {
 							nonhitPositions.add(sitePosition);
@@ -314,17 +257,15 @@ public class OrthologScanFeature {
 
 					if (phosphoSitePositions.size() == 0) {
 						int tempPos = processor.findSiteForAlignment(protein);
-					    if (tempPos > -1) {
-					        phosphoSitePositions.add(tempPos);
-                        }
+						if (tempPos > -1) {
+							phosphoSitePositions.add(tempPos);
+						}
 					}
 
 					for (Integer sitePosition : phosphoSitePositions) {
-						siteRegions.add(buildAlignmentRegion(
-								protein.getSequence(), protein.getIdentifier(),
+						siteRegions.add(buildAlignmentRegion(protein.getSequence(), protein.getIdentifier(),
 								protein.getSpecies().getName(), sitePosition,
-								isValidPhosphoSite(sitePosition, phosphoSites),
-								result.getAlignmentRadius()));
+								isValidPhosphoSite(sitePosition, phosphoSites), result.getAlignmentRadius()));
 					}
 
 					ortholog.setProtein(protein);
@@ -337,18 +278,17 @@ public class OrthologScanFeature {
 				}
 
 				try {
-                    List<ProteinSequence> downstreamSequences = getDownstreamSequences(siteRegions);
-                    List<ProteinSequence> upstreamSequences = getUpstreamSequences(siteRegions);
-                    Profile<ProteinSequence, AminoAcidCompound> downstreamProfile = Alignments
-                            .getMultipleSequenceAlignment(downstreamSequences);
-                    Profile<ProteinSequence, AminoAcidCompound> upstreamProfile = Alignments
-                            .getMultipleSequenceAlignment(upstreamSequences);
-                    result.setSequenceAlignment(combineAlignments(
-                            downstreamProfile, upstreamProfile, siteRegions));
-                } catch (CompoundNotFoundException ex) {
-                    logger.error(ex.getMessage(), ex);
-                    return; //todo check if this is ok?
-                }
+					List<ProteinSequence> downstreamSequences = getDownstreamSequences(siteRegions);
+					List<ProteinSequence> upstreamSequences = getUpstreamSequences(siteRegions);
+					Profile<ProteinSequence, AminoAcidCompound> downstreamProfile = Alignments
+							.getMultipleSequenceAlignment(downstreamSequences);
+					Profile<ProteinSequence, AminoAcidCompound> upstreamProfile = Alignments
+							.getMultipleSequenceAlignment(upstreamSequences);
+					result.setSequenceAlignment(combineAlignments(downstreamProfile, upstreamProfile, siteRegions));
+				} catch (CompoundNotFoundException ex) {
+					logger.error(ex.getMessage(), ex);
+					return; // todo check if this is ok?
+				}
 
 			} else {
 				for (Protein protein : proteins) {
@@ -363,8 +303,7 @@ public class OrthologScanFeature {
 		result.setOrthologs(orthologs);
 	}
 
-	private boolean isValidPhosphoSite(Integer sitePosition,
-			List<ScanResultSite> phosphoSites) {
+	private boolean isValidPhosphoSite(Integer sitePosition, List<ScanResultSite> phosphoSites) {
 		for (ScanResultSite site : phosphoSites) {
 			if (site.getPosition() == sitePosition) {
 				return true;
@@ -387,33 +326,30 @@ public class OrthologScanFeature {
 				sitePosition + ScansiteConstants.HALF_WINDOW);
 	}
 
-	private List<ProteinSequence> getDownstreamSequences(
-			List<OrthologScanSiteRegion> siteRegions) throws CompoundNotFoundException {
+	private List<ProteinSequence> getDownstreamSequences(List<OrthologScanSiteRegion> siteRegions)
+			throws CompoundNotFoundException {
 		List<ProteinSequence> downstreamSequences = new LinkedList<ProteinSequence>();
 
 		for (OrthologScanSiteRegion siteRegion : siteRegions) {
-				downstreamSequences.add(new ProteinSequence(siteRegion
-                        .getDownstreamRegion()));
+			downstreamSequences.add(new ProteinSequence(siteRegion.getDownstreamRegion()));
 		}
 
 		return downstreamSequences;
 	}
 
-	private List<ProteinSequence> getUpstreamSequences(
-			List<OrthologScanSiteRegion> siteRegions) throws CompoundNotFoundException {
+	private List<ProteinSequence> getUpstreamSequences(List<OrthologScanSiteRegion> siteRegions)
+			throws CompoundNotFoundException {
 		List<ProteinSequence> upstreamSequences = new LinkedList<ProteinSequence>();
 
 		for (OrthologScanSiteRegion siteRegion : siteRegions) {
-				upstreamSequences.add(new ProteinSequence(siteRegion
-                        .getUpstreamRegion()));
+			upstreamSequences.add(new ProteinSequence(siteRegion.getUpstreamRegion()));
 		}
 
 		return upstreamSequences;
 	}
 
-	private OrthologScanSiteRegion buildAlignmentRegion(String sequence,
-			String identifier, String speciesName, int phosphoSitePosition,
-			boolean isPredictedSite, int alignmentRadius) {
+	private OrthologScanSiteRegion buildAlignmentRegion(String sequence, String identifier, String speciesName,
+			int phosphoSitePosition, boolean isPredictedSite, int alignmentRadius) {
 		OrthologScanSiteRegion siteRegion = new OrthologScanSiteRegion();
 		int regionStart;
 		int regionEnd;
@@ -433,30 +369,23 @@ public class OrthologScanFeature {
 			regionEnd = phosphoSitePosition + alignmentRadius;
 		}
 
-		siteRegion.setDownstreamRegion(sequence.substring(regionStart,
-				phosphoSitePosition).toUpperCase());
-		siteRegion.setUpstreamRegion(sequence.substring(
-				phosphoSitePosition + 1, regionEnd).toUpperCase());
-		siteRegion.setPhosphorylatedAminoAcid(sequence
-				.charAt(phosphoSitePosition));
+		siteRegion.setDownstreamRegion(sequence.substring(regionStart, phosphoSitePosition).toUpperCase());
+		siteRegion.setUpstreamRegion(sequence.substring(phosphoSitePosition + 1, regionEnd).toUpperCase());
+		siteRegion.setPhosphorylatedAminoAcid(sequence.charAt(phosphoSitePosition));
 
 		return siteRegion;
 	}
 
-	private int localizeSite(ProteinSequence targetSequence,
-			ProteinSequence unlocalizedSiteSequence,
+	private int localizeSite(ProteinSequence targetSequence, ProteinSequence unlocalizedSiteSequence,
 			SubstitutionMatrix<AminoAcidCompound> matrix, GapPenalty penalty) {
-		SequencePair<ProteinSequence, AminoAcidCompound> pair = Alignments
-				.getPairwiseAlignment(unlocalizedSiteSequence, targetSequence,
-						Alignments.PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
+		SequencePair<ProteinSequence, AminoAcidCompound> pair = Alignments.getPairwiseAlignment(unlocalizedSiteSequence,
+				targetSequence, Alignments.PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
 
 		// remove gaps
-		int offset = targetSequence.getSequenceAsString().indexOf(
-				pair.getTarget().getSequenceAsString()
-						.replaceAll(Character.toString(GAP_SYMBOL), ""));
+		int offset = targetSequence.getSequenceAsString()
+				.indexOf(pair.getTarget().getSequenceAsString().replaceAll(Character.toString(GAP_SYMBOL), ""));
 		try {
-			return pair.getIndexInQueryAt(ScansiteConstants.HALF_WINDOW
-					- offset);
+			return pair.getIndexInQueryAt(ScansiteConstants.HALF_WINDOW - offset);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			// TODO used to be unreliable - solved?
@@ -464,37 +393,29 @@ public class OrthologScanFeature {
 		}
 	}
 
-	private SequenceAlignment combineAlignments(
-			Profile<ProteinSequence, AminoAcidCompound> downstreamProfile,
-			Profile<ProteinSequence, AminoAcidCompound> upstreamProfile,
-			List<OrthologScanSiteRegion> siteRegions) {
+	private SequenceAlignment combineAlignments(Profile<ProteinSequence, AminoAcidCompound> downstreamProfile,
+			Profile<ProteinSequence, AminoAcidCompound> upstreamProfile, List<OrthologScanSiteRegion> siteRegions) {
 		SequenceAlignment alignment = new SequenceAlignment();
 
 		if (downstreamProfile.getAlignedSequences().size() > 0) {
-			alignment.setPhosphoSitePosition(downstreamProfile
-					.getAlignedSequences().get(0).getSequenceAsString()
-					.length());
+			alignment.setPhosphoSitePosition(
+					downstreamProfile.getAlignedSequences().get(0).getSequenceAsString().length());
 		}
 
 		for (OrthologScanSiteRegion siteRegion : siteRegions) {
-			alignment.addSequence(new SequenceAlignmentElement(siteRegion
-					.getIdentifier(), findAlignment(
-					downstreamProfile.getAlignedSequences(),
-					siteRegion.getDownstreamRegion())
-					+ siteRegion.getPhosphorylatedAminoAcid()
-					+ findAlignment(upstreamProfile.getAlignedSequences(),
-							siteRegion.getUpstreamRegion()), siteRegion
-					.getSpecies(), siteRegion.isPredictedSite()));
+			alignment.addSequence(new SequenceAlignmentElement(siteRegion.getIdentifier(),
+					findAlignment(downstreamProfile.getAlignedSequences(), siteRegion.getDownstreamRegion())
+							+ siteRegion.getPhosphorylatedAminoAcid()
+							+ findAlignment(upstreamProfile.getAlignedSequences(), siteRegion.getUpstreamRegion()),
+					siteRegion.getSpecies(), siteRegion.isPredictedSite()));
 		}
 		return alignment;
 	}
 
-	private String findAlignment(
-			List<AlignedSequence<ProteinSequence, AminoAcidCompound>> alignedSequences,
+	private String findAlignment(List<AlignedSequence<ProteinSequence, AminoAcidCompound>> alignedSequences,
 			String originalSequence) {
 		for (AlignedSequence<ProteinSequence, AminoAcidCompound> alignedSequence : alignedSequences) {
-			if (alignedSequence.getOriginalSequence().getSequenceAsString()
-					.equals(originalSequence)) {
+			if (alignedSequence.getOriginalSequence().getSequenceAsString().equals(originalSequence)) {
 				return alignedSequence.getSequenceAsString();
 			}
 		}
