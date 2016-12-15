@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -75,7 +76,6 @@ public class Downloader {
 			throws ScansiteUpdaterException {
 		final int BUFFER_SIZE = 1024;
 		OutputStream outstream = null;
-		HttpsURLConnection URLConn = null;
 		InputStream instream = null;
 		try {
 			byte[] buffer;
@@ -84,8 +84,17 @@ public class Downloader {
 			File f = new File(localOutputPath);
 			outstream = new BufferedOutputStream(new FileOutputStream(f));
 
-			URLConn = prepareConnection(fileUrl);
-			instream = URLConn.getInputStream();
+			HttpsURLConnection httpsConn;
+			URLConnection httpConn;
+
+			if(fileUrl.toString().startsWith("https")) {
+				httpsConn = prepareConnection(fileUrl);
+				instream = httpsConn.getInputStream();
+			} else {
+				httpConn = fileUrl.openConnection();
+				instream = httpConn.getInputStream();
+			}
+
 			logger.info("downloading large file...");
 
 			buffer = new byte[BUFFER_SIZE];

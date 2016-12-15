@@ -23,7 +23,12 @@ public class DropTableCommand extends DbUpdateCommand {
 
   @Override
   protected String doGetSqlStatement() throws DataAccessException {
-    return "DROP TABLE " + tableName;
+    return "IF EXISTS(SELECT table_name" +
+            " FROM INFORMATION_SCHEMA.TABLES "
+            +"WHERE table_schema = 'scansite4' "
+            +"AND table_name LIKE '" + tableName
+            + "') THEN DROP TABLE " + tableName
+            + "; END IF";
   }
 
 }

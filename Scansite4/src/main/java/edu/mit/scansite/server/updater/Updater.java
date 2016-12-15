@@ -2,6 +2,9 @@ package edu.mit.scansite.server.updater;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +49,19 @@ public class Updater {
 		fillDataSourceTypesTable(updaterConfig.getDataSourceTypes());
 		fillIdentifierTypesTable(updaterConfig.getIdentifierTypes());
 		fillEvidenceCodesTable(updaterConfig.getEvidenceCodes());
+		ExecutorService es = Executors.newCachedThreadPool();
 		for (DataSourceMetaInfo db : updaterConfig.getDataSourceMetaInfos()) {
 			DbUpdater updater = getUpdater(updaterConfig.getTempDirPath(),
 					updaterConfig.getInvalidFilePrefix(), db, dbConnector);
-			(new Thread(updater)).start();
+			es.execute(updater);
 		}
+        es.shutdown();
+        try {
+            es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage());
+            throw new ScansiteUpdaterException(e);
+        }
 	}
 
 	private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
@@ -93,8 +104,10 @@ public class Updater {
 	 * Instantiates an updater by reflection (using DbUpdaterFactory) and
 	 * returns it
 	 * 
-	 * @param cfg
+	 * @param tempDirPath
+     * @param invalidFilePrefix
 	 * @param db
+     * @param dbConnector
 	 * @return
 	 * @throws ScansiteUpdaterException
 	 */

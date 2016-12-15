@@ -340,20 +340,22 @@ public abstract class DbUpdater implements Runnable {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		File dir;
-		if (f.isDirectory()){
-            dir = f;
-        } else {
-            dir = f.getParentFile();
-            f.delete();
-        }
 
-        try {
-            FileUtils.deleteDirectory(dir);
-        } catch (IOException e) {
-            logger.warn(e.getMessage());
-            logger.warn("Could not delete the temporary directory [" + dir.getAbsolutePath() + "]! Please do so manually!");
-        }
+		//Moved to DataInsertionManager
+//		File dir;
+//		if (f.isDirectory()){
+//            dir = f;
+//        } else {
+//            dir = f.getParentFile();
+//            f.delete();
+//        }
+//
+//        try {
+//            FileUtils.deleteDirectory(dir);
+//        } catch (IOException e) {
+//            logger.warn(e.getMessage());
+//            logger.warn("Could not delete the temporary directory [" + dir.getAbsolutePath() + "]! Please do so manually!");
+//        }
 	}
 
 	protected String getFilePath(String filename) {

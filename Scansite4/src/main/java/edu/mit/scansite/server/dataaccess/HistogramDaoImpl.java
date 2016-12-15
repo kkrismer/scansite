@@ -152,6 +152,9 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 					t = taxa.get(tId);
 				} else {
 					t = daoFac.getTaxonDao().getById(tId, currentDataSource);
+					if (t == null) {
+						throw new DataAccessException("Invalid taxon id in histogram data entry (taxon ID: " + tId + ")");
+					}
 					taxa.put(tId, t);
 				}
 

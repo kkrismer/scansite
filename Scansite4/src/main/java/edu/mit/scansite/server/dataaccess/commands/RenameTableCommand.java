@@ -21,7 +21,12 @@ public class RenameTableCommand extends DbUpdateCommand {
 
   @Override
   protected String doGetSqlStatement() throws DataAccessException {
-    return "ALTER TABLE " + fromTableName + " RENAME " + toTableName;
+      return "IF EXISTS(SELECT table_name" +
+              " FROM INFORMATION_SCHEMA.TABLES "
+              +"WHERE table_schema = 'scansite4' "
+              +"AND table_name LIKE '" + fromTableName
+              + "') THEN ALTER TABLE " + fromTableName + " RENAME " + toTableName
+              + "; END IF";
   }
 
   public void setFromTableName(String fromTableName) {
