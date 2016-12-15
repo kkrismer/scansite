@@ -147,17 +147,6 @@
 			<name>Maven Central Repo</name>
 			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
-		<repository>
-			<id>biojava-maven-repo</id>
-			<name>BioJava repository</name>
-			<url>http://www.biojava.org/download/maven/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -241,51 +230,6 @@
 							<url>${project.url}</url>
 						</manifestEntries>
 					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-					<buildOutputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</buildOutputDirectory>
-					<projectnatures>
-						<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-						<projectnature>com.google.gdt.eclipse.core.webAppNature</projectnature>
-						<nature>com.google.gdt.eclipse.designer.GWTNature</nature>
-						<nature>com.google.gwt.eclipse.core.gwtNature</nature>
-						<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
-						<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-						<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
-					</projectnatures>
-					<buildcommands>
-						<buildcommand>org.eclipse.wst.common.project.facet.core.builder</buildcommand>
-						<buildcommand>com.google.gdt.eclipse.designer.GWTBuilder</buildcommand>
-						<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-						<buildcommand>org.eclipse.wst.validation.validationbuilder</buildcommand>
-						<buildcommand>com.google.gdt.eclipse.core.webAppProjectValidator</buildcommand>
-						<buildcommand>com.google.appengine.eclipse.core.projectValidator</buildcommand>
-						<buildcommand>com.google.gwt.eclipse.core.gwtProjectValidator</buildcommand>
-					</buildcommands>
-					<classpathContainers>
-						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</classpathContainer>
-						<classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
-						<classpathContainer>org.eclipse.jst.j2ee.internal.web.container</classpathContainer>
-						<classpathContainer>org.eclipse.jst.j2ee.internal.module.container</classpathContainer>
-						<classpathContainer>org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER</classpathContainer>
-						<classpathContainer>org.eclipse.jdt.junit.JUNIT_CONTAINER/4</classpathContainer>
-						<classpathContainer>org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache
-							Tomcat v7.0</classpathContainer>
-					</classpathContainers>
-					<excludes>
-						<exclude>com.google.gwt:gwt-servlet</exclude>
-						<exclude>com.google.gwt:gwt-user</exclude>
-						<exclude>com.google.gwt:gwt-dev</exclude>
-						<exclude>javax.validation:validation-api</exclude>
-						<exclude>junit:junit</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 			<!-- Copy static web files before executing gwt:run -->
