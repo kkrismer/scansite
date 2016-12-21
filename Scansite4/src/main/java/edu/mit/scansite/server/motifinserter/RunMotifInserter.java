@@ -66,14 +66,11 @@ public class RunMotifInserter {
 			try {
 				User user = factory.getUserDao().get(email);
 				if (user == null) {
-					System.out
-							.println("Failed to find given user in database.\n\n"
+					throw new Exception("Failed to find given user in database.\n\n"
 									+ USAGE_TEXT);
-					return;
 				}
 			} catch (Exception e) {
-				System.out.println("Failed to find given user in database.\n\n"
-						+ USAGE_TEXT);
+				logger.error(e.getMessage());
 				return;
 			}
 

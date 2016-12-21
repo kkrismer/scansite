@@ -1,7 +1,7 @@
 package edu.mit.scansite.server.updater;
 
 import java.io.InputStream;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -49,22 +49,27 @@ public class Updater {
 		fillDataSourceTypesTable(updaterConfig.getDataSourceTypes());
 		fillIdentifierTypesTable(updaterConfig.getIdentifierTypes());
 		fillEvidenceCodesTable(updaterConfig.getEvidenceCodes());
-		ExecutorService es = Executors.newCachedThreadPool();
+
+		//database issues with parallel attempt -> switch to serial
 		for (DataSourceMetaInfo db : updaterConfig.getDataSourceMetaInfos()) {
+			ExecutorService es = Executors.newCachedThreadPool();
+			String updaterClass = db.getUpdaterClass();
 			DbUpdater updater = getUpdater(updaterConfig.getTempDirPath(),
 					updaterConfig.getInvalidFilePrefix(), db, dbConnector);
 			es.execute(updater);
+			logger.info("Running updater: " + updaterClass);
+			es.shutdown();
+			try {
+				es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+			} catch (InterruptedException e) {
+				logger.error(e.getMessage());
+				throw new ScansiteUpdaterException(e);
+			}
 		}
-        es.shutdown();
-        try {
-            es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            logger.error(e.getMessage());
-            throw new ScansiteUpdaterException(e);
-        }
 	}
 
-	private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
+
+    private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
 		try {
 			IdentifierDao dao = ServiceLocator.getInstance()
 					.getDaoFactory(dbConnector).getIdentifierDao();

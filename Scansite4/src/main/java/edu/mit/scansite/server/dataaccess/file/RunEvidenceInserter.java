@@ -159,7 +159,7 @@ public class RunEvidenceInserter {
 			}
 		}
 
-		System.out.println("Done!\n" + count
+		logger.info("Done!\n" + count
 				+ " entries have been added to the database.\n" + errors
 				+ " lines failed and have not been saved.\n");
 	}

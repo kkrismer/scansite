@@ -27,6 +27,7 @@ public class RunDatabaseInsertionManager {
     private static final String yeastFileIdentifier  = "-moye";
     private static final String emailIdentifier      = "-mail";
     private static final String evidenceIdentifier   = "-evid";
+    private static final String helpIdentifier       = "-help";
 
     private static String motifMammalFile;
     private static String motifYeastFile;
@@ -37,6 +38,7 @@ public class RunDatabaseInsertionManager {
     private static boolean isYeast  = false;
     private static boolean isMail   = false;
     private static boolean isEvid   = false;
+    private static boolean isHelp   = false;
 
     /**
       * As a number of parameters is required in this application,
@@ -58,15 +60,20 @@ public class RunDatabaseInsertionManager {
         String[] motifYeastParams   = new String[2];
         String[] evidenceParams     = new String[1];
 
-
         for (String arg : args) {
             if (isMammal || isYeast || isMail || isEvid) {
                 if (!assignParam(arg)) {
                     logger.error("ERROR! A parameter could not be assigned!\n" +
-                    "Parameter arguments should be given like:" +
-                            "-moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/ -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt");
+                            "Parameter arguments should be given like:" +
+                            "-moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
+                            " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt");
                     return;
-                } //else nothing to assign anyway
+                }
+            } else if (isHelp) {
+                logger.info("Parameter arguments should be given like:" +
+                        "-moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
+                        " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt");
+                return;
             }
 
             switch (arg) {
@@ -82,6 +89,9 @@ public class RunDatabaseInsertionManager {
                 case evidenceIdentifier:
                     isEvid = true;
                     break;
+                case helpIdentifier:
+                    isHelp = true;
+                    break;
             }
         }
 
@@ -91,28 +101,44 @@ public class RunDatabaseInsertionManager {
         motifYeastParams[1]   = motifEmail;
         evidenceParams[0]     = evidenceFile;
 
+        String errorFile = "";
+        if(motifMammalFile == null || motifMammalFile.isEmpty()) {
+            errorFile = "the Motif file (mammals)";
+        } else if (motifYeastFile == null || motifYeastFile.isEmpty()) {
+            errorFile = "The Motif file (yeast)";
+        } else if (motifEmail == null || motifEmail.isEmpty()) {
+            errorFile = "User email for motif runs";
+        } else if (evidenceFile == null || evidenceFile.isEmpty()) {
+            errorFile = "The evidence file";
+        }
+
+        if (!errorFile.isEmpty()) {
+            logger.error(errorFile + " was not assigned correctly. Please check the parameters!\n" +
+                    "Parameter arguments should be given like:" +
+                    "-moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
+                    " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt");
+            return;
+        }
+
         //logger does not write info logs to console
         logger.info("Assigned parameters successfully! Launching applications...");
-        System.out.println("Assigned parameters successfully! Launching applications...");
-        logger.info("Running \"RunUpdater\", Database Updater...");
-        System.out.println("Running \"RunUpdater\", Database Updater...");
-        RunUpdater.main(updaterParams);
+       try {
+           logger.info("Running \"RunUpdater\", Database Updater...");
+           RunUpdater.main(updaterParams);
 
-        logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
-        System.out.println("Running \"RunMotifInserter\" to insert mammal Motifs...");
-//        RunMotifInserter.main(motifMammalsParams);
+           logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
+           RunMotifInserter.main(motifMammalsParams);
 
-        logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
-        System.out.println("Running \"RunMotifInserter\" to insert yeast Motifs...");
-//        RunMotifInserter.main(motifYeastParams);
+           logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
+           RunMotifInserter.main(motifYeastParams);
 
-        logger.info("Running \"RunEvidenceInserter\" to insert evidence data...");
-        System.out.println("Running \"RunEvidenceInserter\" to insert evidence data...");
-//        RunEvidenceInserter.main(evidenceParams);
+           logger.info("Running \"RunEvidenceInserter\" to insert evidence data...");
+           RunEvidenceInserter.main(evidenceParams);
+       } catch (Exception ex) {
+           logger.error(ex.getMessage());
+       }
 
         logger.info("Deleting temporary files...");
-        System.out.println("Deleting temporary files...");
-
         File tempDir = new File("temp/");
         File scansite4_tempDir = new File("scansite4_temp/");
 
@@ -129,9 +155,7 @@ public class RunDatabaseInsertionManager {
             logger.warn("Could not delete the temporary directory [" + scansite4_tempDir.getAbsolutePath() + "]! Please do so manually!");
         }
 
-
         logger.info("Done.");
-        System.out.println("Done.");
     }
 
     private static boolean assignParam(String value) {
