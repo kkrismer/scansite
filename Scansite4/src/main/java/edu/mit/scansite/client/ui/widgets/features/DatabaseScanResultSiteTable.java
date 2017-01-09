@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.cell.client.SafeHtmlCell;
+import edu.mit.scansite.shared.transferobjects.*;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
@@ -40,9 +42,6 @@ import edu.mit.scansite.shared.dispatch.features.DbSearchHistogramRetrieverActio
 import edu.mit.scansite.shared.dispatch.features.DbSearchHistogramRetrieverResult;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanAction;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
-import edu.mit.scansite.shared.transferobjects.DatabaseSearchScanResultSite;
-import edu.mit.scansite.shared.transferobjects.HistogramStringency;
-import edu.mit.scansite.shared.transferobjects.MotifSelection;
 
 /**
  * @author Tobieh
@@ -283,6 +282,37 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 		}
 	};
 
+	private Column<DatabaseSearchScanResultSite, SafeHtml> evidenceLinkColumn = getColumn(
+			new SafeHtmlCell(), new DatabaseScanResultSiteTable.GetValue<SafeHtml>() {
+				@Override
+				public SafeHtml getValue(DatabaseSearchScanResultSite site) {
+					SafeHtmlBuilder shb = new SafeHtmlBuilder();
+					if (site != null && site.getSite().getEvidence() != null
+							&& !site.getSite().getEvidence().isEmpty()) {
+						for (int i = 0; i < site.getSite().getEvidence().size(); ++i) {
+							if (i > 0) {
+								shb.appendHtmlConstant("<span>, </span>");
+							}
+							EvidenceResource res = site.getSite().getEvidence().get(i);
+							if (res.getUri() != null) {
+								shb.appendHtmlConstant("<a href='"
+										+ res.getUri() + "' target='_blank'>"
+										+ res.getResourceName() + "</a>");
+							} else {
+								shb.appendHtmlConstant("<span>"
+										+ res.getResourceName() + "</span>");
+							}
+						}
+					}
+					return shb.toSafeHtml();
+				}
+			}, new FieldUpdater<DatabaseSearchScanResultSite, SafeHtml>() {
+				@Override
+				public void update(int index, DatabaseSearchScanResultSite object, SafeHtml value) {
+
+				}
+			});
+
 	private TextColumn<DatabaseSearchScanResultSite> mwColumn = new TextColumn<DatabaseSearchScanResultSite>() {
 		@Override
 		public String getValue(DatabaseSearchScanResultSite site) {
@@ -345,6 +375,11 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 					+ motifName, "Sequence" + motifName);
 			resultTable.addColumnStyleName(5 + i, "sequence");
 		}
+
+        if (result.getDataSource() != null) {
+            resultTable.addColumn(evidenceLinkColumn, "Previously Mapped Site", "Previously Mapped Site");
+        }
+
 		resultTable.addColumn(mwColumn, "Molecular Weight", "Molecular Weight");
 		resultTable.addColumn(piColumn, "pI", "pI");
 

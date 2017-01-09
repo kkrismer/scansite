@@ -558,7 +558,7 @@ public class ProteinScanResultSiteTable extends ScansiteWidget {
 		List<ScanResultSite> list = dataProvider.getList();
 		list.addAll(results.getHits());
 		Collections.sort(list, new ScanResultSiteComparator(
-				ComparableFields.GROUP, true));
+				ComparableFields.SCORE, true));
 		resultTable.setRowCount(list.size());
 		resultTable.setPageSize(list.size());
 	}
