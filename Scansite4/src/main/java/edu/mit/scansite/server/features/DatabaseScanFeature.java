@@ -47,8 +47,7 @@ public class DatabaseScanFeature {
 			DataSource dataSource, RestrictionProperties restrictionProperties,
 			int outputListSize, boolean doCreateFiles, boolean publicOnly, String realPath)
 			throws DataAccessException {
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-				dbConnector);
+		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(dbConnector);
 
 		DatabaseScanResult result = new DatabaseScanResult();
 		result.setMotifSelection(motifSelection);
