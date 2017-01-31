@@ -128,14 +128,14 @@ public class PresenterFactory {
 		} else if (token
 				.equalsIgnoreCase(NavigationEvent.PageId.FEATURE_SCAN_PROTEIN
 						.getId())) {
-			view = new ScanProteinPageViewImpl();
+			view = new ScanProteinPageViewImpl(user);
 			ScanProteinPageView scanProteinPageView = (ScanProteinPageView) view;
 			if (state instanceof ScanProteinPageState) {
 				presenter = new ScanProteinPagePresenter(scanProteinPageView,
-						(ScanProteinPageState) state);
+						(ScanProteinPageState) state, user);
 			} else {
 				presenter = new ScanProteinPagePresenter(scanProteinPageView,
-						null);
+						null, user);
 			}
 			scanProteinPageView
 					.setPresenter((ScanProteinPagePresenter) presenter);
@@ -154,11 +154,11 @@ public class PresenterFactory {
 		} else if (token
 				.equalsIgnoreCase(NavigationEvent.PageId.FEATURE_SCAN_DB
 						.getId())) {
-			view = new ScanDatabasePageViewImpl();
+			view = new ScanDatabasePageViewImpl(user);
 			ScanDatabasePageView scanDatabasePageView = (ScanDatabasePageView) view;
 			if (state instanceof ScanDatabasePageState) {
 				presenter = new ScanDatabasePagePresenter(scanDatabasePageView,
-						(ScanDatabasePageState) state, user);
+						(ScanDatabasePageState) state, user); //todo check
 			} else {
 				presenter = new ScanDatabasePagePresenter(scanDatabasePageView,
 						null, user);
@@ -168,7 +168,7 @@ public class PresenterFactory {
 		} else if (token
 				.equalsIgnoreCase(NavigationEvent.PageId.FEATURE_SCAN_DB_RESULT
 						.getId())) {
-			view = new ScanDatabaseResultPageViewImpl();
+			view = new ScanDatabaseResultPageViewImpl(user);
 			if (state instanceof ScanDatabaseResultPageState) {
 				presenter = new ScanDatabaseResultPagePresenter(
 						(ScanDatabaseResultPageView) view,
@@ -421,8 +421,8 @@ public class PresenterFactory {
 	public Presenter getScanDatabaseResultPagePresenter(
 			DatabaseScanResult result,
 			NavigationBarPresenter navigationBarPresenter,
-			BreadcrumbsPresenter breadcrumbsPresenter) {
-		PageView view = new ScanDatabaseResultPageViewImpl();
+			BreadcrumbsPresenter breadcrumbsPresenter, User user) {
+		PageView view = new ScanDatabaseResultPageViewImpl(user);
 		update(view, navigationBarPresenter, breadcrumbsPresenter);
 		return new ScanDatabaseResultPagePresenter(
 				(ScanDatabaseResultPageView) view, result);

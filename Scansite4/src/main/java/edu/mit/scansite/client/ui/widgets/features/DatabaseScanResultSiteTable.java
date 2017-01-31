@@ -52,6 +52,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 	public static final String HISTORY_KEY_PROT = "acc";
 	public static final String HISTORY_KEY_DB = "db";
 	private static final String EMPTY_CELL_TEXT = "";
+	private User user;
 
 	private final DispatchAsync dispatch = new StandardDispatchAsync(
 			new DefaultExceptionHandler());
@@ -61,6 +62,15 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 	private DatabaseScanResult result;
 	private CellTable<DatabaseSearchScanResultSite> resultTable;
 	private ListDataProvider<DatabaseSearchScanResultSite> dataProvider = new ListDataProvider<DatabaseSearchScanResultSite>();
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 	private Column<DatabaseSearchScanResultSite, String> submitColumn = getColumn(
 			new ClickableTextCell(), new GetValue<String>() {
@@ -82,7 +92,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 							false,
 							ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX],
 							ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
-							result.getLocalizationDataSource());
+							result.getLocalizationDataSource(), user != null ? user.getSessionId() : ""); //todo: find a solution, i.e.:
 
 					final WaitPopup waitPopup = new WaitPopup();
 					waitPopup.center();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.mit.scansite.shared.transferobjects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,18 +22,6 @@ import edu.mit.scansite.server.images.proteins.ProteinPlotPainter;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
-import edu.mit.scansite.shared.transferobjects.DataSource;
-import edu.mit.scansite.shared.transferobjects.DomainPosition;
-import edu.mit.scansite.shared.transferobjects.HistogramStringency;
-import edu.mit.scansite.shared.transferobjects.LightWeightLocalization;
-import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
-import edu.mit.scansite.shared.transferobjects.Localization;
-import edu.mit.scansite.shared.transferobjects.LocalizationType;
-import edu.mit.scansite.shared.transferobjects.Motif;
-import edu.mit.scansite.shared.transferobjects.MotifSelection;
-import edu.mit.scansite.shared.transferobjects.ScanResultSite;
-import edu.mit.scansite.shared.transferobjects.ScanResults;
-import edu.mit.scansite.shared.transferobjects.Taxon;
 import edu.mit.scansite.shared.util.ScansiteAlgorithms;
 import edu.mit.scansite.shared.util.ScansiteScoring;
 
@@ -60,21 +49,19 @@ public class ProteinScanFeature {
 			MotifSelection motifSelection, HistogramStringency stringency,
 			boolean showDomains, String histogramDataSource,
 			String histogramTaxon, DataSource localizationDataSource,
-			boolean doCreateFiles, String realPath) throws DataAccessException {
+			boolean doCreateFiles, boolean publicOnly, String realPath) throws DataAccessException {
 
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-				dbConnector);
+		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(dbConnector);
 		ArrayList<DomainPosition> domainPositions = null;
 
 		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(
-				motifSelection, true);
+				motifSelection, publicOnly);
 		Map<Motif, LightWeightLocalization> motifLocalizations = null;
 		Localization proteinLocalization = null;
 		if (localizationDataSource != null) {
 			if (locatableMotifs(motifs)) {
 				motifLocalizations = factory.getLocalizationDao()
-						.retrieveLocalizationsForMotifs(localizationDataSource,
-								motifs);
+						.retrieveLocalizationsForMotifs(localizationDataSource, motifs);
 			}
 			proteinLocalization = factory.getLocalizationDao()
 					.retrieveLocalization(localizationDataSource, protein);
@@ -94,8 +81,7 @@ public class ProteinScanFeature {
 		}
 
 		ScansiteAlgorithms alg = new ScansiteAlgorithms();
-		Double[] saValues = alg.calculateSurfaceAccessibility(protein
-				.getSequence());
+		Double[] saValues = alg.calculateSurfaceAccessibility(protein.getSequence());
 		DataSource ds = factory.getDataSourceDao().get(histogramDataSource);
 		Taxon t = factory.getTaxonDao().getByName(histogramTaxon, ds);
 		HistogramDao histDao = factory.getHistogramDao();
@@ -104,18 +90,15 @@ public class ProteinScanFeature {
 		ArrayList<ScanResultSite> hits = new ArrayList<ScanResultSite>();
 		if (!motifs.isEmpty()) {
 			if (locatableMotifs(motifs)) {
-				List<ServerHistogram> sHists = histDao.getHistograms(motifs,
-						ds, t.getId());
+				List<ServerHistogram> sHists = histDao.getHistograms(motifs, ds, t.getId());
 				for (ServerHistogram sh : sHists) {
-					double maxScore = sh.getScore(stringency
-							.getPercentileValue());
+					double maxScore = sh.getScore(stringency.getPercentileValue());
 					ArrayList<ScanResultSite> sites = scoring.scoreProtein(
 							sh.getMotif(), protein, maxScore);
 					for (ScanResultSite site : sites) {
 						if (motifLocalizations != null) {
 							if (motifLocalizations.containsKey(sh.getMotif())) {
-								site.setMotifLocalization(motifLocalizations
-										.get(sh.getMotif()));
+								site.setMotifLocalization(motifLocalizations.get(sh.getMotif()));
 							} else {
 								site.setMotifLocalization(new LightWeightLocalization(
 										new LocalizationType("unknown / NA"), 0));
@@ -161,6 +144,7 @@ public class ProteinScanFeature {
 			}
 			results.setImagePath(clientImagePath);
 		}
+
 		results.setOrthologyDataSources(findOrthologyDataSource(factory,
 				protein.getDataSource()));
 		results.setLocalizationDataSource(localizationDataSource);

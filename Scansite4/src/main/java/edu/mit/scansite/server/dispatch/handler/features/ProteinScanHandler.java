@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import edu.mit.scansite.server.dispatch.handler.user.LoginHandler;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.ActionException;
@@ -34,10 +35,13 @@ public class ProteinScanHandler implements
 		ActionHandler<ProteinScanAction, ProteinScanResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Provider<ServletContext> contextProvider;
+    private final LoginHandler loginHandler;
 
 	@Inject
-	public ProteinScanHandler(final Provider<ServletContext> contextProvider) {
+	public ProteinScanHandler(final Provider<ServletContext> contextProvider,
+            final Provider<LoginHandler> loginHandler) {
 		this.contextProvider = contextProvider;
+        this.loginHandler = loginHandler.get();
 	}
 
 	@Override
@@ -76,11 +80,13 @@ public class ProteinScanHandler implements
 			}
 			ProteinScanFeature feature = new ProteinScanFeature(
 					BootstrapListener.getDbConnector(contextProvider.get()));
-			ProteinScanResult result = feature.doProteinScan(protein,
+			ProteinScanResult result = feature.doProteinScan(protein, //todo get user info
 					action.getMotifSelection(), action.getStringency(),
 					action.isShowDomains(), action.getHistogramDataSource(),
 					action.getHistogramTaxon(),
-					action.getLocalizationDataSource(), true, contextProvider.get().getRealPath("/"));
+					action.getLocalizationDataSource(), true,
+                    !loginHandler.isSessionValidLogin(action.getUserSessionId()),
+                    contextProvider.get().getRealPath("/"));
 
 			// check if the sites are PhosphoSiteSites if swissprot is selected
 			if (accessions != null) {

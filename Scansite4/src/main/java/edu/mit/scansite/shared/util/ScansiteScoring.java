@@ -356,8 +356,8 @@ public class ScansiteScoring {
 	/**
 	 * Scores a list of proteins.
 	 * 
-	 * @param motif
-	 *            A motif.
+	 * @param motifs
+	 *            A list of motifs.
 	 * @param proteins
 	 *            A list of proteins protein.
 	 * @param motifThresholds
@@ -605,8 +605,8 @@ public class ScansiteScoring {
 	 *            A motif.
 	 * @param p
 	 *            A protein.
-	 * @param scoreThreshold
-	 *            A maximum score.
+	 * @param maxScore
+	 *            A maximum threshold score.
 	 * @return Returns a list of hits.
 	 */
 	public ArrayList<ScanResultSite> scoreProtein(Motif motif,
@@ -656,8 +656,6 @@ public class ScansiteScoring {
 	 *            A motif.
 	 * @param scoreToCount
 	 *            A map that maps scores to counts.
-	 * @param fixedCenters
-	 *            A list of a motifs fixedCenters, or NULL.
 	 * @param p
 	 *            A single protein with a sequence set.
 	 * @return A map that maps the calculated scores to the number of hits with

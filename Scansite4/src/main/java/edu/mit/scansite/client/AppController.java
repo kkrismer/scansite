@@ -152,7 +152,7 @@ public class AppController implements ValueChangeHandler<String> {
 						setPresenter(PresenterFactory.instance()
 								.getScanDatabaseResultPagePresenter(scanResult,
 										navigationBarPresenter,
-										breadcrumbsPresenter));
+										breadcrumbsPresenter, user));
 					}
 				});
 

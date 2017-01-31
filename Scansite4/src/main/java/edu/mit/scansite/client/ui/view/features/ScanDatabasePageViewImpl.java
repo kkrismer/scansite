@@ -24,6 +24,7 @@ import edu.mit.scansite.client.ui.widgets.features.DbRestrictionWidget;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.OrganismClass;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.transferobjects.states.ScanDatabasePageState;
 
 /**
@@ -76,7 +77,7 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 	@UiField
 	SubmitButton submitButton;
 
-	public ScanDatabasePageViewImpl() {
+	public ScanDatabasePageViewImpl(User user) {
 		// this.showDomainsCheckBox.getElement().setId("showDomainsCheckBoxId");
 		initWidget(uiBinder.createAndBindUi(this));
 		runCommandOnLoad(new Command() {
@@ -86,6 +87,7 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 						"outputListSizeListBoxId");
 				motifWidget = chooseSelectedMotifWidget; // set default motif
 															// widget
+				chooseSelectedMotifWidget.setUser(user);
 			}
 		});
 	}

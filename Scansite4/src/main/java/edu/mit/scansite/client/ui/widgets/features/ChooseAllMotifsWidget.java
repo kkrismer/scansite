@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.mit.scansite.client.ui.widgets.Stateful;
 import edu.mit.scansite.client.ui.widgets.motifs.MotifClassWidget;
 import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.transferobjects.states.MotifClassWidgetState;
 
 /**
@@ -19,18 +20,26 @@ public class ChooseAllMotifsWidget extends ChooseMotifWidget implements
 	private static ChooseAllMotifsWidgetUiBinder uiBinder = GWT
 			.create(ChooseAllMotifsWidgetUiBinder.class);
 
-	interface ChooseAllMotifsWidgetUiBinder extends
+    interface ChooseAllMotifsWidgetUiBinder extends
 			UiBinder<Widget, ChooseAllMotifsWidget> {
 	}
+
+	private User user;
 
 	@UiField
 	MotifClassWidget motifClassWidget;
 
 	public ChooseAllMotifsWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
+		motifClassWidget.setUser(user);
 	}
 
-	@Override
+    public void setUser(User user) {
+        this.user = user;
+        motifClassWidget.setUser(user);
+    }
+
+    @Override
 	public MotifSelection getMotifSelection() {
 		return new MotifSelection(motifClassWidget.getMotifClass());
 	}

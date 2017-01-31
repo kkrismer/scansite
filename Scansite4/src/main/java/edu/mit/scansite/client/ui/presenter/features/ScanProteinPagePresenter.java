@@ -12,10 +12,7 @@ import edu.mit.scansite.client.ui.presenter.Presenter;
 import edu.mit.scansite.client.ui.view.features.ScanProteinPageView;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanAction;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
-import edu.mit.scansite.shared.transferobjects.DataSource;
-import edu.mit.scansite.shared.transferobjects.HistogramStringency;
-import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
-import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.shared.transferobjects.states.ScanProteinPageState;
 
 /**
@@ -25,10 +22,12 @@ import edu.mit.scansite.shared.transferobjects.states.ScanProteinPageState;
 public class ScanProteinPagePresenter extends Presenter implements
 		ScanProteinPageView.Presenter {
 	private ScanProteinPageView view;
+	private final User user;
 
 	public ScanProteinPagePresenter(ScanProteinPageView view,
-			ScanProteinPageState state) {
+			ScanProteinPageState state, User user) {
 		this.view = view;
+        this.user = user;
 		view.setState(state);
 	}
 
@@ -54,7 +53,8 @@ public class ScanProteinPagePresenter extends Presenter implements
 
 			ProteinScanAction action = new ProteinScanAction(protein,
 					motifSelection, stringency, showDomains,
-					histogramDataSource, histogramTaxon, localizationDataSource);
+					histogramDataSource, histogramTaxon, localizationDataSource,
+                    user != null ? user.getSessionId() : "");
 
 			dispatch.execute(action, new AsyncCallback<ProteinScanResult>() {
 				@Override

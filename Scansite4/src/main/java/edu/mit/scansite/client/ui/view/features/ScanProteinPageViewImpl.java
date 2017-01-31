@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.mit.scansite.shared.transferobjects.User;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
@@ -94,7 +95,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 	@UiField
 	SubmitButton submitButton;
 
-	public ScanProteinPageViewImpl() {
+	public ScanProteinPageViewImpl(User user) {
 		this.showDomainsCheckBox.getElement().setId("showDomainsCheckBoxId");
 		initWidget(uiBinder.createAndBindUi(this));
 		initDataSources();
@@ -103,6 +104,8 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 			@Override
 			public void execute() {
 				motifWidget = chooseAllMotifsWidget;
+				chooseAllMotifsWidget.setUser(user);
+                chooseSelectedMotifsWidget.setUser(user);
 			}
 		});
 	}

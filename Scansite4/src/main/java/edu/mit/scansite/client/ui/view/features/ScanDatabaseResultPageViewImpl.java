@@ -20,6 +20,7 @@ import edu.mit.scansite.client.ui.widgets.features.DisplayMotifSelectionWidget;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
 import edu.mit.scansite.shared.transferobjects.Parameter;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.transferobjects.states.ScanDatabaseResultPageState;
 
 /**
@@ -34,6 +35,7 @@ public class ScanDatabaseResultPageViewImpl extends ScanDatabaseResultPageView {
 			.create(ScanDatabaseResultPageViewImplUiBinder.class);
 
 	private DatabaseScanResult result = null;
+	private User user;
 
 	@UiField
 	DisplayMotifSelectionWidget displayMotifSelectionWidget;
@@ -53,7 +55,8 @@ public class ScanDatabaseResultPageViewImpl extends ScanDatabaseResultPageView {
 	@UiField
 	Anchor downloadResultAnchor;
 
-	public ScanDatabaseResultPageViewImpl() {
+	public ScanDatabaseResultPageViewImpl(User user) {
+		this.user = user;
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
@@ -81,6 +84,8 @@ public class ScanDatabaseResultPageViewImpl extends ScanDatabaseResultPageView {
 	public String getBreadcrumbs() {
 		return Breadcrumbs.FEATURE_SCAN_DB_RESULT;
 	}
+
+
 
 	@Override
 	public void setResult(final DatabaseScanResult result) {
@@ -125,6 +130,7 @@ public class ScanDatabaseResultPageViewImpl extends ScanDatabaseResultPageView {
 		DatabaseScanResultSiteTable resultTable = new DatabaseScanResultSiteTable(
 				result);
 		resultTable.setWidth("100%");
+		resultTable.setUser(user);
 		motifSitesTable.clear();
 		motifSitesTable.add(resultTable);
 	}

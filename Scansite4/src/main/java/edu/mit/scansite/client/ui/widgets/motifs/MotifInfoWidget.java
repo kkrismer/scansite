@@ -87,6 +87,7 @@ public class MotifInfoWidget extends ScansiteWidget implements
 			public void execute() {
 				motifClassWidget.setUser(user);
 				getMotifs(currentMotifClass);
+				motifClassWidget.setUser(user);
 				motifListBox.getElement().setId("motifListBoxId");
 			}
 		});

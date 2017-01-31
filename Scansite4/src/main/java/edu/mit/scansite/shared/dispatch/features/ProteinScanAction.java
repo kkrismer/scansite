@@ -18,6 +18,7 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 	private String histogramDataSource;
 	private String histogramTaxon;
 	private DataSource localizationDataSource;
+	private String userSessionId;
 
 	public ProteinScanAction() {
 
@@ -26,7 +27,7 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 	public ProteinScanAction(LightWeightProtein protein,
 			MotifSelection motifSelection, HistogramStringency stringency,
 			boolean showDomains, String histogramDataSource,
-			String histogramTaxon, DataSource localizationDataSource) {
+			String histogramTaxon, DataSource localizationDataSource, String userSessionId) {
 		this.protein = protein;
 		this.motifSelection = motifSelection;
 		this.stringency = stringency;
@@ -34,6 +35,7 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 		this.histogramDataSource = histogramDataSource;
 		this.histogramTaxon = histogramTaxon;
 		this.localizationDataSource = localizationDataSource;
+		this.userSessionId = userSessionId;
 	}
 
 	public LightWeightProtein getProtein() {
@@ -90,5 +92,13 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 
 	public void setLocalizationDataSource(DataSource localizationDataSource) {
 		this.localizationDataSource = localizationDataSource;
+	}
+
+	public String getUserSessionId() {
+		return userSessionId;
+	}
+
+	public void setUserSessionId(String userSessionId) {
+		this.userSessionId = userSessionId;
 	}
 }

@@ -76,6 +76,7 @@ public class MotifClassWidget extends ScansiteWidget implements
 
 	public void setUser(User user) {
 		this.user = user;
+		retrieveMotifCounts();
 	}
 
 	public String getRadioButtonGroupName() {

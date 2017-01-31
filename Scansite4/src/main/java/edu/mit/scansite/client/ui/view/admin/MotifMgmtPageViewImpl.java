@@ -137,6 +137,10 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 				shortNameAddTextBox.getElement().setId("shortNameAddTextBoxId");
 				publicAddCheckBox.getElement().setId("publicAddCheckBoxId");
 
+				motifClassWidgetSelect.setUser(user);
+				motifClassWidgetAdd.setUser(user);
+				motifClassWidget.setUser(user);
+
 				motifGroupSelector.initMotifGroups(MotifClass.MAMMALIAN);
 				motifGroupSelectorAdd.initMotifGroups(MotifClass.MAMMALIAN);
 

@@ -91,6 +91,9 @@ public class ChooseSelectedMotifsWidget extends ChooseMotifWidget implements
 			public void execute() {
 				motifsListBox.getElement().setId("motifsListBoxId");
 				motifGroupsListBox.getElement().setId("motifGroupsListBoxId");
+				motifClassWidget.setUser(user);
+
+
 				getMotifs(MotifClass.MAMMALIAN);
 				getGroups(MotifClass.MAMMALIAN);
 			}
@@ -156,6 +159,9 @@ public class ChooseSelectedMotifsWidget extends ChooseMotifWidget implements
 
 	public void setUser(User user) {
 		this.user = user;
+		motifClassWidget.setUser(user);
+		getMotifs(MotifClass.MAMMALIAN);
+		getGroups(MotifClass.MAMMALIAN);
 	}
 
 	public String getMotifClassWidgetRadioButtonGroupName() {
