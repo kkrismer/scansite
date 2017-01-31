@@ -108,15 +108,21 @@ public class ScanOrthologsPageViewImpl extends ScanOrthologsPageView {
 					.getProtein(), stringencyLevelWidget.getStringency(),
 					getAlignmentRadius());
 		} else {
-			presenter
-					.onMotifGroupSubmitButtonClicked(motifGroups
-							.get(motifGroupListBox.getSelectedIndex()), Integer
-							.parseInt(sitePositionTextBox.getValue()),
-							chooseOrthologyProteinWidget
-									.getOrthologyDataSource(),
-							chooseOrthologyProteinWidget.getProtein(),
-							stringencyLevelWidget.getStringency(),
-							getAlignmentRadius());
+			try {
+				int sitePosition;
+				sitePosition = Integer.parseInt(sitePositionTextBox.getValue());
+				presenter
+				.onMotifGroupSubmitButtonClicked(motifGroups
+						.get(motifGroupListBox.getSelectedIndex()), sitePosition,
+						chooseOrthologyProteinWidget
+								.getOrthologyDataSource(),
+						chooseOrthologyProteinWidget.getProtein(),
+						stringencyLevelWidget.getStringency(),
+						getAlignmentRadius());
+			} catch (NumberFormatException ex) {
+				setSubmitButtonEnabled(true);
+				showErrorMessage("Invalid site position value, only numeric values accepted");
+			}
 		}
 	}
 
@@ -210,7 +216,7 @@ public class ScanOrthologsPageViewImpl extends ScanOrthologsPageView {
 		try {
 			sitePosition = Integer.parseInt(sitePositionTextBox.getValue());
 		} catch (NumberFormatException ex) {
-			sitePosition = 0;
+			sitePosition = 1;
 		}
 		return new ScanOrthologsPageState(
 				chooseOrthologyProteinWidget.getState(),
