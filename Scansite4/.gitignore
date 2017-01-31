@@ -12,3 +12,4 @@ misc
 src/main/resources/cfg
 .classpath
 .project
+/bin/
