@@ -16,7 +16,7 @@ import edu.mit.scansite.shared.DataAccessException;
  * @author Konstantin Krismer
  */
 public class ServiceLocator {
-	private static final String SLASH_DIR = "/cfg/";
+	private static final String SLASH_DIR = "cfg/";
 	private static final String BACKSLASH_DIR = "\\cfg\\";
 	private static final String DB_ACCESS_FILE = "DatabaseAccess.properties";
 	private static final String DB_CONSTANTS_FILE = "DatabaseConstants.properties";
