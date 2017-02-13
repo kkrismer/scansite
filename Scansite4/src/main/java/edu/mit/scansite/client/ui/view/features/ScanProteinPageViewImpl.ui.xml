@@ -37,7 +37,7 @@
 				<li>
 					<label
 						for="{showDomainsCheckBox.getElement.getFirstChildElement.getId}">Show predicted domains</label>
-					<g:CheckBox ui:field="showDomainsCheckBox" enabled="false" />
+					<g:CheckBox ui:field="showDomainsCheckBox" enabled="true" />
 				</li>
 				<li>
 					<wf:HistogramSelectionWidget ui:field="histogramSelectionWidget" />

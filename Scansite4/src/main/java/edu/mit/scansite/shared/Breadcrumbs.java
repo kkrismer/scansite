@@ -91,6 +91,6 @@ public class Breadcrumbs {
 			+ "\">Motif Group Management</a>";
 	public static final String ADMIN_USER = ADMIN + SEPARATOR + "<a href=\"#"
 			+ NavigationEvent.PageId.ADMIN_USER.getId()
-			+ "\">USER Management</a>";
+			+ "\">User Management</a>";
 	public static final String FILE_NOT_FOUND = BASE + SEPARATOR + "404";
 }
