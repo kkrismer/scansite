@@ -23,11 +23,12 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 	private static final String FILE_BASENAME = "domainRequest_";
 	private static final String OUTFILE_SUFFIX = "_out";
 
-	private static final String CMD_BASE = "iprscan -cli ";
 	private static final String CMD_IN = " -i ";
 	private static final String CMD_OUT = " -o ";
 	private static final String CMD_APPS = " -appl hmmpfam ";
 	private static final String CMD_END = " -seqtype p -format raw ";
+	//feel free to adjust the memory use to your preferences
+	private static final String JAVA_CMD = "java Xms512M -Xmx2048M -jar interproscan-5.jar";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -62,10 +63,10 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			writer.write(sequence);
 			writer.close();
 
-			String command = reader.get(CFG_IPRSCAN_BIN) + CMD_BASE + CMD_IN
-					+ seqFileName + CMD_OUT + outFileName + CMD_APPS + CMD_END;
-			Process p = Runtime.getRuntime().exec(command, null,
-					new File(FilePaths.DOMAINSEQ_DIRECTORY));
+			String iprDir = reader.get(CFG_IPRSCAN_BIN);
+			String command = JAVA_CMD + CMD_IN + localFilePath + CMD_OUT + localOutFilePath + CMD_APPS + CMD_END;
+
+			Process p = Runtime.getRuntime().exec(command, null, new File(iprDir));
 			int exitVal = p.waitFor();
 			f.delete();
 

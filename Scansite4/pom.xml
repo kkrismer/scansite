@@ -15,6 +15,12 @@
 	</properties>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
@@ -71,17 +77,14 @@
             <groupId>org.biojava</groupId>
             <artifactId>biojava-core</artifactId>
             <version>4.2.4</version>
+            <scope>provided</scope>
         </dependency>
 		<dependency>
 			<groupId>org.biojava</groupId>
 			<artifactId>biojava-alignment</artifactId>
 			<version>4.2.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.googlecode.gwtupload</groupId>
 			<artifactId>gwtupload</artifactId>
@@ -126,9 +129,22 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
 			<version>7.0.30</version>
+            <scope>provided</scope>
 			<!-- not part of Tomcat 6 -->
-			<!-- <scope>provided</scope> -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-juli</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-dependency-tree -->
+		<dependency>
+			<groupId>org.apache.maven.shared</groupId>
+			<artifactId>maven-dependency-tree</artifactId>
+			<version>3.0</version>
+		</dependency>
+
 	</dependencies>
 	<repositories>
 		<repository>
@@ -280,30 +296,7 @@
 					<killAfter>-1</killAfter>
 				</configuration>
 			</plugin>
-
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>fully.qualified.MainClass</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+            
 		</plugins>
 	</build>
 </project>
