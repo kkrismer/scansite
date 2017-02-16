@@ -25,10 +25,10 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 
 	private static final String CMD_IN = " -i ";
 	private static final String CMD_OUT = " -o ";
-	private static final String CMD_APPS = " -appl hmmpfam ";
-	private static final String CMD_END = " -seqtype p -format raw ";
+	private static final String CMD_APPS = " -appl Pfam ";
+	private static final String CMD_END = "-t p -f TSV -u ./";
 	//feel free to adjust the memory use to your preferences
-	private static final String JAVA_CMD = "java Xms512M -Xmx2048M -jar interproscan-5.jar";
+	private static final String JAVA_CMD = "java -Xms512M -Xmx2048M -jar interproscan-5.jar";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -60,6 +60,7 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 
 			File f = new File(localFilePath);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+			writer.write("> InterProScan required FASTA header\n");
 			writer.write(sequence);
 			writer.close();
 

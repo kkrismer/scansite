@@ -128,9 +128,9 @@
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
-			<version>7.0.30</version>
-            <scope>provided</scope>
-			<!-- not part of Tomcat 6 -->
+			<version>8.5.11</version>
+            <!--<scope>provided</scope>-->
+			<!--&lt;!&ndash; not part of Tomcat 6 &ndash;&gt;-->
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.tomcat</groupId>
@@ -296,7 +296,7 @@
 					<killAfter>-1</killAfter>
 				</configuration>
 			</plugin>
-            
+
 		</plugins>
 	</build>
 </project>
