@@ -87,6 +87,9 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 	CheckBox showDomainsCheckBox = new CheckBox();
 
 	@UiField
+	CheckBox previouslyMappedSitesOnlyCheckBox = new CheckBox();
+
+	@UiField
 	HistogramSelectionWidget histogramSelectionWidget;
 
 	@UiField
@@ -97,6 +100,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 
 	public ScanProteinPageViewImpl(User user) {
 		this.showDomainsCheckBox.getElement().setId("showDomainsCheckBoxId");
+		this.previouslyMappedSitesOnlyCheckBox.getElement().setId("previouslyMappedSitesOnlyID");
 		initWidget(uiBinder.createAndBindUi(this));
 		initDataSources();
 		// set default motif widget
@@ -207,6 +211,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 			presenter.onSubmitButtonClicked(chooseProteinWidget.getProtein(),
 					motifWidget.getMotifSelection(), stringencyLevelWidget
 							.getStringency(), showDomainsCheckBox.getValue(),
+					previouslyMappedSitesOnlyCheckBox.getValue(),
 					histogramSelectionWidget.getHistogramDataSource(),
 					histogramSelectionWidget.getHistogramTaxon(),
 					localizationDataSourceWidget.getDataSource() != null
@@ -276,6 +281,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 				chooseUserFileMotifWidget.getState(),
 				stringencyLevelWidget.getState(),
 				showDomainsCheckBox.getValue(),
+				previouslyMappedSitesOnlyCheckBox.getValue(),
 				histogramSelectionWidget.getState(),
 				localizationDataSourceWidget.getState());
 	}
@@ -305,6 +311,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 			stringencyLevelWidget.setState(state
 					.getStringencyLevelWidgetState());
 			showDomainsCheckBox.setValue(state.isShowDomains());
+			previouslyMappedSitesOnlyCheckBox.setValue(state.isPreviouslyMappedSitesOnly());
 			histogramSelectionWidget.setState(state
 					.getHistogramSelectionWidgetState());
 			localizationDataSourceWidget.setState(state

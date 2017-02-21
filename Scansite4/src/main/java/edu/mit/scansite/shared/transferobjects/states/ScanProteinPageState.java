@@ -13,6 +13,7 @@ public class ScanProteinPageState extends State {
 	private ChooseUserFileMotifWidgetState chooseUserFileMotifWidgetState;
 	private StringencyLevelWidgetState stringencyLevelWidgetState;
 	private boolean showDomains;
+	boolean previouslyMappedSitesOnly;
 	private HistogramSelectionWidgetState histogramSelectionWidgetState;
 	private DataSourceWidgetState localizationDataSourceWidgetState;
 
@@ -30,6 +31,7 @@ public class ScanProteinPageState extends State {
 			ChooseUserFileMotifWidgetState chooseUserFileMotifWidgetState,
 			StringencyLevelWidgetState stringencyLevelWidgetState,
 			boolean showDomains,
+			boolean previouslyMappedSitesOnly,
 			HistogramSelectionWidgetState histogramSelectionWidgetState,
 			DataSourceWidgetState localizationDataSourceWidgetState) {
 		super();
@@ -42,6 +44,7 @@ public class ScanProteinPageState extends State {
 		this.chooseUserFileMotifWidgetState = chooseUserFileMotifWidgetState;
 		this.stringencyLevelWidgetState = stringencyLevelWidgetState;
 		this.showDomains = showDomains;
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 		this.histogramSelectionWidgetState = histogramSelectionWidgetState;
 		this.localizationDataSourceWidgetState = localizationDataSourceWidgetState;
 	}
@@ -124,6 +127,14 @@ public class ScanProteinPageState extends State {
 
 	public void setShowDomains(boolean showDomains) {
 		this.showDomains = showDomains;
+	}
+
+	public boolean isPreviouslyMappedSitesOnly() {
+		return previouslyMappedSitesOnly;
+	}
+
+	public void setPreviouslyMappedSitesOnly(boolean previouslyMappedSitesOnly) {
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 	}
 
 	public HistogramSelectionWidgetState getHistogramSelectionWidgetState() {

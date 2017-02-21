@@ -15,6 +15,7 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 	private MotifSelection motifSelection;
 	private HistogramStringency stringency;
 	private boolean showDomains;
+	private boolean previouslyMappedSitesOnly;
 	private String histogramDataSource;
 	private String histogramTaxon;
 	private DataSource localizationDataSource;
@@ -26,12 +27,13 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 
 	public ProteinScanAction(LightWeightProtein protein,
 			MotifSelection motifSelection, HistogramStringency stringency,
-			boolean showDomains, String histogramDataSource,
+			boolean showDomains, boolean previouslyMappedSitesOnly, String histogramDataSource,
 			String histogramTaxon, DataSource localizationDataSource, String userSessionId) {
 		this.protein = protein;
 		this.motifSelection = motifSelection;
 		this.stringency = stringency;
 		this.showDomains = showDomains;
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 		this.histogramDataSource = histogramDataSource;
 		this.histogramTaxon = histogramTaxon;
 		this.localizationDataSource = localizationDataSource;
@@ -60,6 +62,14 @@ public class ProteinScanAction implements Action<ProteinScanResult> {
 
 	public void setShowDomains(boolean showDomains) {
 		this.showDomains = showDomains;
+	}
+
+	public boolean isPreviouslyMappedSitesOnly() {
+		return previouslyMappedSitesOnly;
+	}
+
+	public void setPreviouslyMappedSitesOnly(boolean previouslyMappedSitesOnly) {
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 	}
 
 	public MotifSelection getMotifSelection() {

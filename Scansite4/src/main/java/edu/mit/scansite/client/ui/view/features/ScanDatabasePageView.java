@@ -15,8 +15,8 @@ public abstract class ScanDatabasePageView extends PageView implements
 		Stateful<ScanDatabasePageState> {
 	public interface Presenter {
 		public void onSubmitButtonClicked(MotifSelection motifSelection,
-				DataSource dataSource,
-				RestrictionProperties restrictionProperties, int outputListSize);
+				DataSource dataSource, RestrictionProperties restrictionProperties,
+					  		int outputListSize, boolean previouslyMappedSitesOnly);
 	}
 
 	public abstract void setPresenter(Presenter presenter);

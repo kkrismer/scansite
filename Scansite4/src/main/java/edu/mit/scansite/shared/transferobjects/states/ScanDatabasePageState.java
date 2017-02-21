@@ -15,6 +15,7 @@ public class ScanDatabasePageState extends State {
 	private DataSourceWidgetState dataSourceWidgetState;
 	private DbRestrictionWidgetState dbRestrictionWidgetState;
 	private int outputListSizeListBoxSelectedIndex;
+	private boolean previouslyMappedSitesOnly;
 
 	public ScanDatabasePageState() {
 
@@ -31,7 +32,7 @@ public class ScanDatabasePageState extends State {
 			ChooseQuickMotifWidgetState chooseQuickMotifWidgetState,
 			DataSourceWidgetState dataSourceWidgetState,
 			DbRestrictionWidgetState dbRestrictionWidgetState,
-			int outputListSizeListBoxSelectedIndex) {
+			int outputListSizeListBoxSelectedIndex, boolean previouslyMappedSitesOnly) {
 		super();
 		this.searchMethodDatabaseMotifRadioButtonValue = searchMethodDatabaseMotifRadioButtonValue;
 		this.searchMethodDatabaseMotifsRadioButtonValue = searchMethodDatabaseMotifsRadioButtonValue;
@@ -44,6 +45,7 @@ public class ScanDatabasePageState extends State {
 		this.dataSourceWidgetState = dataSourceWidgetState;
 		this.dbRestrictionWidgetState = dbRestrictionWidgetState;
 		this.outputListSizeListBoxSelectedIndex = outputListSizeListBoxSelectedIndex;
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 	}
 
 	public boolean isSearchMethodDatabaseMotifRadioButtonValue() {
@@ -143,5 +145,13 @@ public class ScanDatabasePageState extends State {
 	public void setOutputListSizeListBoxSelectedIndex(
 			int outputListSizeListBoxSelectedIndex) {
 		this.outputListSizeListBoxSelectedIndex = outputListSizeListBoxSelectedIndex;
+	}
+
+	public boolean isPreviouslyMappedSitesOnly() {
+		return previouslyMappedSitesOnly;
+	}
+
+	public void setPreviouslyMappedSitesOnly(boolean previouslyMappedSitesOnly) {
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 	}
 }

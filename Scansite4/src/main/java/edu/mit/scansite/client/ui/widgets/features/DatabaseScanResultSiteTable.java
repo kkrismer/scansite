@@ -89,7 +89,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 							site.getProtein(),
 							new MotifSelection(),
 							HistogramStringency.STRINGENCY_HIGH,
-							false,
+							false, false,
 							ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX],
 							ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
 							result.getLocalizationDataSource(), user != null ? user.getSessionId() : ""); //todo: find a solution, i.e.:

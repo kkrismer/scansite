@@ -59,6 +59,13 @@
 					</g:ListBox>
 				</li>
 				<li>
+					<label
+							for="{previouslyMappedSitesOnlyCheckBox.getElement.getFirstChildElement.getId}">Show only previously mapped sites
+					</label>
+					<g:CheckBox ui:field="previouslyMappedSitesOnlyCheckBox" enabled="true" />
+                    <label>(Might reduce OUTPUT LIST SIZE)</label>
+				</li>
+				<li>
 					<g:SubmitButton ui:field="submitButton">Submit</g:SubmitButton>
 					<span id="waitScan" class="waitImage" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />

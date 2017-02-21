@@ -1,5 +1,6 @@
 package edu.mit.scansite.server.dispatch.handler.features;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -80,10 +81,10 @@ public class ProteinScanHandler implements
 			}
 			ProteinScanFeature feature = new ProteinScanFeature(
 					BootstrapListener.getDbConnector(contextProvider.get()));
-			ProteinScanResult result = feature.doProteinScan(protein, //todo get user info
+			ProteinScanResult result = feature.doProteinScan(protein,
 					action.getMotifSelection(), action.getStringency(),
-					action.isShowDomains(), action.getHistogramDataSource(),
-					action.getHistogramTaxon(),
+					action.isShowDomains(),
+					action.getHistogramDataSource(), action.getHistogramTaxon(),
 					action.getLocalizationDataSource(), true,
                     !loginHandler.isSessionValidLogin(action.getUserSessionId()),
                     contextProvider.get().getRealPath("/"));
@@ -102,6 +103,17 @@ public class ProteinScanHandler implements
 					}
 				}
 			}
+
+            if(action.isPreviouslyMappedSitesOnly()) {
+                ArrayList<ScanResultSite> allHits = new ArrayList<>(result.getResults().getHits());
+                result.getResults().getHits().clear();
+                for (ScanResultSite hit : allHits) {
+                    if (hit.getEvidence() != null && !hit.getEvidence().isEmpty()) {
+                        result.getResults().getHits().add(hit);
+                    }
+                }
+            }
+
 			return result;
 		} catch (Exception e) {
 			logger.error("Error running protein scan: " + e.toString());

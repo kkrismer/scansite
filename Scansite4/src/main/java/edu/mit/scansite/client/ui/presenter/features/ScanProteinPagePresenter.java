@@ -44,7 +44,7 @@ public class ScanProteinPagePresenter extends Presenter implements
 	@Override
 	public void onSubmitButtonClicked(LightWeightProtein protein,
 			MotifSelection motifSelection, HistogramStringency stringency,
-			boolean showDomains, String histogramDataSource,
+			boolean showDomains, boolean previouslyMappedSitesOnly, String histogramDataSource,
 			String histogramTaxon, DataSource localizationDataSource) {
 		if (protein != null) {
 			view.showWaitSymbol();
@@ -52,7 +52,7 @@ public class ScanProteinPagePresenter extends Presenter implements
 					NavigationEvent.PageId.FEATURE_SCAN_PROTEIN.getId());
 
 			ProteinScanAction action = new ProteinScanAction(protein,
-					motifSelection, stringency, showDomains,
+					motifSelection, stringency, showDomains, previouslyMappedSitesOnly,
 					histogramDataSource, histogramTaxon, localizationDataSource,
                     user != null ? user.getSessionId() : "");
 

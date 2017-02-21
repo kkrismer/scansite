@@ -17,7 +17,7 @@ public abstract class ScanProteinPageView extends PageView implements
 	public interface Presenter {
 		public void onSubmitButtonClicked(LightWeightProtein protein,
 				MotifSelection motifSelection, HistogramStringency stringency,
-				boolean showDomains, String histogramDataSource,
+				boolean showDomains, boolean previouslyMappedSitesOnly, String histogramDataSource,
 				String histogramTaxon, DataSource localizationDataSource);
 	}
 

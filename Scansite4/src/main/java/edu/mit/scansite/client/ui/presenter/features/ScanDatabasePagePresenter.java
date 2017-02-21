@@ -47,13 +47,13 @@ public class ScanDatabasePagePresenter extends Presenter implements
 	@Override
 	public void onSubmitButtonClicked(MotifSelection motifSelection,
 			DataSource dataSource, RestrictionProperties restrictionProperties,
-			int outputListSize) {
+			int outputListSize, boolean previouslyMappedSitesOnly) {
 		view.showWaitSymbol();
 		fireHistoryEvent(view.getState(),
 				NavigationEvent.PageId.FEATURE_SCAN_DB.getId());
 
 		DatabaseScanAction action = new DatabaseScanAction(motifSelection,
-				dataSource, restrictionProperties, outputListSize,
+				dataSource, restrictionProperties, outputListSize, previouslyMappedSitesOnly,
 				user != null ? user.getSessionId() : "");
 		dispatch.execute(action, new AsyncCallback<DatabaseScanResult>() {
 			@Override

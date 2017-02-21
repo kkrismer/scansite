@@ -11,6 +11,7 @@ import edu.mit.scansite.server.features.DatabaseScanFeature;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanAction;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
 import edu.mit.scansite.shared.transferobjects.DatabaseSearchScanResultSite;
+import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.ActionException;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -72,6 +74,16 @@ public class DatabaseScanHandler implements
                     }
                 }
             }
+
+			if(action.isPreviouslyMappedSitesOnly()) {
+				ArrayList<DatabaseSearchScanResultSite> allHits = new ArrayList<>(result.getDbSearchSites());
+				result.getDbSearchSites().clear();
+				for (DatabaseSearchScanResultSite hit : allHits) {
+					if (hit.getSite().getEvidence() != null && !hit.getSite().getEvidence().isEmpty()) {
+						result.getDbSearchSites().add(hit);
+					}
+				}
+			}
 
 			return result;
 		} catch (Exception e) {

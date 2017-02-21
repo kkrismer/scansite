@@ -9,10 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.SubmitButton;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 import edu.mit.scansite.client.ui.event.NavigationEvent;
 import edu.mit.scansite.client.ui.widgets.features.ChooseMotifWidget;
@@ -75,11 +72,15 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 	ListBox outputListSizeListBox;
 
 	@UiField
+	CheckBox previouslyMappedSitesOnlyCheckBox = new CheckBox();
+
+	@UiField
 	SubmitButton submitButton;
 
 	public ScanDatabasePageViewImpl(User user) {
 		// this.showDomainsCheckBox.getElement().setId("showDomainsCheckBoxId");
 		initWidget(uiBinder.createAndBindUi(this));
+        this.previouslyMappedSitesOnlyCheckBox.getElement().setId("previouslyMappedSitesOnlyID");
 		runCommandOnLoad(new Command() {
 			@Override
 			public void execute() {
@@ -169,8 +170,8 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 								.getDataSource(), dbRestrictionWidget
 								.getRestrictionProperties(), Integer
 								.parseInt(outputListSizeListBox
-										.getValue(outputListSizeListBox
-												.getSelectedIndex())));
+								.getValue(outputListSizeListBox.getSelectedIndex())),
+                                previouslyMappedSitesOnlyCheckBox.getValue());
 			} else {
 				showWarningMessage("Input validation failed (no user motif was uploaded)");
 			}
@@ -238,7 +239,8 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 				chooseUserFileMotifWidget.getState(),
 				chooseQuickMotifWidget.getState(), dataSourceWidget.getState(),
 				dbRestrictionWidget.getState(),
-				outputListSizeListBox.getSelectedIndex());
+				outputListSizeListBox.getSelectedIndex(),
+                previouslyMappedSitesOnlyCheckBox.getValue());
 	}
 
 	@Override
@@ -275,6 +277,7 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 					.getChooseQuickMotifWidgetState());
 			dataSourceWidget.setState(state.getDataSourceWidgetState());
 			dbRestrictionWidget.setState(state.getDbRestrictionWidgetState());
+            previouslyMappedSitesOnlyCheckBox.setValue(state.isPreviouslyMappedSitesOnly());
 		}
 	}
 }
