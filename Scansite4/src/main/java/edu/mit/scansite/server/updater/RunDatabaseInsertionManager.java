@@ -15,13 +15,13 @@ import java.nio.file.Paths;
 import java.sql.*;
 
 /**
- * Created by Thomas on 15.12.2016.
+ * Created by Thomas Bernwinkler on 15.12.2016.
  * Runs the following database insertion features for an empty database
  * - DatabaseUpdater
  * - MotifInserter (Mammals & Yeast)
  * - EvidenceInserter
  *
- * @author Thomas
+ * @author Thomas Bernwinkler
  */
 
 public class RunDatabaseInsertionManager {

@@ -24,7 +24,7 @@ import javax.net.ssl.*;
 
 /**
  * @author Tobieh
- * @author Thomas
+ * @author Thomas Bernwinkler
  */
 public class Downloader {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

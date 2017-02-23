@@ -5,15 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.cell.client.*;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.user.client.ui.*;
+import edu.mit.scansite.shared.dispatch.features.*;
 import edu.mit.scansite.shared.transferobjects.*;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
 
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.ClickableTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -23,9 +24,6 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 
 import edu.mit.scansite.client.ui.event.EventBus;
@@ -37,15 +35,11 @@ import edu.mit.scansite.shared.DbSearchScanResultSiteComparator;
 import edu.mit.scansite.shared.DbSearchScanResultSiteComparator.ComparableFields;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.URIs;
-import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
-import edu.mit.scansite.shared.dispatch.features.DbSearchHistogramRetrieverAction;
-import edu.mit.scansite.shared.dispatch.features.DbSearchHistogramRetrieverResult;
-import edu.mit.scansite.shared.dispatch.features.ProteinScanAction;
-import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class DatabaseScanResultSiteTable extends ScansiteWidget {
 
@@ -207,18 +201,53 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 				}
 			});
 
-	private TextColumn<DatabaseSearchScanResultSite> proteinInfoColumn = new TextColumn<DatabaseSearchScanResultSite>() {
-		@Override
-		public String getValue(DatabaseSearchScanResultSite site) {
-			if (site == null || site.getProtein() == null
-					|| site.getProtein().getAnnotations() == null
-					|| site.getProtein().getAnnotations().isEmpty()) {
-				return EMPTY_CELL_TEXT;
-			}
+
+
+    private Column<DatabaseSearchScanResultSite, String> proteinInfoColumn = getColumn(
+            new ClickableTextCell(), new GetValue<String>() {
+                @Override
+                public String getValue(DatabaseSearchScanResultSite site) {
+                    if (site == null || site.getProtein() == null
+                            || site.getProtein().getAnnotations() == null
+                            || site.getProtein().getAnnotations().isEmpty()) {
+                        return EMPTY_CELL_TEXT;
+                    }
+
+                    if (site.getProtein().getAnnotations() == null) {
+                    	return EMPTY_CELL_TEXT;
+					} else {
+                    	String proteinInfo = getProteinInformation(site);
+                    	int skipLength = (new String("Description: ").length());
+                    	int maxLength = 50;
+                    	int substr = (proteinInfo.length() < maxLength ? proteinInfo.length() : maxLength);
+                    	proteinInfo = proteinInfo.substring(skipLength, substr);
+                    	proteinInfo += " (click to expand)";
+                    	return proteinInfo;
+					}
+                }
+            }, new FieldUpdater<DatabaseSearchScanResultSite, String>() {
+                @Override
+                public void update(int index,DatabaseSearchScanResultSite site, String value) {
+                    String description = getProteinInformation(site);
+                    description = description.replaceAll("Description: ", "<strong>Description:</strong> </br>");
+                    description = description.replaceAll(";;", ";");
+                    description = description.replaceAll(";", "</br>");
+					SafeHtmlBuilder builder = new SafeHtmlBuilder();
+					builder.appendHtmlConstant(description);
+
+					showPopupPanel(resultTable.getRowElement(index).getAbsoluteBottom(),
+							resultTable.getRowElement(index).getAbsoluteLeft(), builder.toSafeHtml());
+
+                }
+            });
+
+    private String getProteinInformation(DatabaseSearchScanResultSite site) {
+    	if (site != null && site.getProtein() != null
+				&& site.getProtein().getAnnotations() != null
+				&& !site.getProtein().getAnnotations().isEmpty()) {
 			StringBuilder s = new StringBuilder();
 			HashMap<String, Set<String>> anns = site.getProtein()
 					.getAnnotations();
-			boolean first = true;
 			for (String key : anns.keySet()) {
 				s.append(key.substring(0, 1).toUpperCase()).append(
 						key.substring(1));
@@ -226,7 +255,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 					s.append('s');
 				}
 				s.append(": ");
-				first = true;
+				boolean first = true;
 				for (String a : anns.get(key)) {
 					if (first) {
 						first = false;
@@ -241,7 +270,9 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 			}
 			return s.toString();
 		}
-	};
+		return "";
+	}
+
 
 	private SiteSequenceColumn[] siteSequenceColumns;
 
