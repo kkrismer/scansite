@@ -1,10 +1,6 @@
 package edu.mit.scansite.server.domains;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -17,6 +13,7 @@ import edu.mit.scansite.shared.transferobjects.DomainPosition;
 
 /**
  * @author Tobieh
+ * @author Thomas Bernwinkler
  */
 public class InterproScanDomainLocatorLocal extends DomainLocator {
 	private static final String CFG_IPRSCAN_BIN = "IPRSCAN_BIN";
@@ -63,11 +60,56 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			writer.write("> InterProScan required FASTA header\n");
 			writer.write(sequence);
 			writer.close();
-
+			
 			String iprDir = reader.get(CFG_IPRSCAN_BIN);
 			String command = JAVA_CMD + CMD_IN + localFilePath + CMD_OUT + localOutFilePath + CMD_APPS + CMD_END;
 
+			Process logProcess = Runtime.getRuntime().exec("cat " + localFilePath);
+			int catExitVal = logProcess.waitFor();
+
+			BufferedReader content = new BufferedReader(new
+					InputStreamReader(logProcess.getInputStream()));
+
+			String sContent;
+			System.out.println("############################################## InterProScan Input ##############################################");
+			if (catExitVal != 0) {
+				System.out.println("Could not log the input file. File not found.");
+			}
+			while ((sContent = content.readLine()) != null) {
+				System.out.println(sContent);
+			}
+			System.out.println("############################################## END InterProScan Input ##############################################");
+
 			Process p = Runtime.getRuntime().exec(command, null, new File(iprDir));
+
+			// ##############################################
+
+			BufferedReader stdInput = new BufferedReader(new
+					InputStreamReader(p.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new
+					InputStreamReader(p.getErrorStream()));
+
+			// read the output from the command
+			System.out.println("Here is the standard output of the command:\n");
+			String s = null;
+			System.out.println("############################################## INFO ##############################################");
+			while ((s = stdInput.readLine()) != null) {
+				logger.info(s);
+				System.out.println(s);
+			}
+			System.out.println("############################################## END INFO ##############################################");
+
+			// read any errors from the attempted command
+			System.out.println("Here is the standard error of the command (if any):\n");
+			System.out.println("############################################## ERROR ##############################################");
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
+			System.out.println("############################################## END ERROR ##############################################");
+
+			// ##############################################
+
 			int exitVal = p.waitFor();
 			f.delete();
 
