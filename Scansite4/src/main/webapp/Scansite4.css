@@ -39,6 +39,7 @@ div#content {
 	padding: 5px 5px 5px 10px;
 	border-left: 1px dotted #C0C0C0;
 	line-height: 1.5em;
+	font-size: 1.0em;
 }
 
 h3 emph,h4 emph {
