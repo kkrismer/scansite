@@ -8,6 +8,9 @@ body {
 	font-size: 100% !important;
 }
 
+/* avoid font boosting in Android Chrome */
+html * {max-height:1000000px;}
+
 input[type=text],input[type=password],select,textarea {
 	width: 200px;
 }
