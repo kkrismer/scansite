@@ -11,7 +11,7 @@
     </init-param>
     <init-param>
       <param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
-      <param-value>.*\.html|.*\.gif|.*\.css</param-value>
+      <param-value>.*\.html|.*\.gif|.*\.css|.*\.png</param-value>
      </init-param>
   </filter>
 
@@ -31,7 +31,7 @@
     <web-resource-collection>
       <web-resource-name>cfg</web-resource-name>
       <description>config files</description>
-      <url-pattern>src/main/resources/cfg/*</url-pattern>
+      <url-pattern>/src/main/resources/cfg/*</url-pattern>
       <http-method>GET</http-method>
       <http-method>POST</http-method>
     </web-resource-collection>

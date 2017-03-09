@@ -54,8 +54,7 @@ public class ProteinScanFeature {
 		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(dbConnector);
 		ArrayList<DomainPosition> domainPositions = null;
 
-		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(
-				motifSelection, publicOnly);
+		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);
 		Map<Motif, LightWeightLocalization> motifLocalizations = null;
 		Localization proteinLocalization = null;
 		if (localizationDataSource != null) {
@@ -133,7 +132,7 @@ public class ProteinScanFeature {
 		ppPainter.applyHits(hits);
 
 		ScanResults results = new ScanResults();
-		if (true) { // true = doCreateFiles
+		if (doCreateFiles) {
 			String imagePath = FilePaths.getProteinPlotFilePath(realPath);
 			ImageInOut iio = new ImageInOut();
 			iio.saveImage(ppPainter.getBufferedImage(), imagePath);

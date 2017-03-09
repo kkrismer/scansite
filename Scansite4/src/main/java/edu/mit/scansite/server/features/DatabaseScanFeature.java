@@ -56,20 +56,16 @@ public class DatabaseScanFeature {
 		result.setOutputListSize(outputListSize);
 		result.setSuccess(false); // set to true after everything is done!
 
-		int totalNrOfProteinsInDb = factory.getProteinDao().getProteinCount(
-				dataSource);
-		List<Protein> proteins = factory.getProteinDao().get(dataSource,
-				restrictionProperties, true, true);
+		int totalNrOfProteinsInDb = factory.getProteinDao().getProteinCount(dataSource);
+		List<Protein> proteins = factory.getProteinDao().get(dataSource, restrictionProperties, true, true);
 		int nrOfProteinsRetrieved = proteins.size();
 
 		if (nrOfProteinsRetrieved > 0) {
 			// get motifs from db
-			List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(
-					motifSelection, publicOnly);
+			List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);
 			List<Double> motifScoreThresholds = scoreMotifs(motifs);
 
-			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs,
-					motifScoreThresholds, proteins, false, null);
+			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs, motifScoreThresholds, proteins, false, null);
 			try {
 				scorer.doScoring();
 			} catch (Exception e1) {

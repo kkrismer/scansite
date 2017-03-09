@@ -9,7 +9,7 @@ public class Datasource implements Serializable {
   private static final long serialVersionUID = 2379785356802199930L;
 
   private String name;
-  private String nickName;
+  private String shortName;
   private String version;
   private String description;
   private Integer numberOfProteinEntries;
@@ -17,9 +17,9 @@ public class Datasource implements Serializable {
   public Datasource() {
   }
   
-  public Datasource(String name, String nickName, String version, String description, Integer numberOfProteinEntries) {
+  public Datasource(String name, String shortName, String version, String description, Integer numberOfProteinEntries) {
     this.name = name;
-    this.nickName = nickName;
+    this.shortName = shortName;
     this.version = version;
     this.description = description;
     this.setNumberOfProteinEntries(numberOfProteinEntries);
@@ -29,16 +29,16 @@ public class Datasource implements Serializable {
     return name;
   }
   
-  public String getNickName() {
-    return nickName;
+  public String getShortName() {
+    return shortName;
   }
   
   public void setName(String name) {
     this.name = name;
   }
   
-  public void setNickName(String nickName) {
-    this.nickName = nickName;
+  public void setShortName(String nickName) {
+    this.shortName = nickName;
   }
 
   public String getVersion() {

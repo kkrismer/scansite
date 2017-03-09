@@ -11,20 +11,20 @@ public class MotifSite implements Serializable {
   protected Double score;
   protected Double percentile;
   protected String motifName;
-  protected String motifNickName;
+  protected String motifShortName;
   protected String site;
   protected String siteSequence;
   
   public MotifSite() {
   }
 
-  public MotifSite(Double score, Double percentile, String motifName, String motifNickName, String site,
+  public MotifSite(Double score, Double percentile, String motifName, String motifShortName, String site,
       String siteSequence) {
     super();
     this.score = score;
     this.percentile = percentile;
     this.motifName = motifName;
-    this.motifNickName = motifNickName;
+    this.motifShortName = motifShortName;
     this.site = site;
     this.siteSequence = siteSequence;
   }
@@ -53,12 +53,12 @@ public class MotifSite implements Serializable {
     this.motifName = motifName;
   }
 
-  public String getMotifNickName() {
-    return motifNickName;
+  public String getMotifShortName() {
+    return motifShortName;
   }
 
-  public void setMotifNickName(String motifNickName) {
-    this.motifNickName = motifNickName;
+  public void setMotifShortName(String motifShortName) {
+    this.motifShortName = motifShortName;
   }
 
   public String getSite() {
