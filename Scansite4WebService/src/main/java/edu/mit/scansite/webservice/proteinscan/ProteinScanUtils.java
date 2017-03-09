@@ -19,37 +19,63 @@ public class ProteinScanUtils {
     public static final String REFERENCE_YEAST = "Saccharomyces cerevisiae";
     private static final String REFERENCE_PARAM_NAME = "/referenceproteome=";
     private static final String MOTIF_PARAM_NAME = "/motifshortnames=";
-    private static final String SPECIES_RESTRICTION = "/speciesrestriction=";
-    private static final String NO_OF_PHOSPHORYLATIONS = "/numberofphosphorylations=";
-    private static final String MW_FROM = "/molweightfrom=";
-    private static final String MW_TO = "/molweightto=";
-    private static final String PI_FROM = "/isoelectricpointfrom=";
-    private static final String PI_TO = "/isoelectricpointto=";
-    private static final String KEYWORD = "/keywordrestriction=";
-    private static final String SEQUENCE = "/sequencerestriction=";
+    // database scan or database search
+    private static final String DS_SPECIES_RESTRICTION = "/speciesrestriction=";
+    private static final String DS_NO_OF_PHOSPHORYLATIONS = "/numberofphosphorylations=";
+    private static final String DS_MW_FROM = "/molweightfrom=";
+    private static final String DS_MW_TO = "/molweightto=";
+    private static final String DS_PI_FROM = "/isoelectricpointfrom=";
+    private static final String DS_PI_TO = "/isoelectricpointto=";
+    private static final String DS_KEYWORD = "/keywordrestriction=";
+    private static final String DS_SEQUENCE = "/sequencerestriction=";
+    // sequence match
+    private static final String SM_SPECIES_RESTRICTION = "/speciesrestriction=";
+    private static final String SM_PHOSPHORYLATION_NO = "/numberofphosphorylations=";
+    private static final String SM_MW_FROM = "/molweightfrom=";
+    private static final String SM_MW_TO = "/molweightto=";
+    private static final String SM_PI_FROM = "/isoelectricpointfrom=";
+    private static final String SM_PI_TO = "/isoelectricpointto=";
+    private static final String SM_KEYWORD = "/keywordrestriction=";
 
     public static String processOptionalParameter(String param){
         String correctValue = param;
+        // protein scan parameters
         if (param.contains(REFERENCE_PARAM_NAME)) {
             correctValue = param.substring(REFERENCE_PARAM_NAME.length());
         } else if (param.contains(MOTIF_PARAM_NAME)){
+            // database search parameters
             correctValue = param.substring(MOTIF_PARAM_NAME.length());
-        }else if (param.contains(SPECIES_RESTRICTION)){
-            correctValue = param.substring(SPECIES_RESTRICTION.length());
-        }else if (param.contains(NO_OF_PHOSPHORYLATIONS)){
-            correctValue = param.substring(NO_OF_PHOSPHORYLATIONS.length());
-        }else if (param.contains(MW_FROM)){
-            correctValue = param.substring(MW_FROM.length());
-        }else if (param.contains(MW_TO)){
-            correctValue = param.substring(MW_TO.length());
-        }else if (param.contains(PI_FROM)){
-            correctValue = param.substring(PI_FROM.length());
-        }else if (param.contains(PI_TO)){
-            correctValue = param.substring(PI_TO.length());
-        }else if (param.contains(KEYWORD)){
-            correctValue = param.substring(KEYWORD.length());
-        }else if (param.contains(SEQUENCE)){
-            correctValue = param.substring(SEQUENCE.length());
+        }else if (param.contains(DS_SPECIES_RESTRICTION)){
+            correctValue = param.substring(DS_SPECIES_RESTRICTION.length());
+        }else if (param.contains(DS_NO_OF_PHOSPHORYLATIONS)){
+            correctValue = param.substring(DS_NO_OF_PHOSPHORYLATIONS.length());
+        }else if (param.contains(DS_MW_FROM)){
+            correctValue = param.substring(DS_MW_FROM.length());
+        }else if (param.contains(DS_MW_TO)){
+            correctValue = param.substring(DS_MW_TO.length());
+        }else if (param.contains(DS_PI_FROM)){
+            correctValue = param.substring(DS_PI_FROM.length());
+        }else if (param.contains(DS_PI_TO)){
+            correctValue = param.substring(DS_PI_TO.length());
+        }else if (param.contains(DS_KEYWORD)){
+            correctValue = param.substring(DS_KEYWORD.length());
+        }else if (param.contains(DS_SEQUENCE)){
+            correctValue = param.substring(DS_SEQUENCE.length());
+        }else if (param.contains(SM_SPECIES_RESTRICTION)){
+            // sequence match parameters
+            correctValue = param.substring(SM_SPECIES_RESTRICTION.length());
+        }else if (param.contains(SM_PHOSPHORYLATION_NO)){
+            correctValue = param.substring(SM_PHOSPHORYLATION_NO.length());
+        }else if (param.contains(SM_MW_FROM)){
+            correctValue = param.substring(SM_MW_FROM.length());
+        }else if (param.contains(SM_MW_TO)){
+            correctValue = param.substring(SM_MW_TO.length());
+        }else if (param.contains(SM_PI_FROM)){
+            correctValue = param.substring(SM_PI_FROM.length());
+        }else if (param.contains(SM_PI_TO)){
+            correctValue = param.substring(SM_PI_TO.length());
+        }else if (param.contains(SM_KEYWORD)){
+            correctValue = param.substring(SM_KEYWORD.length());
         }
         return correctValue;
     }

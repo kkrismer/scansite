@@ -44,12 +44,9 @@ public class SequenceMatchFeature {
 			boolean limitResultsToPhosphorylatedProteins,
 			boolean doCreateFiles, boolean publicOnly, String realPath)
 			throws DataAccessException {
-		return doSequenceMatch(sequencePatterns, dataSource,
-				restrictionProperties,
-				restrictionProperties.getOrganismClass(),
-				HistogramStringency.STRINGENCY_HIGH,
-				limitResultsToPhosphorylatedProteins, doCreateFiles,
-				publicOnly, realPath);
+		return doSequenceMatch(sequencePatterns, dataSource, restrictionProperties,
+				restrictionProperties.getOrganismClass(), HistogramStringency.STRINGENCY_HIGH,
+				limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);
 	}
 
 	/**

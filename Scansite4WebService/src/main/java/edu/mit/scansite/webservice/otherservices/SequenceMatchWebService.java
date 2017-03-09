@@ -7,6 +7,7 @@ import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
+import edu.mit.scansite.webservice.proteinscan.ProteinScanUtils;
 import edu.mit.scansite.webservice.transferobjects.SequenceMatch;
 import edu.mit.scansite.webservice.transferobjects.SequenceMatchResult;
 
@@ -16,15 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-@Path("/sequenceMatch/sequenceMatchRegex={sequenceMatchRegex}/datasourceNickname={datasourceNick: [A-Za-z]+}/organismClass={organismClass: [A-Za-z]+}" +
-        "/speciesRestrictionRegex={speciesRestrictionRegex: [\\s\\w]*}/numberOfPhosphorylations={numberOfPhosphorylations: [0-3]}" +
-        "/molWeightFrom={molWeightFrom: \\d*}/molWeightTo={molWeightTo: \\d*}" +
-        "/isoelectricPointFrom={isoelectricPointFrom: \\d*\\.?\\d*}/isoelectricPointTo={isoelectricPointTo: \\d*\\.?\\d*}" +
-        "/keywordRestrictionRegex={keywordRestrictionRegex: [\\s\\w]*}")
+@Path("/sequencematch/sequencematchregex={sequencematchregex}/dsshortname={dsshortname: [A-Za-z]+}/organismclass={organismclass: [A-Za-z]+}{speciesrestriction: (/speciesrestriction=[\\s\\w]*)?}{numberofphosphorylations: (/numberofphosphorylations=[0-3])?}{molweightfrom: (/molweightfrom=\\d*)?}{molweightto: (/molweightto=\\d*)?}{isoelectricpointfrom: (/isoelectricpointfrom=\\d*\\.?\\d*)?}{isoelectricpointto: (/isoelectricpointto=\\d*\\.?\\d*)?}{keywordrestriction: (/keywordrestriction=[\\s\\w]*)?}")
 public class SequenceMatchWebService {
     /**
      * @param sequenceMatchRegex       The sequence pattern you are interested in. Regular expressions allowed.
-     * @param datasourceNickName       The nickname of the datasource that will be searched (A list of valid datasources
+     * @param datasourceShortName       The shortname of the datasource that will be searched (A list of valid datasources
      *                                 can be obtained by the getDatasources() method).
      * @param organismClass            A valid organism class (one of those returned by the getOrganismClasses() method).
      * @param speciesRestrictionRegex  A regular expression that restricts the search to proteins of a single species.
@@ -42,25 +39,33 @@ public class SequenceMatchWebService {
     @GET
     @Produces({MediaType.APPLICATION_XML})
     public static SequenceMatchResult doSequenceMatch(
-            @PathParam("sequenceMatchRegex") String sequenceMatchRegex,
-            @PathParam("datasourceNick") String datasourceNickName,
-            @PathParam("organismClass") String organismClass,
-            @DefaultValue("") @PathParam("speciesRestrictionRegex") String speciesRestrictionRegex,
-            @DefaultValue("") @PathParam("numberOfPhosphorylations") String numberOfPhosphorylations,
-            @DefaultValue("") @PathParam("molWeightFrom") String molWeightFrom,
-            @DefaultValue("") @PathParam("molWeightTo") String molWeightTo,
-            @DefaultValue("") @PathParam("isoelectricPointFrom") String isoelectricPointFrom,
-            @DefaultValue("") @PathParam("isoelectricPointTo") String isoelectricPointTo,
-            @DefaultValue("") @PathParam("keywordRestrictionRegex") String keywordRestrictionRegex
-    ) {
+            @PathParam("sequencematchregex") String sequenceMatchRegex,
+            @PathParam("dsshortname") String datasourceShortName,
+            @PathParam("organismclass") String organismClass,
+            @DefaultValue("") @PathParam("speciesrestriction") String speciesRestrictionRegex,
+            @DefaultValue("") @PathParam("numberofphosphorylations") String numberOfPhosphorylations,
+            @DefaultValue("") @PathParam("molweightfrom") String molWeightFrom,
+            @DefaultValue("") @PathParam("molweightto") String molWeightTo,
+            @DefaultValue("") @PathParam("isoelectricpointfrom") String isoelectricPointFrom,
+            @DefaultValue("") @PathParam("isoelectricpointto") String isoelectricPointTo,
+            @DefaultValue("") @PathParam("keywordrestriction") String keywordRestrictionRegex)
+    {
+        speciesRestrictionRegex = ProteinScanUtils.processOptionalParameter(speciesRestrictionRegex);
+        numberOfPhosphorylations = ProteinScanUtils.processOptionalParameter(numberOfPhosphorylations);
+        molWeightFrom = ProteinScanUtils.processOptionalParameter(molWeightFrom);
+        molWeightTo = ProteinScanUtils.processOptionalParameter(molWeightTo);
+        isoelectricPointFrom = ProteinScanUtils.processOptionalParameter(isoelectricPointFrom);
+        isoelectricPointTo = ProteinScanUtils.processOptionalParameter(isoelectricPointTo);
+        keywordRestrictionRegex = ProteinScanUtils.processOptionalParameter(keywordRestrictionRegex);
+
         if (sequenceMatchRegex == null || sequenceMatchRegex.isEmpty()) {
             throw new ScansiteWebServiceException("No sequence match regular expression given.");
         }
         Integer nPhos = 0;
-        Double piFrom = null;
-        Double piTo = null;
-        Double mwFrom = null;
-        Double mwTo = null;
+        Double piFrom = DatabaseSearchWebService.parseParameter(isoelectricPointFrom);
+        Double piTo = DatabaseSearchWebService.parseParameter(isoelectricPointTo);
+        Double mwFrom = DatabaseSearchWebService.parseParameter(molWeightFrom);
+        Double mwTo = DatabaseSearchWebService.parseParameter(molWeightTo);
 
         if (speciesRestrictionRegex != null && speciesRestrictionRegex.isEmpty()) {
             speciesRestrictionRegex = null;
@@ -80,43 +85,16 @@ public class SequenceMatchWebService {
             }
         }
 
-        if (molWeightFrom != null && !molWeightFrom.isEmpty()) {
-            try {
-                mwFrom = Double.parseDouble(molWeightFrom);
-            } catch (Exception e) {
-            }
+        if (datasourceShortName == null || datasourceShortName.isEmpty()) {
+            throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
-
-        if (molWeightTo != null && !molWeightTo.isEmpty()) {
-            try {
-                mwTo = Double.parseDouble(molWeightTo);
-            } catch (Exception e) {
-            }
-        }
-
-        if (isoelectricPointFrom != null && !isoelectricPointFrom.isEmpty()) {
-            try {
-                piFrom = Double.parseDouble(isoelectricPointFrom);
-            } catch (Exception e) {
-            }
-        }
-
-        if (isoelectricPointTo != null && !isoelectricPointTo.isEmpty()) {
-            try {
-                piTo = Double.parseDouble(isoelectricPointTo);
-            } catch (Exception e) {
-            }
-        }
-
         DataSource ds = null;
         try {
-            ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(datasourceNickName);
+            ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(datasourceShortName);
         } catch (Exception e) {
-            throw new ScansiteWebServiceException("No valid datasource nickname given.");
+            throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
-        if (datasourceNickName == null || datasourceNickName.isEmpty()) {
-            throw new ScansiteWebServiceException("No valid datasource nickname given.");
-        }
+
 
         OrganismClass oc = OrganismClass.getByStringRepresentation(organismClass);
         if (oc == null) {
@@ -125,32 +103,31 @@ public class SequenceMatchWebService {
 
         List<SequencePattern> patterns = new ArrayList<SequencePattern>(1);
         SequencePattern pattern = new SequencePattern();
-        pattern.addPosition(new PatternPosition(sequenceMatchRegex, false,
-                false));
+        pattern.addPosition(new PatternPosition(sequenceMatchRegex, false, false));
         patterns.add(pattern);
 
-
-        List<SequencePattern> sequencePatterns = new ArrayList<>();
-        SequencePattern sequencePattern = new SequencePattern();
-        sequencePatterns.add(sequencePattern); //sequenceMatchRegex
+//        List<SequencePattern> sequencePatterns = new ArrayList<>();
+//        SequencePattern sequencePattern = new SequencePattern();
+//        sequencePatterns.add(sequencePattern); //sequenceMatchRegex
 //        ds
-        List<String> seqList = new ArrayList<String>();
-        seqList.add(sequenceMatchRegex);
-        RestrictionProperties restrictionProperties = new RestrictionProperties(oc, speciesRestrictionRegex, nPhos, mwFrom, mwTo, piFrom, piTo, keywordRestrictionRegex, seqList);
+//        List<String> seqList = new ArrayList<String>();
+//        seqList.add(sequenceMatchRegex);
+        RestrictionProperties restrictionProperties = new RestrictionProperties(oc, speciesRestrictionRegex,
+                nPhos, mwFrom, mwTo, piFrom, piTo, keywordRestrictionRegex, null);
 //        oc
 //        HistogramStringency.valueOf("high");
         boolean limitResultsToPhosphorylatedProteins = (nPhos > 0); // [todo:] again... no idea
         boolean doCreateFiles = false;
         boolean publicOnly = true;
-        String realPath = "";
+        String realPath = null;
 
         try {
             Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
             DbConnector connector = new DbConnector(config);
+            connector.initConnectionPooling();
             SequenceMatchFeature feature = new SequenceMatchFeature(connector);
 
-
-            edu.mit.scansite.shared.dispatch.features.SequenceMatchResult result = feature.doSequenceMatch(sequencePatterns, ds,
+            edu.mit.scansite.shared.dispatch.features.SequenceMatchResult result = feature.doSequenceMatch(patterns, ds,
                     restrictionProperties, limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);
             SequenceMatch[] matches = null;
             if (result.getMatches() != null && result.getMatches().size() > 0) {
@@ -162,7 +139,7 @@ public class SequenceMatchWebService {
             } else {
                 matches = new SequenceMatch[]{};
             }
-            return new SequenceMatchResult(sequenceMatchRegex, datasourceNickName, matches, result.getSequencePatternMatchCount(), result.getProteinsInDbCount());
+            return new SequenceMatchResult(sequenceMatchRegex, datasourceShortName, matches, result.getSequencePatternMatchCount(), result.getProteinsInDbCount());
         } catch (DataAccessException e) {
             throw new ScansiteWebServiceException("Running sequence match search failed. Please try again later or, if this problem persists, contact the system's administrator.");
         } catch (DatabaseException e) {

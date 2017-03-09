@@ -450,18 +450,26 @@ just imagine there is no whitespace at all and the URI is just continued on the 
 
     <li id='svc_seqMatch'><b>Search a protein database for a sequence pattern:</b><br/>
         URL:
+        <!--
+        /sequencematch
+        /sequencematchregex={sequencematchregex}
+        /dsshortname={dsshortname: [A-Za-z]+}
+        /organismclass={organismclass: [A-Za-z]+}
+        {speciesrestriction: (/speciesrestriction=[\s\w]*)?}
+        {numberofphosphorylations: (/numberofphosphorylations=[0-3])?}
+        {molweightfrom: (/molweightfrom=\d*)?}
+        {molweightto: (/molweightto=\d*)?}
+        {isoelectricpointfrom: (/isoelectricpointfrom=\d*\.?\d*)?}
+        {isoelectricpointto: (/isoelectricpointto=\d*\.?\d*)?}
+        {keywordrestriction: (/keywordrestriction=[\s\w]*)?}
+        -->
         <pre>
-    ../sequenceMatch/sequenceMatchRegex=<a href='#cmd_any'>[ANY]</a>/datasourceNickname=<a href='#cmd_ds'>[DS]</a>/organismClass=<a
-                href='#cmd_oc'>[OC]</a>/speciesRestrictionRegex=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>  \
-    /numberOfPhosphorylations=<a href='#cmd_np'>[NP]</a>/molWeightFrom=<a href='#cmd_num'>[NUM]</a><a href='#cmd_qmark'>?</a>/molWeightTo=<a
-                href='#cmd_num'>[NUM]</a><a href='#cmd_qmark'>?</a>/isoelectricPointFrom=<a href='#cmd_dec'>[DEC]</a><a
-                href='#cmd_qmark'>?</a>/isoelectricPointTo=<a href='#cmd_dec'>[DEC]</a><a href='#cmd_qmark'>?</a>  \
-    /keywordRestrictionRegex=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>
+    ../sequencematch/sequencematchregex=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/organismclass=<a href='#cmd_oc'>[OC]</a>/speciesrestriction=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>/numberofphosphorylations=<a href='#cmd_np'>[NP]</a>/molweightfrom=<a href='#cmd_num'>[NUM]</a><a href='#cmd_qmark'>?</a>/molweightto=<a href='#cmd_num'>[NUM]</a><a href='#cmd_qmark'>?</a>/isoelectricpointfrom=<a href='#cmd_dec'>[DEC]</a><a href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>
     </pre>
         Examples:
         <pre>
-     - ../sequenceMatch/sequenceMatchRegex=A+VCA/datasourceNickname=swissprot/organismClass=Mammals/speciesRestrictionRegex=human/numberOfPhosphorylations=0/molWeightFrom=/molWeightTo=/isoelectricPointFrom=/isoelectricPointTo=/keywordRestrictionRegex=cell
-     - ../sequenceMatch/sequenceMatchRegex=A+VCA/datasourceNickname=swissprot/organismClass=Mammals/speciesRestrictionRegex=human/numberOfPhosphorylations=0/molWeightFrom=2000/molWeightTo=9000/isoelectricPointFrom=2.2/isoelectricPointTo=6/keywordRestrictionRegex=
+     - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/keywordrestriction=cell
+     - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/molweightfrom=2000/molweightto=9000/isoelectricpointfrom=2.2/isoelectricpointto=6
     </pre>
     </li>
 

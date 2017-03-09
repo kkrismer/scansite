@@ -95,11 +95,11 @@ public class ProteinScanWebService extends WebService {
             throw new ScansiteWebServiceException("Running ProteinScan service failed.");
         } catch (DatabaseException e) {
             e.printStackTrace();
-            throw new ScansiteWebServiceException("Running otherservices scan failed.");
+            throw new ScansiteWebServiceException("Running ProteinScan scan failed.");
         }
     }
 
-    private static HistogramStringency getStringency(String stringencyValue) {
+    public static HistogramStringency getStringency(String stringencyValue) {
         HistogramStringency stringency = null;
         for (HistogramStringency str : HistogramStringency.values()) {
             if (str.getName().equalsIgnoreCase(stringencyValue)) {
