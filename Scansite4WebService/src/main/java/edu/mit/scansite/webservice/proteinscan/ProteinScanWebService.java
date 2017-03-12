@@ -65,12 +65,13 @@ public class ProteinScanWebService extends WebService {
         try {
             Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
             DbConnector connector = new DbConnector(config);
-            connector.initConnectionPooling();
+            connector.initLongTimeConnection();
             ProteinScanFeature feature = new ProteinScanFeature(connector);
 
             edu.mit.scansite.shared.dispatch.features.ProteinScanResult res = feature.doProteinScan(protein, motifSelection, stringency, showDomains,
                     dataSourceShortName, referenceProteome, dataSource, doCreateFiles, publicOnly, realPath);
 
+            connector.closeLongTimeConnection();
             if (res.isSuccess()) {
                 ProteinScanResult result = new ProteinScanResult();
                 result.setProteinName(res.getResults().getProtein().getIdentifier());

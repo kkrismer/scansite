@@ -121,11 +121,12 @@ public class DatabaseSearchWebService {
         try {
             Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
             DbConnector connector = new DbConnector(config);
-            connector.initConnectionPooling();
+            connector.initLongTimeConnection();
 
             DatabaseScanFeature feature = new DatabaseScanFeature(connector);
             DatabaseScanResult result = feature.doDatabaseSearch(motifSelection, ds, restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath);
 
+            connector.closeLongTimeConnection();
             MotifSiteDbSearch[] sites;
             if (result.isSuccess() && result.getDbSearchSites() != null && result.getDbSearchSites().size() > 0) {
                 sites = new MotifSiteDbSearch[result.getDbSearchSites().size()];

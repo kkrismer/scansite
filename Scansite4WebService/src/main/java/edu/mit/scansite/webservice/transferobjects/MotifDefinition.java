@@ -10,17 +10,17 @@ public class MotifDefinition implements Serializable {
   
   private String motifGroupName;
   private String motifName;
-  private String motifNickName;
+  private String motifShortName;
   private String motifClass;
   
   public MotifDefinition() {
   }
 
-  public MotifDefinition(String motifGroupName, String motifName, String motifNickName, String motifClass) {
+  public MotifDefinition(String motifGroupName, String motifName, String motifShortName, String motifClass) {
     super();
     this.motifGroupName = motifGroupName;
     this.motifName = motifName;
-    this.motifNickName = motifNickName;
+    this.motifShortName = motifShortName;
     this.motifClass = motifClass;
   }
 
@@ -40,12 +40,12 @@ public class MotifDefinition implements Serializable {
     this.motifName = motifName;
   }
 
-  public String getMotifNickName() {
-    return motifNickName;
+  public String getMotifShortName() {
+    return motifShortName;
   }
 
-  public void setMotifNickName(String motifNickName) {
-    this.motifNickName = motifNickName;
+  public void setMotifShortName(String motifShortName) {
+    this.motifShortName = motifShortName;
   }
   
   public String getMotifClass() {

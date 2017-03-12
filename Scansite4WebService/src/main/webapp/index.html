@@ -25,6 +25,153 @@
         })();
 
     </script>
+
+    <script type="text/javascript">
+        function errorCallback() {
+            console.log("Error! Could not run REST call");
+        }
+
+        function loadResultList(targetUrl) {
+            if (targetUrl == "/stringency") {
+                printStringencies(targetUrl);
+            }
+            if (targetUrl == "/datasources") {
+                printDataSources(targetUrl);
+            }
+            if (targetUrl == "/motifclasses") {
+                printMotifClasses(targetUrl);
+            }
+            if (targetUrl == "/organismclasses") {
+                printOrganismClasses(targetUrl);
+            }
+            if (targetUrl == "/motifdefinitions/motifclass=YEAST" || targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
+                printMotifDefinition(targetUrl);
+            }
+            if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+                printProteinExists(targetUrl);
+            }
+        }
+
+        function printStringencies(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/\</g,"&lt;")   //for <
+                    resp = resp.replace(/\>/g,"&gt;")   //for >
+                    resp = resp.replace(/&lt;stringencyValues&gt;/g,"<br/>&lt;stringencyValues&gt;")
+                    resp = resp.replace(/&lt;\/stringencyValues&gt;/g,"<br/>&lt;/stringencyValues&gt;")
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>    &lt;")
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoStringency").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+        function printDataSources(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/</g,"&lt;")   //for <
+                    resp = resp.replace(/>/g,"&gt;")   //for >
+                    resp = resp.replace(/&lt;dataSources&gt;/g,"<br/>&lt;dataSources&gt;")
+                    resp = resp.replace(/&lt;\/dataSources&gt;/g,"<br/>&lt;/dataSources&gt;")
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>    &lt;")
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoDataSources").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+        function printMotifClasses(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/</g,"&lt;")   //for <
+                    resp = resp.replace(/>/g,"&gt;")   //for >
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>&lt;")
+                    resp = resp.replace(/&lt;motifClass&gt;/g,"    &lt;motifClass&gt;")
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoMotifClasses").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+        function printOrganismClasses(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/</g,"&lt;")   //for <
+                    resp = resp.replace(/>/g,"&gt;")   //for >
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>    &lt;")
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoOrganismClasses").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+        function printMotifDefinition(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/\</g,"&lt;")   //for <
+                    resp = resp.replace(/\>/g,"&gt;")   //for >
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>    &lt;")
+                    resp = resp.replace(/&lt;motifDefinition&gt;/g,"    &lt;motifDefinition&gt;");
+                    resp = resp.replace(/&lt;motifClass&gt;/g,"        &lt;motifClass&gt;");
+                    resp = resp.replace(/&lt;motifGroupName&gt;/g,"        &lt;motifGroupName&gt;");
+                    resp = resp.replace(/&lt;motifName&gt;/g,"        &lt;motifName&gt;");
+                    resp = resp.replace(/&lt;motifShortName&gt;/g,"        &lt;motifShortName&gt;");
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoMotifDefinition").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+        function printProteinExists(targetUrl) {
+            var req = new XMLHttpRequest();
+            req.onerror = errorCallback;
+            req.onreadystatechange = function() {
+                if (req.readyState==4 && req.status==200) {
+                    var response = req.responseText;
+                    var resp = response.replace(/\</g,"&lt;")   //for <
+                    resp = resp.replace(/\>/g,"&gt;")   //for >
+                    resp = resp.replace(/&gt;&lt;/g,"&gt;<br/>    &lt;")
+                    resp = resp.replace(/&lt;isSuccess&gt;/g,"    &lt;isSuccess&gt;")
+                    resp = "<pre>" + resp + "</pre>"
+                    content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+                    document.getElementById("demoProteinExists").innerHTML = content;
+                }
+            };
+            req.open("GET", targetUrl, true);
+            req.send(null);
+        }
+
+    </script>
 </head>
 <body class='wsDescBody'>
 <div style="text-align:center;">
@@ -42,7 +189,7 @@
     <li><a href='#sec_basicFunctions'>Basic Functions</a>
         <ol>
             <li><a href='#svc_stringency'>Get valid stringency values</a></li>
-            <li><a href='#svc_datasources'>Get valid datasources</a></li>
+            <li><a href='#svc_datasources'>Get valid dataSources</a></li>
             <li><a href='#svc_motifClasses'>Get valid motifs classes</a></li>
             <li><a href='#svc_organismClasses'>Get organism classes</a></li>
             <li><a href='#svc_motifDefs'>Get valid motifs from a given class</a></li>
@@ -55,6 +202,8 @@
             <li><a href="#svc_scanProtSeq">Scan a protein for motifs using a protein sequence</a></li>
             <li><a href="#svc_searchDb">Search a sequence database for a Scansite motif</a></li>
             <li><a href="#svc_seqMatch">Search a sequence database for a sequence pattern</a></li>
+            <li><a href="#svc_orthScan">Scan a protein for evolutionary conserved phosphorylation sites</a></li>
+            <li><a href="#svc_localizationPrediction">Predict cellular localization of a protein</a> </li>
         </ol>
     </li>
     <li><a href='#sec_errors'>Errors</a></li>
@@ -90,7 +239,7 @@
     </tr>
     <tr>
         <td><b><a id='cmd_ds'>[DS]</a></b></td>
-        <td>Only datasource's nicknames as returned by the <a href='#svc_datasources'>datasources-service</a> are
+        <td>Only dataSource's nicknames as returned by the <a href='#svc_datasources'>dataSources-service</a> are
             permitted.
         </td>
     </tr>
@@ -188,21 +337,21 @@
         obtain
         by using one of the <a href="#sec_basicFunctions">basic</a> webservice functions. <br/> Illustrating this,
         [P] means that you have to enter a protein accession value that exists in Scansite3's database, and [DS]
-        requires a valid Scansite3 datasource-definition. But how do you know which proteins and datasources are valid?
-        This can be achieved by using the <a href="#svc_datasources">datasources</a>- and
-        <a href="#svc_proteinExists">proteinExists</a>-function for datasources and proteins, respectively. <br/>
-        The datasources-service at <span class='uriInTxt'>../datasources</span> returns an XML-file that looks something
+        requires a valid Scansite3 dataSource-definition. But how do you know which proteins and dataSources are valid?
+        This can be achieved by using the <a href="#svc_datasources">dataSources</a>- and
+        <a href="#svc_proteinExists">proteinExists</a>-function for dataSources and proteins, respectively. <br/>
+        The dataSources-service at <span class='uriInTxt'>../dataSources</span> returns an XML-file that looks something
         like this:
         <pre>
-&lt;datasources&gt;
+&lt;dataSources&gt;
     &lt;!-- ... --&gt;
-    &lt;datasource&gt;
+    &lt;dataSource&gt;
         &lt;name&gt;SwissProt&lt;/name&gt;
         &lt;nickName&gt;swissprot&lt;/nickName&gt;
         &lt;!-- ... --&gt;
-    &lt;/datasource&gt;
+    &lt;/dataSource&gt;
     &lt;!-- ... --&gt;
-&lt;/datasources&gt;
+&lt;/dataSources&gt;
     </pre>
         Knowing that the protein accession you are interested in is from SwissProt, you can go to the next step and
         check if the accession is available in Scansite3's mirror of SwissProt. For this, run the proteinExists-service
@@ -290,20 +439,34 @@
 <a href="#top" class='goToTopLink'>[Go to top]</a>
 
 <!-- ########################################################################################################## -->
+<!-- ########################################################################################################## -->
+<!-- #####################################  4. BASIC FUNCTIONS ################################################ -->
+<!-- ########################################################################################################## -->
+<!-- ########################################################################################################## -->
 <h2 id='sec_basicFunctions'>4. Basic functions </h2>
 <ol>
     <li id='svc_stringency'><b>Query valid stringency values:</b><br/>
         URL:
         <pre>
     ../stringency
-    </pre>
+        </pre>
+        Demonstrate:
+        <pre>
+    <a href="javascript:void(0);" onclick="loadResultList('/stringency')">../stringency</a>
+        </pre>
+        <div id="demoStringency"></div>
     </li>
 
-    <li id='svc_datasources'><b>Query valid datasources and their nicknames:</b><br/>
+    <li id='svc_datasources'><b>Query valid dataSources and their nicknames:</b><br/>
         URL:
         <pre>
     ../datasources
     </pre>
+    Demonstrate:
+    <pre>
+    <a href="javascript:void(0);" onclick="loadResultList('/datasources')">../datasources</a>
+    </pre>
+        <div id="demoDataSources"></div>
     </li>
 
     <li id='svc_motifClasses'><b>Query valid motif classes:</b><br/>
@@ -311,12 +474,23 @@
         <pre>
     ../motifclasses
     </pre>
+    Demonstrate:
+    <pre>
+        <a href="javascript:void(0);" onclick="loadResultList('/motifclasses')">../motifclasses</a>
+    </pre>
+        <div id="demoMotifClasses"></div>
     </li>
 
     <li id='svc_organismClasses'><b>Query valid organism classes:</b><br/>
         URL:
         <pre>
     ../organismclasses
+        </pre>
+        Demonstrate:
+        <pre>
+        <a href="javascript:void(0);" onclick="loadResultList('/organismclasses')">../organismclasses</a>
+        </pre>
+        <div id="demoOrganismClasses"></div>
     </li>
 
     <li id='svc_motifDefs'><b>Query valid motifs, their group, classes and nicknames:</b><br/>
@@ -326,8 +500,10 @@
     </pre>
         Example:
         <pre>
-    ../motifdefinitions/motifclass=YEAST
+        <a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=YEAST')">../motifdefinitions/motifclass=YEAST</a>
+        <a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=MAMMALIAN')">../motifdefinitions/motifclass=MAMMALIAN</a>
     </pre>
+        <div id="demoMotifDefinition"></div>
     </li>
 
     <li id='svc_proteinExists'><b>Check if a protein exists in one of our database mirrors:</b><br/>
@@ -337,8 +513,9 @@
     </pre>
         Example:
         <pre>
-    ../proteinexists/identifier=vav_mouse/dsshortname=swissprot
+        <a href="javascript:void(0);" onclick="loadResultList('/proteinexists/identifier=vav_mouse/dsshortname=swissprot')">../proteinexists/identifier=vav_mouse/dsshortname=swissprot</a>
     </pre>
+        <div id="demoProteinExists"></div>
     </li>
 </ol>
 <a href="#top" class='goToTopLink'>[Go to top]</a>
@@ -471,6 +648,47 @@ just imagine there is no whitespace at all and the URI is just continued on the 
      - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/keywordrestriction=cell
      - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/molweightfrom=2000/molweightto=9000/isoelectricpointfrom=2.2/isoelectricpointto=6
     </pre>
+    </li>
+    <li id="svc_orthScan"><b>Scan a protein for evolutionary conserved phosphorylation sites</b><br/>
+        URL:
+        <!--
+        /scanorthologs
+        /identifier={identifier: \S+}
+        /dsshortname={dsshortname: [A-Za-z]+}
+        /alignmentradius={alignmentradius}
+        /stringency={stringency: [A-Za-z]+}
+        /sequencepattern={sequencepattern}
+        /motifgroups={motifgroups}
+        /siteposition={siteposition: [0-9]+}")
+        -->
+        <pre>
+    - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a href='#cmd_st'>[ST]</a><strong>/sequencepattern=</strong><a href='#cmd_seq'>[SEQ]</a>
+    - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a href='#cmd_st'>[ST]</a><strong>motifgroup=[motifgroup short name]/siteposition=[<a href='#cmd_num'>[NUM]</a>]</strong>
+        </pre>
+        Parameter choice (either one or the other):
+        <ul>
+            <li>sequencepattern</li>
+            <li>motifgroups and siteposition</li>
+        </ul>
+        Example:
+        <pre>
+    - ../scanorthologs/identifier=BRCA2_HUMAN/dsshortname=swissprotorthology/alignmentradius=40/stringency=High/motifgroup=Acid_ST_kin/siteposition=306
+        </pre>
+    </li>
+    <li id="svc_localizationPrediction"><b>Predict cellular localization of a protein</b><br/>
+        URL:
+        <!-- /predictlocation
+        /localizationdsshortname={localizationdsshortname: [A-Za-z]+}
+        /identifier={identifier: \\S+}
+        /dsshortname={dsshortname: [A-Za-z]+}
+        -->
+        <pre>
+      ../predictlocation/localizationdsshortname=<a href='#cmd_ds'>[DS]</a>/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
+        </pre>
+        Example:
+        <pre>
+      ../predictlocation/localizationdsshortname=loctree/identifier=BRCA2_HUMAN/dsshortname=swissprot
+        </pre>
     </li>
 
 </ol>
