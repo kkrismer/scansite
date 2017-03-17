@@ -36,7 +36,7 @@ public class ProteinExistsService extends WebService {
     ) {
 
         try {
-            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            DaoFactory factory = ServiceLocator.getDaoFactory();
             List<DataSource> dataSourceList = new DataSourcesService().retrieveDataSources(factory);
             DataSource ds = null;
             for (DataSource dataSource : dataSourceList) {

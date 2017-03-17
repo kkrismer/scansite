@@ -1,7 +1,6 @@
 package edu.mit.scansite.webservice.databasesearch;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.DatabaseScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
@@ -33,7 +32,7 @@ public class DatabaseScanFeatureTest {
     @Before
     public void setup() throws DatabaseException {
 
-        dataSource = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(dsShortName);
+        dataSource = ServiceLocator.getDaoFactory().getDataSourceDao().get(dsShortName);
 
         OrganismClass oc = OrganismClass.getByStringRepresentation("Mammals");
         String speciesRestrictionRegex = "homo sapiens";
@@ -56,7 +55,6 @@ public class DatabaseScanFeatureTest {
         publicOnly = true;
         realPath = null;
 
-        DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
         feature = new DatabaseScanFeature();
     }
 

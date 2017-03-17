@@ -3,7 +3,6 @@ package edu.mit.scansite.webservice.otherservices;
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.DataSourceDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.webservice.WebService;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
@@ -30,8 +29,7 @@ public class DataSourcesService extends WebService {
     @Produces({MediaType.APPLICATION_XML})
     public DataSource[] getDatasources() {
         try {
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
-            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            DaoFactory factory = ServiceLocator.getDaoFactory();
             List<edu.mit.scansite.shared.transferobjects.DataSource> ds = retrieveDataSources(factory);
             if (ds != null && ds.size() > 0) {
                 DataSource[] dataSources = new DataSource[ds.size()];

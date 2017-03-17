@@ -40,7 +40,7 @@ public class MotifDefinitionsService extends WebService {
             throw new ScansiteWebServiceException("Given motif class is invalid!");
         }
         try {
-            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            DaoFactory factory = ServiceLocator.getDaoFactory();
             List<Motif> dbMotifs = factory.getMotifDao().getAll(mc, true);
             List<MotifGroup> dbGroups = factory.getGroupsDao().getAll();
             if (dbMotifs != null && dbGroups != null) {

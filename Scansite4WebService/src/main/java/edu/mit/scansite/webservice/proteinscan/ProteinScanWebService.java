@@ -1,7 +1,5 @@
 package edu.mit.scansite.webservice.proteinscan;
 
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.ProteinScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.*;
@@ -65,7 +63,6 @@ public class ProteinScanWebService extends WebService {
         final String realPath = null; // only necessary if doCreateFiles or if showDomains
 
         try {
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
             ProteinScanFeature feature = new ProteinScanFeature();
 
             edu.mit.scansite.shared.dispatch.features.ProteinScanResult res = feature.doProteinScan(protein, motifSelection, stringency, showDomains,

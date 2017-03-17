@@ -1,7 +1,6 @@
 package edu.mit.scansite.webservice.otherservices;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.OrthologScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.*;
@@ -17,7 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Thomas on 3/9/2017.
@@ -61,8 +63,7 @@ public class ScanOrthologsService {
 
         try {
             final boolean publicOnly = false;
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
-            DataSource ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(orthologyDsShortName);
+            DataSource ds = ServiceLocator.getDaoFactory().getDataSourceDao().get(orthologyDsShortName);
             OrthologScanFeature feature = new OrthologScanFeature();
             edu.mit.scansite.shared.dispatch.features.OrthologScanResult result;
             if (motifGroup != null) {
@@ -131,7 +132,7 @@ public class ScanOrthologsService {
         final boolean publicOnly = true;
         List<MotifGroup> motifGroups;
         try {
-            motifGroups = ServiceLocator.getSvcDaoFactory().getGroupsDao().getAll(publicOnly);
+            motifGroups = ServiceLocator.getDaoFactory().getGroupsDao().getAll(publicOnly);
             for (MotifGroup motifGroup : motifGroups) {
                 if (motifGroup.getShortName().equals(motifGroupStr)) {
                     return motifGroup;

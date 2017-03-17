@@ -1,27 +1,24 @@
 package edu.mit.scansite.webservice.otherservices;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.PredictLocalizationFeature;
 import edu.mit.scansite.shared.dispatch.features.PredictProteinsLocalizationResult;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.GOTermEvidence;
 import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
-import edu.mit.scansite.webservice.transferobjects.PredictLocationResult;
 import edu.mit.scansite.webservice.proteinscan.ProteinScanUtils;
+import edu.mit.scansite.webservice.transferobjects.PredictLocationResult;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Thomas on 3/9/2017.
+ *
  */
 @Path("/predictlocation/localizationdsshortname={localizationdsshortname: [A-Za-z]+}/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}")
 public class PredictLocationService {
@@ -44,8 +41,7 @@ public class PredictLocationService {
 //        }
 
         try {
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
-            DataSource ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(localizationDsShortName);
+            DataSource ds = ServiceLocator.getDaoFactory().getDataSourceDao().get(localizationDsShortName);
             PredictLocalizationFeature feature = new PredictLocalizationFeature();
             edu.mit.scansite.shared.dispatch.features.PredictProteinsLocalizationResult result;
 

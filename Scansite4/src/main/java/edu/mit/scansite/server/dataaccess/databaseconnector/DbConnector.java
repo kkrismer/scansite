@@ -75,10 +75,10 @@ public class DbConnector {
         return connections[activeConnectionNo];
     }
 
-    public void setWebServiceProperties(Properties properties) {
-	    this.properties = properties;
-	    logger.info("Prepared Web Service database access");
-    }
+//    public void setWebServiceProperties(Properties properties) {
+//	    this.properties = properties;
+//	    logger.info("Prepared Web Service database access");
+//    }
 
     public static DbConnector getInstance() {
         if (instance == null) {
@@ -196,13 +196,6 @@ public class DbConnector {
 		}
 	}
 
-//	public void rollback() throws DatabaseAccessException {
-//		try {
-//			connections[activeConnectionNo].rollback();
-//		} catch (Exception e) {
-//			throw new DatabaseAccessException(e.getMessage(), e);
-//		}
-//	}
 
 	public void setAutoCommit(boolean autoCommit) throws DatabaseAccessException {
 		try {

@@ -51,7 +51,7 @@ public class DataSourcesServiceTest {
 
     @Test
     public void retriebeDataSourcesTest() throws DataAccessException {
-        DaoFactory daoFac = ServiceLocator.getSvcDaoFactory();
+        DaoFactory daoFac = ServiceLocator.getDaoFactory();
         List<edu.mit.scansite.shared.transferobjects.DataSource> dataSources = service.retrieveDataSources(daoFac);
 
         int matches = 0;

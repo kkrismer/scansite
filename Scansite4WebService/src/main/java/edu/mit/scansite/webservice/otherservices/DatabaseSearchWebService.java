@@ -1,10 +1,8 @@
 package edu.mit.scansite.webservice.otherservices;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.DatabaseScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
@@ -14,7 +12,10 @@ import edu.mit.scansite.webservice.transferobjects.MotifSiteDbSearch;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Path("/databasesearch/motifshortname={motifshortname: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/organismclass={organismclass: [A-Za-z]+}{speciesrestriction: (/speciesrestriction=[\\s\\w]*)?}{numberofphosphorylations: (/numberofphosphorylations=[0-3])?}{molweightfrom: (/molweightfrom=\\d*)?}{molweightto: (/molweightto=\\d*)?}{isoelectricpointfrom: (/isoelectricpointfrom=\\d*\\.?\\d*)?}{isoelectricpointto: (/isoelectricpointto=\\d*\\.?\\d*)?}{keywordrestriction: (/keywordrestriction=[\\w\\s]*)?}{sequencerestriction: (/sequencerestriction=[\\w\\s]*)?}")
 public class DatabaseSearchWebService {
@@ -63,7 +64,7 @@ public class DatabaseSearchWebService {
 
         DataSource ds;
         try {
-            ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(datasourceShortName);
+            ds = ServiceLocator.getDaoFactory().getDataSourceDao().get(datasourceShortName);
         } catch (Exception e) {
             throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
@@ -121,7 +122,6 @@ public class DatabaseSearchWebService {
         final String realPath = null;
 
         try {
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
             DatabaseScanFeature feature = new DatabaseScanFeature();
             DatabaseScanResult result = feature.doDatabaseSearch(motifSelection, ds, restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath);
 

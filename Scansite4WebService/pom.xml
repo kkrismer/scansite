@@ -14,7 +14,7 @@
 			<artifactId>Scansite4</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-			<systemPath>E:/Repository/Scansite/Scansite4/target/Scansite4-jar-with-dependencies.jar</systemPath>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/Scansite4-jar-with-dependencies.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>

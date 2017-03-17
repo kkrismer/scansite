@@ -1,10 +1,8 @@
 package edu.mit.scansite.webservice.otherservices;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.SequenceMatchFeature;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
 import edu.mit.scansite.webservice.proteinscan.ProteinScanUtils;
@@ -90,7 +88,7 @@ public class SequenceMatchWebService {
         }
         DataSource ds;
         try {
-            ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(datasourceShortName);
+            ds = ServiceLocator.getDaoFactory().getDataSourceDao().get(datasourceShortName);
         } catch (Exception e) {
             throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
@@ -122,7 +120,6 @@ public class SequenceMatchWebService {
         final String realPath = null;
 
         try {
-            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
             SequenceMatchFeature feature = new SequenceMatchFeature();
             edu.mit.scansite.shared.dispatch.features.SequenceMatchResult result = feature.doSequenceMatch(patterns, ds,
                     restrictionProperties, limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);

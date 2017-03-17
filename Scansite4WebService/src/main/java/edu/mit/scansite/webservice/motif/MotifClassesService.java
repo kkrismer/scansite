@@ -26,7 +26,7 @@ public class MotifClassesService extends WebService {
         ArrayList<String> mClasses = new ArrayList<>();
         MotifDao dao;
         try {
-            dao = ServiceLocator.getSvcDaoFactory().getMotifDao();
+            dao = ServiceLocator.getDaoFactory().getMotifDao();
             //dao = ServiceLocator.getInstance().getDaoFactory().getMotifDao();
             final boolean publicOnly = true;
             for (MotifClass mc : mcs) {

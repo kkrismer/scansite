@@ -1,7 +1,5 @@
 package edu.mit.scansite.webservice.proteinscan;
 
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.ProteinScanFeature;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.*;
@@ -33,7 +31,6 @@ public class ProteinScanFeatureTest {
 
     @Before
     public void setup() throws DatabaseException {
-        DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
         proteinScanFeature = new ProteinScanFeature();
 
         protein = ProteinScanUtils.getLightWeightProtein(proteinIdentifier, dsShortName);

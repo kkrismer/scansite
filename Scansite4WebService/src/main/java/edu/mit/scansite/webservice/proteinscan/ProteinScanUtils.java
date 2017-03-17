@@ -107,7 +107,7 @@ public class ProteinScanUtils {
             throw new ScansiteWebServiceException("ProteinIdentifierScanService: Missing protein identifier!");
         } else {
             try {
-                DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+                DaoFactory factory = ServiceLocator.getDaoFactory();
                 ProteinDao proteinDao = factory.getProteinDao();
                 DataSourceDao dataSourceDao = factory.getDataSourceDao();
                 return proteinDao.get(proteinIdentifier, dataSourceDao.get(dataSourceShortName));
@@ -120,7 +120,7 @@ public class ProteinScanUtils {
 
     public static DataSource getLocalizationDataSource(String errorMessage) throws DataAccessException {
         List<DataSource> dataSources = new DataSourcesService()
-                .retrieveDataSources(ServiceLocator.getSvcDaoFactory());
+                .retrieveDataSources(ServiceLocator.getDaoFactory());
         if (dataSources == null) {
             throw new ScansiteWebServiceException("Server can not access database. " + errorMessage);
         }
