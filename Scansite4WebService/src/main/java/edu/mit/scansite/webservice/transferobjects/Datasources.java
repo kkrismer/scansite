@@ -5,14 +5,14 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Datasources implements Serializable {
+public class DataSources implements Serializable {
   private static final long serialVersionUID = 3317284759277045902L;
   private DataSource[] dataSource;
   
-  public Datasources() {
+  public DataSources() {
   }
 
-  public Datasources(DataSource[] dataSource) {
+  public DataSources(DataSource[] dataSource) {
     super();
     this.dataSource = dataSource;
   }
