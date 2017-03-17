@@ -16,9 +16,8 @@ public class MotifGroupUpdateCommand extends DbUpdateCommand {
 	private LightWeightMotifGroup group;
 
 	public MotifGroupUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			LightWeightMotifGroup group) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, LightWeightMotifGroup group) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.group = group;
 	}
 

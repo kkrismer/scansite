@@ -32,9 +32,9 @@ public class MotifLocalizationGetAllCommand extends
 	private Map<String, List<Motif>> identifierToMotifsLUT;
 
 	public MotifLocalizationGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource, List<Motif> motifs) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 		identifierToMotifsLUT = generateLUT(motifs);
 	}

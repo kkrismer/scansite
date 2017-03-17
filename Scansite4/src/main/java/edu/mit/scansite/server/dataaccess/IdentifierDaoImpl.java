@@ -22,8 +22,8 @@ import edu.mit.scansite.shared.transferobjects.IdentifierType;
 public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 
 	public IdentifierDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +33,7 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	public List<DataSource> getCompatibleProteinDataSourcesForIdentifierType(
 			IdentifierType type) throws DataAccessException {
 		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, type);
+				dbAccessConfig, dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -56,7 +56,7 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	public List<DataSource> getCompatibleOrthologyDataSourcesForIdentifierType(
 			IdentifierType type) throws DataAccessException {
 		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, type);
+				dbAccessConfig, dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -79,7 +79,7 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	public List<DataSource> getCompatibleLocalizationDataSourcesForIdentifierType(
 			IdentifierType type) throws DataAccessException {
 		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, type);
+				dbAccessConfig, dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -146,13 +146,11 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 			IdentifierType temp = getIdentifierType(identifierType.getId());
 			if (temp == null) {
 				IdentifierTypeAddCommand cmd = new IdentifierTypeAddCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
-						identifierType);
+						dbAccessConfig, dbConstantsConfig, identifierType);
 				cmd.execute();
 			} else {
 				IdentifierTypeUpdateCommand cmd = new IdentifierTypeUpdateCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
-						identifierType);
+						dbAccessConfig, dbConstantsConfig, identifierType);
 				cmd.execute();
 			}
 		} catch (DatabaseException e) {
@@ -166,7 +164,7 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	@Override
 	public IdentifierType getIdentifierType(int id) throws DataAccessException {
 		IdentifierTypeByIdGetCommand cmd = new IdentifierTypeByIdGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -182,7 +180,7 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	public List<IdentifierType> getAllIdentifierTypes()
 			throws DataAccessException {
 		IdentifierTypesGetAllCommand cmd = new IdentifierTypesGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {

@@ -27,10 +27,9 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
 	public OrthologProteinsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			boolean useTempTablesForUpdate, DataSource orthologySource,
+			Properties dbConstantsConfig, boolean useTempTablesForUpdate, DataSource orthologySource,
 			List<String> identifiers, DataSource proteinSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.orthologySource = orthologySource;
@@ -39,10 +38,10 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 	}
 
 	public OrthologProteinsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource orthologySource, String identifier,
 			DataSource proteinSource, boolean useTempTablesForUpdate) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.orthologySource = orthologySource;

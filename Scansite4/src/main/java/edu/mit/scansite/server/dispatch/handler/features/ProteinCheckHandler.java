@@ -44,11 +44,7 @@ public class ProteinCheckHandler implements
 	public BooleanResult execute(ProteinCheckAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			List<String> accs = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get()))
+			List<String> accs = ServiceLocator.getDaoFactory()
 					.getProteinDao()
 					.getAccessionsStartingWith(action.getAccessionContains(),
 							action.getDataSource(), 1);

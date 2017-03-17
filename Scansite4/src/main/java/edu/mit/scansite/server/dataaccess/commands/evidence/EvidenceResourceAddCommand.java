@@ -17,9 +17,8 @@ public class EvidenceResourceAddCommand extends DbInsertCommand {
 	private String link;
 
 	public EvidenceResourceAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String resourceName, String link) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String resourceName, String link) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.resourceName = resourceName;
 		this.link = link;
 	}

@@ -1,6 +1,7 @@
 package edu.mit.scansite.webservice.motif;
 
 import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
@@ -32,20 +33,20 @@ public class MotifDefinitionsService extends WebService {
     @GET
     @Produces({MediaType.APPLICATION_XML})
     public static MotifDefinitions getMotifDefinitions(@PathParam("motifclass") String motifClass) {
-        MotifClass mc = MotifClass.MAMMALIAN;
+        MotifClass mc;
         try {
             mc = MotifClass.getDbValue(motifClass.toUpperCase());
         } catch (Exception e) {
             throw new ScansiteWebServiceException("Given motif class is invalid!");
         }
         try {
-            List<Motif> dbMotifs = ServiceLocator.getWebServiceInstance().getDaoFactory().getMotifDao().getAll(mc, true);
-            List<MotifGroup> dbGroups = ServiceLocator.getWebServiceInstance().getDaoFactory().getGroupsDao().getAll();
+            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            List<Motif> dbMotifs = factory.getMotifDao().getAll(mc, true);
+            List<MotifGroup> dbGroups = factory.getGroupsDao().getAll();
             if (dbMotifs != null && dbGroups != null) {
                 MotifDefinition[] ms = new MotifDefinition[dbMotifs.size()];
                 for (int i = 0; i < dbMotifs.size(); ++i) {
                     Motif m = dbMotifs.get(i);
-                    //todo: check whether getShortName or getDisplayName
                     ms[i] = new MotifDefinition(m.getGroup().getShortName(), m.getShortName(), m.getShortName(), m.getMotifClass().getDatabaseEntry());
                 }
                 return new MotifDefinitions(ms);

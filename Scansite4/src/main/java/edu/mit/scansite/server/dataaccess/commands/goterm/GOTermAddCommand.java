@@ -15,8 +15,8 @@ public class GOTermAddCommand extends DbInsertCommand {
 	private GOTerm goTerm;
 
 	public GOTermAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, GOTerm goTerm) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, GOTerm goTerm) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.goTerm = goTerm;
 	}
 

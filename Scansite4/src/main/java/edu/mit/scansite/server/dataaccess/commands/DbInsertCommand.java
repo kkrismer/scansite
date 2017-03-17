@@ -12,27 +12,25 @@ import edu.mit.scansite.shared.DataAccessException;
  */
 public abstract class DbInsertCommand extends DbCommand<Integer> {
 	public DbInsertCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override
-	protected Integer doExecute(DbConnector dbConnector)
+	protected Integer doExecute()
 			throws DataAccessException {
-		return dbConnector.executeInsertQuery(doGetSqlStatement());
+		return DbConnector.getInstance().executeInsertQuery(doGetSqlStatement());
 	}
 
 	/**
 	 * @return The name of the current table.
-	 * @throws DataLayerException
+	 * @throws DataAccessException
 	 *             Is thrown if an error occurs.
 	 */
 	protected abstract String getTableName() throws DataAccessException;
 
 	/**
 	 * @return The name of the id column in the current table.
-	 * @throws DataLayerException
-	 *             Is thrown if an error occurs.
 	 */
 	protected abstract String getIdColumnName();
 }

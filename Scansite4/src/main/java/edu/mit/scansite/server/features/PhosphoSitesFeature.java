@@ -28,10 +28,8 @@ import edu.mit.scansite.shared.util.ScansiteScoring;
  * @author Konstantin Krismer
  */
 public class PhosphoSitesFeature {
-	private DbConnector dbConnector;
 
-	public PhosphoSitesFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public PhosphoSitesFeature() {
 	}
 
 	private String histogramTaxonName = ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX];
@@ -67,8 +65,7 @@ public class PhosphoSitesFeature {
 			Protein protein, int position, HistogramStringency stringency,
 			LightWeightMotifGroup motifGroup, OrganismClass motifOrganismClass,
 			boolean publicOnly) throws DataAccessException {
-		DaoFactory daoFac = ServiceLocator.getInstance().getDaoFactory(
-				dbConnector);
+		DaoFactory daoFac = ServiceLocator.getDaoFactory();
 		ScansiteAlgorithms alg = new ScansiteAlgorithms();
 		ScansiteScoring scoring = new ScansiteScoring();
 		List<ScanResultSite> hits = new ArrayList<ScanResultSite>();

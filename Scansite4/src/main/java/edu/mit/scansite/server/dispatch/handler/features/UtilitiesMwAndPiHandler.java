@@ -51,12 +51,7 @@ public class UtilitiesMwAndPiHandler implements
 		if ((protein.getSequence() == null || protein.getSequence().isEmpty())
 				&& protein.getDataSource() != null) {
 			try {
-				Protein p = ServiceLocator
-						.getInstance()
-						.getDaoFactory(
-								BootstrapListener
-										.getDbConnector(contextProvider.get()))
-						.getProteinDao()
+				Protein p = ServiceLocator.getDaoFactory().getProteinDao()
 						.get(protein.getIdentifier(), protein.getDataSource());
 				if (p == null) {
 					return new UtilitiesMwAndPiResult(false,

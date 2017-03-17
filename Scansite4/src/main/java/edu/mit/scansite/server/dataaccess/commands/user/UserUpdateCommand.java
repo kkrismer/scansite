@@ -16,9 +16,8 @@ public class UserUpdateCommand extends DbUpdateCommand {
 	private boolean changePassword = false;
 
 	public UserUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, User user,
-			boolean changePassword) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, User user, boolean changePassword) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.user = user;
 		this.changePassword = changePassword;
 	}

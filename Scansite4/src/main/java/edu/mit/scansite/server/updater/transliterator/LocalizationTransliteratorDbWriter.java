@@ -34,13 +34,12 @@ public class LocalizationTransliteratorDbWriter implements
 	private DataSourceMetaInfo dataSourceMetaInfo;
 
 	public LocalizationTransliteratorDbWriter(BufferedWriter errorWriter,
-			DataSourceMetaInfo dataSourceMetaInfo, DbConnector dbConnector)
+			DataSourceMetaInfo dataSourceMetaInfo)
 			throws ScansiteUpdaterException {
 		this.errorWriter = errorWriter;
 		this.dataSourceMetaInfo = dataSourceMetaInfo;
 		try {
-			DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory factory = ServiceLocator.getDaoFactory();
 			localizationDao = factory.getLocalizationDao();
 			localizationDao.setUseTempTablesForUpdate(true);
 		} catch (Exception e) {

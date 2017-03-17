@@ -45,14 +45,8 @@ public class DataSourcesRetrieverHandler implements
 			throws DispatchException {
 		try {
 			return new DataSourcesRetrieverResult(
-					ServiceLocator
-							.getInstance()
-							.getDaoFactory(
-									BootstrapListener
-											.getDbConnector(contextProvider
-													.get()))
-							.getDataSourceDao()
-							.getAll(action.getType(),
+					ServiceLocator.getDaoFactory()
+							.getDataSourceDao().getAll(action.getType(),
 									action.isPrimaryDataSourcesOnly()));
 		} catch (DataAccessException e) {
 			logger.error(e.toString());

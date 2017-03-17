@@ -655,24 +655,24 @@ just imagine there is no whitespace at all and the URI is just continued on the 
         /scanorthologs
         /identifier={identifier: \S+}
         /dsshortname={dsshortname: [A-Za-z]+}
-        /alignmentradius={alignmentradius}
+        /orthologydsshortname={orthologydsshortname: [A-Za-z]+}
+        /alignmentradius={alignmentradius: [0-9]+}
         /stringency={stringency: [A-Za-z]+}
-        /sequencepattern={sequencepattern}
-        /motifgroups={motifgroups}
+        /motifgroup={motifgroup: \S+}
         /siteposition={siteposition: [0-9]+}")
         -->
         <pre>
-    - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a href='#cmd_st'>[ST]</a><strong>/sequencepattern=</strong><a href='#cmd_seq'>[SEQ]</a>
-    - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a href='#cmd_st'>[ST]</a><strong>motifgroup=[motifgroup short name]/siteposition=[<a href='#cmd_num'>[NUM]</a>]</strong>
+    <!-- - .. some example using the sequence pattern -->
+    - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/orthologydsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a href='#cmd_st'>[ST]</a>motifgroup=[motifgroup short name]/siteposition=[<a href='#cmd_num'>[NUM]</a>
         </pre>
-        Parameter choice (either one or the other):
-        <ul>
-            <li>sequencepattern</li>
-            <li>motifgroups and siteposition</li>
-        </ul>
+        <!--Parameter choice (either one or the other):-->
+        <!--<ul>-->
+            <!--<li>sequencepattern</li>-->
+            <!--<li>motifgroups and siteposition</li>-->
+        <!--</ul>-->
         Example:
         <pre>
-    - ../scanorthologs/identifier=BRCA2_HUMAN/dsshortname=swissprotorthology/alignmentradius=40/stringency=High/motifgroup=Acid_ST_kin/siteposition=306
+    - ../scanorthologs/identifier=BRCA2_HUMAN/dsshortname=swissprot/orthologydsshortname=swissprotorthology/alignmentradius=40/stringency=High/motifgroup=Acid_ST_kin/siteposition=306
         </pre>
     </li>
     <li id="svc_localizationPrediction"><b>Predict cellular localization of a protein</b><br/>

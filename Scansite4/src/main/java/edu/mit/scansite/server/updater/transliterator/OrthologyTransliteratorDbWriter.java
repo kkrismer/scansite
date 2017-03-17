@@ -24,13 +24,12 @@ public class OrthologyTransliteratorDbWriter implements
 	private DataSourceMetaInfo dataSourceMetaInfo;
 
 	public OrthologyTransliteratorDbWriter(BufferedWriter errorWriter,
-			DataSourceMetaInfo dataSourceMetaInfo, DbConnector dbConnector)
+			DataSourceMetaInfo dataSourceMetaInfo)
 			throws ScansiteUpdaterException {
 		this.errorWriter = errorWriter;
 		this.dataSourceMetaInfo = dataSourceMetaInfo;
 		try {
-			DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory factory = ServiceLocator.getDaoFactory();
 			orthologyDao = factory.getOrthologDao();
 			orthologyDao.setUseTempTablesForUpdate(true);
 		} catch (Exception e) {

@@ -16,9 +16,8 @@ public class NewsAddCommand extends DbInsertCommand {
 	private NewsEntry entry;
 
 	public NewsAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			NewsEntry entry) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, NewsEntry entry) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.entry = entry;
 	}
 

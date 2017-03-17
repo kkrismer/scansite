@@ -24,10 +24,10 @@ public class ProteinGetAccessionsLikeCommand extends
 	private int maxSuggestionsProteinAccessions = -1;
 
 	public ProteinGetAccessionsLikeCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			String accessionContains, boolean beginningOnly,
 			DataSource dataSource, int maxSuggestionsProteinAccessions) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.accessionContains = (beginningOnly ? "" : "%") + accessionContains
 				+ "%";
 		this.dataSource = dataSource;

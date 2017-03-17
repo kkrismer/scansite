@@ -20,9 +20,9 @@ public class ProteinAddCommand extends DbInsertCommand {
 	private DataSource dataSource;
 
 	public ProteinAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Protein p,
+			Properties dbConstantsConfig, Protein p,
 			int taxonId, boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.p = p;
 		this.taxonId = taxonId;
 		setUseOfTempTables(useTempTablesForUpdate);

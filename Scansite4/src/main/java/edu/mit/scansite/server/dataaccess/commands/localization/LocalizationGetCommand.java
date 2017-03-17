@@ -25,9 +25,9 @@ public class LocalizationGetCommand extends DbQueryCommand<Localization> {
 	private LightWeightProtein protein;
 
 	public LocalizationGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource, LightWeightProtein protein) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 		this.protein = protein;
 	}

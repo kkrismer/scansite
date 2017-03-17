@@ -16,9 +16,8 @@ public class CreateProteinsTableCommand extends DbUpdateCommand {
 	private DataSource dataSource;
 
 	public CreateProteinsTableCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(true);
 		this.dataSource = dataSource;
 	}

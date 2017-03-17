@@ -21,10 +21,9 @@ public class TaxonIdGetSubTaxaIdCommand extends DbQueryCommand<Set<Integer>> {
 	private boolean getSpeciesOnly = true;
 
 	public TaxonIdGetSubTaxaIdCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String parentPath, boolean useTempTablesForUpdate,
+			Properties dbConstantsConfig, String parentPath, boolean useTempTablesForUpdate,
 			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 		this.parentPath = parentPath;

@@ -17,8 +17,8 @@ import edu.mit.scansite.shared.transferobjects.GOTerm;
 public class GOTermsGetAllCommand extends DbQueryCommand<List<GOTerm>> {
 
 	public GOTermsGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

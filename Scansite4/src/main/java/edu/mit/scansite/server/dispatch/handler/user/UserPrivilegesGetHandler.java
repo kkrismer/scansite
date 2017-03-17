@@ -44,12 +44,8 @@ public class UserPrivilegesGetHandler implements
 	public UserPrivilegesResult execute(UserPrivilegesAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			User user = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao()
-					.get(action.getUserEmail());
+			User user = ServiceLocator.getDaoFactory()
+					.getUserDao().get(action.getUserEmail());
 			if (user != null) {
 				return new UserPrivilegesResult(user.isAdmin(),
 						user.isSuperAdmin());

@@ -15,8 +15,8 @@ public class UserDeleteCommand extends DbUpdateCommand {
 	private String email;
 
 	public UserDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String email) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String email) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.email = email;
 	}
 

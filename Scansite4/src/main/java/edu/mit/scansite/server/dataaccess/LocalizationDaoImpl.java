@@ -32,8 +32,8 @@ import edu.mit.scansite.shared.transferobjects.Protein;
 public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 
 	public LocalizationDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -60,7 +60,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 							type.getName());
 					if (id < 0) { // add to id
 						LocalizationTypeAddCommand cmd = new LocalizationTypeAddCommand(
-								dbAccessConfig, dbConstantsConfig, dbConnector,
+								dbAccessConfig, dbConstantsConfig,
 								localizationDataSource, type);
 						type.setId(cmd.execute());
 					} else { // already in db
@@ -109,7 +109,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 				try {
 					addLocalizationGOTerms(localization.getGoTerms());
 					LocalizationAddCommand cmd = new LocalizationAddCommand(
-							dbAccessConfig, dbConstantsConfig, dbConnector,
+							dbAccessConfig, dbConstantsConfig,
 							localizationDataSource, protein, localization);
 					localization.setId(cmd.execute());
 
@@ -118,7 +118,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 						for (GOTermEvidence goTerm : localization.getGoTerms()) {
 							GOTermEvidenceAddCommand goTermCommand = new GOTermEvidenceAddCommand(
 									dbAccessConfig, dbConstantsConfig,
-									dbConnector, localizationDataSource,
+									localizationDataSource,
 									localization, goTerm);
 							goTermCommand.execute();
 						}
@@ -143,8 +143,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 	private void addLocalizationGOTerms(List<GOTermEvidence> goTerms)
 			throws DataAccessException {
 		if (goTerms != null && !goTerms.isEmpty()) {
-			GOTermDao dao = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getGOTermDao();
+			GOTermDao dao = ServiceLocator.getDaoFactory().getGOTermDao();
 			for (GOTermEvidence goTerm : goTerms) {
 				goTerm.setGoTerm(dao.addGOTerm(goTerm.getGoTerm()));
 				if (goTerm.getEvidenceCode() != null) {
@@ -167,7 +166,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 						.equals("localization")) {
 			try {
 				LocalizationGetCommand cmd = new LocalizationGetCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						localizationDataSource, protein);
 				return cmd.execute();
 			} catch (DatabaseException e) {
@@ -193,7 +192,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 						.equals("localization")) {
 			try {
 				LocalizationGetAllCommand cmd = new LocalizationGetAllCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						localizationDataSource, proteins);
 				return cmd.execute();
 			} catch (DatabaseException e) {
@@ -219,7 +218,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 						.equals("localization")) {
 			try {
 				MotifLocalizationGetAllCommand cmd = new MotifLocalizationGetAllCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						localizationDataSource, motifs);
 				return cmd.execute();
 			} catch (DatabaseException e) {
@@ -249,7 +248,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 				LightWeightProtein protein = new Protein();
 				protein.setIdentifier(motifIdentifier.getValue());
 				LocalizationGetCommand cmd = new LocalizationGetCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						localizationDataSource, protein);
 				return cmd.execute();
 			} catch (DatabaseException e) {
@@ -290,7 +289,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 						.equals("localization")) {
 			try {
 				LocalizationTypesGetAllCommand cmd = new LocalizationTypesGetAllCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						localizationDataSource);
 				return cmd.execute();
 			} catch (DatabaseException e) {
@@ -311,7 +310,7 @@ public class LocalizationDaoImpl extends DaoImpl implements LocalizationDao {
 	public int getLocalizationCount(DataSource dataSource)
 			throws DataAccessException {
 		DataSourceEntryCountGetCommand cmd = new DataSourceEntryCountGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, dataSource);
+				dbAccessConfig, dbConstantsConfig, dataSource);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {

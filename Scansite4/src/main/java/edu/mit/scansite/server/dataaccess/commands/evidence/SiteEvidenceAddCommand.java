@@ -18,9 +18,8 @@ public class SiteEvidenceAddCommand extends DbInsertCommand {
 	private String evidenceResource;
 
 	public SiteEvidenceAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String accession, String site, String evidenceResource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String accession, String site, String evidenceResource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.accession = accession;
 		this.site = site;
 		this.evidenceResource = evidenceResource;

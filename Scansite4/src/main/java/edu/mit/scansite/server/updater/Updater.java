@@ -26,19 +26,15 @@ import edu.mit.scansite.shared.transferobjects.IdentifierType;
  */
 public class Updater {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final DbConnector dbConnector;
 
-	public Updater(final DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public Updater() {
 	}
 
 	public void update() throws ScansiteUpdaterException {
 		DbUpdaterConfig updaterConfig;
 		try {
-			InputStream configFileStream = ServiceLocator.getInstance()
-					.getUpdaterConstantsFilePath();
-			InputStream configDTDFileStream = ServiceLocator.getInstance()
-					.getUpdaterConstantsDTDFilePath();
+			InputStream configFileStream = ServiceLocator.getUpdaterConstantsFileProperties();
+			InputStream configDTDFileStream = ServiceLocator.getUpdaterConstantsDTDFileProperties();
 			UpdaterConfigXmlFileReader reader = new UpdaterConfigXmlFileReader();
 			updaterConfig = reader.readConfig(configFileStream,
 					configDTDFileStream);
@@ -55,7 +51,7 @@ public class Updater {
 			ExecutorService es = Executors.newCachedThreadPool();
 			String updaterClass = db.getUpdaterClass();
 			DbUpdater updater = getUpdater(updaterConfig.getTempDirPath(),
-					updaterConfig.getInvalidFilePrefix(), db, dbConnector);
+					updaterConfig.getInvalidFilePrefix(), db);
 			es.execute(updater);
 			logger.info("Running updater: " + updaterClass);
 			es.shutdown();
@@ -71,8 +67,7 @@ public class Updater {
 
     private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
 		try {
-			IdentifierDao dao = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getIdentifierDao();
+			IdentifierDao dao = ServiceLocator.getDaoFactory().getIdentifierDao();
 			for (IdentifierType identifierType : identifierTypes) {
 				dao.addOrUpdateIdentifierType(identifierType);
 			}
@@ -83,8 +78,7 @@ public class Updater {
 
 	private void fillEvidenceCodesTable(List<EvidenceCode> evidenceCodes) {
 		try {
-			GOTermDao dao = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getGOTermDao();
+			GOTermDao dao = ServiceLocator.getDaoFactory().getGOTermDao();
 			for (EvidenceCode evidenceCode : evidenceCodes) {
 				dao.addEvidenceCode(evidenceCode);
 			}
@@ -95,8 +89,7 @@ public class Updater {
 
 	private void fillDataSourceTypesTable(List<DataSourceType> dataSourceTypes) {
 		try {
-			DataSourceDao dao = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getDataSourceDao();
+			DataSourceDao dao = ServiceLocator.getDaoFactory().getDataSourceDao();
 			for (DataSourceType dataSourceType : dataSourceTypes) {
 				dao.addOrUpdateDataSourceType(dataSourceType);
 			}
@@ -112,12 +105,11 @@ public class Updater {
 	 * @param tempDirPath
      * @param invalidFilePrefix
 	 * @param db
-     * @param dbConnector
 	 * @return
 	 * @throws ScansiteUpdaterException
 	 */
 	private DbUpdater getUpdater(String tempDirPath, String invalidFilePrefix,
-			DataSourceMetaInfo db, DbConnector dbConnector)
+			DataSourceMetaInfo db)
 			throws ScansiteUpdaterException {
 		DbUpdater updater;
 		try {
@@ -125,7 +117,7 @@ public class Updater {
 		} catch (DbUpdaterException e) {
 			throw new ScansiteUpdaterException(e);
 		}
-		updater.init(tempDirPath, invalidFilePrefix, db, dbConnector);
+		updater.init(tempDirPath, invalidFilePrefix, db);
 		return updater;
 	}
 }

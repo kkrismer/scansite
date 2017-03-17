@@ -1,20 +1,18 @@
 package edu.mit.scansite.server.images.histograms;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.ProteinDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.scoring.ParallelHistogramScorer;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.Protein;
 import edu.mit.scansite.shared.transferobjects.Taxon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * A class that creates histograms.
@@ -26,13 +24,13 @@ public class HistogramMaker {
 			.getLogger(HistogramMaker.class);
 
 	/**
-	 * Makes a ServerHistogram. Motif, Datasource and Taxon have to be available
+	 * Makes a ServerHistogram. Motif, DataSource and Taxon have to be available
 	 * in the database!
 	 * 
 	 * @param motif
 	 *            A motif.
-	 * @param datasource
-	 *            A datasource.
+	 * @param dataSource
+	 *            A data source.
 	 * @param taxon
 	 *            A taxon. Please <b>note</b> that <i>ALL of its sub-taxa</i>
 	 *            are also included in the protein query.
@@ -43,21 +41,13 @@ public class HistogramMaker {
 	public ServerHistogram makeServerHistogram(Motif motif,
 			DataSource dataSource, Taxon taxon) throws DataAccessException {
 		return makeServerHistogram(motif, dataSource, taxon, false,
-				ServiceLocator.getInstance().getDaoFactory());
+				ServiceLocator.getDaoFactory());
 	}
 
 	public ServerHistogram makeServerHistogram(Motif motif,
-			DataSource dataSource, Taxon taxon, boolean useTempTables)
-			throws DataAccessException {
+			DataSource dataSource, Taxon taxon, boolean useTempTables) throws DataAccessException {
 		return makeServerHistogram(motif, dataSource, taxon, useTempTables,
-				ServiceLocator.getInstance().getDaoFactory());
-	}
-
-	public ServerHistogram makeServerHistogram(Motif motif,
-			DataSource dataSource, Taxon taxon, boolean useTempTables,
-			DbConnector dbConnector) throws DataAccessException {
-		return makeServerHistogram(motif, dataSource, taxon, useTempTables,
-				ServiceLocator.getInstance().getDaoFactory(dbConnector));
+				ServiceLocator.getDaoFactory());
 	}
 
 	public ServerHistogram makeServerHistogram(Motif motif,

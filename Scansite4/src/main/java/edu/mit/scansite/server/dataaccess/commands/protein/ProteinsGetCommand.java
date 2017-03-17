@@ -25,11 +25,9 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	protected List<String> identifiers = null;
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
-	public ProteinsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			List<String> identifiers, DataSource dataSource,
-			boolean useTempTablesForUpdate) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public ProteinsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+		  	List<String> identifiers, DataSource dataSource, boolean useTempTablesForUpdate) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.dataSource = dataSource;

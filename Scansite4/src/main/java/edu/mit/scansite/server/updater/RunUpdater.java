@@ -1,11 +1,8 @@
 package edu.mit.scansite.server.updater;
 
+import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
-import edu.mit.scansite.shared.DatabaseException;
 
 /**
  * Runs the database updater. This class can be used to instantiate a scansite
@@ -19,21 +16,11 @@ public class RunUpdater {
 			.getLogger(RunUpdater.class);
 
 	public static void main(String[] args) {
-		DbConnector dbConnector = null;
 		try {
-			dbConnector = new DbConnector(ServiceLocator.getInstance().getDbAccessFile());
-			dbConnector.initLongTimeConnection();
-			Updater updater = new Updater(dbConnector);
+			Updater updater = new Updater();
 			updater.update();
-		} catch (ScansiteUpdaterException | DatabaseException e) {
+		} catch (ScansiteUpdaterException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
-		} finally {
-			try {
-				dbConnector.closeLongTimeConnection();
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-			}
 		}
 	}
 }

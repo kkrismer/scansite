@@ -18,16 +18,15 @@ public class MotifUpdateCommand extends DbUpdateCommand {
 	private boolean withOptScore = false;
 
 	public MotifUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Motif motif,
-			boolean withOptScore) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Motif motif, boolean withOptScore) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motif = motif;
 		this.withOptScore = withOptScore;
 	}
 
 	public MotifUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Motif motif) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Motif motif) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motif = motif;
 	}
 

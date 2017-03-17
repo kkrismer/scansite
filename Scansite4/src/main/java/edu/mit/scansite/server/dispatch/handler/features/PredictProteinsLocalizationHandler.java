@@ -41,8 +41,7 @@ public class PredictProteinsLocalizationHandler implements
 	public PredictLocalizationResult execute(PredictProteinsLocalizationAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			PredictLocalizationFeature feature = new PredictLocalizationFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			PredictLocalizationFeature feature = new PredictLocalizationFeature();
 			return feature.doPredictProteinLocalization(
 					action.getLocalizationDataSource(), action.getProtein());
 		} catch (Exception e) {

@@ -19,16 +19,15 @@ import edu.mit.scansite.shared.DataAccessException;
 public abstract class DbQueryCommand<T> extends DbCommand<T> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public DbQueryCommand(Properties dbAccessConfig, Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public DbQueryCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override
-	protected T doExecute(DbConnector dbConnector) throws DataAccessException {
+	protected T doExecute() throws DataAccessException {
 		String query = "";
-		Connection connection = null;
+		Connection connection = DbConnector.getInstance().getConnection();
 		try {
-			connection = dbConnector.getConnection();
 			Statement statement = connection.createStatement();
 			query = doGetSqlStatement();
 			ResultSet resultSet = statement.executeQuery(query);
@@ -37,8 +36,8 @@ public abstract class DbQueryCommand<T> extends DbCommand<T> {
 			if (!resultSet.isLast()) {
 				result = doProcessResults(resultSet);
 			}
-			dbConnector.close(resultSet);
-			dbConnector.close(statement);
+			DbConnector.getInstance().close(resultSet);
+			DbConnector.getInstance().close(statement);
 
 			return result;
 		} catch (Exception e) {
@@ -47,9 +46,8 @@ public abstract class DbQueryCommand<T> extends DbCommand<T> {
 			logger.error(e2.getMessage(), e2);
 			throw e2;
 		} finally {
-			if (!dbConnector.isSingleConnectionMode()) {
-				dbConnector.close(connection);
-			}
+			//instead of closing the connection: reuse it
+			//DbConnector.getInstance().close(connection);
 		}
 	}
 
@@ -57,7 +55,7 @@ public abstract class DbQueryCommand<T> extends DbCommand<T> {
 	 * @param result
 	 *            The resultset that is returned by the databaseConnector.
 	 * @return The processed results.
-	 * @throws DataLayerException
+	 * @throws DataAccessException
 	 *             Is thrown if an error occurs.
 	 */
 	protected abstract T doProcessResults(ResultSet result) throws DataAccessException;

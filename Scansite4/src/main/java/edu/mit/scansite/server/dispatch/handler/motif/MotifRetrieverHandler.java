@@ -47,22 +47,10 @@ public class MotifRetrieverHandler implements
 			if (action.getMotifShortName() == null
 					|| action.getMotifShortName().isEmpty()) {
 				return new MotifRetrieverResult(new ArrayList<Motif>(
-						ServiceLocator
-								.getInstance()
-								.getDaoFactory(
-										BootstrapListener
-												.getDbConnector(contextProvider
-														.get()))
-								.getMotifDao()
-								.getAll(action.getMotifClass(),
-										!action.isUserLoggedIn())));
+						ServiceLocator.getDaoFactory().getMotifDao()
+								.getAll(action.getMotifClass(),!action.isUserLoggedIn())));
 			} else {
-				Motif m = ServiceLocator
-						.getInstance()
-						.getDaoFactory(
-								BootstrapListener
-										.getDbConnector(contextProvider.get()))
-						.getMotifDao()
+				Motif m = ServiceLocator.getDaoFactory().getMotifDao()
 						.getByShortName(action.getMotifShortName());
 				ArrayList<Motif> ms = new ArrayList<Motif>();
 				ms.add(m);

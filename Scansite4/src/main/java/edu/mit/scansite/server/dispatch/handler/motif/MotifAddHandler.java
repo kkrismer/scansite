@@ -2,6 +2,7 @@ package edu.mit.scansite.server.dispatch.handler.motif;
 
 import javax.servlet.ServletContext;
 
+import edu.mit.scansite.server.dataaccess.DaoFactory;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.DispatchException;
@@ -46,16 +47,9 @@ public class MotifAddHandler implements
 	public BooleanResult execute(MotifAddAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			MotifDao motifDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao();
-			HistogramDao histogramDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getHistogramDao();
+			DaoFactory factory = ServiceLocator.getDaoFactory();
+			MotifDao motifDao = factory.getMotifDao();
+			HistogramDao histogramDao = factory.getHistogramDao();
 
 			if (!action.isUpdate()) { // ADD NEW HISTOGRAM TO DATABASE
 				Motif motif = action.getMotif();

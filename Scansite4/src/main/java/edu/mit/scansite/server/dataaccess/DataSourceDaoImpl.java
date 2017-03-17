@@ -29,8 +29,8 @@ import edu.mit.scansite.shared.transferobjects.DataSourceType;
 public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 
 	public DataSourceDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -44,15 +44,13 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 				DataSource temp = get(dataSource.getShortName());
 				if (temp == null) {
 					DataSourceAddCommand cmd = new DataSourceAddCommand(
-							dbAccessConfig, dbConstantsConfig, dbConnector,
-							dataSource);
+							dbAccessConfig, dbConstantsConfig, dataSource);
 					id = cmd.execute();
 				} else {
 					id = temp.getId();
 					dataSource.setId(id);
 					DataSourceUpdateCommand cmd = new DataSourceUpdateCommand(
-							dbAccessConfig, dbConstantsConfig, dbConnector,
-							dataSource);
+							dbAccessConfig, dbConstantsConfig, dataSource);
 					cmd.execute(); // an updatecommand returns number of changed
 									// rows. we
 									// are not really interested in this number.
@@ -60,8 +58,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 				}
 			} else {
 				DataSourceUpdateCommand cmd = new DataSourceUpdateCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
-						dataSource);
+						dbAccessConfig, dbConstantsConfig, dataSource);
 				cmd.execute();
 			}
 		} catch (Exception e) {
@@ -81,13 +78,11 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 			DataSourceType temp = getDataSourceType(dataSourceType.getId());
 			if (temp == null) {
 				DataSourceTypeAddCommand cmd = new DataSourceTypeAddCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
-						dataSourceType);
+						dbAccessConfig, dbConstantsConfig, dataSourceType);
 				cmd.execute();
 			} else {
 				DataSourceTypeUpdateCommand cmd = new DataSourceTypeUpdateCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
-						dataSourceType);
+						dbAccessConfig, dbConstantsConfig, dataSourceType);
 				cmd.execute();
 			}
 		} catch (DatabaseException e) {
@@ -101,7 +96,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	@Override
 	public DataSource get(int id) throws DataAccessException {
 		DataSourceGetCommand cmd = new DataSourceGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+				dbConstantsConfig, id);
 		DataSource dataSource = null;
 		try {
 			dataSource = cmd.execute();
@@ -118,7 +113,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	@Override
 	public DataSource get(String shortName) throws DataAccessException {
 		DataSourceGetCommand cmd = new DataSourceGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, shortName);
+				dbConstantsConfig, shortName);
 		DataSource dataSource = null;
 		try {
 			dataSource = cmd.execute();
@@ -135,7 +130,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	@Override
 	public DataSourceType getDataSourceType(int id) throws DataAccessException {
 		DataSourceTypeGetCommand cmd = new DataSourceTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 		DataSourceType dataSourceType = null;
 		try {
 			dataSourceType = cmd.execute();
@@ -153,7 +148,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	public DataSourceType getDataSourceType(String shortName)
 			throws DataAccessException {
 		DataSourceTypeGetCommand cmd = new DataSourceTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, shortName);
+				dbAccessConfig, dbConstantsConfig, shortName);
 		DataSourceType dataSourceType = null;
 		try {
 			dataSourceType = cmd.execute();
@@ -214,7 +209,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	public List<DataSource> getAll(DataSourceType type,
 			boolean primaryDataSourcesOnly) throws DataAccessException {
 		DataSourceGetAllCommand cmd = new DataSourceGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, type);
+				dbAccessConfig, dbConstantsConfig, type);
 		List<DataSource> dataSources = null;
 		try {
 			dataSources = cmd.execute();
@@ -244,7 +239,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 		try {
 			List<DataSource> dataSources = getAll(true);
 			DataSourceEntryCountsGetCommand sizesCommand = new DataSourceEntryCountsGetCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, dataSources);
+					dbAccessConfig, dbConstantsConfig, dataSources);
 			return sizesCommand.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -258,7 +253,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	@Override
 	public void delete(int id) throws DataAccessException {
 		DataSourceDeleteCommand cmd = new DataSourceDeleteCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 		try {
 			cmd.execute();
 		} catch (Exception e) {
@@ -274,7 +269,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	public int getEntryCountByDataSource(DataSource dataSource)
 			throws DataAccessException {
 		DataSourceEntryCountGetCommand cmd = new DataSourceEntryCountGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, dataSource);
+				dbAccessConfig, dbConstantsConfig, dataSource);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -289,7 +284,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	@Override
 	public List<DataSourceType> getDataSourceTypes() throws DataAccessException {
 		DataSourceTypeGetAllCommand cmd = new DataSourceTypeGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		List<DataSourceType> dataSourceTypes = null;
 		try {
 			dataSourceTypes = cmd.execute();

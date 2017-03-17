@@ -18,9 +18,8 @@ import edu.mit.scansite.shared.transferobjects.EvidenceResource;
  */
 public class SiteEvidenceDaoImpl extends DaoImpl implements SiteEvidenceDao {
 
-	public SiteEvidenceDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public SiteEvidenceDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/*
@@ -35,8 +34,7 @@ public class SiteEvidenceDaoImpl extends DaoImpl implements SiteEvidenceDao {
 			String site) throws DataAccessException {
 		try {
 			SiteEvidenceGetCommand cmd = new SiteEvidenceGetCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, accessions,
-					site);
+					dbAccessConfig, dbConstantsConfig, accessions, site);
 			List<EvidenceResource> siteResources = cmd.execute();
 			if (siteResources != null && !siteResources.isEmpty()) {
 				List<EvidenceResource> allResources = getAllResources();
@@ -58,7 +56,7 @@ public class SiteEvidenceDaoImpl extends DaoImpl implements SiteEvidenceDao {
 	private List<EvidenceResource> getAllResources() throws DataAccessException {
 		try {
 			EvidenceResourceGetAllCommand cmd = new EvidenceResourceGetAllCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector);
+					dbAccessConfig, dbConstantsConfig);
 			return cmd.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -77,7 +75,7 @@ public class SiteEvidenceDaoImpl extends DaoImpl implements SiteEvidenceDao {
 	public void addSite(String site, String accession, String resource) throws DataAccessException {
 		try {
 			SiteEvidenceAddCommand cmd = new SiteEvidenceAddCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, accession,
+					dbAccessConfig, dbConstantsConfig, accession,
 					site, resource);
 			cmd.execute();
 		} catch (Exception e) {
@@ -96,8 +94,7 @@ public class SiteEvidenceDaoImpl extends DaoImpl implements SiteEvidenceDao {
 	public void addResource(String resource, String resourceLink) throws DataAccessException {
 		try {
 			EvidenceResourceAddCommand cmd = new EvidenceResourceAddCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector,
-					resource, resourceLink);
+					dbAccessConfig, dbConstantsConfig, resource, resourceLink);
 			cmd.execute();
 		} catch (Exception e) {
 			throw new DataAccessException(e.getMessage(), e);

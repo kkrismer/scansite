@@ -43,13 +43,8 @@ public class OrthologyCheckOracleHandler implements
 			OrthologyCheckOracleAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			return new OrthologyCheckOracleResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get()))
-					.getOrthologDao()
-					.getOrthologsCountByIdentifier(
+			return new OrthologyCheckOracleResult(ServiceLocator.getDaoFactory()
+					.getOrthologDao().getOrthologsCountByIdentifier(
 							action.getOrthologyDataSource(),
 							action.getIdentifier()));
 		} catch (DataAccessException e) {

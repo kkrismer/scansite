@@ -27,15 +27,14 @@ public class MotifGetCommand extends DbQueryCommand<Motif> {
 	private int motifId = -1;
 
 	public MotifGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String shortName) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String shortName) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.shortName = shortName;
 	}
 
 	public MotifGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int motifId) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 	}
 

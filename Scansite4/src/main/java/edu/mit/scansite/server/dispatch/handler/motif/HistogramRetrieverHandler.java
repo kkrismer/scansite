@@ -46,12 +46,7 @@ public class HistogramRetrieverHandler implements
 			ExecutionContext context) throws DispatchException {
 		try {
 			HistogramRetrieverResult result = new HistogramRetrieverResult();
-			ServerHistogram sHist = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get()))
-					.getHistogramDao()
+			ServerHistogram sHist = ServiceLocator.getDaoFactory().getHistogramDao()
 					.getHistogram(action.getMotifId(), action.getTaxonName(),
 							action.getDataSource());
 			if (sHist != null) {

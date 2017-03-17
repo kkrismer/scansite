@@ -43,11 +43,7 @@ public class UserDeleteHandler implements
 	public UserRetrieverResult execute(UserDeleteAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			UserDao userDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao();
+			UserDao userDao = ServiceLocator.getDaoFactory().getUserDao();
 			userDao.delete(action.getUserEmail());
 			return new UserRetrieverResult(userDao.getAll(), true);
 		} catch (DataAccessException e) {

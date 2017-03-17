@@ -1,21 +1,14 @@
 package edu.mit.scansite.server.dataaccess;
 
+import edu.mit.scansite.server.dataaccess.commands.taxon.*;
+import edu.mit.scansite.shared.DataAccessException;
+import edu.mit.scansite.shared.transferobjects.DataSource;
+import edu.mit.scansite.shared.transferobjects.Taxon;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonAddCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonDeleteCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonGetAllCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonGetCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonGetSpeciesMapCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonIdGetByDataSourceCommand;
-import edu.mit.scansite.server.dataaccess.commands.taxon.TaxonIdGetSubTaxaIdCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
-import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.transferobjects.DataSource;
-import edu.mit.scansite.shared.transferobjects.Taxon;
 
 /**
  * @author Tobieh
@@ -23,9 +16,8 @@ import edu.mit.scansite.shared.transferobjects.Taxon;
  */
 public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 
-	public TaxonDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public TaxonDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +39,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 				Taxon temp = getByName(t.getName(), dataSource);
 				if (temp == null) {
 					TaxonAddCommand cmd = new TaxonAddCommand(dbAccessConfig,
-							dbConstantsConfig, dbConnector, t,
+							dbConstantsConfig, t,
 							useTempTablesForUpdate, dataSource);
 					id = cmd.execute();
 				} else {
@@ -68,9 +60,9 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public Taxon getByName(String name, DataSource dataSource)
 			throws DataAccessException {
 		TaxonGetCommand cmd = new TaxonGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, name, useTempTablesForUpdate,
+				dbConstantsConfig, name, useTempTablesForUpdate,
 				dataSource);
-		Taxon t = null;
+		Taxon t;
 		try {
 			t = cmd.execute();
 		} catch (Exception e) {
@@ -89,7 +81,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 		Taxon t = null;
 		if (id > 0) {
 			TaxonGetCommand cmd = new TaxonGetCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, id, useTempTablesForUpdate,
+					dbConstantsConfig, id, useTempTablesForUpdate,
 					dataSource);
 			try {
 				t = cmd.execute();
@@ -109,7 +101,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public void delete(String name, DataSource dataSource)
 			throws DataAccessException {
 		TaxonDeleteCommand cmd = new TaxonDeleteCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, name, useTempTablesForUpdate,
+				dbConstantsConfig, name, useTempTablesForUpdate,
 				dataSource);
 		try {
 			cmd.execute();
@@ -126,7 +118,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public void delete(int id, DataSource dataSource)
 			throws DataAccessException {
 		TaxonDeleteCommand cmd = new TaxonDeleteCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id, useTempTablesForUpdate,
+				dbConstantsConfig, id, useTempTablesForUpdate,
 				dataSource);
 		try {
 			cmd.execute();
@@ -143,9 +135,9 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public ArrayList<Taxon> getAllTaxa(DataSource dataSource)
 			throws DataAccessException {
 		TaxonGetAllCommand cmd = new TaxonGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, useTempTablesForUpdate,
+				dbConstantsConfig, useTempTablesForUpdate,
 				dataSource);
-		ArrayList<Taxon> ts = null;
+		ArrayList<Taxon> ts;
 		try {
 			ts = cmd.execute();
 		} catch (Exception e) {
@@ -162,8 +154,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public Set<Integer> getSubTaxaIds(Taxon taxon, DataSource dataSource)
 			throws DataAccessException {
 		TaxonIdGetSubTaxaIdCommand command = new TaxonIdGetSubTaxaIdCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
-				taxon.getParentTaxonList() + taxon.getId(),
+				dbAccessConfig, dbConstantsConfig, taxon.getParentTaxonList() + taxon.getId(),
 				useTempTablesForUpdate, dataSource);
 		try {
 			Set<Integer> ids = command.execute();
@@ -182,8 +173,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public Set<Integer> getAllTaxonIds(DataSource dataSource)
 			throws DataAccessException {
 		TaxonIdGetByDataSourceCommand command = new TaxonIdGetByDataSourceCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
-				useTempTablesForUpdate, dataSource);
+				dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate, dataSource);
 		try {
 			return command.execute();
 		} catch (Exception e) {
@@ -200,8 +190,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public Set<Integer> getAllTaxonIds(DataSource dataSource,
 			String speciesRegex) throws DataAccessException {
 		TaxonIdGetByDataSourceCommand command = new TaxonIdGetByDataSourceCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
-				useTempTablesForUpdate, dataSource, speciesRegex);
+				dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate, dataSource, speciesRegex);
 		command.setSpeciesOnly(true);
 		try {
 			return command.execute();
@@ -219,8 +208,7 @@ public class TaxonDaoImpl extends DaoImpl implements TaxonDao {
 	public Map<Integer, Taxon> getSpeciesMap(DataSource dataSource, boolean b)
 			throws DataAccessException {
 		TaxonGetSpeciesMapCommand cmd = new TaxonGetSpeciesMapCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
-				useTempTablesForUpdate, dataSource);
+				dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate, dataSource);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {

@@ -44,12 +44,8 @@ public class DataSourceTypesRetrieverHandler
 			DataSourceTypesRetrieverAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			return new DataSourceTypesRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getDataSourceDao()
-					.getDataSourceTypes());
+			return new DataSourceTypesRetrieverResult(ServiceLocator.getDaoFactory()
+					.getDataSourceDao().getDataSourceTypes());
 		} catch (DataAccessException e) {
 			logger.error(e.toString());
 			throw new ActionException(e.getMessage(), e);

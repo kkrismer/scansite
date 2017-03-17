@@ -43,11 +43,7 @@ public class NewsDeleteHandler implements
 	public NewsRetrieverResult execute(NewsDeleteAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			NewsDao newsDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getNewsDao();
+			NewsDao newsDao = ServiceLocator.getDaoFactory().getNewsDao();
 			newsDao.delete(action.getId());
 			return new NewsRetrieverResult(newsDao.getAll(0));
 		} catch (DataAccessException exc) {

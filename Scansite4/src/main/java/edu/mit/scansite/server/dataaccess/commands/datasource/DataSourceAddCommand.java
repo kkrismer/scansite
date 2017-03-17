@@ -16,9 +16,8 @@ public class DataSourceAddCommand extends DbInsertCommand {
 	private DataSource dataSource = null;
 
 	public DataSourceAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 	}
 

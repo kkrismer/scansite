@@ -15,8 +15,8 @@ public class MotifGroupDeleteCommand extends DbUpdateCommand {
 	private int id;
 
 	public MotifGroupDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 

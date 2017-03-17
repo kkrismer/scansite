@@ -21,9 +21,8 @@ public class ProteinIdentifierGetAllCommand extends
 	private DataSource dataSource;
 
 	public ProteinIdentifierGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 	}

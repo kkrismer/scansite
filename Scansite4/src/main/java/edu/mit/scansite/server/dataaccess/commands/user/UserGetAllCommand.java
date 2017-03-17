@@ -24,8 +24,8 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	private String cIsSuperAdmin;
 
 	public UserGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 		tUsers = c.gettUsers();
 		cEmail = c.getcUsersEmail();
 		cFirstName = c.getcUsersFirstName();

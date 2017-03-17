@@ -46,11 +46,7 @@ public class MotifGroupDeleteHandler
 			MotifGroupDeleteAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			MotifGroupsDao groupDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getGroupsDao();
+			MotifGroupsDao groupDao = ServiceLocator.getDaoFactory().getGroupsDao();
 			groupDao.delete(action.getId());
 			return new LightWeightMotifGroupRetrieverResult(
 					groupDao.getAllLightWeight());

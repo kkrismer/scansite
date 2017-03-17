@@ -12,13 +12,13 @@ import edu.mit.scansite.shared.DataAccessException;
  */
 public abstract class DbUpdateCommand extends DbCommand<Integer> {
 	public DbUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override
-	protected Integer doExecute(DbConnector dbConnector)
+	protected Integer doExecute()
 			throws DataAccessException {
-		return dbConnector.executeUpdateQuery(doGetSqlStatement());
+		return DbConnector.getInstance().executeUpdateQuery(doGetSqlStatement());
 	}
 }

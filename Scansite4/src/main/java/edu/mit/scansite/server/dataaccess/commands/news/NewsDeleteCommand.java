@@ -15,8 +15,8 @@ public class NewsDeleteCommand extends DbUpdateCommand {
 	private int id;
 
 	public NewsDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 

@@ -51,11 +51,7 @@ public class HistogramCreateHandler implements
 		HistogramRetrieverResult result = new HistogramRetrieverResult();
 		Taxon taxon;
 		try {
-			taxon = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getTaxonDao()
+			taxon = ServiceLocator.getDaoFactory().getTaxonDao()
 					.getByName(action.getTaxonName(), action.getDataSource());
 			// dataSource = ServiceLocator
 			// .getInstance()

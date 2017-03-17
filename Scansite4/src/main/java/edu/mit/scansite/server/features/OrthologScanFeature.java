@@ -46,10 +46,8 @@ import edu.mit.scansite.shared.transferobjects.SequencePattern;
  */
 public class OrthologScanFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private DbConnector dbConnector;
 
-	public OrthologScanFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public OrthologScanFeature() {
 	}
 
 	private static char GAP_SYMBOL = '-';
@@ -69,7 +67,7 @@ public class OrthologScanFeature {
 	public OrthologScanSequencePatternResult scanOrthologsBySequencePattern(SequencePattern sequencePattern,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
 			int alignmentRadius, boolean publicOnly) throws DatabaseException {
-		Protein protein = ServiceLocator.getInstance().getDaoFactory(dbConnector).getProteinDao()
+		Protein protein = ServiceLocator.getDaoFactory().getProteinDao()
 				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanSequencePatternResult(
@@ -154,7 +152,7 @@ public class OrthologScanFeature {
 	public OrthologScanMotifResult scanOrthologsByMotifGroup(int sitePosition, LightWeightMotifGroup motifGroup,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
 			int alignmentRadius, boolean publicOnly) throws DatabaseException {
-		Protein protein = ServiceLocator.getInstance().getDaoFactory(dbConnector).getProteinDao()
+		Protein protein = ServiceLocator.getDaoFactory().getProteinDao()
 				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanMotifResult(
@@ -217,10 +215,10 @@ public class OrthologScanFeature {
 
 	private void findSites(ProteinProcessor processor, OrthologScanResult result, boolean publicOnly)
 			throws DatabaseException {
-		List<Protein> proteins = ServiceLocator.getInstance().getDaoFactory(dbConnector).getOrthologDao().getOrthologs(
+		List<Protein> proteins = ServiceLocator.getDaoFactory().getOrthologDao().getOrthologs(
 				result.getOrthologyDataSource(), result.getProtein().getDataSource(),
 				result.getProtein().getIdentifier());
-		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature(dbConnector);
+		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature();
 		List<Ortholog> orthologs = new LinkedList<Ortholog>();
 		List<OrthologScanSiteRegion> siteRegions = new LinkedList<OrthologScanSiteRegion>();
 		Ortholog ortholog = null;
@@ -241,7 +239,7 @@ public class OrthologScanFeature {
 					List<ScanResultSite> phosphoSites = new LinkedList<ScanResultSite>();
 					List<Integer> nonhitPositions = new LinkedList<Integer>();
 
-					protein.setSpecies(ServiceLocator.getInstance().getDaoFactory(dbConnector).getTaxonDao()
+					protein.setSpecies(ServiceLocator.getDaoFactory().getTaxonDao()
 							.getById(protein.getSpecies().getId(), result.getProtein().getDataSource()));
 
 					for (Integer sitePosition : phosphoSitePositions) {

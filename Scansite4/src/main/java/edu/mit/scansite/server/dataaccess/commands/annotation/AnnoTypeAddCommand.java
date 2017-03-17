@@ -15,8 +15,8 @@ public class AnnoTypeAddCommand extends DbInsertCommand {
 	private String name = null;
 
 	public AnnoTypeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String name) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String name) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.name = name;
 	}
 

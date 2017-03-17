@@ -28,7 +28,7 @@ public abstract class OrthologyDbUpdater extends DbUpdater {
 			errorWriter = new BufferedWriter(new FileWriter(new File(
 					errorFilePath)));
 			OrthologyTransliteratorDbWriter writer = new OrthologyTransliteratorDbWriter(
-					errorWriter, dataSourceMetaInfo, dbConnector);
+					errorWriter, dataSourceMetaInfo);
 			ScansiteOrthologyFileTransliterator transliterator = new ScansiteOrthologyFileTransliterator(
 					getReaders(), writer);
 			return transliterator;
@@ -42,9 +42,9 @@ public abstract class OrthologyDbUpdater extends DbUpdater {
 	protected void createTables() throws ScansiteUpdaterException {
 		try {
 			CreateOrthologyTableCommand cmd = new CreateOrthologyTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error("Cannot create orthology table: " + e.getMessage(), e);
@@ -57,15 +57,13 @@ public abstract class OrthologyDbUpdater extends DbUpdater {
 	protected void renameTables() throws ScansiteUpdaterException {
 		try {
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
-			RenameTableCommand cmd = new RenameTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector,
-					cmdConst.getOrthologsTableName(dataSourceMetaInfo
-							.getDataSource()),
-					CommandConstants.getOldTable(cmdConst
-							.getOrthologsTableName(dataSourceMetaInfo
-									.getDataSource())));
+					.instance(ServiceLocator.getDbConstantsProperties());
+			RenameTableCommand cmd = new RenameTableCommand(
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					cmdConst.getOrthologsTableName(dataSourceMetaInfo.getDataSource()),
+					CommandConstants.getOldTable(cmdConst.getOrthologsTableName(
+							dataSourceMetaInfo.getDataSource())));
 
 			// renaming existing orthology table to old orthology table
 			try {
@@ -92,11 +90,11 @@ public abstract class OrthologyDbUpdater extends DbUpdater {
 	@Override
 	protected void dropOldTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
+			DropTableCommand cmd = new DropTableCommand(
+			        ServiceLocator.getDbAccessProperties(),
+                    ServiceLocator.getDbConstantsProperties(), null);
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+					.instance(ServiceLocator.getDbConstantsProperties());
 			cmd.setTableName(CommandConstants.getOldTable(cmdConst
 					.getOrthologsTableName(dataSourceMetaInfo.getDataSource())));
 			cmd.execute();
@@ -109,11 +107,11 @@ public abstract class OrthologyDbUpdater extends DbUpdater {
 	@Override
 	protected void dropTempTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
+			DropTableCommand cmd = new DropTableCommand(
+			        ServiceLocator.getDbAccessProperties(),
+                    ServiceLocator.getDbConstantsProperties(), null);
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+					.instance(ServiceLocator.getDbConstantsProperties());
 			cmd.setTableName(CommandConstants.getTempTable(cmdConst
 					.getOrthologsTableName(dataSourceMetaInfo.getDataSource())));
 			cmd.execute();

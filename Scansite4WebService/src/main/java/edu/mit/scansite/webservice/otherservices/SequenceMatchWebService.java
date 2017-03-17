@@ -15,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 @Path("/sequencematch/sequencematchregex={sequencematchregex}/dsshortname={dsshortname: [A-Za-z]+}/organismclass={organismclass: [A-Za-z]+}{speciesrestriction: (/speciesrestriction=[\\s\\w]*)?}{numberofphosphorylations: (/numberofphosphorylations=[0-3])?}{molweightfrom: (/molweightfrom=\\d*)?}{molweightto: (/molweightto=\\d*)?}{isoelectricpointfrom: (/isoelectricpointfrom=\\d*\\.?\\d*)?}{isoelectricpointto: (/isoelectricpointto=\\d*\\.?\\d*)?}{keywordrestriction: (/keywordrestriction=[\\s\\w]*)?}")
 public class SequenceMatchWebService {
@@ -82,15 +81,16 @@ public class SequenceMatchWebService {
                     nPhos = 0;
                 }
             } catch (Exception e) {
+                throw new ScansiteWebServiceException("No valid number of phosphorylations given.");
             }
         }
 
         if (datasourceShortName == null || datasourceShortName.isEmpty()) {
             throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
-        DataSource ds = null;
+        DataSource ds;
         try {
-            ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(datasourceShortName);
+            ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(datasourceShortName);
         } catch (Exception e) {
             throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
@@ -101,7 +101,7 @@ public class SequenceMatchWebService {
             throw new ScansiteWebServiceException("No valid organismClass given.");
         }
 
-        List<SequencePattern> patterns = new ArrayList<SequencePattern>(1);
+        List<SequencePattern> patterns = new ArrayList<>(1);
         SequencePattern pattern = new SequencePattern();
         pattern.addPosition(new PatternPosition(sequenceMatchRegex, false, false));
         patterns.add(pattern);
@@ -116,20 +116,18 @@ public class SequenceMatchWebService {
                 nPhos, mwFrom, mwTo, piFrom, piTo, keywordRestrictionRegex, null);
 //        oc
 //        HistogramStringency.valueOf("high");
-        boolean limitResultsToPhosphorylatedProteins = (nPhos > 0); // [todo:] again... no idea
-        boolean doCreateFiles = false;
-        boolean publicOnly = true;
-        String realPath = null;
+        final boolean limitResultsToPhosphorylatedProteins = false;
+        final boolean doCreateFiles = false;
+        final boolean publicOnly = true;
+        final String realPath = null;
 
         try {
-            Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
-            DbConnector connector = new DbConnector(config);
-            connector.initConnectionPooling();
-            SequenceMatchFeature feature = new SequenceMatchFeature(connector);
-
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            SequenceMatchFeature feature = new SequenceMatchFeature();
             edu.mit.scansite.shared.dispatch.features.SequenceMatchResult result = feature.doSequenceMatch(patterns, ds,
                     restrictionProperties, limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);
-            SequenceMatch[] matches = null;
+
+            SequenceMatch[] matches;
             if (result.getMatches() != null && result.getMatches().size() > 0) {
                 matches = new SequenceMatch[result.getMatches().size()];
                 int i = 0;
@@ -141,9 +139,6 @@ public class SequenceMatchWebService {
             }
             return new SequenceMatchResult(sequenceMatchRegex, datasourceShortName, matches, result.getSequencePatternMatchCount(), result.getProteinsInDbCount());
         } catch (DataAccessException e) {
-            throw new ScansiteWebServiceException("Running sequence match search failed. Please try again later or, if this problem persists, contact the system's administrator.");
-        } catch (DatabaseException e) {
-            e.printStackTrace();
             throw new ScansiteWebServiceException("Running sequence match search failed. Please try again later or, if this problem persists, contact the system's administrator.");
         }
     }

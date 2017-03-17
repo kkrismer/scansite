@@ -22,19 +22,16 @@ public class TaxonIdGetByDataSourceCommand extends DbQueryCommand<Set<Integer>> 
 	private String speciesRegex;
 
 	public TaxonIdGetByDataSourceCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 	}
 
 	public TaxonIdGetByDataSourceCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			boolean useTempTablesForUpdate, DataSource dataSource,
-			String speciesRegex) {
-		this(dbAccessConfig, dbConstantsConfig, dbConnector,
-				useTempTablesForUpdate, dataSource);
+			Properties dbConstantsConfig, boolean useTempTablesForUpdate,
+            DataSource dataSource, String speciesRegex) {
+		this(dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate, dataSource);
 		this.speciesRegex = speciesRegex;
 	}
 

@@ -47,11 +47,7 @@ public class MotifNumbersRetrieverHandler implements
 		try {
 			boolean onlyPublic = !loginHandler.isSessionValidLogin(action
 					.getUserSessionId());
-			MotifDao motifDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao();
+			MotifDao motifDao = ServiceLocator.getDaoFactory().getMotifDao();
 			return new MotifNumbersRetrieverResult(motifDao.getNumberOfMotifs(
 					MotifClass.MAMMALIAN, onlyPublic),
 					motifDao.getNumberOfMotifs(MotifClass.YEAST, onlyPublic),

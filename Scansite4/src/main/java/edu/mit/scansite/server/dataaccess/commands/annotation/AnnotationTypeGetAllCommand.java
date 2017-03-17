@@ -18,8 +18,8 @@ public class AnnotationTypeGetAllCommand extends
 		DbQueryCommand<Map<Integer, String>> {
 
 	public AnnotationTypeGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

@@ -1,22 +1,25 @@
 package edu.mit.scansite.webservice.proteinscan;
 
 import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.DataSourceDao;
 import edu.mit.scansite.server.dataaccess.ProteinDao;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
-import edu.mit.scansite.webservice.otherservices.DatasourcesService;
+import edu.mit.scansite.webservice.otherservices.DataSourcesService;
 
 import java.util.List;
 
 /**
  * Created by Thomas on 3/8/2017.
+ *
  */
 public class ProteinScanUtils {
-    public static final String REFERENCE_VERTEBRATA = "Vertebrata";
-    public static final String REFERENCE_YEAST = "Saccharomyces cerevisiae";
+    // package private
+    static final String REFERENCE_VERTEBRATA = "Vertebrata";
+    private static final String REFERENCE_YEAST = "Saccharomyces cerevisiae";
     private static final String REFERENCE_PARAM_NAME = "/referenceproteome=";
     private static final String MOTIF_PARAM_NAME = "/motifshortnames=";
     // database scan or database search
@@ -38,6 +41,9 @@ public class ProteinScanUtils {
     private static final String SM_KEYWORD = "/keywordrestriction=";
 
     public static String processOptionalParameter(String param){
+        if (param == null) {
+            return null;
+        }
         String correctValue = param;
         // protein scan parameters
         if (param.contains(REFERENCE_PARAM_NAME)) {
@@ -80,7 +86,8 @@ public class ProteinScanUtils {
         return correctValue;
     }
 
-    public static String checkReferenceProteome(String referenceProteome) {
+    // package private
+    static String checkReferenceProteome(String referenceProteome) {
         String refProteome;
         if (referenceProteome.toLowerCase().equals("vertebrata")) {
             refProteome = REFERENCE_VERTEBRATA;
@@ -100,8 +107,9 @@ public class ProteinScanUtils {
             throw new ScansiteWebServiceException("ProteinIdentifierScanService: Missing protein identifier!");
         } else {
             try {
-                ProteinDao proteinDao = ServiceLocator.getWebServiceInstance().getSvcDaoFactory().getProteinDao();
-                DataSourceDao dataSourceDao = ServiceLocator.getWebServiceInstance().getSvcDaoFactory().getDataSourceDao();
+                DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+                ProteinDao proteinDao = factory.getProteinDao();
+                DataSourceDao dataSourceDao = factory.getDataSourceDao();
                 return proteinDao.get(proteinIdentifier, dataSourceDao.get(dataSourceShortName));
             } catch (DataAccessException e) {
                 e.printStackTrace();
@@ -111,8 +119,8 @@ public class ProteinScanUtils {
     }
 
     public static DataSource getLocalizationDataSource(String errorMessage) throws DataAccessException {
-        List<DataSource> dataSources = new DatasourcesService()
-                .retrieveDataSources(ServiceLocator.getWebServiceInstance().getDaoFactory());
+        List<DataSource> dataSources = new DataSourcesService()
+                .retrieveDataSources(ServiceLocator.getSvcDaoFactory());
         if (dataSources == null) {
             throw new ScansiteWebServiceException("Server can not access database. " + errorMessage);
         }

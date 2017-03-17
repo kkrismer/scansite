@@ -18,17 +18,17 @@ public class HistogramDataDeleteCommand extends DbUpdateCommand {
 	private int motifId = -1;
 
 	public HistogramDataDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId,
+			Properties dbConstantsConfig, int motifId,
 			int datasourceId, int taxonId) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.taxonId = taxonId;
 		this.datasourceId = datasourceId;
 		this.motifId = motifId;
 	}
 
 	public HistogramDataDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int motifId) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 	}
 

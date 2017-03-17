@@ -21,15 +21,15 @@ public class DataSourceGetCommand extends DbQueryCommand<DataSource> {
 	private String shortName = null;
 
 	public DataSourceGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 
 	public DataSourceGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			String shortName) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.shortName = shortName;
 	}
 

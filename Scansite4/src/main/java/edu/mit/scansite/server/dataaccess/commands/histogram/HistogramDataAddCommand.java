@@ -19,9 +19,9 @@ public class HistogramDataAddCommand extends DbInsertCommand {
 	private ServerHistogram h;
 
 	public HistogramDataAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			ServerHistogram histogram, double score, int absFrequency) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.h = histogram;
 		this.score = score;
 		this.freq = absFrequency;

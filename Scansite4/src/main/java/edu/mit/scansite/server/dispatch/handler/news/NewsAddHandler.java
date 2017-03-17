@@ -43,11 +43,7 @@ public class NewsAddHandler implements
 	public NewsRetrieverResult execute(NewsAddAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			NewsDao newsDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getNewsDao();
+			NewsDao newsDao = ServiceLocator.getDaoFactory().getNewsDao();
 			newsDao.add(action.getNewsEntry());
 			return new NewsRetrieverResult(newsDao.getAll(0));
 		} catch (DataAccessException exc) {

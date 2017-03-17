@@ -19,8 +19,8 @@ public class LightWeightMotifGroupGetAllCommand extends
 		DbQueryCommand<List<LightWeightMotifGroup>> {
 
 	public LightWeightMotifGroupGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

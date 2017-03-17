@@ -19,9 +19,8 @@ import edu.mit.scansite.shared.transferobjects.IdentifierType;
  */
 public class MotifIdentifierGetAllCommand extends
 		DbQueryCommand<Map<Integer, List<Identifier>>> {
-	public MotifIdentifierGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public MotifIdentifierGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

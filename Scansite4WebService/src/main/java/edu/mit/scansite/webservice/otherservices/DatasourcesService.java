@@ -3,11 +3,11 @@ package edu.mit.scansite.webservice.otherservices;
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.DataSourceDao;
+import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.webservice.WebService;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
-import edu.mit.scansite.webservice.transferobjects.Datasource;
+import edu.mit.scansite.webservice.transferobjects.DataSource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -21,33 +21,34 @@ import java.util.List;
  * */
 
 @Path("/datasources")
-public class DatasourcesService extends WebService {
+public class DataSourcesService extends WebService {
     /**
      * @return An object containing all available datasources/databases (each of which has a name and a nickname).
-     * @throws ScansiteWebServiceException
+     * @throws ScansiteWebServiceException Unable to access database
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    public Datasource[] getDatasources() {
+    public DataSource[] getDatasources() {
         try {
-            DaoFactory daoFac = ServiceLocator.getWebServiceInstance().getDaoFactory();
-            List<DataSource> ds = retrieveDataSources(daoFac);
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            List<edu.mit.scansite.shared.transferobjects.DataSource> ds = retrieveDataSources(factory);
             if (ds != null && ds.size() > 0) {
-                Datasource[] datasources = new Datasource[ds.size()];
+                DataSource[] dataSources = new DataSource[ds.size()];
                 for (int i = 0; i < ds.size(); ++i) {
-                    datasources[i] = new Datasource(ds.get(i).getDisplayName(), ds.get(i).getShortName(), ds.get(i).getVersion(), ds.get(i).getDescription(),
-                            daoFac.getProteinDao().getProteinCount(ds.get(i)));
+                    dataSources[i] = new DataSource(ds.get(i).getDisplayName(), ds.get(i).getShortName(), ds.get(i).getVersion(), ds.get(i).getDescription(),
+                            factory.getProteinDao().getProteinCount(ds.get(i)));
                 }
-                return datasources;
+                return dataSources;
             }
-            return new Datasource[]{};
+            return new DataSource[]{};
         } catch (DataAccessException e) {
             throw new ScansiteWebServiceException("Server can not access database. " + TXT_TRY_LATER);
         }
     }
 
-    public List<DataSource> retrieveDataSources(DaoFactory daoFac) throws DataAccessException {
-            boolean primaryDataSourceOnly = true;
+    public List<edu.mit.scansite.shared.transferobjects.DataSource> retrieveDataSources(DaoFactory daoFac) throws DataAccessException {
+            final boolean primaryDataSourceOnly = true;
             DataSourceDao dsDao = daoFac.getDataSourceDao();
             return dsDao.getAll(primaryDataSourceOnly);
     }

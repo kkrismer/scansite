@@ -51,7 +51,6 @@ public class DatabaseSearchWebService {
             @DefaultValue("") @PathParam("keywordrestriction") String keywordRestrictionRegex,
             @DefaultValue("") @PathParam("sequencerestriction") String sequenceRestrictionRegex
     ) {
-        // todo: might add motif class to parameter list
         speciesRestrictionRegex  = ProteinScanUtils.processOptionalParameter(speciesRestrictionRegex);
         numberOfPhosphorylations = ProteinScanUtils.processOptionalParameter(numberOfPhosphorylations);
         molWeightFrom            = ProteinScanUtils.processOptionalParameter(molWeightFrom);
@@ -62,9 +61,9 @@ public class DatabaseSearchWebService {
         sequenceRestrictionRegex = ProteinScanUtils.processOptionalParameter(sequenceRestrictionRegex);
 
 
-        DataSource ds = null;
+        DataSource ds;
         try {
-            ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(datasourceShortName);
+            ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(datasourceShortName);
         } catch (Exception e) {
             throw new ScansiteWebServiceException("No valid datasource shortname given.");
         }
@@ -104,7 +103,7 @@ public class DatabaseSearchWebService {
         Set<String> shortMotifNames = new HashSet<>();
         shortMotifNames.add(motiShortName);
         MotifSelection motifSelection = new MotifSelection();
-        //todo also set motif class mc
+        //optional: also set motif class mc
         motifSelection.setMotifShortNames(shortMotifNames);
         List<String> seqRestrictions = new ArrayList<>();
         if (sequenceRestrictionRegex != null && !sequenceRestrictionRegex.isEmpty()) {
@@ -112,21 +111,20 @@ public class DatabaseSearchWebService {
         } else {
             seqRestrictions = null;
         }
-        RestrictionProperties restrictionProperties = new RestrictionProperties(oc, speciesRestrictionRegex, nPhos, mwFrom, mwTo, piFrom, piTo, keywordRestrictionRegex, seqRestrictions);
-        int outputListSize = 0; // returns all sites
-        boolean doCreateFiles = false;
-        boolean publicOnly = true;
-        String realPath = null;
+        RestrictionProperties restrictionProperties = new RestrictionProperties(oc,
+                speciesRestrictionRegex, nPhos, mwFrom, mwTo, piFrom, piTo,
+                keywordRestrictionRegex, seqRestrictions);
+
+        final int outputListSize = 0; // returns all sites
+        final boolean doCreateFiles = false;
+        final boolean publicOnly = true;
+        final String realPath = null;
 
         try {
-            Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
-            DbConnector connector = new DbConnector(config);
-            connector.initLongTimeConnection();
-
-            DatabaseScanFeature feature = new DatabaseScanFeature(connector);
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            DatabaseScanFeature feature = new DatabaseScanFeature();
             DatabaseScanResult result = feature.doDatabaseSearch(motifSelection, ds, restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath);
 
-            connector.closeLongTimeConnection();
             MotifSiteDbSearch[] sites;
             if (result.isSuccess() && result.getDbSearchSites() != null && result.getDbSearchSites().size() > 0) {
                 sites = new MotifSiteDbSearch[result.getDbSearchSites().size()];
@@ -142,9 +140,6 @@ public class DatabaseSearchWebService {
             return new DbSearchResult(sites, datasourceShortName, result.getMedian(), result.getMedianAbsDev(), result.getNrOfProteinsFound(), result.getTotalNrOfSites(), result.getTotalNrOfProteinsInDb());
         } catch (DataAccessException e) {
             throw new ScansiteWebServiceException("Running database search failed. Please try again later or, if this problem persists, contact the system's administrator!");
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            throw new ScansiteWebServiceException("Running database search failed. Please try again later or, if this problem persists, contact the system's administrator!");
         }
     }
 
@@ -152,7 +147,8 @@ public class DatabaseSearchWebService {
         return (regex != null && regex.isEmpty()) ? null : regex;
     }
 
-    public static Double parseParameter(String value) {
+    // package private
+    static Double parseParameter(String value) {
         if (value != null && !value.isEmpty()) {
             try {
                 return Double.parseDouble(value);

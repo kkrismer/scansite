@@ -23,8 +23,8 @@ import edu.mit.scansite.shared.transferobjects.MotifGroup;
 public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 
 	public MotifGroupsDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +33,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	@Override
 	public void add(LightWeightMotifGroup group) throws DataAccessException {
 		MotifGroupAddCommand command = new MotifGroupAddCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, group);
+				dbConstantsConfig, group);
 		try {
 			group.setId(command.execute());
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	public boolean update(LightWeightMotifGroup group)
 			throws DataAccessException {
 		MotifGroupUpdateCommand command = new MotifGroupUpdateCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, group);
+				dbAccessConfig, dbConstantsConfig, group);
 		try {
 			return command.execute() > 0;
 		} catch (Exception e) {
@@ -63,7 +63,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	@Override
 	public void delete(int id) throws DataAccessException {
 		MotifGroupDeleteCommand command = new MotifGroupDeleteCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 		try {
 			command.execute();
 		} catch (DatabaseException e) {
@@ -78,7 +78,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	@Override
 	public LightWeightMotifGroup get(int id) throws DataAccessException {
 		MotifGroupGetCommand command = new MotifGroupGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+				dbConstantsConfig, id);
 		LightWeightMotifGroup group;
 		try {
 			group = command.execute();
@@ -97,7 +97,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	public List<LightWeightMotifGroup> getAllLightWeight()
 			throws DataAccessException {
 		LightWeightMotifGroupGetAllCommand command = new LightWeightMotifGroupGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		List<LightWeightMotifGroup> groups;
 		try {
 			groups = command.execute();
@@ -132,7 +132,7 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 	public List<MotifGroup> getAll(MotifClass motifClass, boolean publicOnly)
 			throws DataAccessException {
 		MotifGroupGetAllCommand command = new MotifGroupGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, motifClass, publicOnly);
+				dbAccessConfig, dbConstantsConfig, motifClass, publicOnly);
 		List<MotifGroup> groups;
 		try {
 			groups = command.execute();

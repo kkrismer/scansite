@@ -45,11 +45,7 @@ public class DataSourceSizesRetrieverHandler
 			DataSourceSizesRetrieverAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			return new DataSourceSizesRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getDataSourceDao()
+			return new DataSourceSizesRetrieverResult(ServiceLocator.getDaoFactory().getDataSourceDao()
 					.getDataSourceSizes());
 		} catch (DataAccessException e) {
 			logger.error(e.toString());

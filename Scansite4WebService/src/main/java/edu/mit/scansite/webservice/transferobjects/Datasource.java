@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Datasource implements Serializable {
+public class DataSource implements Serializable {
   private static final long serialVersionUID = 2379785356802199930L;
 
   private String name;
@@ -14,10 +14,10 @@ public class Datasource implements Serializable {
   private String description;
   private Integer numberOfProteinEntries;
   
-  public Datasource() {
+  public DataSource() {
   }
   
-  public Datasource(String name, String shortName, String version, String description, Integer numberOfProteinEntries) {
+  public DataSource(String name, String shortName, String version, String description, Integer numberOfProteinEntries) {
     this.name = name;
     this.shortName = shortName;
     this.version = version;

@@ -17,10 +17,10 @@ public class LocalizationTypeAddCommand extends DbInsertCommand {
 	private LocalizationType localizationType;
 
 	public LocalizationTypeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource localizationTypeDataSource,
+			Properties dbConstantsConfig,
+            DataSource localizationTypeDataSource,
 			LocalizationType localizationType) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationTypeDataSource = localizationTypeDataSource;
 		this.localizationType = localizationType;
 	}

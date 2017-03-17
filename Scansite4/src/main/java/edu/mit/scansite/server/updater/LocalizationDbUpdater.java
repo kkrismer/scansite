@@ -29,7 +29,7 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 			errorWriter = new BufferedWriter(new FileWriter(new File(
 					errorFilePath)));
 			LocalizationTransliteratorDbWriter writer = new LocalizationTransliteratorDbWriter(
-					errorWriter, dataSourceMetaInfo, dbConnector);
+					errorWriter, dataSourceMetaInfo);
 			ScansiteLocalizationFileTransliterator transliterator = new ScansiteLocalizationFileTransliterator(
 					getReaders(), writer);
 			return transliterator;
@@ -43,9 +43,9 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 	protected void createTables() throws ScansiteUpdaterException {
 		try {
 			CreateLocalizationTableCommand cmd = new CreateLocalizationTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error("Cannot create localization table: " + e.getMessage(),
@@ -56,9 +56,9 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 
 		try {
 			CreateLocalizationGOTermsTableCommand cmd = new CreateLocalizationGOTermsTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error(
@@ -72,16 +72,12 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 	@Override
 	protected void renameTables() throws ScansiteUpdaterException {
 		try {
-			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
-			RenameTableCommand cmd = new RenameTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector,
-					cmdConst.getLocalizationTableName(dataSourceMetaInfo
-							.getDataSource()),
-					CommandConstants.getOldTable(cmdConst
-							.getLocalizationTableName(dataSourceMetaInfo
-									.getDataSource())));
+			CommandConstants cmdConst = CommandConstants.instance(ServiceLocator.getDbConstantsProperties());
+			RenameTableCommand cmd = new RenameTableCommand(ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), cmdConst
+					.getLocalizationTableName(dataSourceMetaInfo.getDataSource()),
+					CommandConstants.getOldTable(cmdConst.getLocalizationTableName(
+							dataSourceMetaInfo.getDataSource())));
 
 			// renaming existing localization table to old localization table
 			try {
@@ -134,11 +130,9 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 	@Override
 	protected void dropOldTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
-			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+			DropTableCommand cmd = new DropTableCommand(ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), null);
+			CommandConstants cmdConst = CommandConstants.instance(ServiceLocator.getDbConstantsProperties());
 			// order is important: first drop go terms m:n table, then
 						// localization main table
 			cmd.setTableName(CommandConstants.getOldTable(cmdConst
@@ -159,11 +153,9 @@ public abstract class LocalizationDbUpdater extends DbUpdater {
 	@Override
 	protected void dropTempTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
-			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+			DropTableCommand cmd = new DropTableCommand(ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), null);
+			CommandConstants cmdConst = CommandConstants.instance(ServiceLocator.getDbConstantsProperties());
 			// order is important: first drop go terms m:n table, then
 			// localization main table
 			cmd.setTableName(CommandConstants.getTempTable(cmdConst

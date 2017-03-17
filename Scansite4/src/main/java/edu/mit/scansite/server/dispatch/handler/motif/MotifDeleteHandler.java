@@ -46,18 +46,8 @@ public class MotifDeleteHandler implements
 	public LightWeightMotifRetrieverResult execute(MotifDeleteAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao()
-					.deleteMotif(action.getMotifId());
-
-			List<Motif> motifs = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao()
+			ServiceLocator.getDaoFactory().getMotifDao().deleteMotif(action.getMotifId());
+			List<Motif> motifs = ServiceLocator.getDaoFactory().getMotifDao()
 					.getAll(action.getMotifClass(), false);
 			List<LightWeightMotif> lightWeightMotifs = new LinkedList<LightWeightMotif>();
 			for (Motif motif : motifs) {

@@ -30,10 +30,9 @@ public class AnnotationGetForAllProteinsCommand extends
 	private String regex = null;
 
 	public AnnotationGetForAllProteinsCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			List<Protein> proteins, Map<Integer, String> annotationTypes,
+			Properties dbConstantsConfig, List<Protein> proteins, Map<Integer, String> annotationTypes,
 			boolean useTempTablesForUpdate, DataSource dataSource, String regex) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.annotationTypes = annotationTypes;
 		this.proteins = proteins;

@@ -18,15 +18,14 @@ public class DataSourceTypeGetCommand extends DbQueryCommand<DataSourceType> {
 	private String shortName = null;
 
 	public DataSourceTypeGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 
 	public DataSourceTypeGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String shortName) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String shortName) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.shortName = shortName;
 	}
 

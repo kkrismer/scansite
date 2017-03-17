@@ -16,8 +16,8 @@ public class GOTermGetCommand extends DbQueryCommand<GOTerm> {
 	private String id;
 
 	public GOTermGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 

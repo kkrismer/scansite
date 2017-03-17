@@ -35,8 +35,8 @@ import edu.mit.scansite.shared.transferobjects.MotifSelection;
 public class MotifDaoImpl extends DaoImpl implements MotifDao {
 
 	public MotifDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/*
@@ -52,15 +52,13 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 			Motif temp = getByShortName(motif.getShortName());
 			int id = -1;
 			if (temp == null) {
-				MotifAddCommand cmd = new MotifAddCommand(dbAccessConfig,
-						dbConstantsConfig, dbConnector, motif);
+				MotifAddCommand cmd = new MotifAddCommand(dbAccessConfig, dbConstantsConfig, motif);
 				id = cmd.execute();
 				if (id > 0) {
 					motif.setId(id);
 					for (int i = 0; i < ScansiteConstants.WINDOW_SIZE; ++i) {
 						MotifDataAddCommand dataCmd = new MotifDataAddCommand(
-								dbAccessConfig, dbConstantsConfig, dbConnector,
-								motif, i);
+								dbAccessConfig, dbConstantsConfig, motif, i);
 						dataCmd.execute();
 					}
 					// adding identifiers
@@ -114,13 +112,10 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 		}
 		try {
 			MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, motifNicks, motifClass,
-					publicOnly);
+					dbConstantsConfig, motifNicks, motifClass, publicOnly);
 			
 			List<Motif> motifs = cmd.execute();
-			List<LightWeightMotifGroup> groups = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getGroupsDao()
-					.getAllLightWeight();
+			List<LightWeightMotifGroup> groups = ServiceLocator.getDaoFactory().getGroupsDao().getAllLightWeight();
 
 			for (Motif m : motifs) {
 				int groupId = m.getGroup().getId();
@@ -170,8 +165,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 */
 	@Override
 	public Motif getByShortName(String shortName) throws DataAccessException {
-		MotifGetCommand cmd = new MotifGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, shortName);
+		MotifGetCommand cmd = new MotifGetCommand(dbAccessConfig, dbConstantsConfig, shortName);
 		try {
 			Motif motif = cmd.execute();
 			return motif;
@@ -194,7 +188,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 			MotifClass motifClass, boolean publicOnly)
 			throws DataAccessException {
 		MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, group.getId(), motifClass,
+				dbConstantsConfig, group.getId(), motifClass,
 				publicOnly);
 		try {
 			List<Motif> motifs = cmd.execute();
@@ -215,7 +209,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	private void fetchIdentifiers(List<Motif> motifs)
 			throws DataAccessException {
 		MotifIdentifierGetAllCommand cmd = new MotifIdentifierGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		try {
 			Map<Integer, List<Identifier>> motifIdentifiers = cmd.execute();
 
@@ -239,8 +233,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	public void updateMotif(Motif motif) throws DataAccessException {
 		try {
 			MotifIdentifierDeleteCommand cmd = new MotifIdentifierDeleteCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector,
-					motif.getId());
+					dbAccessConfig, dbConstantsConfig, motif.getId());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error(
@@ -258,8 +251,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 			throw new DataAccessException(e.getMessage(), e);
 		}
 		try {
-			MotifUpdateCommand cmd = new MotifUpdateCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, motif);
+			MotifUpdateCommand cmd = new MotifUpdateCommand(dbAccessConfig, dbConstantsConfig, motif);
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -275,19 +267,18 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	@Override
 	public void deleteMotif(int id) throws DataAccessException {
 		MotifDataDeleteCommand cmd1 = new MotifDataDeleteCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 		MotifIdentifierDeleteCommand cmd2 = new MotifIdentifierDeleteCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, id);
+				dbAccessConfig, dbConstantsConfig, id);
 
-		MotifDeleteCommand cmd3 = new MotifDeleteCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+		MotifDeleteCommand cmd3 = new MotifDeleteCommand(dbAccessConfig, dbConstantsConfig, id);
 
 		try {
 			cmd1.execute();
 			cmd2.execute();
 			Motif m = new Motif();
 			m.setId(id);
-			ServiceLocator.getInstance().getDaoFactory(dbConnector)
+			ServiceLocator.getDaoFactory()
 					.getHistogramDao().deleteHistograms(m, null, null);
 			cmd3.execute();
 		} catch (Exception e) {
@@ -303,8 +294,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 */
 	@Override
 	public Motif getById(int motifId) throws DataAccessException {
-		MotifGetCommand cmd = new MotifGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, motifId);
+		MotifGetCommand cmd = new MotifGetCommand(dbAccessConfig, dbConstantsConfig, motifId);
 		try {
 			Motif motif = cmd.execute();
 			return motif;
@@ -324,12 +314,12 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	@Override
 	public void updateMotifData(Motif motif) throws DataAccessException {
 		MotifUpdateCommand cmdMotif = new MotifUpdateCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, motif, true);
+				dbConstantsConfig, motif, true);
 		try {
 			cmdMotif.execute();
 			for (int i = 0; i < ScansiteConstants.WINDOW_SIZE; ++i) {
 				MotifDataUpdateCommand cmdMotifData = new MotifDataUpdateCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector, motif,
+						dbAccessConfig, dbConstantsConfig, motif,
 						i);
 				cmdMotifData.execute();
 			}
@@ -352,7 +342,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 			boolean getOnlyPublic) throws DataAccessException {
 		try {
 			MotifCountGetCommand cmd = new MotifCountGetCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, motifClass, getOnlyPublic);
+					dbConstantsConfig, motifClass, getOnlyPublic);
 			return cmd.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -382,8 +372,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 						"cannot save motif identifier, identifier type is not in db");
 			}
 			MotifIdentifierAddCommand cmd = new MotifIdentifierAddCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, motif,
-					identifier);
+					dbAccessConfig, dbConstantsConfig, motif, identifier);
 			return cmd.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

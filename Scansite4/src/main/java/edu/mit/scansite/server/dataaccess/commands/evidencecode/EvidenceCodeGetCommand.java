@@ -16,8 +16,8 @@ public class EvidenceCodeGetCommand extends DbQueryCommand<EvidenceCode> {
 	private String code;
 
 	public EvidenceCodeGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String code) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String code) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.code = code;
 	}
 

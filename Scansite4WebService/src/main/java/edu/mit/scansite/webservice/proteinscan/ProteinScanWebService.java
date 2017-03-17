@@ -4,7 +4,6 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.ProteinScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.webservice.WebService;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
@@ -13,7 +12,6 @@ import edu.mit.scansite.webservice.transferobjects.ProteinScanResult;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -22,9 +20,10 @@ import java.util.Set;
  */
 
 public class ProteinScanWebService extends WebService {
-    protected static final String MOTIF_SEPARATOR = "~";
+    private static final String MOTIF_SEPARATOR = "~";
 
-    protected static ProteinScanResult doProteinScan(LightWeightProtein protein, String referenceProteome,
+    // package private
+    static ProteinScanResult doProteinScan(LightWeightProtein protein, String referenceProteome,
              String dataSourceShortName, DataSource dataSource, String inputMotifShortNames, String motifClass, String stringencyValue) {
 
         // check motif input
@@ -40,11 +39,14 @@ public class ProteinScanWebService extends WebService {
         }
 
         //If explicitly motifs picked: use them -- else motif class
-        String[] motifShortNames = inputMotifShortNames.split(MOTIF_SEPARATOR);
+        String[] motifShortNames;
         Set<String> motifShortNamesSet = null;
-        if (motifShortNames != null && motifShortNames.length > 0) {
-            motifShortNamesSet = new HashSet<>();
-            Collections.addAll(motifShortNamesSet, motifShortNames);
+        if (inputMotifShortNames != null) {
+            motifShortNames = inputMotifShortNames.split(MOTIF_SEPARATOR);
+            if (motifShortNames.length > 0) {
+                motifShortNamesSet = new HashSet<>();
+                Collections.addAll(motifShortNamesSet, motifShortNames);
+            }
         }
 
         // check stringency input
@@ -57,21 +59,18 @@ public class ProteinScanWebService extends WebService {
         MotifSelection motifSelection = new MotifSelection();
         motifSelection.setMotifShortNames(motifShortNamesSet);
         motifSelection.setMotifClass(mc);
-        boolean showDomains = false;
-        boolean doCreateFiles = false;
-        boolean publicOnly = true;
-        String realPath = null; // only necessary if doCreateFiles or if showDomains
+        final boolean showDomains = false;
+        final boolean doCreateFiles = false;
+        final boolean publicOnly = true;
+        final String realPath = null; // only necessary if doCreateFiles or if showDomains
 
         try {
-            Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
-            DbConnector connector = new DbConnector(config);
-            connector.initLongTimeConnection();
-            ProteinScanFeature feature = new ProteinScanFeature(connector);
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            ProteinScanFeature feature = new ProteinScanFeature();
 
             edu.mit.scansite.shared.dispatch.features.ProteinScanResult res = feature.doProteinScan(protein, motifSelection, stringency, showDomains,
                     dataSourceShortName, referenceProteome, dataSource, doCreateFiles, publicOnly, realPath);
 
-            connector.closeLongTimeConnection();
             if (res.isSuccess()) {
                 ProteinScanResult result = new ProteinScanResult();
                 result.setProteinName(res.getResults().getProtein().getIdentifier());
@@ -94,20 +93,20 @@ public class ProteinScanWebService extends WebService {
             }
         } catch (DataAccessException e) {
             throw new ScansiteWebServiceException("Running ProteinScan service failed.");
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            throw new ScansiteWebServiceException("Running ProteinScan scan failed.");
         }
     }
 
     public static HistogramStringency getStringency(String stringencyValue) {
-        HistogramStringency stringency = null;
+        if (stringencyValue == null) {
+            return null;
+        }
+
         for (HistogramStringency str : HistogramStringency.values()) {
             if (str.getName().equalsIgnoreCase(stringencyValue)) {
-                stringency = str;
+                return str;
             }
         }
-        return stringency;
+        return null;
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.List;
 @Path("/proteinexists/identifier={identifier}/dsshortname={shortname}")
 public class ProteinExistsService extends WebService {
     /**
-     * @param proteinIdentifier
+     * @param proteinIdentifier identifier code of the protein
      * @param dsShortName DataSource short name
      * @return TRUE, if the otherservices is available in our database, otherwise FALSE.
      */
@@ -36,8 +36,8 @@ public class ProteinExistsService extends WebService {
     ) {
 
         try {
-            DaoFactory daoFactory = ServiceLocator.getWebServiceInstance().getDaoFactory();
-            List<DataSource> dataSourceList = new DatasourcesService().retrieveDataSources(daoFactory);
+            DaoFactory factory = ServiceLocator.getSvcDaoFactory();
+            List<DataSource> dataSourceList = new DataSourcesService().retrieveDataSources(factory);
             DataSource ds = null;
             for (DataSource dataSource : dataSourceList) {
                 if(dataSource.getShortName().equals(dsShortName)) {
@@ -47,7 +47,7 @@ public class ProteinExistsService extends WebService {
             if (ds == null) {
                 throw new ScansiteWebServiceException("Could not assign data source shortname: " + dsShortName);
             }
-            return new BooleanResult(daoFactory.getProteinDao().get(proteinIdentifier, ds) != null);
+            return new BooleanResult(factory.getProteinDao().get(proteinIdentifier, ds) != null);
         } catch (DataAccessException e) {
             throw new ScansiteWebServiceException("Server can not access database. Maybe the given database nickname is invalid...");
         }

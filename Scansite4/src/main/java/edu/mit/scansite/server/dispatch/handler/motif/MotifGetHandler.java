@@ -42,8 +42,7 @@ public class MotifGetHandler implements
 	public MotifGetResult execute(MotifGetAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			DaoFactory fac = ServiceLocator.getInstance().getDaoFactory(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			DaoFactory fac = ServiceLocator.getDaoFactory();
 			Motif m = fac.getMotifDao().getByShortName(
 					action.getMotifShortName());
 			if (m != null) {

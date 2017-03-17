@@ -43,11 +43,7 @@ public class UserAddHandler implements
 	public UserRetrieverResult execute(UserAddAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			UserDao userDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao();
+			UserDao userDao = ServiceLocator.getDaoFactory().getUserDao();
 			userDao.add(action.getUser());
 			return new UserRetrieverResult(userDao.getAll(), true);
 		} catch (DataAccessException e) {

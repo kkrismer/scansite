@@ -15,9 +15,8 @@ public class IdentifierTypeUpdateCommand extends DbUpdateCommand {
 	private IdentifierType identifierType;
 
 	public IdentifierTypeUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			IdentifierType identifierType) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, IdentifierType identifierType) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.identifierType = identifierType;
 	}
 

@@ -41,11 +41,7 @@ public class ProteinCheckOracleHandler implements
 	public ProteinCheckOracleResult execute(ProteinCheckOracleAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			List<String> accList = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get()))
+			List<String> accList = ServiceLocator.getDaoFactory()
 					.getProteinDao()
 					.getAccessionsStartingWith(
 							action.getIdentifier(),

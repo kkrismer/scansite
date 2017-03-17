@@ -21,9 +21,9 @@ public class HistogramGetThresholdCommand extends DbQueryCommand<Double> {
 	private HistogramStringency stringency;
 
 	public HistogramGetThresholdCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId,
+			Properties dbConstantsConfig, int motifId,
 			int taxonId, DataSource dataSource, HistogramStringency stringency) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 		this.taxonId = taxonId;
 		this.dataSource = dataSource;

@@ -45,11 +45,7 @@ public class MotifGroupAddHandler
 			MotifGroupAddAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			MotifGroupsDao groupDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getGroupsDao();
+			MotifGroupsDao groupDao = ServiceLocator.getDaoFactory().getGroupsDao();
 			groupDao.add(action.getMotifGroup());
 			return new LightWeightMotifGroupRetrieverResult(
 					groupDao.getAllLightWeight());

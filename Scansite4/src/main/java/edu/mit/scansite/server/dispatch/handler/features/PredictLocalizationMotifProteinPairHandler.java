@@ -48,8 +48,7 @@ public class PredictLocalizationMotifProteinPairHandler
 			PredictLocalizationMotifProteinPairAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			PredictLocalizationFeature feature = new PredictLocalizationFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			PredictLocalizationFeature feature = new PredictLocalizationFeature();
 			PredictLocalizationMotifProteinPairResult result = new PredictLocalizationMotifProteinPairResult();
 			result.setMotif(action.getMotif());
 			result.setLocalizationDataSource(action.getLocalizationDataSource());

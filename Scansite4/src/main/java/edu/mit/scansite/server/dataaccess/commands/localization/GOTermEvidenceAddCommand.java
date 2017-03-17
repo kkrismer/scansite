@@ -19,10 +19,10 @@ public class GOTermEvidenceAddCommand extends DbInsertCommand {
 	private GOTermEvidence goTermEvidence;
 
 	public GOTermEvidenceAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource, Localization localization,
 			GOTermEvidence goTermEvidence) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 		this.localization = localization;
 		this.goTermEvidence = goTermEvidence;

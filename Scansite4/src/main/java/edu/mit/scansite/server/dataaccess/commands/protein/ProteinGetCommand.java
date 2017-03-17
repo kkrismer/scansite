@@ -25,20 +25,18 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	protected String identifier = null;
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
-	public ProteinGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource dataSource, boolean useTempTablesForUpdate) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public ProteinGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+	 	DataSource dataSource, boolean useTempTablesForUpdate) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.dataSource = dataSource;
 	}
 
 	public ProteinGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String identifier, DataSource dataSource,
-			boolean useTempTablesForUpdate) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String identifier,
+            DataSource dataSource, boolean useTempTablesForUpdate) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.dataSource = dataSource;
@@ -46,9 +44,9 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	}
 
 	public ProteinGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int taxonId,
+			Properties dbConstantsConfig, int taxonId,
 			DataSource dataSource, boolean useTempTablesForUpdate) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.dataSource = dataSource;

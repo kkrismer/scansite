@@ -19,8 +19,8 @@ public class EvidenceResourceGetAllCommand extends
 		DbQueryCommand<List<EvidenceResource>> {
 
 	public EvidenceResourceGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

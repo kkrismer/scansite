@@ -3,6 +3,7 @@ package edu.mit.scansite.webservice.otherservices;
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.features.OrthologScanFeature;
+import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
 import edu.mit.scansite.webservice.proteinscan.ProteinScanUtils;
@@ -20,40 +21,33 @@ import java.util.*;
 
 /**
  * Created by Thomas on 3/9/2017.
+ *
  */
-//@Path("/scanorthologs/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/alignmentradius={alignmentradius: [0-9]+}/stringency={stringency: [A-Za-z]+}{sequencepattern: (/sequencepattern=([A-Z]*))?}{motifgroup: (/motifgroup=*)?}{siteposition: (/siteposition=[A-Za-z0-9])?}")
-@Path("/scanorthologs")
+// todo [optional]: Make motif group and site position optional and add a sequence pattern parameter
+@Path("/scanorthologs/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/orthologydsshortname={orthologydsshortname: [A-Za-z]+}/alignmentradius={alignmentradius: [0-9]+}/stringency={stringency: [A-Za-z]+}/motifgroup={motifgroup: \\S+}/siteposition={siteposition: [0-9]+}")
 public class ScanOrthologsService {
 
     @GET
     @Produces({MediaType.APPLICATION_XML})
     public static OrthologScanResult scanOrthologs(
-//            @PathParam("siteposition") String sitePositionStr,
-//            @PathParam("motifgroup") String motifGroupsStr,
-//            @PathParam("sequencepattern") String sequencePatternStr,
-//            @PathParam("identifier") String proteinIdentifier,
-//            @PathParam("dsshortname") String dsShortName,
-//            @PathParam("alignmentradius") String alignmentRadiusStr,
-//            @PathParam("stringency") String stringencyValue
+            @PathParam("siteposition") String sitePositionStr,
+            @PathParam("motifgroup") String motifGroupsStr,
+            @PathParam("orthologydsshortname") String orthologyDsShortName,
+            @PathParam("identifier") String proteinIdentifier,
+            @PathParam("dsshortname") String proteinDsShortName,
+            @PathParam("alignmentradius") String alignmentRadiusStr,
+            @PathParam("stringency") String stringencyValue
     ) {
-        //test
-        String sitePositionStr = "306";
-        String motifGroupsStr = "Acid_ST_kin";
-        String sequencePatternStr = "";
-        String proteinIdentifier = "BRCA2_HUMAN";
-        String proteinDsShortName = "swissprot";
-        String orthologyDsShortName = "swissprotorthology";
-        String alignmentRadiusStr = "40";
-        String stringencyValue = "High";
+//        String sequencePatternStr = "";
 
         Integer sitePosition;
         if (sitePositionStr != null && !sitePositionStr.isEmpty()) {
-            sitePosition = Integer.parseInt(sitePositionStr); //todo: make changes to that the site position is assigned correctly -- only numbers possible?
+            sitePosition = Integer.parseInt(sitePositionStr);
         } else {
             throw new ScansiteWebServiceException("Running OrthologScan service failed: No site position available");
         }
         LightWeightMotifGroup motifGroup = getMotifGroup(motifGroupsStr);
-        SequencePattern pattern = getSequencePattern(sequencePatternStr);
+//        SequencePattern pattern = getSequencePattern(sequencePatternStr);
 
         Integer alignmentRadius;
         if (alignmentRadiusStr != null && !alignmentRadiusStr.isEmpty()) {
@@ -66,21 +60,20 @@ public class ScanOrthologsService {
         HistogramStringency stringency = ProteinScanWebService.getStringency(stringencyValue);
 
         try {
-            boolean publicOnly = false;
-            DataSource ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(orthologyDsShortName);
-            Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
-            DbConnector connector = new DbConnector(config);
-            connector.initLongTimeConnection();
-            OrthologScanFeature feature = new OrthologScanFeature(connector);
+            final boolean publicOnly = false;
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            DataSource ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(orthologyDsShortName);
+            OrthologScanFeature feature = new OrthologScanFeature();
             edu.mit.scansite.shared.dispatch.features.OrthologScanResult result;
             if (motifGroup != null) {
-                 result = feature.scanOrthologsByMotifGroup(sitePosition, motifGroup, ds, protein, stringency, alignmentRadius, publicOnly);
                 System.out.println("Running ortholog scan based on motif groups");
+                result = feature.scanOrthologsByMotifGroup(sitePosition, motifGroup, ds, protein, stringency, alignmentRadius, publicOnly);
             } else {
-                result = feature.scanOrthologsBySequencePattern(pattern, ds, protein, stringency, alignmentRadius, publicOnly);
-                System.out.println("Running ortholog scan based on sequence pattern(s)");
+                throw new ScansiteWebServiceException("Running OrthologScan service failed. Motif group missing");
+//                System.out.println("Running ortholog scan based on sequence pattern(s)");
+//                result = feature.scanOrthologsBySequencePattern(pattern, ds, protein, stringency, alignmentRadius, publicOnly);
             }
-            connector.closeLongTimeConnection();
+
             if(result.isSuccess()) {
                 OrthologScanResult scanResult = new OrthologScanResult();
                 List<OrthologScanResultEntry> resultEntries = new ArrayList<>();
@@ -98,7 +91,7 @@ public class ScanOrthologsService {
                         for (String categoryAnnotation : categoryAnnotations) {
                             annotations += categoryAnnotation;
                         }
-                        annotations += "; ";
+                        annotations += "\n";
                     }
                     entry.setAnnotation(annotations);
                     entry.setMolWeight(ortholog.getProtein().getMolecularWeight());
@@ -112,7 +105,12 @@ public class ScanOrthologsService {
                     entry.setPredictedSite(motifSites);
                     resultEntries.add(entry);
                 }
-                scanResult.setOrthologousProteins((OrthologScanResultEntry[]) resultEntries.toArray());
+
+                OrthologScanResultEntry[] resultEntryArray = new OrthologScanResultEntry[resultEntries.size()];
+                for (int i=0; i < resultEntries.size(); i++) {
+                    resultEntryArray[i] = resultEntries.get(i);
+                }
+                scanResult.setOrthologousProteins(resultEntryArray);
                 scanResult.setSequenceAlignment(result.getSequenceAlignment().getHTMLFormattedAlignment());
 
                 return scanResult;
@@ -124,11 +122,24 @@ public class ScanOrthologsService {
         }
     }
 
-    private static SequencePattern getSequencePattern(String sequencePatternStr) {
-        return null;
-    }
+//    private static SequencePattern getSequencePattern(String sequencePatternStr) {
+//        //todo if the second choice is going to be introduced
+//        return null;
+//    }
 
-    private static LightWeightMotifGroup getMotifGroup(String motifGroupsStr) {
+    private static LightWeightMotifGroup getMotifGroup(String motifGroupStr) {
+        final boolean publicOnly = true;
+        List<MotifGroup> motifGroups;
+        try {
+            motifGroups = ServiceLocator.getSvcDaoFactory().getGroupsDao().getAll(publicOnly);
+            for (MotifGroup motifGroup : motifGroups) {
+                if (motifGroup.getShortName().equals(motifGroupStr)) {
+                    return motifGroup;
+                }
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

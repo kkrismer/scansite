@@ -18,10 +18,10 @@ public class OrthologyAddCommand extends DbInsertCommand {
 	private String orthologsIdentifier;
 
 	public OrthologyAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			boolean useTempTablesForUpdate, DataSource orthologyDataSource,
 			int orthologsGroupId, String orthologsIdentifier) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.orthologyDataSource = orthologyDataSource;
 		this.orthologsGroupId = orthologsGroupId;

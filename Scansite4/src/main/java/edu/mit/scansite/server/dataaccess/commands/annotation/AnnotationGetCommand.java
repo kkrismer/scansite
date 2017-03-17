@@ -23,20 +23,16 @@ public class AnnotationGetCommand extends
 	private DataSource dataSource;
 	private String regex = null;
 
-	public AnnotationGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String proteinId, boolean useTempTablesForUpdate,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public AnnotationGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			String proteinId, boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.proteinId = proteinId;
 		this.dataSource = dataSource;
 	}
 
-	public AnnotationGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String proteinId, boolean useTempTablesForUpdate,
-			DataSource dataSource, String regex) {
-		this(dbAccessConfig, dbConstantsConfig, dbConnector, proteinId,
+	public AnnotationGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			String proteinId, boolean useTempTablesForUpdate, DataSource dataSource, String regex) {
+		this(dbAccessConfig, dbConstantsConfig, proteinId,
 				useTempTablesForUpdate, dataSource);
 		this.regex = regex;
 	}

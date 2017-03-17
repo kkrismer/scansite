@@ -20,9 +20,8 @@ public class MotifCountGetCommand extends DbQueryCommand<Integer> {
 	private boolean getPublicOnly = true;
 
 	public MotifCountGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			MotifClass motifClass, boolean getPublicOnly) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, MotifClass motifClass, boolean getPublicOnly) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.getPublicOnly = getPublicOnly;
 		this.motifClass = motifClass;
 	}

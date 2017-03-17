@@ -18,9 +18,8 @@ public class MotifIdentifierAddCommand extends DbInsertCommand {
 	private Identifier identifier;
 
 	public MotifIdentifierAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Motif motif,
-			Identifier identifier) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Motif motif, Identifier identifier) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motif = motif;
 		this.identifier = identifier;
 	}

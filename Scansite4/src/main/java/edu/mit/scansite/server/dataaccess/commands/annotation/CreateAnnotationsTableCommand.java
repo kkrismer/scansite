@@ -15,9 +15,9 @@ public class CreateAnnotationsTableCommand extends DbUpdateCommand {
 	private DataSource dataSource;
 
 	public CreateAnnotationsTableCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(true);
 		this.dataSource = dataSource;
 	}

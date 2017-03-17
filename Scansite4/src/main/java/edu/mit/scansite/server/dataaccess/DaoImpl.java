@@ -20,15 +20,12 @@ public abstract class DaoImpl implements Dao {
 
 	protected Properties dbAccessConfig;
 	protected Properties dbConstantsConfig;
-	protected DbConnector dbConnector;
 
 	protected boolean useTempTablesForUpdate = false;
 
-	public DaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
+	public DaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		this.dbAccessConfig = dbAccessConfig;
 		this.dbConstantsConfig = dbConstantsConfig;
-		this.dbConnector = dbConnector;
 	}
 
 	/* (non-Javadoc)
@@ -36,16 +33,20 @@ public abstract class DaoImpl implements Dao {
 	 */
 	@Override
 	public void disableChecks() throws ScansiteUpdaterException {
+		Connection connection = null;
 		try {
-			dbConnector.setAutoCommit(false);
-			Connection connection = dbConnector.getConnection();
+			DbConnector.getInstance().setAutoCommit(false);
+			connection = DbConnector.getInstance().getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.execute("SET UNIQUE_CHECKS=0;");
 			stmt.execute("SET foreign_key_checks=0;");
-			dbConnector.close(stmt);
+			DbConnector.getInstance().close(stmt);
 		} catch (Exception e) {
 			logger.error("Cannot disable checks: " + e.getMessage(), e);
 			throw new ScansiteUpdaterException("Cannot disable checks", e);
+		} finally {
+			//instead of closing the connection: reuse it
+			//DbConnector.getInstance().close(connection);
 		}
 	}
 
@@ -54,16 +55,20 @@ public abstract class DaoImpl implements Dao {
 	 */
 	@Override
 	public void enableChecks() throws ScansiteUpdaterException {
+		Connection connection = null;
 		try {
-			dbConnector.setAutoCommit(true);
-			Connection connection = dbConnector.getConnection();
+			DbConnector.getInstance().setAutoCommit(true);
+			connection = DbConnector.getInstance().getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.execute("SET UNIQUE_CHECKS=1;");
 			stmt.execute("SET foreign_key_checks=1;");
-			dbConnector.close(stmt);
+			DbConnector.getInstance().close(stmt);
 		} catch (Exception e) {
 			logger.error("Cannot enable checks: " + e.getMessage(), e);
 			throw new ScansiteUpdaterException("Cannot enable checks", e);
+		} finally {
+			//instead of closing the connection: reuse it
+			//DbConnector.getInstance().close(connection);
 		}
 	}
 }

@@ -25,9 +25,8 @@ public class DataSourceEntryCountsGetCommand extends
 	private List<DataSource> dataSources = null;
 
 	public DataSourceEntryCountsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			List<DataSource> dataSources) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, List<DataSource> dataSources) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSources = dataSources;
 	}
 

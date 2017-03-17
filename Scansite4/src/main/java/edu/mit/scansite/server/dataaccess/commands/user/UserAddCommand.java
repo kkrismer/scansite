@@ -15,8 +15,8 @@ public class UserAddCommand extends DbInsertCommand {
 	private User entry;
 
 	public UserAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, User entry) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, User entry) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.entry = entry;
 	}
 

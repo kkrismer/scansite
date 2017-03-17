@@ -20,9 +20,8 @@ import edu.mit.scansite.shared.transferobjects.GOTerm;
  */
 public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 
-	public GOTermDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public GOTermDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -38,7 +37,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 			}
 			if (temp == null) {
 				EvidenceCodeAddCommand cmd = new EvidenceCodeAddCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						evidenceCode);
 				evidenceCode.setId(cmd.execute());
 				return evidenceCode;
@@ -58,7 +57,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 	@Override
 	public EvidenceCode getEvidenceCode(String code) throws DataAccessException {
 		EvidenceCodeGetCommand cmd = new EvidenceCodeGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, code);
+				dbConstantsConfig, code);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -73,7 +72,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 	@Override
 	public List<EvidenceCode> getAllEvidenceCodes() throws DataAccessException {
 		EvidenceCodesGetAllCommand cmd = new EvidenceCodesGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {
@@ -91,7 +90,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 			GOTerm temp = getGOTerm(goTerm.getId());
 			if (temp == null) {
 				GOTermAddCommand cmd = new GOTermAddCommand(dbAccessConfig,
-						dbConstantsConfig, dbConnector, goTerm);
+						dbConstantsConfig, goTerm);
 				cmd.execute();
 				return goTerm;
 			} else {
@@ -110,7 +109,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 	@Override
 	public GOTerm getGOTerm(String id) throws DataAccessException {
 		GOTermGetCommand cmd = new GOTermGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+				dbConstantsConfig, id);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -125,7 +124,7 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 	@Override
 	public List<GOTerm> getAllGOTerms() throws DataAccessException {
 		GOTermsGetAllCommand cmd = new GOTermsGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector);
+				dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {

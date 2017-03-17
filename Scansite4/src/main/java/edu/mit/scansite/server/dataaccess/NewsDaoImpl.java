@@ -19,9 +19,8 @@ import edu.mit.scansite.shared.transferobjects.NewsEntry;
  */
 public class NewsDaoImpl extends DaoImpl implements NewsDao {
 
-	public NewsDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public NewsDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/*
@@ -34,7 +33,7 @@ public class NewsDaoImpl extends DaoImpl implements NewsDao {
 	@Override
 	public void add(NewsEntry entry) throws DataAccessException {
 		NewsAddCommand command = new NewsAddCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, entry);
+				dbConstantsConfig, entry);
 		try {
 			command.execute();
 		} catch (Exception e) {
@@ -53,7 +52,7 @@ public class NewsDaoImpl extends DaoImpl implements NewsDao {
 	@Override
 	public boolean update(NewsEntry entry) throws DataAccessException {
 		NewsUpdateCommand command = new NewsUpdateCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, entry);
+				dbConstantsConfig, entry);
 		try {
 			return command.execute() > 0;
 		} catch (Exception e) {
@@ -70,7 +69,7 @@ public class NewsDaoImpl extends DaoImpl implements NewsDao {
 	@Override
 	public void delete(int id) throws DataAccessException {
 		NewsDeleteCommand command = new NewsDeleteCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+				dbConstantsConfig, id);
 		try {
 			command.execute();
 		} catch (DatabaseException e) {
@@ -87,7 +86,7 @@ public class NewsDaoImpl extends DaoImpl implements NewsDao {
 	@Override
 	public NewsEntry get(int id) throws DataAccessException {
 		NewsGetCommand command = new NewsGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, id);
+				dbConstantsConfig, id);
 		NewsEntry entry;
 		try {
 			entry = command.execute();
@@ -108,7 +107,7 @@ public class NewsDaoImpl extends DaoImpl implements NewsDao {
 	public List<NewsEntry> getAll(int nrOfNewestEntries)
 			throws DataAccessException {
 		NewsGetAllCommand command = new NewsGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, nrOfNewestEntries);
+				dbConstantsConfig, nrOfNewestEntries);
 		List<NewsEntry> news;
 		try {
 			news = command.execute();

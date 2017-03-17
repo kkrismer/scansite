@@ -15,9 +15,8 @@ public class DataSourceTypeUpdateCommand extends DbUpdateCommand {
 	private DataSourceType dataSourceType;
 
 	public DataSourceTypeUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSourceType dataSourceType) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSourceType dataSourceType) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSourceType = dataSourceType;
 	}
 

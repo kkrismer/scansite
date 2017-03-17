@@ -28,8 +28,8 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	private Map<Integer, String> annotationTypesRev = null;
 
 	public AnnotationDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -47,8 +47,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	public int addAnnotationType(String name) throws DataAccessException {
 		int id = getAnnotationTypeId(name);
 		if (id == -1) {
-			AnnoTypeAddCommand cmd = new AnnoTypeAddCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, name);
+			AnnoTypeAddCommand cmd = new AnnoTypeAddCommand(dbAccessConfig, dbConstantsConfig, name);
 			try {
 				id = cmd.execute();
 			} catch (Exception e) {
@@ -64,8 +63,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	 */
 	@Override
 	public int getAnnotationTypeId(String name) throws DataAccessException {
-		AnnoTypeGetIdCommand cmd = new AnnoTypeGetIdCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, name);
+		AnnoTypeGetIdCommand cmd = new AnnoTypeGetIdCommand(dbAccessConfig, dbConstantsConfig, name);
 		Integer id = -1;
 		try {
 			id = cmd.execute();
@@ -106,7 +104,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 		}
 		if (typeId != null && typeId >= 0) {
 			AnnotationAddCommand cmd = new AnnotationAddCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, typeId, annotation,
+					dbConstantsConfig, typeId, annotation,
 					proteinId, useTempTablesForUpdate, dataSource);
 			try {
 				cmd.execute();
@@ -127,7 +125,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	public Map<String, Set<String>> get(String proteinId, DataSource dataSource)
 			throws DataAccessException {
 		AnnotationGetCommand cmd = new AnnotationGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, proteinId,
+				dbConstantsConfig, proteinId,
 				useTempTablesForUpdate, dataSource);
 		Map<String, Set<String>> as = null;
 		try {
@@ -149,7 +147,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 			return get(proteinId, dataSource);
 		}
 		AnnotationGetCommand cmd = new AnnotationGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, proteinId,
+				dbConstantsConfig, proteinId,
 				useTempTablesForUpdate, dataSource, regex);
 		HashMap<String, Set<String>> as = null;
 		try {
@@ -176,7 +174,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 				annotationTypesRev = getAnnotationTypes();
 			}
 			AnnotationGetForAllProteinsCommand cmd = new AnnotationGetForAllProteinsCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, proteins,
+					dbAccessConfig, dbConstantsConfig, proteins,
 					annotationTypesRev, useTempTablesForUpdate, dataSource,
 					regex);
 			return cmd.execute();
@@ -189,7 +187,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	private Map<Integer, String> getAnnotationTypes()
 			throws DataAccessException {
 		AnnotationTypeGetAllCommand cmd = new AnnotationTypeGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector);
+				dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -205,7 +203,7 @@ public class AnnotationDaoImpl extends DaoImpl implements AnnotationDao {
 	public String getProteinAccessionNr(String accessionAnnotation,
 			DataSource dataSource) throws DataAccessException {
 		AnnotationGetProteinAccCommand cmd = new AnnotationGetProteinAccCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
+				dbAccessConfig, dbConstantsConfig,
 				accessionAnnotation, useTempTablesForUpdate, dataSource);
 		String proteinId = null;
 		try {

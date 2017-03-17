@@ -19,10 +19,10 @@ public class OrthologsCountByIdentifierGetCommand extends
 	protected String identifier;
 
 	public OrthologsCountByIdentifierGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			boolean useTempTablesForUpdate, DataSource orthologyDataSource,
 			String identifier) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.orthologyDataSource = orthologyDataSource;
 		this.identifier = identifier;

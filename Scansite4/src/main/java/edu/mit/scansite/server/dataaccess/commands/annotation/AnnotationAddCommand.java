@@ -20,10 +20,9 @@ public class AnnotationAddCommand extends DbInsertCommand {
 	private String proteinId = null;
 
 	public AnnotationAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			Integer typeId, String annotation, String proteinId,
-			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Integer typeId, String annotation,
+			String proteinId, boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.typeId = typeId;
 		this.annotation = annotation;
 		this.proteinId = proteinId;

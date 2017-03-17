@@ -32,10 +32,7 @@ import edu.mit.scansite.shared.util.ScansiteScoring;
 public class ProteinScanFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private DbConnector dbConnector;
-
-	public ProteinScanFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public ProteinScanFeature() {
 	}
 
 	/**
@@ -51,7 +48,7 @@ public class ProteinScanFeature {
 			String histogramTaxon, DataSource localizationDataSource,
 			boolean doCreateFiles, boolean publicOnly, String realPath) throws DataAccessException {
 
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(dbConnector);
+		DaoFactory factory = ServiceLocator.getDaoFactory();
 		ArrayList<DomainPosition> domainPositions = null;
 
 		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);

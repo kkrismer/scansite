@@ -44,15 +44,12 @@ public class PredictLocationService {
 //        }
 
         try {
-            Properties config = ServiceLocator.getWebServiceInstance().getDbAccessFile();
-            DbConnector connector = new DbConnector(config);
-            connector.initLongTimeConnection();
-            DataSource ds = ServiceLocator.getWebServiceInstance().getDaoFactory().getDataSourceDao().get(localizationDsShortName);
-            PredictLocalizationFeature feature = new PredictLocalizationFeature(connector);
+            DbConnector.getInstance().setWebServiceProperties(ServiceLocator.getSvcDbAccessProperties());
+            DataSource ds = ServiceLocator.getSvcDaoFactory().getDataSourceDao().get(localizationDsShortName);
+            PredictLocalizationFeature feature = new PredictLocalizationFeature();
             edu.mit.scansite.shared.dispatch.features.PredictProteinsLocalizationResult result;
 
             result = (PredictProteinsLocalizationResult) feature.doPredictProteinLocalization(ds, protein);
-            connector.closeLongTimeConnection();
 
             int numberProteinLocations = result.getTotalProteinLocalizations();
             String localization = result.getLocalization().getType().getName();

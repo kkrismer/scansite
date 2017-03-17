@@ -33,8 +33,8 @@ import edu.mit.scansite.shared.transferobjects.Taxon;
 public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 
 	public HistogramDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/*
@@ -48,14 +48,13 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 	public void add(ServerHistogram histogram) throws DataAccessException {
 		Motif motif = histogram.getMotif();
 		if (motif.getId() <= 0) {
-			int id = ServiceLocator.getInstance().getDaoFactory(dbConnector)
-					.getMotifDao().addMotif(motif);
+			int id = ServiceLocator.getDaoFactory().getMotifDao().addMotif(motif);
 			motif.setId(id);
 			histogram.setMotif(motif);
 		}
 
 		try {
-			HistogramAddCommand cmd = new HistogramAddCommand(dbConstantsConfig, dbConnector, histogram);
+			HistogramAddCommand cmd = new HistogramAddCommand(dbConstantsConfig, histogram);
 			
 			cmd.execute();
 			try {
@@ -68,7 +67,7 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 			ArrayList<HistogramDataPoint> scores = histogram.getDataPoints();
 			for (HistogramDataPoint p : scores) {
 				HistogramDataAddCommand cmdData = new HistogramDataAddCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						histogram, p.getScore(), (int) p.getAbsFreq());
 				cmdData.execute();
 			}
@@ -92,11 +91,11 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 			throws DataAccessException {
 		if (motif != null && motif.getId() > 0) {
 			HistogramDataDeleteCommand cmd1 = new HistogramDataDeleteCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector,
+					dbAccessConfig, dbConstantsConfig,
 					motif.getId(), (dataSource != null) ? dataSource.getId()
 							: -1, (taxon != null) ? taxon.getId() : -1);
 			HistogramDeleteCommand cmd2 = new HistogramDeleteCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector,
+					dbAccessConfig, dbConstantsConfig,
 					motif.getId(), (dataSource != null) ? dataSource.getId()
 							: -1, (taxon != null) ? taxon.getId() : -1);
 			try {
@@ -122,17 +121,16 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 		List<ServerHistogram> hists = new ArrayList<ServerHistogram>();
 		try {
 			HistogramGetAllCommand cmd = new HistogramGetAllCommand(
-					dbAccessConfig, dbConstantsConfig, dbConnector, motifs,
+					dbAccessConfig, dbConstantsConfig, motifs,
 					dataSource, taxonId, GetHistogramMode.GENERAL_INFO_ONLY);
 			hists = cmd.execute();
 			// get histogramData
 			cmd = new HistogramGetAllCommand(dbAccessConfig, dbConstantsConfig,
-					dbConnector, motifs, dataSource, taxonId,
+					motifs, dataSource, taxonId,
 					GetHistogramMode.DATA_ONLY);
 			List<ServerHistogram> tempHists = cmd.execute();
 
-			DaoFactory daoFac = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory daoFac = ServiceLocator.getDaoFactory();
 			Map<Integer, DataSource> datasources = new HashMap<Integer, DataSource>();
 			Map<Integer, Taxon> taxa = new HashMap<Integer, Taxon>();
 			int tId = -1;
@@ -196,9 +194,9 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 			DataSource dataSource) throws DataAccessException {
 		if (motifId > 0 && taxonName != null && dataSource != null) {
 			ArrayList<Motif> motifs = new ArrayList<Motif>();
-			Taxon t = ServiceLocator.getInstance().getDaoFactory(dbConnector)
+			Taxon t = ServiceLocator.getDaoFactory()
 					.getTaxonDao().getByName(taxonName, dataSource);
-			motifs.add(ServiceLocator.getInstance().getDaoFactory(dbConnector)
+			motifs.add(ServiceLocator.getDaoFactory()
 					.getMotifDao().getById(motifId));
 			List<ServerHistogram> hists = getHistograms(motifs, dataSource,
 					t.getId());
@@ -221,12 +219,12 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 	public void updateHistogram(ServerHistogram hist, boolean updateData)
 			throws DataAccessException {
 		try {
-			HistogramUpdateCommand cmd = new HistogramUpdateCommand(dbConstantsConfig, dbConnector, hist);
+			HistogramUpdateCommand cmd = new HistogramUpdateCommand(dbConstantsConfig, hist);
 			cmd.execute();
 			if (updateData) {
 				// remove old data
 				HistogramDataDeleteCommand delData = new HistogramDataDeleteCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector, hist
+						dbAccessConfig, dbConstantsConfig, hist
 								.getMotif().getId(), hist.getDataSource()
 								.getId(), hist.getTaxon().getId());
 				delData.execute();
@@ -235,7 +233,7 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 				ArrayList<HistogramDataPoint> scores = hist.getDataPoints();
 				for (HistogramDataPoint p : scores) {
 					HistogramDataAddCommand cmdData = new HistogramDataAddCommand(
-							dbAccessConfig, dbConstantsConfig, dbConnector,
+							dbAccessConfig, dbConstantsConfig,
 							hist, p.getScore(), (int) p.getAbsFreq());
 					cmdData.execute();
 				}
@@ -262,7 +260,7 @@ public class HistogramDaoImpl extends DaoImpl implements HistogramDao {
 				&& stringency != null) {
 			try {
 				HistogramGetThresholdCommand cmd = new HistogramGetThresholdCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						motifId, taxonId, dataSource, stringency);
 				return cmd.execute();
 			} catch (DatabaseException e) {

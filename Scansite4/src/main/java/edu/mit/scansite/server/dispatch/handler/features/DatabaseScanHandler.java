@@ -50,15 +50,13 @@ public class DatabaseScanHandler implements
 	public DatabaseScanResult execute(DatabaseScanAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			DatabaseScanFeature feature = new DatabaseScanFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			DatabaseScanFeature feature = new DatabaseScanFeature();
 			DatabaseScanResult result = feature.doDatabaseSearch(action.getMotifSelection(), action
 					.getDataSource(), action.getRestrictionProperties(), action
 					.getOutputListSize(), true, !loginHandler
 					.isSessionValidLogin(action.getUserSessionId()), contextProvider.get().getRealPath("/"));
 
-            DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-                    BootstrapListener.getDbConnector(contextProvider.get()));
+            DaoFactory factory = ServiceLocator.getDaoFactory();
             // check if the sites are PhosphoSiteSites if swissprot is selected
 
             for (DatabaseSearchScanResultSite site : result.getDbSearchSites()) {

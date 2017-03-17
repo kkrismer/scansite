@@ -20,9 +20,9 @@ public class LocalizationTypesGetAllCommand extends
 	private DataSource localizationDataSource;
 
 	public LocalizationTypesGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 	}
 

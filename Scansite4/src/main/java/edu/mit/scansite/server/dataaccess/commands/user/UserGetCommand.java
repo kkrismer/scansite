@@ -28,9 +28,9 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	private String cPassword;
 
 	public UserGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			String email, String password) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.email = email;
 		this.password = password;
 
@@ -44,8 +44,8 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	}
 
 	public UserGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String email) {
-		this(dbAccessConfig, dbConstantsConfig, dbConnector, email, "");
+			Properties dbConstantsConfig, String email) {
+		this(dbAccessConfig, dbConstantsConfig, email, "");
 		withPassword = false;
 	}
 

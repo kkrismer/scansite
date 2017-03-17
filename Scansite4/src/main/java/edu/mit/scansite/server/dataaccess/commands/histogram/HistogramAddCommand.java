@@ -23,14 +23,11 @@ public class HistogramAddCommand {
 
 	private ServerHistogram h;
 	private CommandConstants c = CommandConstants.instance();
-	private DbConnector dbConnector;
 
-	public HistogramAddCommand(Properties dbConstantsConfig,
-			DbConnector dbConnector, ServerHistogram hist) {
+	public HistogramAddCommand(Properties dbConstantsConfig, ServerHistogram hist) {
 		if (c == null) {
 			c = CommandConstants.instance(dbConstantsConfig);
 		}
-		this.dbConnector = dbConnector;
 		h = hist;
 	}
 
@@ -39,17 +36,17 @@ public class HistogramAddCommand {
 		Connection connection = null;
 		File f = new File(h.getImageFilePath());
 		try {
-			connection = dbConnector.getConnection();
+			connection = DbConnector.getInstance().getConnection();
 			query = getSqlStatement();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setBlob(1, new FileInputStream(f), f.length());
 			statement.executeUpdate();
-			dbConnector.close(statement);
+			DbConnector.getInstance().close(statement);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
 		} finally {
-			dbConnector.close(connection);
+
 		}
 	}
 

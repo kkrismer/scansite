@@ -54,8 +54,7 @@ public class ProteinScanHandler implements
 	public ProteinScanResult execute(ProteinScanAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			DaoFactory factory = ServiceLocator.getDaoFactory();
 			LightWeightProtein protein = null;
 			Set<String> accessions = null;
 			if (action.getProtein().getDataSource() != null) {
@@ -79,8 +78,7 @@ public class ProteinScanHandler implements
 			} else {
 				protein = action.getProtein();
 			}
-			ProteinScanFeature feature = new ProteinScanFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			ProteinScanFeature feature = new ProteinScanFeature();
 			ProteinScanResult result = feature.doProteinScan(protein,
 					action.getMotifSelection(), action.getStringency(),
 					action.isShowDomains(),

@@ -20,8 +20,8 @@ import edu.mit.scansite.shared.transferobjects.Protein;
 public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 
 	public OrthologyDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +40,7 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 			int orthologsGroupId, String orthologsIdentifier)
 			throws DataAccessException {
 		OrthologyAddCommand command = new OrthologyAddCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, useTempTablesForUpdate,
+				dbConstantsConfig, useTempTablesForUpdate,
 				orthologyDataSource, orthologsGroupId, orthologsIdentifier);
 		try {
 			command.execute();
@@ -145,12 +145,11 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 		try {
 			if (identifiers != null && identifiers.size() > 0) {
 				OrthologProteinsGetCommand cmd = new OrthologProteinsGetCommand(
-						dbAccessConfig, dbConstantsConfig, dbConnector,
+						dbAccessConfig, dbConstantsConfig,
 						useTempTablesForUpdate, orthologyDataSource,
 						identifiers, proteinDataSource);
 				List<Protein> proteins = cmd.execute();
-				proteins = ServiceLocator.getInstance()
-						.getDaoFactory(dbConnector).getProteinDao()
+				proteins = ServiceLocator.getDaoFactory().getProteinDao()
 						.getProteinInformation(proteins, proteinDataSource);
 				return proteins;
 			} else {
@@ -187,7 +186,7 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 	public int getOrthologsCountByIdentifier(DataSource orthologyDataSource,
 			String identifier) throws DataAccessException {
 		OrthologsCountByIdentifierGetCommand cmd = new OrthologsCountByIdentifierGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
+				dbAccessConfig, dbConstantsConfig,
 				useTempTablesForUpdate, orthologyDataSource, identifier);
 		try {
 			return cmd.execute();

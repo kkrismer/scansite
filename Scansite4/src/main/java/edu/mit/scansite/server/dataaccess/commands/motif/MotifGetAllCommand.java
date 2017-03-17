@@ -29,18 +29,18 @@ public class MotifGetAllCommand extends DbQueryCommand<List<Motif>> {
 	private boolean getOnlyPublic = true;
 
 	public MotifGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			Set<String> motifNicks, MotifClass motifClass, boolean getOnlyPublic) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifNicks = motifNicks;
 		this.getOnlyPublic = getOnlyPublic;
 		this.motifClass = motifClass;
 	}
 
 	public MotifGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int groupId,
+			Properties dbConstantsConfig, int groupId,
 			MotifClass motifClass, boolean getOnlyPublic) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.groupId = groupId;
 		this.getOnlyPublic = getOnlyPublic;
 		this.motifClass = motifClass;

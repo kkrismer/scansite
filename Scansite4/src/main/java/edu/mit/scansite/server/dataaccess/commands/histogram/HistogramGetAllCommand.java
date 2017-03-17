@@ -41,19 +41,19 @@ public class HistogramGetAllCommand extends
 	}
 
 	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId,
+			Properties dbConstantsConfig, int motifId,
 			DataSource dataSource, int taxonId) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		m = motifId;
 		this.dataSource = dataSource;
 		t = taxonId;
 	}
 
 	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			List<Motif> motifs, DataSource dataSource, int taxonId,
 			GetHistogramMode mode) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 		t = taxonId;
 		if (motifs == null || motifs.isEmpty()) {
@@ -74,9 +74,9 @@ public class HistogramGetAllCommand extends
 	}
 
 	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			List<Motif> motifs, DataSource dataSource, int taxonId) {
-		this(dbAccessConfig, dbConstantsConfig, dbConnector, motifs,
+		this(dbAccessConfig, dbConstantsConfig, motifs,
 				dataSource, taxonId, GetHistogramMode.ALL);
 	}
 

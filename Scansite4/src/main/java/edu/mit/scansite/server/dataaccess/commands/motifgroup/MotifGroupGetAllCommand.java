@@ -24,15 +24,13 @@ public class MotifGroupGetAllCommand extends DbQueryCommand<List<MotifGroup>> {
 	private MotifClass motifClass = null;
 	private boolean publicOnly = true;
 
-	public MotifGroupGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public MotifGroupGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	public MotifGroupGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			MotifClass motifClass, boolean publicOnly) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, MotifClass motifClass, boolean publicOnly) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifClass = motifClass;
 		this.publicOnly = publicOnly;
 	}

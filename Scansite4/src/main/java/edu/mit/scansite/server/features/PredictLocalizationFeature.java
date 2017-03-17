@@ -3,6 +3,7 @@ package edu.mit.scansite.server.features;
 import java.util.List;
 import java.util.Map;
 
+import edu.mit.scansite.server.dataaccess.DaoFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,17 +28,14 @@ import edu.mit.scansite.shared.transferobjects.MotifClass;
 public class PredictLocalizationFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private DbConnector dbConnector;
 
-	public PredictLocalizationFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public PredictLocalizationFeature() {
 	}
 
 	public PredictLocalizationResult doPredictProteinLocalization(
 			DataSource localizationDataSource, LightWeightProtein protein)
 			throws DataAccessException {
-		LocalizationDao dao = ServiceLocator.getInstance()
-				.getDaoFactory(dbConnector).getLocalizationDao();
+		LocalizationDao dao = ServiceLocator.getDaoFactory().getLocalizationDao();
 
 		PredictProteinsLocalizationResult result = new PredictProteinsLocalizationResult();
 		result.setLocalizationDataSource(localizationDataSource);
@@ -65,10 +63,9 @@ public class PredictLocalizationFeature {
 	public PredictLocalizationResult doPredictMotifsLocalization(
 			DataSource localizationDataSource, MotifClass motifClass)
 			throws DataAccessException {
-		LocalizationDao dao = ServiceLocator.getInstance()
-				.getDaoFactory(dbConnector).getLocalizationDao();
-		MotifDao motifDao = ServiceLocator.getInstance()
-				.getDaoFactory(dbConnector).getMotifDao();
+		DaoFactory factory = ServiceLocator.getDaoFactory();
+		LocalizationDao dao = factory.getLocalizationDao();
+		MotifDao motifDao = factory.getMotifDao();
 
 		PredictMotifsLocalizationResult result = new PredictMotifsLocalizationResult();
 		result.setLocalizationDataSource(localizationDataSource);
@@ -98,8 +95,7 @@ public class PredictLocalizationFeature {
 	public Localization doPredictMotifLocalization(
 			DataSource localizationDataSource, Motif motif)
 			throws DataAccessException {
-		LocalizationDao dao = ServiceLocator.getInstance()
-				.getDaoFactory(dbConnector).getLocalizationDao();
+		LocalizationDao dao = ServiceLocator.getDaoFactory().getLocalizationDao();
 		try {
 			return dao.retrieveLocalizationForMotif(localizationDataSource,
 					motif);

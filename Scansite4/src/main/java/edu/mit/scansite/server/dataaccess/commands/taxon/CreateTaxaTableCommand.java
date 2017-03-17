@@ -16,9 +16,8 @@ public class CreateTaxaTableCommand extends DbUpdateCommand {
 	private DataSource dataSource;
 
 	public CreateTaxaTableCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(true);
 		this.dataSource = dataSource;
 	}

@@ -17,8 +17,8 @@ public class AnnoTypeGetIdCommand extends DbQueryCommand<Integer> {
 	private String name;
 
 	public AnnoTypeGetIdCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String name) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String name) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.name = name;
 	}
 

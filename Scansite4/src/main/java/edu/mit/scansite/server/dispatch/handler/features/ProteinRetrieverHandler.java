@@ -46,14 +46,8 @@ public class ProteinRetrieverHandler implements
 		try {
 			if (action.getProteinIdentifier() != null
 					&& action.getDataSource() != null) {
-				Protein protein = ServiceLocator
-						.getInstance()
-						.getDaoFactory(
-								BootstrapListener
-										.getDbConnector(contextProvider.get()))
-						.getProteinDao()
-						.get(action.getProteinIdentifier(),
-								action.getDataSource());
+				Protein protein = ServiceLocator.getDaoFactory()
+					.getProteinDao().get(action.getProteinIdentifier(), action.getDataSource());
 				if (protein != null) {
 					return new ProteinRetrieverResult(protein);
 				} else {

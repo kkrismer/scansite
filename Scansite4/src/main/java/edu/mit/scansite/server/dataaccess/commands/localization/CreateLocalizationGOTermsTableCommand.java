@@ -15,9 +15,8 @@ public class CreateLocalizationGOTermsTableCommand extends DbUpdateCommand {
 	private DataSource localizationDataSource;
 
 	public CreateLocalizationGOTermsTableCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource localizationDataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSource localizationDataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(true);
 		this.localizationDataSource = localizationDataSource;
 	}

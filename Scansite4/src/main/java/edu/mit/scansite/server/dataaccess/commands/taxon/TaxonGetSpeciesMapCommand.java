@@ -21,9 +21,8 @@ public class TaxonGetSpeciesMapCommand extends
 	private DataSource dataSource;
 
 	public TaxonGetSpeciesMapCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 	}

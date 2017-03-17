@@ -15,9 +15,8 @@ public class DataSourceTypeAddCommand extends DbInsertCommand {
 	private DataSourceType dataSourceType = null;
 
 	public DataSourceTypeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSourceType dataSourceType) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSourceType dataSourceType) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSourceType = dataSourceType;
 	}
 

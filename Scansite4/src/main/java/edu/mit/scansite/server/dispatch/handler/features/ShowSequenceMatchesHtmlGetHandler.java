@@ -53,14 +53,8 @@ public class ShowSequenceMatchesHtmlGetHandler
 		try {
 			if (protein.getIdentifier() != null
 					&& protein.getDataSource() != null) {
-				protein = ServiceLocator
-						.getInstance()
-						.getDaoFactory(
-								BootstrapListener
-										.getDbConnector(contextProvider.get()))
-						.getProteinDao()
-						.get(protein.getIdentifier(),
-								protein.getDataSource());
+				protein = ServiceLocator.getDaoFactory()
+						.getProteinDao().get(protein.getIdentifier(), protein.getDataSource());
 			}
 
 			html.appendHtmlConstant("<h3>")

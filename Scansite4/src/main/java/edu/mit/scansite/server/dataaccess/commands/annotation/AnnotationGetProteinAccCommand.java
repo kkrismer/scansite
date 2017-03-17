@@ -19,10 +19,9 @@ public class AnnotationGetProteinAccCommand extends DbQueryCommand<String> {
 	private DataSource dataSource;
 
 	public AnnotationGetProteinAccCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			String accessionAnnotation, boolean useTempTablesForUpdate,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, String accessionAnnotation,
+		    boolean useTempTablesForUpdate, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.accessionAnnotation = accessionAnnotation;
 		this.dataSource = dataSource;
 	}

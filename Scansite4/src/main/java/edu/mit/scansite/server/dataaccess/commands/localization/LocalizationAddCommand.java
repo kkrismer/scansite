@@ -19,10 +19,10 @@ public class LocalizationAddCommand extends DbInsertCommand {
 	private Localization localization;
 
 	public LocalizationAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource, LightWeightProtein protein,
 			Localization localization) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 		this.protein = protein;
 		this.localization = localization;

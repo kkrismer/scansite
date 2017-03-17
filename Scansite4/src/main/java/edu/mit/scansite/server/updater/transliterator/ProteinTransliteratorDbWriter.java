@@ -50,13 +50,12 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 	private HashMap<String, Integer> taxaIds = new HashMap<String, Integer>();
 
 	public ProteinTransliteratorDbWriter(BufferedWriter errorWriter,
-			DataSourceMetaInfo dataSourceMetaInfo, DbConnector dbConnector)
+			DataSourceMetaInfo dataSourceMetaInfo)
 			throws ScansiteUpdaterException {
 		this.errorWriter = errorWriter;
 		this.dataSourceMetaInfo = dataSourceMetaInfo;
 		try {
-			DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory factory = ServiceLocator.getDaoFactory();
 			proteinDao = factory.getProteinDao();
 			taxonDao = factory.getTaxonDao();
 			annoDao = factory.getAnnotationDao();

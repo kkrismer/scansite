@@ -86,45 +86,34 @@ public class BatchProteinScan2 {
 		ArrayList<ScanResultSite> results = new ArrayList<ScanResultSite>();
 		String proteinName = null;
 		String seq = null;
+
+		for (int i = 0; i < names.size(); ++i) {
+			proteinName = names.get(i);
+			seq = seqs.get(i);
+			Protein p = new Protein();
+			p.setIdentifier(proteinName);
+			p.setSequence(seq);
+
+			Double[] saValues = alg.calculateSurfaceAccessibility(seq);
+
+			double maxScore = ScansiteConstants.MAX_SCORING_SCORE;
+			ArrayList<ScanResultSite> sites = scoring.scoreProtein(m, p,
+					maxScore);
+			for (ScanResultSite site : sites) {
+				site.setSurfaceAccessValue(saValues[site.getPosition()]);
+			}
+			results.addAll(sites);
+
+		}
 		try {
-			DbConnector dbConnector = new DbConnector(ServiceLocator
-					.getInstance().getDbAccessFile());
-			dbConnector.initConnectionPooling();
-			for (int i = 0; i < names.size(); ++i) {
-				proteinName = names.get(i);
-				seq = seqs.get(i);
-				Protein p = new Protein();
-				p.setIdentifier(proteinName);
-				p.setSequence(seq);
-
-				Double[] saValues = alg.calculateSurfaceAccessibility(seq);
-
-				double maxScore = ScansiteConstants.MAX_SCORING_SCORE;
-				ArrayList<ScanResultSite> sites = scoring.scoreProtein(m, p,
-						maxScore);
-				for (ScanResultSite site : sites) {
-					site.setSurfaceAccessValue(saValues[site.getPosition()]);
-				}
-				results.addAll(sites);
-
-			}
-			try {
-				ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(
-						resultPathPrefix);
-				fileWriter.setMotifName(organism);
-				fileWriter.writeResults("", results);// TODO check - added
-														// realPath - realPath
-														// should be only
-														// relevant in client
-														// mode
-			} catch (ResultFileWriterException e) {
-				System.err.println("Problem with writing results");
-				System.err.println(" -- " + e.getMessage() + "\n");
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		} catch (DatabaseException e1) {
-			e1.printStackTrace();
+			ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(
+					resultPathPrefix);
+			fileWriter.setMotifName(organism);
+			// realPath - realPath // should be only relevant in client mode
+			fileWriter.writeResults("", results);
+		} catch (ResultFileWriterException e) {
+			System.err.println("Problem with writing results");
+			System.err.println(" -- " + e.getMessage() + "\n");
 		}
 	}
 

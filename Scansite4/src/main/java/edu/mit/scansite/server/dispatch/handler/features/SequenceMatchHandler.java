@@ -46,8 +46,7 @@ public class SequenceMatchHandler implements
 	public SequenceMatchResult execute(SequenceMatchAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			SequenceMatchFeature feature = new SequenceMatchFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			SequenceMatchFeature feature = new SequenceMatchFeature();
 			return feature
 					.doSequenceMatch(action.getSequencePatterns(), action
 							.getDataSource(),

@@ -42,11 +42,7 @@ public class UserRetrieverHandler implements
 	public UserRetrieverResult execute(UserRetrieverAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			return new UserRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao().getAll(), true);
+			return new UserRetrieverResult(ServiceLocator.getDaoFactory().getUserDao().getAll(), true);
 		} catch (DataAccessException e) {
 			logger.error("Error getting user: " + e.toString());
 			throw new ActionException(e);

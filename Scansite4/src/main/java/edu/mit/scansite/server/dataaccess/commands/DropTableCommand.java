@@ -12,8 +12,8 @@ public class DropTableCommand extends DbUpdateCommand {
   
   private String tableName;
 
-  public DropTableCommand(Properties dbAccessConfig, Properties dbConstantsConfig, DbConnector dbConnector, String tableName) {
-    super(dbAccessConfig, dbConstantsConfig, dbConnector);
+  public DropTableCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String tableName) {
+    super(dbAccessConfig, dbConstantsConfig);
     this.tableName = tableName;
   }
   

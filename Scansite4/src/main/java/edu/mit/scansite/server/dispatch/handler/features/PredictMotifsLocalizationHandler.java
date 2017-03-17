@@ -43,8 +43,7 @@ public class PredictMotifsLocalizationHandler
 			PredictMotifsLocalizationAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			PredictLocalizationFeature feature = new PredictLocalizationFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			PredictLocalizationFeature feature = new PredictLocalizationFeature();
 			return feature.doPredictMotifsLocalization(
 					action.getLocalizationDataSource(), action.getMotifClass());
 		} catch (Exception e) {

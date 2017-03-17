@@ -19,9 +19,8 @@ public class MotifDataAddCommand extends DbInsertCommand {
 	private int position;
 
 	public MotifDataAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Motif motif,
-			int position) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Motif motif, int position) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.m = motif;
 		this.position = position;
 	}

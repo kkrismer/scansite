@@ -22,7 +22,7 @@ import edu.mit.scansite.shared.DatabaseException;
  */
 @Singleton
 public class BootstrapListener extends GuiceServletContextListener {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+//	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public static DbConnector getDbConnector(ServletContext context) {
 		return (DbConnector) context.getAttribute("db");
@@ -31,27 +31,13 @@ public class BootstrapListener extends GuiceServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		super.contextDestroyed(servletContextEvent);
-		try {
-//			getDbConnector(servletContextEvent.getServletContext())
-//					.closeDataSource();
-//			No need to close the data source
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		super.contextInitialized(servletContextEvent);
-		try {
-			DbConnector dbConnector = new DbConnector(ServiceLocator
-					.getInstance().getDbAccessFile());
-			dbConnector.initConnectionPooling();
-			ServletContext context = servletContextEvent.getServletContext();
-			context.setAttribute("db", dbConnector);
-		} catch (DatabaseException e) {
-			logger.error(e.getMessage());
-		}
+		ServletContext context = servletContextEvent.getServletContext();
+		context.setAttribute("db", DbConnector.getInstance());
 	}
 
 	@Override

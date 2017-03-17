@@ -42,7 +42,7 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 			errorWriter = new BufferedWriter(new FileWriter(new File(
 					errorFilePath)));
 			ProteinTransliteratorDbWriter writer = new ProteinTransliteratorDbWriter(
-					errorWriter, dataSourceMetaInfo, dbConnector);
+					errorWriter, dataSourceMetaInfo);
 			ScansiteProteinFileTransliterator transliterator = new ScansiteProteinFileTransliterator(
 					getReaders(), writer);
 			return transliterator;
@@ -63,10 +63,10 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	protected void renameTables() throws ScansiteUpdaterException {
 		try {
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
-			RenameTableCommand cmd = new RenameTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null,
+					.instance(ServiceLocator.getDbConstantsProperties());
+			RenameTableCommand cmd = new RenameTableCommand(
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), null,
 					null);
 			renameTaxonTables(cmd, cmdConst);
 			renameAnnotationTables(cmd, cmdConst);
@@ -81,11 +81,11 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	@Override
 	protected void dropOldTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
+			DropTableCommand cmd = new DropTableCommand(
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), null);
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+					.instance(ServiceLocator.getDbConstantsProperties());
 			cmd.setTableName(CommandConstants.getOldTable(cmdConst
 					.getAnnotationsTableName(dataSourceMetaInfo.getDataSource())));
 			try {
@@ -118,11 +118,11 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	@Override
 	protected void dropTempTables() throws ScansiteUpdaterException {
 		try {
-			DropTableCommand cmd = new DropTableCommand(ServiceLocator
-					.getInstance().getDbAccessFile(), ServiceLocator
-					.getInstance().getDbConstantsFile(), dbConnector, null);
+			DropTableCommand cmd = new DropTableCommand(
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), null);
 			CommandConstants cmdConst = CommandConstants
-					.instance(ServiceLocator.getInstance().getDbConstantsFile());
+					.instance(ServiceLocator.getDbConstantsProperties());
 			cmd.setTableName(CommandConstants.getTempTable(cmdConst
 					.getAnnotationsTableName(dataSourceMetaInfo.getDataSource())));
 			try {
@@ -233,9 +233,9 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	private void createTaxonTable() throws ScansiteUpdaterException {
 		try {
 			CreateTaxaTableCommand cmd = new CreateTaxaTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error("Cannot create taxa table: " + e.getMessage(), e);
@@ -246,9 +246,9 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	private void createAnnotationTable() throws ScansiteUpdaterException {
 		try {
 			CreateAnnotationsTableCommand cmd = new CreateAnnotationsTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error("Cannot create annotations table: " + e.getMessage(),
@@ -261,9 +261,9 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 	private void createProteinTable() throws ScansiteUpdaterException {
 		try {
 			CreateProteinsTableCommand cmd = new CreateProteinsTableCommand(
-					ServiceLocator.getInstance().getDbAccessFile(),
-					ServiceLocator.getInstance().getDbConstantsFile(),
-					dbConnector, dataSourceMetaInfo.getDataSource());
+					ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(),
+					dataSourceMetaInfo.getDataSource());
 			cmd.execute();
 		} catch (Exception e) {
 			logger.error("Cannot create proteins table: " + e.getMessage(), e);

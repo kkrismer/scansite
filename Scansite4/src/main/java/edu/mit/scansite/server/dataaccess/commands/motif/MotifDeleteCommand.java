@@ -16,8 +16,8 @@ public class MotifDeleteCommand extends DbUpdateCommand {
 	private int motifId;
 
 	public MotifDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int motifId) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int motifId) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 	}
 

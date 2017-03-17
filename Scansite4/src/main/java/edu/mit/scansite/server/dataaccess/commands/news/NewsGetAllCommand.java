@@ -22,9 +22,8 @@ public class NewsGetAllCommand extends DbQueryCommand<List<NewsEntry>> {
 	private int count;
 
 	public NewsGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			int nrOfNewestEntries) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int nrOfNewestEntries) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.count = nrOfNewestEntries;
 	}
 

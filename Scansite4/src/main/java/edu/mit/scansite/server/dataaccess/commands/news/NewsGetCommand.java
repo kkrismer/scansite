@@ -20,8 +20,8 @@ public class NewsGetCommand extends DbQueryCommand<NewsEntry> {
 	private int id;
 
 	public NewsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, int id) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
 

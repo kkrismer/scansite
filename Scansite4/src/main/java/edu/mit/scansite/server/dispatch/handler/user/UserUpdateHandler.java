@@ -44,11 +44,7 @@ public class UserUpdateHandler implements
 			ExecutionContext context) throws DispatchException {
 		UserRetrieverResult result = new UserRetrieverResult();
 		try {
-			UserDao userDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao();
+			UserDao userDao = ServiceLocator.getDaoFactory().getUserDao();
 			result.setSuccess(userDao.update(action.getUser(),
 					action.isPasswordChange()));
 			result.setUsers(userDao.getAll());

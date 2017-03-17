@@ -13,8 +13,8 @@ public class RenameTableCommand extends DbUpdateCommand {
   private String fromTableName;
   private String toTableName;
 
-  public RenameTableCommand(Properties dbAccessConfig, Properties dbConstantsConfig, DbConnector dbConnector, String fromTableName, String toTableName) {
-    super(dbAccessConfig, dbConstantsConfig, dbConnector);
+  public RenameTableCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String fromTableName, String toTableName) {
+    super(dbAccessConfig, dbConstantsConfig);
     this.fromTableName = fromTableName;
     this.toTableName = toTableName;
   }

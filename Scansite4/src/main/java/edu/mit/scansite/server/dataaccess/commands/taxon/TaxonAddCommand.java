@@ -18,9 +18,9 @@ public class TaxonAddCommand extends DbInsertCommand {
 	private DataSource dataSource;
 
 	public TaxonAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Taxon t,
+			Properties dbConstantsConfig, Taxon t,
 			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 		this.taxon = t;

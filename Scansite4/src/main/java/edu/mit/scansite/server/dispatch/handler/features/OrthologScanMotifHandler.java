@@ -51,8 +51,7 @@ public class OrthologScanMotifHandler implements
 	public OrthologScanMotifResult execute(OrthologScanMotifAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			OrthologScanFeature feature = new OrthologScanFeature(
-					BootstrapListener.getDbConnector(contextProvider.get()));
+			OrthologScanFeature feature = new OrthologScanFeature();
 			if (action.isMainFormEmission()) {
 				// main form: orthology data source and identifier type
 				// specified
@@ -66,12 +65,7 @@ public class OrthologScanMotifHandler implements
 				// protein scan form: orthology data source not specified,
 				// identifier
 				// type needs to be inferred from protein data source
-				IdentifierDao dao = ServiceLocator
-						.getInstance()
-						.getDaoFactory(
-								BootstrapListener
-										.getDbConnector(contextProvider.get()))
-						.getIdentifierDao();
+				IdentifierDao dao = ServiceLocator.getDaoFactory().getIdentifierDao();
 				List<DataSource> orthologyDataSources = dao
 						.getCompatibleOrthologyDataSourcesForIdentifierType(action
 								.getProtein().getDataSource()

@@ -57,7 +57,7 @@ public class RunEvidenceInserter {
 			+ "\n";
 
 	/**
-	 * @param args
+	 * @param args java application terminal / console arguments
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
@@ -65,7 +65,7 @@ public class RunEvidenceInserter {
 			return;
 		}
 		String filePath = args[0];
-		BufferedReader reader = null;
+		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(filePath));
 		} catch (FileNotFoundException e) {
@@ -78,15 +78,10 @@ public class RunEvidenceInserter {
 		}
 		int count = 0;
 		SiteEvidenceDao evDao;
-		DbConnector dbConnector = null;
 		int errors = 0;
 		
 		try {
-			dbConnector = new DbConnector(ServiceLocator.getInstance()
-					.getDbAccessFile());
-			dbConnector.initLongTimeConnection();
-			DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory factory = ServiceLocator.getDaoFactory();
 			logger.info("disables auto-commit, unique and foreign key checks");
 			factory.getDataSourceDao().disableChecks();
 			evDao = factory.getSiteEvidenceDao();
@@ -152,9 +147,8 @@ public class RunEvidenceInserter {
 			return;
 		} finally {
 			try {
-				dbConnector.closeLongTimeConnection();
 				reader.close();
-			} catch (Exception e) {
+			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}

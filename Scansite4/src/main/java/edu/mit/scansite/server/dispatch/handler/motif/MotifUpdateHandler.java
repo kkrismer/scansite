@@ -46,18 +46,10 @@ public class MotifUpdateHandler implements
 	public LightWeightMotifRetrieverResult execute(MotifUpdateAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao()
-					.updateMotif(action.getMotif());
-			List<Motif> motifs = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getMotifDao()
-					.getAll(action.getMotif().getMotifClass(), false);
+			ServiceLocator.getDaoFactory()
+					.getMotifDao().updateMotif(action.getMotif());
+			List<Motif> motifs = ServiceLocator.getDaoFactory()
+					.getMotifDao().getAll(action.getMotif().getMotifClass(), false);
 			List<LightWeightMotif> lightWeightMotifs = new LinkedList<LightWeightMotif>();
 			for (Motif motif : motifs) {
 				lightWeightMotifs.add(new LightWeightMotif(motif.getId(), motif

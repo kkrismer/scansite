@@ -7,21 +7,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Datasources implements Serializable {
   private static final long serialVersionUID = 3317284759277045902L;
-  private Datasource[] datasource;
+  private DataSource[] dataSource;
   
   public Datasources() {
   }
 
-  public Datasources(Datasource[] datasource) {
+  public Datasources(DataSource[] dataSource) {
     super();
-    this.datasource = datasource;
+    this.dataSource = dataSource;
   }
 
-  public Datasource[] getDatasource() {
-    return datasource;
+  public DataSource[] getDataSource() {
+    return dataSource;
   }
   
-  public void setDatasource(Datasource[] datasource) {
-    this.datasource = datasource;
+  public void setDataSource(DataSource[] dataSource) {
+    this.dataSource = dataSource;
   }
 }

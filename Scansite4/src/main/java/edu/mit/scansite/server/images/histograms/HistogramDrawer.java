@@ -54,7 +54,7 @@ public class HistogramDrawer extends Painter {
     drawTitle(HistogramConstants.HIST_TITLE_PREFIX + histogram.getMotif().getDisplayName() + HistogramConstants.HIST_TITLE_POSTFIX);
     drawMedianAndMAD(histogram.getMedian(), histogram.getMedianAbsDev());
     drawHistogramInfo("Motif: ", histogram.getMotif().getShortName());
-    drawHistogramInfo("Datasource: ", histogram.getDataSource().getShortName());
+    drawHistogramInfo("DataSource: ", histogram.getDataSource().getShortName());
     if (histogram.getTaxon().getName().length() > MAX_TAXON_NAME_LENGTH) {
       drawHistogramInfo("Taxon Class: ", "");
       drawHistogramInfo("", histogram.getTaxon().getName());

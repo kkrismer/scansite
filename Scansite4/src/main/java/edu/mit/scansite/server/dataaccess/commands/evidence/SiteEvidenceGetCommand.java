@@ -24,9 +24,8 @@ public class SiteEvidenceGetCommand extends
 	private String site;
 
 	public SiteEvidenceGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			Set<String> accessions, String site) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, Set<String> accessions, String site) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.site = site;
 		this.accessions = accessions;
 	}

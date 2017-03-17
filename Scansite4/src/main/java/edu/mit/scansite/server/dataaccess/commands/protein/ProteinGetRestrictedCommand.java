@@ -41,12 +41,12 @@ public class ProteinGetRestrictedCommand extends
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
 	public ProteinGetRestrictedCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource dataSource, List<String> sequenceRegexs,
 			OrganismClass organismClass, Set<Integer> taxaIds,
 			int phosphoSites, Double piFrom, Double piTo, Double mwFrom,
 			Double mwTo, boolean getWithSequence) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 		this.sequenceRegexs = sequenceRegexs;
 		this.organismClass = organismClass;

@@ -21,9 +21,8 @@ public class DataSourcesByIdentifierTypeGetCommand extends
 	private IdentifierType type;
 
 	public DataSourcesByIdentifierTypeGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			IdentifierType type) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, IdentifierType type) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.type = type;
 	}
 

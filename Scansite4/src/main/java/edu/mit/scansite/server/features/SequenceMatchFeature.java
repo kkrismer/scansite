@@ -32,10 +32,7 @@ import edu.mit.scansite.shared.transferobjects.SequencePattern;
 public class SequenceMatchFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private DbConnector dbConnector;
-
-	public SequenceMatchFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public SequenceMatchFeature() {
 	}
 
 	public SequenceMatchResult doSequenceMatch(
@@ -50,6 +47,7 @@ public class SequenceMatchFeature {
 	}
 
 	/**
+	 * Description not up to date
 	 * Runs a sequence match search using the given parameters.
 	 * 
 	 * @param sequenceMatchRegexs
@@ -94,8 +92,7 @@ public class SequenceMatchFeature {
 			boolean limitResultsToPhosphorylatedProteins,
 			boolean doCreateFiles, boolean publicOnly, String realPath)
 			throws DataAccessException {
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-				dbConnector);
+		DaoFactory factory = ServiceLocator.getDaoFactory();
 		restrictionProperties.setSequenceRegEx(SequencePattern
 				.getRegExs(sequencePatterns));
 		List<Protein> proteins = factory.getProteinDao().get(dataSource,
@@ -114,8 +111,7 @@ public class SequenceMatchFeature {
 		ArrayList<ProteinSequenceMatch> matches = new ArrayList<ProteinSequenceMatch>();
 		ProteinSequenceMatch match = null;
 		int totalNrOfMatches = 0;
-		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature(
-				dbConnector);
+		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature();
 
 		for (Protein p : proteins) {
 			match = new ProteinSequenceMatch();
@@ -229,7 +225,7 @@ public class SequenceMatchFeature {
 	// */
 	// public static SequenceMatchResult doSequenceMatch(String
 	// sequenceMatchRegex,
-	// Datasource datasource, OrganismClass organismClass,
+	// DataSource datasource, OrganismClass organismClass,
 	// String speciesRegexRestriction, Integer numberOfPhosphorylations,
 	// Double molWeightFrom, Double molWeightTo, Double isoelectricPointFrom,
 	// Double isoelectricPointTo, String keywordRegexRestriction)

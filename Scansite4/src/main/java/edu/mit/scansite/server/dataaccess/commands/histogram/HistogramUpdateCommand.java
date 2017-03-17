@@ -23,33 +23,30 @@ public class HistogramUpdateCommand {
 
 	private ServerHistogram hist;
 	private CommandConstants c = CommandConstants.instance();
-	private DbConnector dbConnector;
 
-	public HistogramUpdateCommand(Properties dbConstantsConfig,
-			DbConnector dbConnector, ServerHistogram hist) {
+	public HistogramUpdateCommand(Properties dbConstantsConfig, ServerHistogram hist) {
 		if (c == null) {
 			c = CommandConstants.instance(dbConstantsConfig);
 		}
-		this.dbConnector = dbConnector;
 		this.hist = hist;
 	}
 
 	public void execute() throws DataAccessException {
 		String query = "";
-		Connection connection = null;
+		Connection connection;
 		File f = new File(hist.getImageFilePath());
 		try {
-			connection = dbConnector.getConnection();
+			connection = DbConnector.getInstance().getConnection();
 			query = getSqlStatement();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setBlob(1, new FileInputStream(f), f.length());
 			statement.executeUpdate();
-			dbConnector.close(statement);
+			DbConnector.getInstance().close(statement);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
 		} finally {
-			dbConnector.close(connection);
+
 		}
 	}
 

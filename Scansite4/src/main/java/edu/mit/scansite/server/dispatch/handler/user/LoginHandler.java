@@ -67,11 +67,7 @@ public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 		User user;
 		String sessionId = action.getSessionId();
 		if (sessionId == null) {
-			user = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getUserDao()
+			user = ServiceLocator.getDaoFactory().getUserDao()
 					.get(action.getUserEmail(), action.getUserPassword());
 		} else {
 			user = getUserBySessionId(action.getSessionId());
@@ -101,10 +97,6 @@ public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 	}
 
 	public ArrayList<User> getAll() throws DataAccessException {
-		return ServiceLocator
-				.getInstance()
-				.getDaoFactory(
-						BootstrapListener.getDbConnector(contextProvider.get()))
-				.getUserDao().getAll();
+		return ServiceLocator.getDaoFactory().getUserDao().getAll();
 	}
 }

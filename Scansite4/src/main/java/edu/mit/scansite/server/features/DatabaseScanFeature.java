@@ -37,17 +37,14 @@ import edu.mit.scansite.shared.transferobjects.Taxon;
 public class DatabaseScanFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private DbConnector dbConnector;
-
-	public DatabaseScanFeature(DbConnector dbConnector) {
-		this.dbConnector = dbConnector;
+	public DatabaseScanFeature() {
 	}
 
 	public DatabaseScanResult doDatabaseSearch(MotifSelection motifSelection,
 			DataSource dataSource, RestrictionProperties restrictionProperties,
 			int outputListSize, boolean doCreateFiles, boolean publicOnly, String realPath)
 			throws DataAccessException {
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(dbConnector);
+		DaoFactory factory = ServiceLocator.getDaoFactory();
 
 		DatabaseScanResult result = new DatabaseScanResult();
 		result.setMotifSelection(motifSelection);
@@ -168,8 +165,7 @@ public class DatabaseScanFeature {
 
 	private List<Double> scoreMotifs(List<Motif> motifs)
 			throws DataAccessException {
-		DaoFactory factory = ServiceLocator.getInstance().getDaoFactory(
-				dbConnector);
+		DaoFactory factory = ServiceLocator.getDaoFactory();
 		DataSource defaultHistogramDataSource = factory
 				.getDataSourceDao()
 				.get(ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX]);

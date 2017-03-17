@@ -17,8 +17,8 @@ import edu.mit.scansite.shared.transferobjects.DataSourceType;
 public class DataSourceTypeGetAllCommand extends
 		DbQueryCommand<List<DataSourceType>> {
 	public DataSourceTypeGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override

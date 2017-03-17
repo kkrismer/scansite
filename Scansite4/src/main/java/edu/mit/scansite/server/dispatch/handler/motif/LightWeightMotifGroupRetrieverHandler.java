@@ -45,11 +45,8 @@ public class LightWeightMotifGroupRetrieverHandler
 			LightWeightMotifGroupRetrieverAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			return new LightWeightMotifGroupRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getGroupsDao().getAllLightWeight());
+			return new LightWeightMotifGroupRetrieverResult(ServiceLocator.
+					getDaoFactory().getGroupsDao().getAllLightWeight());
 		} catch (DataAccessException e) {
 			logger.error("Error retrieving motif groups: " + e.getMessage());
 			throw new ActionException(e.getMessage(), e);

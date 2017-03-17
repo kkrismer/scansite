@@ -36,7 +36,6 @@ public abstract class DbUpdater implements Runnable {
 
 	protected DataSourceMetaInfo dataSourceMetaInfo;
 	protected DaoFactory fac;
-	protected DbConnector dbConnector;
 
 	private List<URL> dbDownloadUrls = new LinkedList<>();
 	protected URL versionFileDownloadUrl;
@@ -51,10 +50,9 @@ public abstract class DbUpdater implements Runnable {
 	}
 
 	public void init(String tempDirPath, String invalidFilePrefix,
-			DataSourceMetaInfo dataSourceMetaInfo, DbConnector dbConnector)
+			DataSourceMetaInfo dataSourceMetaInfo)
 			throws ScansiteUpdaterException {
 		try {
-			this.dbConnector = dbConnector;
 			this.dataSourceMetaInfo = dataSourceMetaInfo;
 			this.dbDownloadUrls.add(new URL(dataSourceMetaInfo.getUrl()));
 			try {
@@ -81,7 +79,7 @@ public abstract class DbUpdater implements Runnable {
 					}
 				}
 			}
-			fac = ServiceLocator.getInstance().getDaoFactory(dbConnector);
+			fac = ServiceLocator.getDaoFactory();
 		} catch (MalformedURLException e) {
 			logger.error("Given URLs are invalid: " + e.getMessage(), e);
 			throw new ScansiteUpdaterException("Given URLs are invalid: "

@@ -17,9 +17,8 @@ public class DataSourceEntryCountGetCommand extends DbQueryCommand<Integer> {
 	private DataSource dataSource = null;
 
 	public DataSourceEntryCountGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, DataSource dataSource) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 	}
 

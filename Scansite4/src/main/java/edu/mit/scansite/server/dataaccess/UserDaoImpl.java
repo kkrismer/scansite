@@ -19,9 +19,8 @@ import edu.mit.scansite.shared.transferobjects.User;
  */
 public class UserDaoImpl extends DaoImpl implements UserDao {
 
-	public UserDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public UserDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/*
@@ -33,7 +32,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	@Override
 	public User get(String email, String password) throws DataAccessException {
 		UserGetCommand command = new UserGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, email, password);
+				dbConstantsConfig, email, password);
 		User user = null;
 		try {
 			user = command.execute();
@@ -54,7 +53,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	@Override
 	public void add(User entry) throws DataAccessException {
 		UserAddCommand command = new UserAddCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, entry);
+				dbConstantsConfig, entry);
 		try {
 			command.execute();
 		} catch (Exception e) {
@@ -73,7 +72,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	public boolean update(User entry, boolean changePassword)
 			throws DataAccessException {
 		UserUpdateCommand command = new UserUpdateCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, entry, changePassword);
+				dbConstantsConfig, entry, changePassword);
 		try {
 			return command.execute() > 0;
 		} catch (Exception e) {
@@ -89,8 +88,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	 */
 	@Override
 	public void delete(String email) throws DataAccessException {
-		UserDeleteCommand command = new UserDeleteCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, email);
+		UserDeleteCommand command = new UserDeleteCommand(dbAccessConfig, dbConstantsConfig, email);
 		try {
 			command.execute();
 		} catch (DatabaseException e) {
@@ -107,7 +105,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	@Override
 	public User get(String email) throws DataAccessException {
 		UserGetCommand command = new UserGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, email);
+				dbConstantsConfig, email);
 		User user;
 		try {
 			user = command.execute();
@@ -126,7 +124,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	@Override
 	public ArrayList<User> getAll() throws DataAccessException {
 		UserGetAllCommand command = new UserGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector);
+				dbConstantsConfig);
 		ArrayList<User> users;
 		try {
 			users = command.execute();

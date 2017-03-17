@@ -25,10 +25,9 @@ public class ProteinGetAlternativeAccessionsLikeCommand extends
 
 	public ProteinGetAlternativeAccessionsLikeCommand(
 			Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector, String accessionContains,
-			boolean beginningOnly, DataSource dataSource,
+			String accessionContains, boolean beginningOnly, DataSource dataSource,
 			int accessionAnnotationId, int maxSuggestionsProteinAccessions) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.accessionContains = (beginningOnly ? "" : "%") + accessionContains
 				+ "%";
 		this.dataSource = dataSource;

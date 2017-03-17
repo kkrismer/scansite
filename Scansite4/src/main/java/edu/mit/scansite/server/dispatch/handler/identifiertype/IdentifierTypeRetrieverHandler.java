@@ -45,11 +45,7 @@ public class IdentifierTypeRetrieverHandler
 			throws DispatchException {
 		try {
 			return new IdentifierTypeRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getIdentifierDao()
-					.getAllIdentifierTypes());
+					.getDaoFactory().getIdentifierDao().getAllIdentifierTypes());
 		} catch (DataAccessException e) {
 			logger.error(e.getMessage());
 			throw new ActionException(e.getMessage(), e);

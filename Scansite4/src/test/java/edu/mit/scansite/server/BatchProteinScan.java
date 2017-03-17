@@ -36,7 +36,6 @@ import edu.mit.scansite.shared.util.ScansiteScoring;
 
 public class BatchProteinScan {
 
-	private static ServiceLocator serviceLocator = ServiceLocator.getInstance();
 	private ScansiteAlgorithms alg = new ScansiteAlgorithms();
 	private ScansiteScoring scoring = new ScansiteScoring();
 
@@ -88,10 +87,7 @@ public class BatchProteinScan {
 		String proteinName = null;
 		String seq = null;
 		try {
-			DbConnector dbConnector = new DbConnector(ServiceLocator
-					.getInstance().getDbAccessFile());
-			dbConnector.initConnectionPooling();
-			DaoFactory daoFac = serviceLocator.getDaoFactory(dbConnector);
+			DaoFactory daoFac = ServiceLocator.getDaoFactory();
 			Set<String> motifNicks = new HashSet<String>(new ArrayList<String>(
 					Arrays.asList(new String[] { motifName })));
 			List<Motif> motifs = new ArrayList<Motif>();
@@ -142,8 +138,6 @@ public class BatchProteinScan {
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-		} catch (DatabaseException e1) {
-			e1.printStackTrace();
 		}
 	}
 

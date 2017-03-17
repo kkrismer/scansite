@@ -1,7 +1,9 @@
 package edu.mit.scansite.server.updater;
 
+import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.RunEvidenceInserter;
 import edu.mit.scansite.server.motifinserter.RunMotifInserter;
+import edu.mit.scansite.shared.DatabaseException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by Thomas Bernwinkler on 15.12.2016.
@@ -34,18 +39,12 @@ public class RunDatabaseInsertionManager {
     private static final String evidenceIdentifier   = "-evid";
     private static final String helpIdentifier       = "-help";
     private static final String sqlScriptIdentifier  = "-msql";
-    private static final String dbUserIdentifier     = "-dbus";
-    private static final String dbPasswordIdentifier = "-dbpw";
-    private static final String dbIPIdendifier       = "-dbip";
 
     private static String motifMammalFile;
     private static String motifYeastFile;
     private static String motifEmail;
     private static String evidenceFile;
     private static String sqlScriptFile;
-    private static String dbUser;
-    private static String dbPassword;
-    private static String dbIP;
 
     private static boolean isMammal = false;
     private static boolean isYeast  = false;
@@ -53,9 +52,6 @@ public class RunDatabaseInsertionManager {
     private static boolean isEvid   = false;
     private static boolean isHelp   = false;
     private static boolean isScript = false;
-    private static boolean isDBUser = false;
-    private static boolean isDBPwd  = false;
-    private static boolean isDBIP   = false;
 
     /**
       * As a number of parameters is required in this application,
@@ -87,10 +83,8 @@ public class RunDatabaseInsertionManager {
                 " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt" +
                 " -msql misc/database/scansiteDb.sql -dbus tbernwin -dbpw tbernwin";
 
-        dbIP = "127.0.0.1";
-
         for (String arg : args) {
-            if (isMammal || isYeast || isMail || isEvid || isScript || isDBUser || isDBPwd || isDBIP) {
+            if (isMammal || isYeast || isMail || isEvid || isScript) {
                 if (!assignParam(arg)) {
                     logger.error("ERROR! A parameter could not be assigned!\n" + exampleCall);
                     return;
@@ -118,15 +112,6 @@ public class RunDatabaseInsertionManager {
                     break;
                 case sqlScriptIdentifier:
                     isScript = true;
-                    break;
-                case dbUserIdentifier:
-                    isDBUser = true;
-                    break;
-                case dbPasswordIdentifier:
-                    isDBPwd = true;
-                    break;
-                case dbIPIdendifier:
-                    isDBIP = true;
                     break;
             }
         }
@@ -163,10 +148,10 @@ public class RunDatabaseInsertionManager {
 
         try {
             logger.info("Resetting database...");
-            resetDatabase("scansite4");
-        } catch (SQLException e) {
+            resetDatabase();
+        } catch (SQLException | DatabaseException e) {
             logger.error(e.getMessage());
-            logger.error("Could not reset database due to an SQL exception!");
+            logger.error("Could not reset database due to an exception!");
             System.exit(1);
         }
 
@@ -222,12 +207,10 @@ public class RunDatabaseInsertionManager {
      * right before filling it with data. Hence errors that would appear by filling
      * a not properly set up database can be avoided.
      *
-     * @param database This parameter contains the name of the database that is
-     *                 supposed to be recreated / replaced
      */
-    private static void resetDatabase(String database) throws SQLException {
-        String sqlCommands="";
-        String inserts="";
+    private static void resetDatabase() throws SQLException, DatabaseException {
+        String sqlCommands;
+        String inserts;
         try {
             Charset enconding = StandardCharsets.UTF_8;
             byte[] content = Files.readAllBytes(Paths.get(sqlScriptFile));
@@ -245,13 +228,9 @@ public class RunDatabaseInsertionManager {
             return;
         }
 
-        if(dbUser.isEmpty()) {
-            logger.error("Could not reset database as the user name was not given!");
-            return;
-        }
+        final String database = "scansite4";
 
-        String url = "jdbc:mysql://" + dbIP + ":3306/" + database;
-        Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
+        Connection conn = DbConnector.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         if(databaseExists(conn, database)) {
             stmt.executeUpdate(String.format("DROP DATABASE %s;", database));
@@ -259,8 +238,9 @@ public class RunDatabaseInsertionManager {
         stmt.executeUpdate(String.format("CREATE DATABASE %s", database));
         stmt.execute(String.format("USE %s;", database));
 
-        runDatabaseCommands(stmt, sqlCommands, "CREATE TABLE", ";");
-        runDatabaseCommands(stmt, inserts, "INSERT INTO", ";");
+        final String endOfCommand = ";";
+        runDatabaseCommands(stmt, sqlCommands, "CREATE TABLE", endOfCommand);
+        runDatabaseCommands(stmt, inserts, "INSERT INTO", endOfCommand);
 
         stmt.close();
         conn.close();
@@ -288,7 +268,7 @@ public class RunDatabaseInsertionManager {
      *
      * @param stmt A Statement that is able to execute SQL CREATE and UPDATE statements
      * @param sqlCommands The String value which contains one or several SQL statements
-     * @param beginOfCommand Identifier for the beginning of a new command i.e. "CREATE TABLE" or "INSERT INTO"
+     * @param beginOfCommand Identifier for the beginning` of a new command i.e. "CREATE TABLE" or "INSERT INTO"
      * @param endOfCommand Identifierr for the end of a SQL statement i.e. ";"
      */
     private static void runDatabaseCommands(Statement stmt, String sqlCommands, String beginOfCommand, String endOfCommand) throws SQLException {
@@ -329,17 +309,6 @@ public class RunDatabaseInsertionManager {
             sqlScriptFile = value;
             isScript = false;
             return !sqlScriptFile.startsWith("<");
-        } else if(isDBUser) {
-            dbUser = value;
-            isDBUser = false;
-            return !dbUser.startsWith("<");
-        } else if(isDBPwd) {
-            dbPassword = value;
-            isDBPwd = false;
-            return true; // password could start with '<'
-        } else if (isDBIP) {
-            dbIP = value;
-            isDBIP = false;
         }
         return false;
     }

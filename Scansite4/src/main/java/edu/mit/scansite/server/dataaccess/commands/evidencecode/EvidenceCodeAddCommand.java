@@ -15,9 +15,8 @@ public class EvidenceCodeAddCommand extends DbInsertCommand {
 	private EvidenceCode evidenceCode;
 
 	public EvidenceCodeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
-			EvidenceCode evidenceCode) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+			Properties dbConstantsConfig, EvidenceCode evidenceCode) {
+		super(dbAccessConfig, dbConstantsConfig);
 		this.evidenceCode = evidenceCode;
 	}
 

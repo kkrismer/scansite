@@ -46,11 +46,7 @@ public class MotifGroupUpdateHandler
 			MotifGroupUpdateAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			MotifGroupsDao groupDao = ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getGroupsDao();
+			MotifGroupsDao groupDao = ServiceLocator.getDaoFactory().getGroupsDao();
 			boolean success = groupDao.update(action.getMotifGroup());
 			if (!success) {
 				// logging

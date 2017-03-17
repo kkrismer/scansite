@@ -25,9 +25,9 @@ public class LocalizationGetAllCommand extends
 	private Map<String, LightWeightProtein> identifierToProteinLUT;
 
 	public LocalizationGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector,
+			Properties dbConstantsConfig,
 			DataSource localizationDataSource, List<LightWeightProtein> proteins) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 		this.proteins = proteins;
 		identifierToProteinLUT = generateLUT(proteins);

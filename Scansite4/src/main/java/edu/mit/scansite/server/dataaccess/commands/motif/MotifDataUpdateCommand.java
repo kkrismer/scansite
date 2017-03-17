@@ -19,9 +19,9 @@ public class MotifDataUpdateCommand extends DbUpdateCommand {
 	private int position;
 
 	public MotifDataUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, Motif motif,
+			Properties dbConstantsConfig, Motif motif,
 			int position) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		this.motif = motif;
 		this.position = position;
 	}

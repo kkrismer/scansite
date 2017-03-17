@@ -47,15 +47,10 @@ public class MotifGroupRetrieverHandler implements
 	public MotifGroupRetrieverResult execute(MotifGroupRetrieverAction action,
 			ExecutionContext context) throws DispatchException {
 		try {
-			return new MotifGroupRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get()))
-					.getGroupsDao()
-					.getAll(action.getMotifClass(),
-							!loginHandler.isSessionValidLogin(action
-									.getUserSessionId())));
+			return new MotifGroupRetrieverResult(ServiceLocator.getDaoFactory()
+					.getGroupsDao().getAll(
+						action.getMotifClass(),
+						!loginHandler.isSessionValidLogin(action.getUserSessionId())));
 		} catch (DataAccessException e) {
 			logger.error(e.toString());
 			throw new ActionException(e.getMessage(), e);

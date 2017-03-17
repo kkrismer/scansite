@@ -23,18 +23,18 @@ public class TaxonGetCommand extends DbQueryCommand<Taxon> {
 	private boolean getSpeciesOnly = false;
 
 	public TaxonGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, int id,
+			Properties dbConstantsConfig, int id,
 			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 		this.id = id;
 	}
 
 	public TaxonGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DbConnector dbConnector, String name,
+			Properties dbConstantsConfig, String name,
 			boolean useTempTablesForUpdate, DataSource dataSource) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
 		this.name = name;

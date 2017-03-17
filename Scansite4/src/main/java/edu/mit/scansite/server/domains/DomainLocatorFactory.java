@@ -15,7 +15,7 @@ public class DomainLocatorFactory {
   
     
   public static DomainLocator getDomainLocator() throws DataAccessException, DomainLocatorException {
-    ConfigReader cfg = new ConfigReader(ServiceLocator.getInstance().getDomainLocatorConfigFile());
+    ConfigReader cfg = new ConfigReader(ServiceLocator.getDomainLocatorConfigProperties());
     String domainLocatorClass = cfg.get(CFG_KEY_CLASS);
     try {
       Class<? extends DomainLocator> clazz = Class.forName(domainLocatorClass).asSubclass(DomainLocator.class);

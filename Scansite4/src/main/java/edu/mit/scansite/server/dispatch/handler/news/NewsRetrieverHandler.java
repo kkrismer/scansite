@@ -39,11 +39,7 @@ public class NewsRetrieverHandler implements
 	public synchronized NewsRetrieverResult execute(NewsRetrieverAction action,
 			ExecutionContext context) throws ActionException {
 		try {
-			return new NewsRetrieverResult(ServiceLocator
-					.getInstance()
-					.getDaoFactory(
-							BootstrapListener.getDbConnector(contextProvider
-									.get())).getNewsDao().getAll(0));
+			return new NewsRetrieverResult(ServiceLocator.getDaoFactory().getNewsDao().getAll(0));
 		} catch (DataAccessException e) {
 			logger.error("Error getting news entries: " + e.toString());
 			throw new ActionException(e);

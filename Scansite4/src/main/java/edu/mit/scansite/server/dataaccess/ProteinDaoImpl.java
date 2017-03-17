@@ -31,9 +31,8 @@ import edu.mit.scansite.shared.transferobjects.Taxon;
  */
 public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 
-	public ProteinDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig,
-			DbConnector dbConnector) {
-		super(dbAccessConfig, dbConstantsConfig, dbConnector);
+	public ProteinDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
+		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +50,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public List<Protein> getAll(DataSource dataSource)
 			throws DataAccessException {
 		ProteinGetAllCommand cmd = new ProteinGetAllCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, useTempTablesForUpdate,
+				dbConstantsConfig, useTempTablesForUpdate,
 				dataSource);
 		List<Protein> proteins = new LinkedList<Protein>();
 		try {
@@ -71,8 +70,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public List<String> getAllIdentifiers(DataSource dataSource)
 			throws DataAccessException {
 		ProteinIdentifierGetAllCommand cmd = new ProteinIdentifierGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector,
-				useTempTablesForUpdate, dataSource);
+				dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate, dataSource);
 		List<String> proteinIdentifiers;
 		try {
 			proteinIdentifiers = cmd.execute();
@@ -90,12 +88,10 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public List<Protein> getAll(Taxon taxon, DataSource dataSource,
 			boolean withProteinInfo) throws DataAccessException {
 		try {
-			Set<Integer> taxIds = ServiceLocator.getInstance()
-					.getDaoFactory(dbConnector).getTaxonDao()
+			Set<Integer> taxIds = ServiceLocator.getDaoFactory().getTaxonDao()
 					.getSubTaxaIds(taxon, dataSource);
 			ProteinGetAllCommand cmd = new ProteinGetAllCommand(dbAccessConfig,
-					dbConstantsConfig, dbConnector, taxIds,
-					useTempTablesForUpdate, dataSource);
+					dbConstantsConfig, taxIds, useTempTablesForUpdate, dataSource);
 			List<Protein> proteins = new ArrayList<Protein>();
 			proteins = cmd.execute();
 			if (withProteinInfo) {
@@ -121,8 +117,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 			DataSource dataSource, String regex) throws DataAccessException {
 		Map<Integer, Taxon> taxa = new HashMap<Integer, Taxon>();
 		try {
-			DaoFactory fac = ServiceLocator.getInstance().getDaoFactory(
-					dbConnector);
+			DaoFactory fac = ServiceLocator.getDaoFactory();
 			TaxonDao taxonDao = fac.getTaxonDao();
 			taxonDao.setUseTempTablesForUpdate(useTempTablesForUpdate);
 
@@ -174,7 +169,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public List<Protein> getByDatasourceAndTaxon(DataSource dataSource,
 			int taxonId) throws DataAccessException {
 		ProteinGetCommand cmd = new ProteinGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, taxonId, dataSource,
+				dbConstantsConfig, taxonId, dataSource,
 				useTempTablesForUpdate);
 		List<Protein> ps = null;
 		try {
@@ -194,7 +189,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public Protein get(String identifier, DataSource dataSource)
 			throws DataAccessException {
 		ProteinGetCommand cmd = new ProteinGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, identifier, dataSource,
+				dbConstantsConfig, identifier, dataSource,
 				useTempTablesForUpdate);
 		List<Protein> ps = null;
 		try {
@@ -205,14 +200,13 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 				// query!!!!
 				if (ps.isEmpty()) {// no protein with the given primary
 									// accessionNumber
-					identifier = ServiceLocator.getInstance()
-							.getDaoFactory(dbConnector).getAnnotationDao()
+					identifier = ServiceLocator.getDaoFactory().getAnnotationDao()
 							.getProteinAccessionNr(identifier, dataSource);
 					if (identifier == null) {
 						return null;
 					}
 					cmd = new ProteinGetCommand(dbAccessConfig,
-							dbConstantsConfig, dbConnector, identifier,
+							dbConstantsConfig, identifier,
 							dataSource, useTempTablesForUpdate);
 					ps = cmd.execute();
 				}
@@ -235,8 +229,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public List<Protein> get(List<String> identifiers, DataSource dataSource)
 			throws DataAccessException {
 		ProteinsGetCommand cmd = new ProteinsGetCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, identifiers, dataSource,
-				useTempTablesForUpdate);
+				dbConstantsConfig, identifiers, dataSource, useTempTablesForUpdate);
 		try {
 			if (identifiers != null && identifiers.size() > 0) {
 				return getProteinInformation(cmd.execute(), dataSource);
@@ -255,8 +248,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	@Override
 	public void add(Protein p, boolean doAddAnnotations, DataSource dataSource)
 			throws DataAccessException {
-		DaoFactory fac = ServiceLocator.getInstance()
-				.getDaoFactory(dbConnector);
+		DaoFactory fac = ServiceLocator.getDaoFactory();
 
 		// add taxon if necessary
 		TaxonDao taxonDao = fac.getTaxonDao();
@@ -276,8 +268,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 			}
 		} else {
 			throw new DataAccessException(
-					"Can not add taxon to database (protein: "
-							+ p.getIdentifier() + ").");
+				"Can not add taxon to database (protein: " + p.getIdentifier() + ").");
 		}
 
 		// add datasource if necessary
@@ -302,7 +293,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 		}
 
 		ProteinAddCommand cmd = new ProteinAddCommand(dbAccessConfig,
-				dbConstantsConfig, dbConnector, p, taxonId,
+				dbConstantsConfig, p, taxonId,
 				useTempTablesForUpdate, dataSource);
 		try {
 			cmd.execute();
@@ -331,7 +322,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 	public int getProteinCount(DataSource dataSource)
 			throws DataAccessException {
 		DataSourceEntryCountGetCommand cmd = new DataSourceEntryCountGetCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, dataSource);
+				dbAccessConfig, dbConstantsConfig, dataSource);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -348,17 +339,13 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 			RestrictionProperties restrictionProperties,
 			boolean getWithSequence, boolean getWithInformation)
 			throws DataAccessException {
-		Set<Integer> taxaIds = ServiceLocator
-				.getInstance()
-				.getDaoFactory(dbConnector)
-				.getTaxonDao()
-				.getAllTaxonIds(dataSource,
-						restrictionProperties.getSpeciesRegEx());
+		Set<Integer> taxaIds = ServiceLocator.getDaoFactory().getTaxonDao()
+				.getAllTaxonIds(dataSource, restrictionProperties.getSpeciesRegEx());
 		if (taxaIds == null || taxaIds.isEmpty()) {
 			return new LinkedList<Protein>();
 		}
 		ProteinGetRestrictedCommand cmd = new ProteinGetRestrictedCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, dataSource,
+				dbAccessConfig, dbConstantsConfig, dataSource,
 				restrictionProperties.getSequenceRegEx(),
 				restrictionProperties.getOrganismClass(), taxaIds,
 				restrictionProperties.getPhosphorylatedSites(),
@@ -391,7 +378,7 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 			throws DataAccessException {
 		String acc = accessionContains.replace("_", "\\_");
 		ProteinGetAccessionsLikeCommand cmd = new ProteinGetAccessionsLikeCommand(
-				dbAccessConfig, dbConstantsConfig, dbConnector, acc, true,
+				dbAccessConfig, dbConstantsConfig, acc, true,
 				dataSource, maxSuggestionsProteinAccessions);
 		// TOO expensive
 		// AnnotationDao annDao = ServiceLocator.getInstance()
