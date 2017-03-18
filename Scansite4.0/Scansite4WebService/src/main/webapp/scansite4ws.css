@@ -1,0 +1,69 @@
+/** Add css rules here for your application. */
+/** Example rules used by the template application (remove for your app) */
+body, table td, p, ul, ol, dl, gwt-Label, gwt-HTML {
+  font-family: Arial, sans-serif, serif;
+  font-size: 12pt;
+}
+
+pre {
+	font-size: 9pt;
+}
+
+h1 {
+  font-size: 17pt;
+  font-weight: bold;
+  color: #779977;
+  margin: 50px 0px 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 15pt;
+  font-weight: bold;
+  color: #779977;
+  margin: 50px 0px 20px;
+  text-align: center;
+}
+
+h3 {
+  font-size: 13pt;
+  font-weight: bold;
+  color: #779977;
+  margin: 2px 0px 1px;
+  text-align: left;
+}
+
+h4 {
+  font-size: 12pt;
+  font-weight: bold;
+  color: black;
+  margin: 2px 0px 1px;
+  text-align: left;
+}
+
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+.descriptionTable {
+	margin-left: 3em; 
+	width: 70%;
+}
+
+.wsDescBody {
+  margin-left: 10em;
+  margin-right: 10em;
+  background-color: #F0F0F0 !important;
+  font-size: 100% !important;
+}
+
+.goToTopLink {
+	font-size: 8pt;
+}
+
+.uriInTxt {
+  font-size:9pt;
+	font-family: monospace;
+}
