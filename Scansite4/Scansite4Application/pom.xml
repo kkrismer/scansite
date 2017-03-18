@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Scansite4</artifactId>
+    <artifactId>Scansite4Application</artifactId>
 	<packaging>war</packaging>
-	<name>Scansite4</name>
+	<name>Scansite4Application</name>
 	<url>http://scansite4.mit.edu</url>
 
 	<parent>
 		<groupId>edu.mit.scansite</groupId>
-		<artifactId>Scansite4.0</artifactId>
+		<artifactId>Scansite4</artifactId>
 		<version>1.0.0</version>
 	</parent>
 

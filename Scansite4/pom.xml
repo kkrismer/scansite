@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.mit.scansite</groupId>
-    <artifactId>Scansite4.0</artifactId>
+    <artifactId>Scansite4</artifactId>
     <version>1.0.0</version>
 
     <modules>
-        <module>Scansite4</module>
+        <module>Scansite4Application</module>
         <module>Scansite4WebService</module>
     </modules>
 

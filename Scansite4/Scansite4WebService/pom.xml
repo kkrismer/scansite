@@ -11,7 +11,7 @@
 
 	<parent>
 		<groupId>edu.mit.scansite</groupId>
-		<artifactId>Scansite4.0</artifactId>
+		<artifactId>Scansite4</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
