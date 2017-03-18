@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: edu.mit.scansite.server.updater.RunDatabaseInsertionManage
- r
-

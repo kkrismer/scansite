@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Scansite4WebService</artifactId>
+	<artifactId>Scansite4WebService</artifactId>
 	<packaging>war</packaging>
 
 	<name>Scansite4WebService</name>
 	<url>http://scansite4.mit.edu</url>
-    <description>Scansite 4 RESTful Web Service</description>
+	<description>Scansite 4 RESTful Web Service</description>
 
 	<parent>
 		<groupId>edu.mit.scansite</groupId>
@@ -15,26 +15,25 @@
 		<version>1.0.0</version>
 	</parent>
 
-
-    <properties>
-        <gwtVersion>2.8.0</gwtVersion>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+	<properties>
+		<gwtVersion>2.8.0</gwtVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>${parent.groupId}</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>Scansite4</artifactId>
-            <version>${project.version}</version>
-            <classifier>classes</classifier>
+			<version>${project.version}</version>
+			<classifier>classes</classifier>
 		</dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwtVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -117,9 +116,10 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
 			<version>8.5.11</version>
-            <!--<scope>test</scope>-->
+			<!--<scope>test</scope> -->
 		</dependency>
-    </dependencies>
+	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>guice-maven</id>
@@ -143,6 +143,7 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -161,8 +162,6 @@
 				<version>3.0.0</version>
 				<configuration>
 					<attachClasses>true</attachClasses>
-					<!--<outputDirectory>WEB-INF/lib</outputDirectory>-->
-					<!--<webappDirectory>${webappDirectory}</webappDirectory>-->
 					<archive>
 						<manifestEntries>
 							<Built-By>Konstantin Krismer, Thomas Bernwinkler</Built-By>

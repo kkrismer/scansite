@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Scansite4Application</artifactId>
+	<artifactId>Scansite4Application</artifactId>
 	<packaging>war</packaging>
 	<name>Scansite4Application</name>
 	<url>http://scansite4.mit.edu</url>
@@ -20,12 +20,11 @@
 	</properties>
 
 	<dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
@@ -78,18 +77,17 @@
 			<artifactId>axis2-adb</artifactId>
 			<version>1.6.2</version>
 		</dependency>
-        <dependency>
-            <groupId>org.biojava</groupId>
-            <artifactId>biojava-core</artifactId>
-            <version>4.2.4</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.biojava</groupId>
+			<artifactId>biojava-core</artifactId>
+			<version>4.2.4</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.biojava</groupId>
 			<artifactId>biojava-alignment</artifactId>
 			<version>4.2.4</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.googlecode.gwtupload</groupId>
 			<artifactId>gwtupload</artifactId>
@@ -134,14 +132,12 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
 			<version>8.5.11</version>
-            <!--<scope>provided</scope>-->
-			<!--&lt;!&ndash; not part of Tomcat 6 &ndash;&gt;-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>tomcat-juli</artifactId>
-                </exclusion>
-            </exclusions>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat</groupId>
+					<artifactId>tomcat-juli</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-dependency-tree -->
 		<dependency>
@@ -149,8 +145,8 @@
 			<artifactId>maven-dependency-tree</artifactId>
 			<version>3.0</version>
 		</dependency>
-
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>mvn-public</id>
@@ -169,6 +165,7 @@
 			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>maven-central</id>
@@ -177,6 +174,7 @@
 			<layout>default</layout>
 		</pluginRepository>
 	</pluginRepositories>
+
 	<build>
 		<resources>
 			<resource>
@@ -186,9 +184,6 @@
 		</resources>
 		<finalName>Scansite4</finalName>
 		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
-		<!-- <sourceDirectory>src</sourceDirectory> <testSourceDirectory>test</testSourceDirectory> 
-			<resources> <resource> <directory>src</directory> <excludes> <exclude>**/*.java</exclude> 
-			</excludes> </resource> </resources> -->
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -210,7 +205,6 @@
 					<logLevel>INFO</logLevel>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
-					<!--<copyWebapp>true</copyWebapp> <buildOutputDirectory>src/main/webapp/WEB-INF/classes</buildOutputDirectory> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -245,7 +239,7 @@
 				</executions>
 				<configuration>
 					<webappDirectory>${webappDirectory}</webappDirectory>
-                    <attachClasses>true</attachClasses>
+					<attachClasses>true</attachClasses>
 					<archive>
 						<manifestEntries>
 							<Built-By>Konstantin Krismer</Built-By>

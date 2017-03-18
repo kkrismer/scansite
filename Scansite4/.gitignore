@@ -1,0 +1,15 @@
+*~
+.gwt
+.settings
+
+src/main/webapp/img/old
+target
+lib
+temp
+scansite4_temp
+/target/
+misc
+src/main/resources/cfg
+.classpath
+.project
+/bin/
