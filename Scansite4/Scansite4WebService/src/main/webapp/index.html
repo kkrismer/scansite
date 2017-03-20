@@ -396,7 +396,7 @@
 						href="#svc_proteinExists">proteinExists</a>-function for dataSources
 						and proteins, respectively. <br /> The dataSources-service at <span
 						class='uriInTxt'>../dataSources</span> returns an XML-file that looks
-						something like this: <pre>
+						something like this: <div class="resturl"><pre>
 &lt;dataSources&gt;
     &lt;!-- ... --&gt;
     &lt;dataSource&gt;
@@ -406,7 +406,7 @@
     &lt;/dataSource&gt;
     &lt;!-- ... --&gt;
 &lt;/dataSources&gt;
-			    </pre> Knowing that the protein accession you are interested in is from
+</pre></div> Knowing that the protein accession you are interested in is from
 						SwissProt, you can go to the next step and check if the accession is
 						available in Scansite3's mirror of SwissProt. For this, run the
 						proteinExists-service with the nickname that is defined for Swissprot
@@ -419,7 +419,7 @@
 &lt;booleanResult&gt;
     &lt;isSuccess&gt;true&lt;/isSuccess&gt;
 &lt;/booleanResult&gt; 
-			    </pre> The motifClasses- (for [MC]), stringencyValues- ([ST]), and
+</pre> The motifClasses- (for [MC]), stringencyValues- ([ST]), and
 						motifDefinitions-services ([MS]) all work in a similar manner. Please
 						note that the question mark after [MS] indicates that this parameter
 						is optional. This means that if you want to look for all motifs of a
@@ -478,7 +478,7 @@
         MELWRQCTHWLIQCRV&lt;!-- ... --&gt;
     &lt;/proteinSequence&gt;
 &lt;/proteinScanResult&gt;
-			    </pre> It includes a list of all the predicted sites, along with the
+</pre> It includes a list of all the predicted sites, along with the
 						protein sequence, the sites' positions, scores, sequences and
 						matching motifs.
 					</li>
@@ -498,50 +498,50 @@
 					<li id='svc_stringency'><b>Query valid stringency values:</b><br />
 						URL: <pre>
 ../stringency
-			        </pre> Demonstrate: <pre>
+</pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/stringency')">../stringency</a>
-			        </pre>
+</pre>
 						<div id="demoStringency"></div></li>
 			
 					<li id='svc_datasources'><b>Query valid dataSources and their
 							nicknames:</b><br /> URL: <pre>
 ../datasources
-			    </pre> Demonstrate: <pre>
+</pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/datasources')">../datasources</a>
-			    </pre>
+</pre>
 						<div id="demoDataSources"></div></li>
 			
 					<li id='svc_motifClasses'><b>Query valid motif classes:</b><br />
 						URL: <pre>
 ../motifclasses
-			    </pre> Demonstrate: <pre>
+</pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/motifclasses')">../motifclasses</a>
-			    </pre>
+</pre>
 						<div id="demoMotifClasses"></div></li>
 			
 					<li id='svc_organismClasses'><b>Query valid organism classes:</b><br />
 						URL: <pre>
 ../organismclasses
-			        </pre> Demonstrate: <pre>
+</pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/organismclasses')">../organismclasses</a>
-			        </pre>
+</pre>
 						<div id="demoOrganismClasses"></div></li>
 			
 					<li id='svc_motifDefs'><b>Query valid motifs, their group,
 							classes and nicknames:</b><br /> URL: <pre>
 ../motifdefinitions/motifclass=<a href='#cmd_mc'>[MC]</a>
-			    </pre> Example: <pre>
+</pre> Example: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=YEAST')">../motifdefinitions/motifclass=YEAST</a>
 <a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=MAMMALIAN')">../motifdefinitions/motifclass=MAMMALIAN</a>
-			    </pre>
+</pre>
 						<div id="demoMotifDefinition"></div></li>
 			
 					<li id='svc_proteinExists'><b>Check if a protein exists in
 							one of our database mirrors:</b><br /> URL: <pre>
 ../proteinexists/identifier=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
-			    </pre> Example: <pre>
+</pre> Example: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/proteinexists/identifier=vav_mouse/dsshortname=swissprot')">../proteinexists/identifier=vav_mouse/dsshortname=swissprot</a>
-			    </pre>
+</pre>
 						<div id="demoProteinExists"></div></li>
 				</ol>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
@@ -566,7 +566,7 @@
 ../proteinscan/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/motifclass=<a href='#cmd_mc'>[MC]</a>/motifshortnames=<a
 								href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>/stringency=<a
 								href='#cmd_st'>[ST]</a>/referenceproteome=[Vertebrata | Yeast]</a>
-			        </pre> Optional parameters:
+</pre> Optional parameters:
 						<ul>
 							<li>motifshortnames</li>
 							<li>referenceproteome</li>
@@ -575,7 +575,7 @@
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=YEAST/motifshortnames=/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High/referenceproteome=Vertebrata
-			        </pre></li>
+</pre></li>
 			
 					<li id='svc_scanProtSeq'><b>Scan a protein for motifs using a
 							protein sequence:</b><br /> URL: <!--../proteinscan--> <!--/identifier=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a> \-->
@@ -587,7 +587,7 @@
 								href='#cmd_qmark'>?</a>/sequence=<a href='#cmd_seq'>[SEQ]</a>/motifclass=<a
 								href='#cmd_mc'>[MC]</a>/motifshortnames=<a href='#cmd_ms'>[MS]</a><a
 								href='#cmd_qmark'>?</a>/stringencyValue=<a href='#cmd_st'>[ST]</a>/referenceproteome=[Vertebrata | Yeast]</a>
-			        </pre> Optional parameters:
+</pre> Optional parameters:
 						<ul>
 							<li>motifshortnames</li>
 							<li>referenceproteome</li>
@@ -597,7 +597,7 @@
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=YEAST/motifshortnames=/stringency=High
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low/referenceproteome=Vertebrata
-			    </pre></li>
+</pre></li>
 			
 					<li id='svc_searchDb'><b>Search a sequence database for a
 							motif:</b><br /> URL: <!--
@@ -624,7 +624,7 @@
 								href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
 								href='#cmd_qmark'>?</a>/sequencerestriction=<a href='#cmd_any'>[ANY]</a><a
 								href='#cmd_qmark'>?</a>
-			    </pre> Optional parameters:
+</pre> Optional parameters:
 						<ul>
 							<li>speciesrestriction</li>
 							<li>numberofphosphorylations</li>
@@ -634,9 +634,8 @@
 							<li>isoelectricpointto</li>
 							<li>keywordrestriction</li>
 							<li>sequencerestriction</li>
-						</ul> <pre>
-<font color="red">Please use at least the species restriction to reduce runtime!</font>
-    </pre> Examples : <pre>
+						</ul> <font color="red">Please use at least the species restriction to reduce runtime!</font><br/>
+                        Examples : <pre>
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=rattus/numberofphosphorylations=1/molweightfrom=5000/molweightto=20000/isoelectricpointfrom=4/keywordrestriction=cell/sequencerestriction=PPP
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/numberofphosphorylations=0
 </pre></li>
@@ -664,10 +663,10 @@
 	href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a
 	href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
 	href='#cmd_qmark'>?</a>
-			    </pre> Examples: <pre>
+</pre> Examples: <pre>
 - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/keywordrestriction=cell
 - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/molweightfrom=2000/molweightto=9000/isoelectricpointfrom=2.2/isoelectricpointto=6
-			    </pre></li>
+</pre></li>
 					<li id="svc_orthScan"><b>Scan a protein for evolutionary
 							conserved phosphorylation sites</b><br /> URL: <!--
 			        /scanorthologs
@@ -684,11 +683,11 @@
 	href='#cmd_ds'>[DS]</a>/orthologydsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a
 	href='#cmd_st'>[ST]</a>motifgroup=[motifgroup short name]/siteposition=[<a
 	href='#cmd_num'>[NUM]</a>
-			        </pre> <!--Parameter choice (either one or the other):--> <!--<ul>-->
+</pre> <!--Parameter choice (either one or the other):--> <!--<ul>-->
 						<!--<li>sequencepattern</li>--> <!--<li>motifgroups and siteposition</li>-->
 						<!--</ul>--> Example: <pre>
 - ../scanorthologs/identifier=BRCA2_HUMAN/dsshortname=swissprot/orthologydsshortname=swissprotorthology/alignmentradius=40/stringency=High/motifgroup=Acid_ST_kin/siteposition=306
-			        </pre></li>
+</pre></li>
 					<li id="svc_localizationPrediction"><b>Predict cellular
 							localization of a protein</b><br /> URL: <!-- /predictlocation
 			        /localizationdsshortname={localizationdsshortname: [A-Za-z]+}
@@ -697,9 +696,9 @@
 			        --> <pre>
 ../predictlocation/localizationdsshortname=<a href='#cmd_ds'>[DS]</a>/identifier=<a
 								href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
-			        </pre> Example: <pre>
+</pre> Example: <pre>
 ../predictlocation/localizationdsshortname=loctree/identifier=BRCA2_HUMAN/dsshortname=swissprot
-			        </pre></li>
+</pre></li>
 			
 				</ol>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>

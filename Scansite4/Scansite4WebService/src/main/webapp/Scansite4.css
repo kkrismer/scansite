@@ -684,3 +684,10 @@ a#bidmc:hover {
 .goToTopLink {
 	font-size: smaller;
 }
+
+
+pre {
+	background: #DBDBDB;
+	border-radius: 5px;
+	overflow: auto;
+}
