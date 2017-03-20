@@ -145,6 +145,7 @@
 	</repositories>
 
 	<build>
+        <finalName>Scansite4WebService</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
