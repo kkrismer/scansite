@@ -123,7 +123,7 @@ public class DatabaseSearchWebService {
 
         try {
             DatabaseScanFeature feature = new DatabaseScanFeature();
-            DatabaseScanResult result = feature.doDatabaseSearch(motifSelection, ds, restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath);
+            DatabaseScanResult result = feature.doDatabaseSearch(motifSelection, ds, restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath, false);
 
             MotifSiteDbSearch[] sites;
             if (result.isSuccess() && result.getDbSearchSites() != null && result.getDbSearchSites().size() > 0) {

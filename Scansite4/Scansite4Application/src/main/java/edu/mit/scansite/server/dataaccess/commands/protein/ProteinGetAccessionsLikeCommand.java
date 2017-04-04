@@ -53,7 +53,7 @@ public class ProteinGetAccessionsLikeCommand extends
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier());
-		sql.append(CommandConstants.FROM).append(c.gettProteins(dataSource));
+		sql.append(CommandConstants.FROM).append(c.getProteins(dataSource));
 		if (accessionContains != null && !accessionContains.isEmpty()) {
 			sql.append(CommandConstants.WHERE)
 					.append(c.getcProteinsIdentifier())

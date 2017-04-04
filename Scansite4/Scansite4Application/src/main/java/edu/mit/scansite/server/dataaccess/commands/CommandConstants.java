@@ -397,7 +397,7 @@ public class CommandConstants {
 		}
 	}
 
-	public String gettProteins(DataSource dataSource) throws IllegalArgumentException {
+	public String getProteins(DataSource dataSource) throws IllegalArgumentException {
 		if(!dataSource.getType().getShortName().equals("proteins")) {
 			throw new IllegalArgumentException("Data source type invalid: Protein data source expected");
 		}

@@ -81,8 +81,7 @@ public abstract class ProteinFileTransliterator extends FileTransliterator {
 					calcPI();
 				}
 				if (allSet()) {
-					writer.saveEntry(proteinId, annotations, mw, pI, taxa,
-							species, sequence);
+					writer.saveEntry(proteinId, annotations, mw, pI, taxa, species, sequence);
 				} else {
 					writer.saveInvalidEntry(proteinId);
 				}

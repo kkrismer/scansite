@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
@@ -36,215 +37,216 @@ import edu.mit.scansite.shared.transferobjects.states.ScanProteinResultPageState
  * @author Konstantin Krismer
  */
 public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
-	interface ScanProteinResultPageViewImplUiBinder extends
-			UiBinder<Widget, ScanProteinResultPageViewImpl> {
-	}
+    interface ScanProteinResultPageViewImplUiBinder extends
+            UiBinder<Widget, ScanProteinResultPageViewImpl> {
+    }
 
-	private static ScanProteinResultPageViewImplUiBinder uiBinder = GWT
-			.create(ScanProteinResultPageViewImplUiBinder.class);
+    private static ScanProteinResultPageViewImplUiBinder uiBinder = GWT
+            .create(ScanProteinResultPageViewImplUiBinder.class);
 
-	private ProteinScanResult result = null;
-	private User user;
+    private ProteinScanResult result = null;
+    private User user;
 
-	@UiField
-	DisplayGeneralPropertiesWidget displayProteinPropertiesWidget;
+    @UiField
+    DisplayGeneralPropertiesWidget displayProteinPropertiesWidget;
 
-	@UiField
-	DisplayMotifSelectionWidget displayMotifSelectionWidget;
+    @UiField
+    DisplayMotifSelectionWidget displayMotifSelectionWidget;
 
-	@UiField
-	DisplayGeneralPropertiesWidget displayScanPropertiesWidget;
+    @UiField
+    DisplayGeneralPropertiesWidget displayScanPropertiesWidget;
 
-	@UiField
-	FlowPanel motifSitesTable;
-	
-	@UiField
-	FlowPanel domainPanel;
-	
-	@UiField
-	InputElement disphosSeqHidden;
-	
-	@UiField
-	Anchor downloadResultAnchor;
+    @UiField
+    FlowPanel motifSitesTable;
 
-	public ScanProteinResultPageViewImpl(User user) {
-		this.user = user;
-		initWidget(uiBinder.createAndBindUi(this));
-	}
+    @UiField
+    FlowPanel domainPanel;
 
-	@Override
-	public String getPageTitle() {
-		return "Scan Protein for Motifs - Result";
-	}
+    @UiField
+    InputElement disphosSeqHidden;
 
-	@Override
-	public boolean isMajorNavigationPage() {
-		return false;
-	}
+    @UiField
+    Anchor downloadResultAnchor;
 
-	@Override
-	public String getMajorPageId() {
-		return NavigationEvent.PageId.FEATURE_SCAN_PROTEIN.getId();
-	}
+    public ScanProteinResultPageViewImpl(User user) {
+        this.user = user;
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-	@Override
-	public String getPageId() {
-		return NavigationEvent.PageId.FEATURE_SCAN_PROTEIN_RESULT.getId();
-	}
+    @Override
+    public String getPageTitle() {
+        return "Scan Protein for Motifs - Result";
+    }
 
-	@Override
-	public String getBreadcrumbs() {
-		return Breadcrumbs.FEATURE_SCAN_PROTEIN_RESULT;
-	}
+    @Override
+    public boolean isMajorNavigationPage() {
+        return false;
+    }
 
-	@Override
-	public void setResult(final ProteinScanResult result) {
-		this.result = result;
-		Command setResult = new Command() {
-			@Override
-			public void execute() {
-				if (result.isSuccess()) {
-					setProteinProperties(result.getResults().getProtein(),
-							result.getResults().getProteinLocalization());
-					setScanProperties(result.getResults());
-					setProteinPlot(result.getResults());
-					setMotifSitesTable(result.getResults());
-					disphosSeqHidden.setValue(result.getResults().getProtein().getSequence());
-					downloadResultAnchor.setHref(result.getResults().getResultFilePath());
-				} else {
-					showErrorMessage(result.getFailureMessage());
-				}
-			}
-		};
-		runCommandOnLoad(setResult);
-	}
+    @Override
+    public String getMajorPageId() {
+        return NavigationEvent.PageId.FEATURE_SCAN_PROTEIN.getId();
+    }
 
-	private void setProteinProperties(LightWeightProtein protein,
-			LightWeightLocalization localization) {
-		String dbLink = URIs.getDirectIdentifierInfoLink(protein);
-		String phosphosite = "";
-		HashMap<String, Set<String>> annotations = null;
+    @Override
+    public String getPageId() {
+        return NavigationEvent.PageId.FEATURE_SCAN_PROTEIN_RESULT.getId();
+    }
 
-		if (protein.getDataSource() != null
-				&& protein.getDataSource().getShortName()
-						.equalsIgnoreCase("swissprot")) {
-			if (protein instanceof Protein) {
-				annotations = ((Protein) protein).getAnnotations();
-			}
-			Set<String> anns = annotations.get("accession");
-			if (anns != null && !anns.isEmpty()) {
-				phosphosite = ", see <a href='"
-						+ URIs.directPhosphositeProteinLink(anns.iterator()
-								.next()) + "' target='_blank'>PhosphoSite</a>";
-			}
-		}
+    @Override
+    public String getBreadcrumbs() {
+        return Breadcrumbs.FEATURE_SCAN_PROTEIN_RESULT;
+    }
 
-		List<Parameter> parameters = new LinkedList<>();
-		parameters.add(new Parameter("Identifier", protein.getIdentifier()
-				+ (dbLink == null ? "" : " (see <a target='_blank' href=\""
-						+ dbLink + "\">"
-						+ protein.getDataSource().getDisplayName() + "</a>"
-						+ phosphosite + ")")));
+    @Override
+    public void setResult(final ProteinScanResult result) {
+        this.result = result;
+        Command setResult = new Command() {
+            @Override
+            public void execute() {
+                if (result.isSuccess()) {
+                    setProteinProperties(result.getResults().getProtein(),
+                            result.getResults().getProteinLocalization());
+                    setScanProperties(result.getResults());
+                    setProteinPlot(result.getResults());
+                    setMotifSitesTable(result.getResults());
+                    disphosSeqHidden.setValue(result.getResults().getProtein().getSequence());
+                    downloadResultAnchor.setHref(result.getResults().getResultFilePath());
+                } else {
+                    showErrorMessage(result.getFailureMessage());
+                }
+            }
+        };
+        runCommandOnLoad(setResult);
+    }
 
-		if (annotations != null && !annotations.isEmpty()) {
-			for (String type : annotations.keySet()) {
-				String txt = "";
-				for (String ann : annotations.get(type)) {
-					if (ann != null && !ann.isEmpty()) {
-						if (!txt.isEmpty()) {
-							txt += ", ";
-						}
-						txt += ann;
-					}
-				}
+    private void setProteinProperties(LightWeightProtein protein,
+                                      LightWeightLocalization localization) {
+        String dbLink = URIs.getDirectIdentifierInfoLink(protein);
+        String phosphosite = "";
+        HashMap<String, Set<String>> annotations = null;
 
-				if (type.equalsIgnoreCase("Keyword")) {
-					parameters.add(new Parameter(type.substring(0, 1)
-							.toUpperCase() + type.substring(1) + "s", txt,
-							true, false));
-				} else {
-					parameters.add(new Parameter(type.substring(0, 1)
-							.toUpperCase() + type.substring(1) + "s", txt));
-				}
-			}
-		}
+        if (protein.getDataSource() != null
+                && protein.getDataSource().getShortName()
+                .equalsIgnoreCase("swissprot")) {
+            if (protein instanceof Protein) {
+                annotations = ((Protein) protein).getAnnotations();
+            }
+            Set<String> anns = annotations.get("accession");
+            if (anns != null && !anns.isEmpty()) {
+                phosphosite = ", see <a href='"
+                        + URIs.directPhosphositeProteinLink(anns.iterator()
+                        .next()) + "' target='_blank'>PhosphoSite</a>";
+            }
+        }
 
-		if (protein instanceof Protein) {
-			parameters.add(new Parameter("Molecular weight",
-					((Protein) protein).getMolecularWeight()));
-			parameters.add(new Parameter("Isoelectric point",
-					((Protein) protein).getpI()));
-		}
-		if (localization != null) {
-			parameters.add(new Parameter("Subcellular localization",
-					localization.getType().getName()));
-		} else {
-			parameters
-					.add(new Parameter("Subcellular localization", "Unknown", false, true));
-		}
-		displayProteinPropertiesWidget.setProperties(parameters);
-	}
+        List<Parameter> parameters = new LinkedList<>();
+        parameters.add(new Parameter("Identifier", protein.getIdentifier()
+                + (dbLink == null ? "" : " (see <a target='_blank' href=\""
+                + dbLink + "\">"
+                + protein.getDataSource().getDisplayName() + "</a>"
+                + phosphosite + ")")));
 
-	private void setScanProperties(ScanResults result) {
-		displayMotifSelectionWidget.setMotifSelection(result
-				.getMotifSelection());
-		List<Parameter> parameters = new LinkedList<>();
-		parameters.add(new Parameter("Domains requested", result
-				.isShowDomains() ? "Yes" : "No"));
-		parameters.add(new Parameter("Stringency", result
-				.getHistogramThreshold().getName()));
-		parameters.add(new Parameter("Reference histogram", result
-				.getHistogramTaxonName()
-				+ " ("
-				+ result.getHistogramDataSourceSelection().getDisplayName()
-				+ ")"));
-		parameters.add(new Parameter("Number of predicted motif sites", result
-				.getHits().size()));
-		parameters.add(new Parameter("Protein data source", result.getProtein()
-				.getDataSource().getDisplayName()));
-		if (result.getLocalizationDataSource() != null) {
-			parameters.add(new Parameter("Localization data source", result
-					.getLocalizationDataSource().getDisplayName()));
-		} else {
-			parameters.add(new Parameter("Localization data source",
-					"Not available for specified protein identifier type ("
-							+ result.getProtein().getDataSource()
-									.getIdentifierType().getName() + ")", false, true));
-		}
+        if (annotations != null && !annotations.isEmpty()) {
+            for (String type : annotations.keySet()) {
+                String txt = "";
+                for (String ann : annotations.get(type)) {
+                    if (ann != null && !ann.isEmpty()) {
+                        if (!txt.isEmpty()) {
+                            txt += ", ";
+                        }
+                        txt += ann;
+                    }
+                }
 
-		displayScanPropertiesWidget.setProperties(parameters);
-	}
+                if (type.equalsIgnoreCase("Keyword")) {
+                    parameters.add(new Parameter(type.substring(0, 1)
+                            .toUpperCase() + type.substring(1) + "s", txt,
+                            true, false));
+                } else {
+                    parameters.add(new Parameter(type.substring(0, 1)
+                            .toUpperCase() + type.substring(1) + "s", txt));
+                }
+            }
+        }
 
-	private void setProteinPlot(ScanResults result) {
-		if (result.isShowDomains() && result.getDomainPositions() != null
-				&& !result.getDomainPositions().isEmpty()) {
-			domainPanel.add(new DomainInformationWidget(result.getProtein(), result
-			 .getDomainPositions()));
-		}
-		if (result.getImagePath() != null) {
-			DOM.getElementById("proteinPlot").setInnerHTML(
-					"<img alt=\"protein plot\" src=\"" + result.getImagePath()
-							+ "\"/>");
-		}
-	}
+        if (protein instanceof Protein) {
+            Double mw = ((Protein) protein).getMolecularWeight() / 1000;
+            parameters.add(new Parameter("Molecular weight",
+                    String.valueOf(NumberFormat.getFormat("0.00").format(mw)) + " kDa"));
+            parameters.add(new Parameter("Isoelectric point",
+                    ((Protein) protein).getpI()));
+        }
+        if (localization != null) {
+            parameters.add(new Parameter("Subcellular localization",
+                    localization.getType().getName()));
+        } else {
+            parameters
+                    .add(new Parameter("Subcellular localization", "Unknown", false, true));
+        }
+        displayProteinPropertiesWidget.setProperties(parameters);
+    }
 
-	private void setMotifSitesTable(ScanResults result) {
-		ProteinScanResultSiteTable resultTable = new ProteinScanResultSiteTable(
-				result, user);
-		resultTable.setWidth("100%");
-		motifSitesTable.clear();
-		motifSitesTable.add(resultTable);
-	}
+    private void setScanProperties(ScanResults result) {
+        displayMotifSelectionWidget.setMotifSelection(result
+                .getMotifSelection());
+        List<Parameter> parameters = new LinkedList<>();
+        parameters.add(new Parameter("Domains requested", result
+                .isShowDomains() ? "Yes" : "No"));
+        parameters.add(new Parameter("Stringency", result
+                .getHistogramThreshold().getName()));
+        parameters.add(new Parameter("Reference histogram", result
+                .getHistogramTaxonName()
+                + " ("
+                + result.getHistogramDataSourceSelection().getDisplayName()
+                + ")"));
+        parameters.add(new Parameter("Number of predicted motif sites", result
+                .getHits().size()));
+        parameters.add(new Parameter("Protein data source", result.getProtein()
+                .getDataSource().getDisplayName()));
+        if (result.getLocalizationDataSource() != null) {
+            parameters.add(new Parameter("Localization data source", result
+                    .getLocalizationDataSource().getDisplayName()));
+        } else {
+            parameters.add(new Parameter("Localization data source",
+                    "Not available for specified protein identifier type ("
+                            + result.getProtein().getDataSource()
+                            .getIdentifierType().getName() + ")", false, true));
+        }
 
-	@Override
-	public ScanProteinResultPageState getState() {
-		return new ScanProteinResultPageState(result);
-	}
+        displayScanPropertiesWidget.setProperties(parameters);
+    }
 
-	@Override
-	public void setState(ScanProteinResultPageState state) {
-		if (state != null) {
-			setResult(state.getProteinScanResult());
-		}
-	}
+    private void setProteinPlot(ScanResults result) {
+        if (result.isShowDomains() && result.getDomainPositions() != null
+                && !result.getDomainPositions().isEmpty()) {
+            domainPanel.add(new DomainInformationWidget(result.getProtein(), result
+                    .getDomainPositions()));
+        }
+        if (result.getImagePath() != null) {
+            DOM.getElementById("proteinPlot").setInnerHTML(
+                    "<img alt=\"protein plot\" src=\"" + result.getImagePath()
+                            + "\"/>");
+        }
+    }
+
+    private void setMotifSitesTable(ScanResults result) {
+        ProteinScanResultSiteTable resultTable = new ProteinScanResultSiteTable(
+                result, user);
+        resultTable.setWidth("100%");
+        motifSitesTable.clear();
+        motifSitesTable.add(resultTable);
+    }
+
+    @Override
+    public ScanProteinResultPageState getState() {
+        return new ScanProteinResultPageState(result);
+    }
+
+    @Override
+    public void setState(ScanProteinResultPageState state) {
+        if (state != null) {
+            setResult(state.getProteinScanResult());
+        }
+    }
 }

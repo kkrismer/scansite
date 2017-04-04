@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.cell.client.*;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.ui.*;
 import edu.mit.scansite.shared.dispatch.features.*;
 import edu.mit.scansite.shared.transferobjects.*;
@@ -277,25 +275,26 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 	private SiteSequenceColumn[] siteSequenceColumns;
 
 	private class SiteSequenceColumn extends
-			TextColumn<DatabaseSearchScanResultSite> {
+			Column<DatabaseSearchScanResultSite, SafeHtml> {
 		private int index = 0;
 
 		public SiteSequenceColumn(int index) {
-			super();
+			super(new SafeHtmlCell());
 			this.index = index > 0 ? index : 0;
 		}
 
 		@Override
-		public String getValue(DatabaseSearchScanResultSite site) {
+		public SafeHtml getValue(DatabaseSearchScanResultSite site) {
+			SafeHtmlBuilder shb = new SafeHtmlBuilder();
 			if (site == null) {
-				return EMPTY_CELL_TEXT;
-			}
-			if (site.isMultiple()) {
-				return String.valueOf(site.getSites().get(index)
-						.getSiteSequence());
+				shb.appendHtmlConstant(EMPTY_CELL_TEXT);
+			} else if (site.isMultiple()) {
+				shb.appendHtmlConstant(String.valueOf(site.getSites().get(index)
+						.getSiteSequence()));
 			} else {
-				return String.valueOf(site.getSite().getSiteSequence());
+				shb.appendHtmlConstant(String.valueOf(site.getSite().getSiteSequence()));
 			}
+			return shb.toSafeHtml();
 		}
 	};
 
@@ -361,8 +360,12 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 				return EMPTY_CELL_TEXT;
 			}
 			Double mw = site.getProtein().getMolecularWeight();
+			Double kMultiplier = 1000.0;
+			if (mw > kMultiplier) {
+				mw /= kMultiplier;
+			}
 			return ((mw == null) ? EMPTY_CELL_TEXT : String
-					.valueOf(NumberFormat.getFormat("0.0").format(mw)));
+					.valueOf(NumberFormat.getFormat("0.00").format(mw)));
 		}
 	};
 
@@ -421,7 +424,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
             resultTable.addColumn(evidenceLinkColumn, "Previously Mapped Site", "Previously Mapped Site");
         }
 
-		resultTable.addColumn(mwColumn, "Molecular Weight", "Molecular Weight");
+		resultTable.addColumn(mwColumn, "Molecular Weight [kDa]", "Molecular Weight [kDa]");
 		resultTable.addColumn(piColumn, "pI", "pI");
 
 		initSortableCols();

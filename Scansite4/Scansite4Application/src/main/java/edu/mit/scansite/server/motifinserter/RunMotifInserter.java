@@ -4,6 +4,7 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
 import edu.mit.scansite.server.dataaccess.MotifDao;
+import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.DirectoryManagement;
 import edu.mit.scansite.server.dataaccess.file.ImageInOut;
 import edu.mit.scansite.server.dataaccess.file.MotifFileReader;
@@ -48,6 +49,7 @@ public class RunMotifInserter {
 			dir += "/";
 		}
 		String motifFilePath = dir + "motifs.xml";
+        DbConnector.getInstance().resizeConnectionPool(1);
 		try {
 			DaoFactory factory = ServiceLocator.getDaoFactory();
 			try {
@@ -70,8 +72,8 @@ public class RunMotifInserter {
 
 			for (int i = 0; i < motifs.size(); ++i) {
 				Motif currentMotif = motifs.get(i);
-				List<LightWeightMotifGroup> groups = factory.getGroupsDao()
-						.getAllLightWeight();
+				List<LightWeightMotifGroup> groups =
+						factory.getGroupsDao().getAllLightWeight();
 				if (groups != null) {
 					for (LightWeightMotifGroup group : groups) {
 						if (group.getDisplayName().equalsIgnoreCase(
@@ -114,8 +116,7 @@ public class RunMotifInserter {
 
 			logger.info("enabling auto-commit, unique and foreign key checks");
 			factory.getDataSourceDao().enableChecks();
-		} catch (ScansiteFileFormatException | DatabaseException
-				| ScansiteUpdaterException e) {
+		} catch (ScansiteFileFormatException | DatabaseException | ScansiteUpdaterException e) {
 			e.printStackTrace();
 		}
 	}

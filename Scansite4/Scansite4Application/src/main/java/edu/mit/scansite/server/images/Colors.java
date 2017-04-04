@@ -18,7 +18,7 @@ public class Colors {
   public static final Color RED_DARK = new Color(120, 0, 0);
   
   public static final Color GREEN_LIGHT = new Color(100, 255, 0);
-  public static final Color GREEN_DARK = new Color(150, 150, 0);
+  public static final Color GREEN_DARK = new Color(75, 150, 50);
   public static final Color GREEN = new Color(150, 200, 0);
   
   public static final Color BLUE_GREEN = new Color(0, 200, 200);

@@ -1,11 +1,9 @@
 package edu.mit.scansite.server.features;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +40,8 @@ public class DatabaseScanFeature {
 
 	public DatabaseScanResult doDatabaseSearch(MotifSelection motifSelection,
 			DataSource dataSource, RestrictionProperties restrictionProperties,
-			int outputListSize, boolean doCreateFiles, boolean publicOnly, String realPath)
-			throws DataAccessException {
+			int outputListSize, boolean doCreateFiles, boolean publicOnly,
+		    String realPath, boolean previouslyMappedSitesOnly) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 
 		DatabaseScanResult result = new DatabaseScanResult();
@@ -124,6 +122,32 @@ public class DatabaseScanFeature {
 				motifDisplayNames.add(motif.getDisplayName());
 			}
 			result.setMotifDisplayNames(motifDisplayNames);
+
+			// set evidence data before reducing the output list size
+
+			for (DatabaseSearchScanResultSite site : sites) {
+				Set<String> accessions = (site.getProtein().getAnnotation("accession"));
+				if (accessions != null && !accessions.isEmpty()) {
+					SiteEvidenceDao evidenceDao = factory.getSiteEvidenceDao();
+					try {
+						site.getSite().setEvidence(evidenceDao.getSiteEvidence(
+								accessions, site.getSite().getSite()));
+					} catch (Exception e) {
+						logger.error("Error checking PSP database: "
+								+ e.toString());
+					}
+				}
+			}
+
+			if(previouslyMappedSitesOnly) {
+				ArrayList<DatabaseSearchScanResultSite> allHits = new ArrayList<>(sites);
+				sites.clear();
+				for (DatabaseSearchScanResultSite hit : allHits) {
+					if (hit.getSite().getEvidence() != null && !hit.getSite().getEvidence().isEmpty()) {
+						sites.add(hit);
+					}
+				}
+			}
 
 			ArrayList<DatabaseSearchScanResultSite> temp = new ArrayList<DatabaseSearchScanResultSite>();
 			if (outputListSize <= 0) {

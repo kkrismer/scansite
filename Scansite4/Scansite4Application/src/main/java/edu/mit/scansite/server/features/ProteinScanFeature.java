@@ -113,8 +113,7 @@ public class ProteinScanFeature {
 				double maxScore = stringency.getPercentileValue(); // used to be
 																	// MAX_SCORING_SCORE
 				for (Motif motif : motifs) {
-					ArrayList<ScanResultSite> sites = scoring.scoreProtein(
-							motif, protein, maxScore);
+					ArrayList<ScanResultSite> sites = scoring.scoreProtein(motif, protein, maxScore);
 					for (ScanResultSite site : sites) {
 						site.setSurfaceAccessValue(saValues[site.getPosition()]);
 					}

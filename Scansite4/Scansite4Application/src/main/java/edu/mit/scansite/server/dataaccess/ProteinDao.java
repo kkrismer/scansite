@@ -144,4 +144,7 @@ public interface ProteinDao extends Dao {
 			String accessionContains, DataSource dataSource,
 			int maxSuggestionsProteinAccessions) throws DataAccessException;
 
+	public abstract void updateProtein(DataSource dataSource,
+									   Protein protein) throws DataAccessException;
+
 }

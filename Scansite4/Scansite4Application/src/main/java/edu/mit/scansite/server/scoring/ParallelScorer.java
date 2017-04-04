@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author Tobieh
  */
 public abstract class ParallelScorer<T extends ScoringJob> implements Observer {
-    protected static final int THREAD_COUNT = 4;
+    protected static final int THREAD_COUNT = 6;
     protected static final long THREAD_SLEEP_TIME_MS = 150;
 
     private ArrayList<ScoringJob> scoringJobs = new ArrayList<ScoringJob>();

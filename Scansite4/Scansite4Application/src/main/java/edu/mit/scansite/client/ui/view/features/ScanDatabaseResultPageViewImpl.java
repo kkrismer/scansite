@@ -51,7 +51,7 @@ public class ScanDatabaseResultPageViewImpl extends ScanDatabaseResultPageView {
 
 	@UiField
 	FlowPanel motifSitesTable;
-	
+
 	@UiField
 	Anchor downloadResultAnchor;
 
