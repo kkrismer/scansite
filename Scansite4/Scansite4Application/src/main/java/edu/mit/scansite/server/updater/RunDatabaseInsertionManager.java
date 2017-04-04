@@ -30,15 +30,14 @@ import java.sql.Statement;
  */
 
 public class RunDatabaseInsertionManager {
-    private static final Logger logger = LoggerFactory
-            .getLogger(RunUpdater.class);
+    private static final Logger logger = LoggerFactory.getLogger(RunUpdater.class);
 
     private static final String mammalFileIdentifier = "-moma";
-    private static final String yeastFileIdentifier  = "-moye";
-    private static final String emailIdentifier      = "-mail";
-    private static final String evidenceIdentifier   = "-evid";
-    private static final String helpIdentifier       = "-help";
-    private static final String sqlScriptIdentifier  = "-msql";
+    private static final String yeastFileIdentifier = "-moye";
+    private static final String emailIdentifier = "-mail";
+    private static final String evidenceIdentifier = "-evid";
+    private static final String helpIdentifier = "-help";
+    private static final String sqlScriptIdentifier = "-msql";
 
     private static String motifMammalFile;
     private static String motifYeastFile;
@@ -47,41 +46,38 @@ public class RunDatabaseInsertionManager {
     private static String sqlScriptFile;
 
     private static boolean isMammal = false;
-    private static boolean isYeast  = false;
-    private static boolean isMail   = false;
-    private static boolean isEvid   = false;
-    private static boolean isHelp   = false;
+    private static boolean isYeast = false;
+    private static boolean isMail = false;
+    private static boolean isEvid = false;
+    private static boolean isHelp = false;
     private static boolean isScript = false;
 
     /**
-      * As a number of parameters is required in this application,
-      * it is easily able to mess up with the order of the command line arguemnts.
-      * Hence the order of the parameters does not matter, however one needs to use
-      * the following declarations for the parameters (including the hyphens/dashes).
-      * Please also make sure to actually replace the whole term <parameter> with the
-      * appropriate parameter.
-      *
-      * -moma <path/to/motifMammalsFile>
-      * -moye <path/to/motifYeastFile>
-      * -mail <user@mit.edu>
-      * -evid <path/to/evidenceFile>
-      * -msql <path/to/scansiteDb.sql>
-      * -dbus <database user name>
-      * -dbpw <database password of the given user>
-      * -dbip <database IP address, default 127.0.0.1>
-      *
-      * -help Display example call parameters
-      */
+     * As a number of parameters is required in this application,
+     * it is easily able to mess up with the order of the command line arguemnts.
+     * Hence the order of the parameters does not matter, however one needs to use
+     * the following declarations for the parameters (including the hyphens/dashes).
+     * Please also make sure to actually replace the whole term <parameter> with the
+     * appropriate parameter.
+     * <p>
+     * -moma <path/to/motifMammalsFile>
+     * -moye <path/to/motifYeastFile>
+     * -mail <user@mit.edu>
+     * -evid <path/to/evidenceFile>
+     * -msql <path/to/scansiteDb.sql>
+     * <p>
+     * -help Display example call parameters
+     */
     public static void main(String[] args) {
-        String[] updaterParams      = new String[0];
+        String[] updaterParams = new String[0];
         String[] motifMammalsParams = new String[2];
-        String[] motifYeastParams   = new String[2];
-        String[] evidenceParams     = new String[1];
+        String[] motifYeastParams = new String[2];
+        String[] evidenceParams = new String[1];
 
         String exampleCall = "Parameter arguments should be given like:" +
                 " -moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
                 " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt" +
-                " -msql misc/database/scansiteDb.sql -dbus tbernwin -dbpw tbernwin";
+                " -msql misc/database/scansiteDb.sql";
 
         for (String arg : args) {
             if (isMammal || isYeast || isMail || isEvid || isScript) {
@@ -118,12 +114,12 @@ public class RunDatabaseInsertionManager {
 
         motifMammalsParams[0] = motifMammalFile;
         motifMammalsParams[1] = motifEmail;
-        motifYeastParams[0]   = motifYeastFile;
-        motifYeastParams[1]   = motifEmail;
-        evidenceParams[0]     = evidenceFile;
+        motifYeastParams[0] = motifYeastFile;
+        motifYeastParams[1] = motifEmail;
+        evidenceParams[0] = evidenceFile;
 
         String errorFile = "";
-        if(motifMammalFile == null || motifMammalFile.isEmpty()) {
+        if (motifMammalFile == null || motifMammalFile.isEmpty()) {
             errorFile += "the Motif file (mammals)\n";
         } else if (motifYeastFile == null || motifYeastFile.isEmpty()) {
             errorFile += "The Motif file (yeast)\n";
@@ -146,6 +142,9 @@ public class RunDatabaseInsertionManager {
 
         logger.info("Assigned parameters successfully! Launching applications...");
 
+        // single long time connection as previously used for setting up the database
+        // also required for disabling auto commit and constraints
+        DbConnector.getInstance().resizeConnectionPool(1);
         try {
             logger.info("Resetting database...");
             resetDatabase();
@@ -156,17 +155,22 @@ public class RunDatabaseInsertionManager {
         }
 
         try {
-           logger.info("Running \"RunUpdater\", Database Updater...");
-           RunUpdater.main(updaterParams);
+            logger.info("Running \"RunUpdater\", Database Updater...");
+            RunUpdater.main(updaterParams);
 
-           logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
-           RunMotifInserter.main(motifMammalsParams);
+            logger.info("Running \"RunEvidenceInserter\" to insert evidence data...");
+            RunEvidenceInserter.main(evidenceParams);
 
-           logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
-           RunMotifInserter.main(motifYeastParams);
+            //sequence rework
+            logger.info("Running SequenceMotifier to adjust protein sequences according to their site evidence data");
+            RunSequenceModifier.run();
 
-           logger.info("Running \"RunEvidenceInserter\" to insert evidence data...");
-           RunEvidenceInserter.main(evidenceParams);
+            logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
+            RunMotifInserter.main(motifMammalsParams);
+
+            logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
+            RunMotifInserter.main(motifYeastParams);
+
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
@@ -206,7 +210,6 @@ public class RunDatabaseInsertionManager {
      * a new one based on the sql file. This way a new clean database is available
      * right before filling it with data. Hence errors that would appear by filling
      * a not properly set up database can be avoided.
-     *
      */
     private static void resetDatabase() throws SQLException, DatabaseException {
         String sqlCommands;
@@ -232,7 +235,7 @@ public class RunDatabaseInsertionManager {
 
         Connection conn = DbConnector.getInstance().getConnection();
         Statement stmt = conn.createStatement();
-        if(databaseExists(conn, database)) {
+        if (databaseExists(conn, database)) {
             stmt.executeUpdate(String.format("DROP DATABASE %s;", database));
         }
         stmt.executeUpdate(String.format("CREATE DATABASE %s", database));
@@ -249,13 +252,13 @@ public class RunDatabaseInsertionManager {
     /**
      * This method checks the meta data of the database in order to check
      * whether the target database currently exists
-     * @param connection A valid database connection that can be used for accessing the meta data
      *
+     * @param connection   A valid database connection that can be used for accessing the meta data
      * @param databaseName The name of the database that is looked for in the meta data
      */
     private static boolean databaseExists(Connection connection, String databaseName) throws SQLException {
         ResultSet resultSet = connection.getMetaData().getCatalogs();
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             if (resultSet.getString(1).equals(databaseName)) {
                 return true;
             }
@@ -266,13 +269,13 @@ public class RunDatabaseInsertionManager {
     /**
      * Executes the required SQL statements in a long string based on separators
      *
-     * @param stmt A Statement that is able to execute SQL CREATE and UPDATE statements
-     * @param sqlCommands The String value which contains one or several SQL statements
+     * @param stmt           A Statement that is able to execute SQL CREATE and UPDATE statements
+     * @param sqlCommands    The String value which contains one or several SQL statements
      * @param beginOfCommand Identifier for the beginning` of a new command i.e. "CREATE TABLE" or "INSERT INTO"
-     * @param endOfCommand Identifierr for the end of a SQL statement i.e. ";"
+     * @param endOfCommand   Identifierr for the end of a SQL statement i.e. ";"
      */
     private static void runDatabaseCommands(Statement stmt, String sqlCommands, String beginOfCommand, String endOfCommand) throws SQLException {
-        while(!sqlCommands.isEmpty()) {
+        while (!sqlCommands.isEmpty()) {
             String nextCommand = sqlCommands.substring(sqlCommands.indexOf(beginOfCommand), sqlCommands.indexOf(endOfCommand) + 1);
             sqlCommands = sqlCommands.replace(nextCommand, "");
             while (sqlCommands.startsWith(" ") || sqlCommands.startsWith("\n") || sqlCommands.startsWith("\r")) {
@@ -286,26 +289,27 @@ public class RunDatabaseInsertionManager {
      * Checks if the requirement for assigning the value to a parameter has been met
      * assigns the value and checks if the value mistakenly starts with < as the
      * description samples are like <example parameter>
+     *
      * @param value The String value which is assigned to a designated parameter
      */
     private static boolean assignParam(String value) {
-        if(isMammal) {
+        if (isMammal) {
             motifMammalFile = value;
             isMammal = false;
             return !motifMammalFile.startsWith("<");
-        } else if(isYeast) {
+        } else if (isYeast) {
             motifYeastFile = value;
             isYeast = false;
             return !motifYeastFile.startsWith("<");
-        } else if(isMail) {
+        } else if (isMail) {
             motifEmail = value;
             isMail = false;
             return !motifEmail.startsWith("<");
-        } else if(isEvid) {
+        } else if (isEvid) {
             evidenceFile = value;
             isEvid = false;
             return !evidenceFile.startsWith("<");
-        } else if(isScript){
+        } else if (isScript) {
             sqlScriptFile = value;
             isScript = false;
             return !sqlScriptFile.startsWith("<");

@@ -66,8 +66,8 @@ public class MotifsConfigXmlFileReader {
 			Document document = dBuilder.parse(in);
 			document.getDocumentElement().normalize();
 
-			Element motifsElement = (Element) document.getElementsByTagName(
-					MOTIFS).item(0);
+			Element motifsElement = (Element) document
+					.getElementsByTagName(MOTIFS).item(0);
 			List<Motif> motifs = new LinkedList<>();
 
 			NodeList nodeList = motifsElement.getElementsByTagName(MOTIF);
@@ -93,8 +93,7 @@ public class MotifsConfigXmlFileReader {
 							.getElementsByTagName(MOTIF_CLASS).item(0)
 							.getTextContent().trim()));
 					motif.setPublic(node.getElementsByTagName(MOTIF_IS_PUBLIC)
-							.item(0).getTextContent().trim().equals("1") ? true
-							: false);
+							.item(0).getTextContent().trim().equals("1") ? true : false);
 
 					NodeList identifiersList = ((Element) node
 							.getElementsByTagName(IDENTIFIERS).item(0))

@@ -36,7 +36,7 @@ public class MotifDataUpdateCommand extends DbUpdateCommand {
 		for (AminoAcid aa : aas) {
 			if (!aa.equals(AminoAcid._C) && !aa.equals(AminoAcid._N)) {
 				sql.append(c.getcMatrixDataScorePrefix())
-						.append(aa.getOneLetterCode())
+						.append(MotifDataAddCommand.evaluateOneLetterCode(aa.getOneLetterCode()))
 						.append(CommandConstants.EQ)
 						.append(motif.getValue(aa, position))
 						.append(CommandConstants.COMMA);

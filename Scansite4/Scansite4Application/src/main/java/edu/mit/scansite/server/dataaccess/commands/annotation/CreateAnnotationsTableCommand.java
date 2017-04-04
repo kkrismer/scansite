@@ -31,7 +31,7 @@ public class CreateAnnotationsTableCommand extends DbUpdateCommand {
 				+ c.getcAnnotationTypesId() + "     INT NOT NULL,\n" + "  "
 				+ c.getcAnnotationsAnnotation() + " TEXT,\n"
 				+ "  FOREIGN KEY (" + c.getcProteinsIdentifier()
-				+ ") REFERENCES " + c.gettProteins(dataSource) + "("
+				+ ") REFERENCES " + c.getProteins(dataSource) + "("
 				+ c.getcProteinsIdentifier() + "),\n" + "  FOREIGN KEY ("
 				+ c.getcAnnotationTypesId() + ") REFERENCES "
 				+ c.gettAnnotationTypes() + "(" + c.getcAnnotationTypesId()

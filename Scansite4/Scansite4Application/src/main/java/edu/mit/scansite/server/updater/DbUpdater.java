@@ -127,8 +127,8 @@ public abstract class DbUpdater implements Runnable {
 
 		logger.info("prepare file transliterator");
 		initReader(tempFileName);
-		FileTransliterator ssTransliterator = getScansiteFileTransliterator(getFilePath("DB_"
-				+ errFileName));
+		FileTransliterator ssTransliterator = getScansiteFileTransliterator(
+				getFilePath("DB_" + errFileName));
 		try {
 			logger.info("transliterate scansite-specific files to temporary table in database");
 			logger.info("disables auto-commit, unique and foreign key checks");
@@ -266,8 +266,7 @@ public abstract class DbUpdater implements Runnable {
 				readers.clear();
 			}
 			if (f.toString().endsWith(".gz")) {
-				GZIPInputStream gzIn = new GZIPInputStream(new FileInputStream(
-						f));
+				GZIPInputStream gzIn = new GZIPInputStream(new FileInputStream(f));
 				if (dataSourceMetaInfo.getEncoding() != null
 						&& !dataSourceMetaInfo.getEncoding().isEmpty()) {
 					readers.add(new BufferedReader(new InputStreamReader(gzIn,

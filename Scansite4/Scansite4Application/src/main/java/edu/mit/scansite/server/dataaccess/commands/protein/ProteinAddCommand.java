@@ -39,7 +39,7 @@ public class ProteinAddCommand extends DbInsertCommand {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 		sql.append(CommandConstants.INSERTINTO)
-				.append(c.gettProteins(dataSource)).append('(');
+				.append(c.getProteins(dataSource)).append('(');
 		sql.append(c.getcProteinsIdentifier()).append(CommandConstants.COMMA)
 				.append(c.getcProteinsClass()).append(CommandConstants.COMMA)
 				.append(c.getcProteinsMolWeight())

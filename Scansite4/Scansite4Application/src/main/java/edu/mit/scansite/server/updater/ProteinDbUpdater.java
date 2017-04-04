@@ -39,12 +39,11 @@ public abstract class ProteinDbUpdater extends DbUpdater {
 			String errorFilePath) throws ScansiteUpdaterException {
 		BufferedWriter errorWriter;
 		try {
-			errorWriter = new BufferedWriter(new FileWriter(new File(
-					errorFilePath)));
-			ProteinTransliteratorDbWriter writer = new ProteinTransliteratorDbWriter(
-					errorWriter, dataSourceMetaInfo);
-			ScansiteProteinFileTransliterator transliterator = new ScansiteProteinFileTransliterator(
-					getReaders(), writer);
+			errorWriter = new BufferedWriter(new FileWriter(new File(errorFilePath)));
+			ProteinTransliteratorDbWriter writer =
+					new ProteinTransliteratorDbWriter(errorWriter, dataSourceMetaInfo);
+			ScansiteProteinFileTransliterator transliterator =
+					new ScansiteProteinFileTransliterator(getReaders(), writer);
 			return transliterator;
 		} catch (IOException e) {
 			throw new ScansiteUpdaterException(

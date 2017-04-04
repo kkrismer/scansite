@@ -10,13 +10,7 @@ import java.util.Set;
 
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceEntryCountGetCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinAddCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinGetAccessionsLikeCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinGetAllCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinGetCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinGetRestrictedCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinIdentifierGetAllCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinsGetCommand;
+import edu.mit.scansite.server.dataaccess.commands.protein.*;
 import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
@@ -399,5 +393,17 @@ public class ProteinDaoImpl extends DaoImpl implements ProteinDao {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void updateProtein(DataSource dataSource, Protein protein) throws DataAccessException {
+		ProteinUpdateCommand cmd = new ProteinUpdateCommand(ServiceLocator.getDbAccessProperties(),
+				ServiceLocator.getDbConstantsProperties(), dataSource, protein);
+        try {
+            cmd.execute();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
 	}
 }

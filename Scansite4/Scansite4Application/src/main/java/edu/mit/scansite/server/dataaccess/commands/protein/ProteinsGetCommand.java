@@ -76,7 +76,7 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 				.append(c.getcProteinsSequence())
 				.append(CommandConstants.COMMA).append(c.getcTaxaId());
 		sql.append(CommandConstants.FROM).append(
-				c.gettProteins(dataSource));
+				c.getProteins(dataSource));
 		sql.append(CommandConstants.WHERE).append(c.getcProteinsIdentifier())
 				.append(CommandConstants.IN).append(CommandConstants.LPAR);
 		for (int i = 0; i < identifiers.size(); ++i) {

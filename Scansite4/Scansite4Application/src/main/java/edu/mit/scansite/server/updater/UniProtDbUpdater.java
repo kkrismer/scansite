@@ -34,10 +34,8 @@ public class UniProtDbUpdater extends ProteinDbUpdater {
 		BufferedWriter tempFileWriter;
 		BufferedWriter errorWriter;
 		try {
-			tempFileWriter = new BufferedWriter(new FileWriter(new File(
-					tempFilePath)));
-			errorWriter = new BufferedWriter(new FileWriter(new File(
-					errorFilePath)));
+			tempFileWriter = new BufferedWriter(new FileWriter(new File(tempFilePath)));
+			errorWriter = new BufferedWriter(new FileWriter(new File(errorFilePath)));
 			ProteinTransliteratorFileWriter writer = new ProteinTransliteratorFileWriter(
 					tempFileWriter, errorWriter);
 			UniProtDatFileTransliterator transliterator = new UniProtDatFileTransliterator(

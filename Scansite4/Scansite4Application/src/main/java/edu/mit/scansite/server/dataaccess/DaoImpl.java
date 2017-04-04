@@ -33,20 +33,15 @@ public abstract class DaoImpl implements Dao {
 	 */
 	@Override
 	public void disableChecks() throws ScansiteUpdaterException {
-		Connection connection = null;
 		try {
 			DbConnector.getInstance().setAutoCommit(false);
-			connection = DbConnector.getInstance().getConnection();
-			Statement stmt = connection.createStatement();
+			Statement stmt = DbConnector.getInstance().getConnection().createStatement();
 			stmt.execute("SET UNIQUE_CHECKS=0;");
-			stmt.execute("SET foreign_key_checks=0;");
+			stmt.execute("SET FOREIGN_KEY_CHECKS=0;");
 			DbConnector.getInstance().close(stmt);
 		} catch (Exception e) {
 			logger.error("Cannot disable checks: " + e.getMessage(), e);
 			throw new ScansiteUpdaterException("Cannot disable checks", e);
-		} finally {
-			//instead of closing the connection: reuse it
-			//DbConnector.getInstance().close(connection);
 		}
 	}
 
@@ -55,20 +50,15 @@ public abstract class DaoImpl implements Dao {
 	 */
 	@Override
 	public void enableChecks() throws ScansiteUpdaterException {
-		Connection connection = null;
 		try {
 			DbConnector.getInstance().setAutoCommit(true);
-			connection = DbConnector.getInstance().getConnection();
-			Statement stmt = connection.createStatement();
+			Statement stmt = DbConnector.getInstance().getConnection().createStatement();
 			stmt.execute("SET UNIQUE_CHECKS=1;");
-			stmt.execute("SET foreign_key_checks=1;");
+			stmt.execute("SET FOREIGN_KEY_CHECKS=1;");
 			DbConnector.getInstance().close(stmt);
 		} catch (Exception e) {
 			logger.error("Cannot enable checks: " + e.getMessage(), e);
 			throw new ScansiteUpdaterException("Cannot enable checks", e);
-		} finally {
-			//instead of closing the connection: reuse it
-			//DbConnector.getInstance().close(connection);
 		}
 	}
 }

@@ -46,8 +46,7 @@ public abstract class LocalizationFileTransliterator extends FileTransliterator 
 		for (BufferedReader reader : readers) {
 			while (readEntry(reader)) {
 				if (allSet()) {
-					writer.saveEntry(proteinIdentifier, score, localization,
-							goTerms);
+					writer.saveEntry(proteinIdentifier, score, localization, goTerms);
 				} else {
 					writer.saveInvalidEntry(currentLine);
 				}

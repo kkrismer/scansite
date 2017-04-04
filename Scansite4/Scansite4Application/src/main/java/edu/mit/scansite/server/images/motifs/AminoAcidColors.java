@@ -11,36 +11,34 @@ import edu.mit.scansite.shared.transferobjects.AminoAcid;
  * @author Tobieh
  */
 public enum AminoAcidColors {
-  S (AminoAcid.S, Colors.BROWN), // small
-  A (AminoAcid.A, Colors.BROWN_DARK),  // small
-  G (AminoAcid.G, Colors.TAN),  // small
-  
-  D (AminoAcid.D, Colors.GRAY_DARK), // negative
-  E (AminoAcid.E, Colors.GRAY_LIGHT), // negative
+  P (AminoAcid.P, Colors.GREEN_DARK),  // small
 
-  H (AminoAcid.H, Colors.RED),  // positive
-  K (AminoAcid.K, Colors.RED_LIGHT),  // positive
-  O (AminoAcid.O, Colors.RED_LIGHT), // positive
-  R (AminoAcid.R, Colors.RED_DARK), // positive
+  D (AminoAcid.D, Colors.RED_DARK), // negative
+  E (AminoAcid.E, Colors.RED_DARK), // negative
 
-  P (AminoAcid.P, Colors.ORANGE),  // small
-  N (AminoAcid.N, Colors.ORANGE_DARK),  // small
+  H (AminoAcid.H, Colors.BLUE_DARK),  // positive
+  K (AminoAcid.K, Colors.BLUE_DARK),  // positive
+  O (AminoAcid.O, Colors.BLUE_DARK), // positive
+  R (AminoAcid.R, Colors.BLUE_DARK), // positive
 
-  Q (AminoAcid.Q, Colors.YELLOW),
+  G (AminoAcid.G, Colors.ORANGE),  // small
+  A (AminoAcid.A, Colors.ORANGE),  // small
+  V (AminoAcid.V, Colors.ORANGE), // aliphatic
+  I (AminoAcid.I, Colors.ORANGE), // aliphatic
+  L (AminoAcid.L, Colors.ORANGE), // aliphatic
+  M (AminoAcid.M, Colors.ORANGE),
 
-  F (AminoAcid.F, Colors.GREEN), // aromatic
-  Y (AminoAcid.Y, Colors.GREEN_LIGHT), // aromatic
-  W (AminoAcid.W, Colors.GREEN_DARK), // aromatic
+  S (AminoAcid.S, Colors.ORANGE), // small
+  T (AminoAcid.T, Colors.ORANGE),  // small
+  C (AminoAcid.C, Colors.ORANGE), // small
+  U (AminoAcid.U, Colors.ORANGE),  // small
+  N (AminoAcid.N, Colors.ORANGE),  // small
+  Q (AminoAcid.Q, Colors.ORANGE),
 
-  M (AminoAcid.M, Colors.BLUE_GREEN),
-  
-  I (AminoAcid.I, Colors.BLUE_DARK), // aliphatic
-  L (AminoAcid.L, Colors.BLUE_LIGHT), // aliphatic
-  V (AminoAcid.V, Colors.BLUE), // aliphatic
+  F (AminoAcid.F, Colors.PURPLE), // aromatic
+  Y (AminoAcid.Y, Colors.PURPLE), // aromatic
+  W (AminoAcid.W, Colors.PURPLE), // aromatic
 
-  C (AminoAcid.C, Colors.PURPLE_DARK), // small
-  U (AminoAcid.U, Colors.PURPLE_DARK),  // small
-  T (AminoAcid.T, Colors.PURPLE),  // small
   
   _N (AminoAcid._N, Colors.MARPLE),
   _C (AminoAcid._C, Colors.MARPLE),

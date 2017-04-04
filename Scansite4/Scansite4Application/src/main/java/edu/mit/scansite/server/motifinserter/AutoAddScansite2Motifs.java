@@ -162,9 +162,10 @@ public class AutoAddScansite2Motifs {
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
 			System.out.println("Can not find or open file: " + motifFilePath);
-		} catch (IOException | ScansiteFileFormatException
-				| ScansiteUpdaterException | DatabaseException e) {
+		} catch (IOException | ScansiteFileFormatException | DatabaseException e) {
 			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+		} catch (ScansiteUpdaterException e) {
 			e.printStackTrace();
 		} finally {
 			try {

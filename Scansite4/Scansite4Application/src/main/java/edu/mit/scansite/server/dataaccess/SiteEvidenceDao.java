@@ -1,5 +1,6 @@
 package edu.mit.scansite.server.dataaccess;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -19,4 +20,5 @@ public interface SiteEvidenceDao extends Dao {
 
 	public abstract void addResource(String resource, String resourceLink) throws DataAccessException;
 
+	public abstract HashMap<String, List<String> > getEvidenceMap() throws DataAccessException;
 }

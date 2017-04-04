@@ -69,7 +69,7 @@ public class DatabaseScanFeatureTest {
     @Test
     public void DatabaseScanFeatureMotifClassTest() throws DataAccessException {
         evaluateResult(feature.doDatabaseSearch(motifSelection, dataSource,
-                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath));
+                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath, false));
     }
 
 
@@ -81,7 +81,7 @@ public class DatabaseScanFeatureTest {
         motifSelection.setMotifShortNames(shortMotifNames);
 
         evaluateResult(feature.doDatabaseSearch(motifSelection, dataSource,
-                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath));
+                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath, false));
     }
 
 
@@ -94,6 +94,6 @@ public class DatabaseScanFeatureTest {
         motifSelection.setMotifShortNames(shortMotifNames);
 
         evaluateResult(feature.doDatabaseSearch(motifSelection, dataSource,
-                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath));
+                restrictionProperties, outputListSize, doCreateFiles, publicOnly, realPath, false));
     }
 }

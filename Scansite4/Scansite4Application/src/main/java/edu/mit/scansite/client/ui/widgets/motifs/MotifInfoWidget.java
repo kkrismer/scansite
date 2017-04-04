@@ -2,6 +2,8 @@ package edu.mit.scansite.client.ui.widgets.motifs;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.*;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
@@ -21,10 +23,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
 
 import edu.mit.scansite.client.ui.event.EventBus;
 import edu.mit.scansite.client.ui.event.MessageEvent;
@@ -61,11 +59,17 @@ public class MotifInfoWidget extends ScansiteWidget implements
 	private MotifClass currentMotifClass = MotifClass.MAMMALIAN;
 	private User user;
 
+    private MotifGetResult latestResult;
+	private boolean displayToggled;
+
 	@UiField
 	MotifClassWidget motifClassWidget;
 
 	@UiField
 	ListBox motifListBox;
+
+	@UiField
+    Button toggleButton;
 
 	@UiField
 	FlowPanel consensus;
@@ -81,6 +85,8 @@ public class MotifInfoWidget extends ScansiteWidget implements
 
 	public MotifInfoWidget(final User user) {
 		this.user = user;
+        latestResult = null;
+        displayToggled = false;
 		initWidget(uiBinder.createAndBindUi(this));
 		runCommandOnLoad(new Command() {
 			@Override
@@ -143,12 +149,12 @@ public class MotifInfoWidget extends ScansiteWidget implements
 											.toSafeHtml());
 								}
 								consensus.clear();
-								Image motifImage = new Image(result
-										.getMotifLogoUrl());
+								Image motifImage = new Image(result.getMotifLogoUrl());
 								motifImage.setPixelSize(
 										(int) (IMAGE_WIDTH * 0.7),
 										(int) (IMAGE_HEIGHT * 0.7));
 								consensus.add(motifImage);
+								latestResult = result;
 							} else {
 								EventBus.instance().fireEvent(
 										new MessageEvent(
@@ -161,6 +167,30 @@ public class MotifInfoWidget extends ScansiteWidget implements
 					});
 		}
 	}
+
+
+	@UiHandler("toggleButton")
+    public void onButtonClick(ClickEvent event) {
+	    if (latestResult == null) {
+	        toggleButton.setText("Could not load data");
+	        return;
+        }
+        consensus.clear();
+        Image motifImage;
+        if (displayToggled) { // normal logo
+            motifImage = new Image(latestResult.getMotifLogoUrl());
+	        displayToggled = false;
+	        toggleButton.setText("Switch to polar & non-polar coloring");
+        } else { // group colored logo
+            motifImage = new Image(latestResult.getToggleMotifLogoUrl());
+	        displayToggled = true;
+	        toggleButton.setText("Switch to aromatic & aliphatic coloring");
+        }
+        motifImage.setPixelSize(
+                (int) (IMAGE_WIDTH * 0.7),
+                (int) (IMAGE_HEIGHT * 0.7));
+        consensus.add(motifImage);
+    }
 
 	protected void setMotifClass(MotifClass motifClass) {
 		currentMotifClass = motifClass;

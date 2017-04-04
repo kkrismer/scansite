@@ -85,7 +85,7 @@ public class ProteinGetAllCommand extends DbQueryCommand<ArrayList<Protein>> {
 				.append(CommandConstants.COMMA).append(c.getcProteinsPI())
 				.append(CommandConstants.COMMA)
 				.append(c.getcProteinsSequence());
-		sql.append(CommandConstants.FROM).append(c.gettProteins(dataSource));
+		sql.append(CommandConstants.FROM).append(c.getProteins(dataSource));
 		if (taxIds != null && !taxIds.isEmpty()) { // MANY ..OR.. ARE MORE
 													// EFFICIENT
 													// THAN ..IN(...)

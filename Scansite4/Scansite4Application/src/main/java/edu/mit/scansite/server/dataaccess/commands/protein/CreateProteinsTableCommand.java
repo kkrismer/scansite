@@ -24,7 +24,7 @@ public class CreateProteinsTableCommand extends DbUpdateCommand {
 
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
-		String sql = "CREATE TABLE IF NOT EXISTS " + c.gettProteins(dataSource)
+		String sql = "CREATE TABLE IF NOT EXISTS " + c.getProteins(dataSource)
 				+ " (\n" + " " + c.getcProteinsIdentifier()
 				+ " VARCHAR(30) UNIQUE NOT NULL,\n" + " " + c.getcTaxaId()
 				+ "       INT NOT NULL,\n" + " " + c.getcProteinsClass()
