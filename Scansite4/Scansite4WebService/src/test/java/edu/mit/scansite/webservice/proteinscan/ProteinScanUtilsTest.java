@@ -242,7 +242,7 @@ public class ProteinScanUtilsTest {
         LightWeightProtein BRCA2_HUMAN = ProteinScanUtils.getLightWeightProtein(BRCA2_HUMAN_STRING, SWISSPROT);
         assert (BRCA2_HUMAN != null);
         assert (BRCA2_HUMAN.getIdentifier().equals(BRCA2_HUMAN_STRING));
-        assert (BRCA2_HUMAN.getSequence().equals(UNIPROT_SEQUENCE));
+        assert (BRCA2_HUMAN.getSequence().equalsIgnoreCase(UNIPROT_SEQUENCE));
         assert (BRCA2_HUMAN.getDataSource().getShortName().equals(SWISSPROT));
     }
 

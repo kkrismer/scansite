@@ -38,7 +38,7 @@ public class SequenceMatchWebServiceTest {
     @Test
     public void sequenceMatchWebServiceTest() {
 
-        int proteinsInDb = 553474;
+        int proteinsInDb = 553941;
         int proteinMatches = 42;
 
         SequenceMatchResult result = SequenceMatchWebService.doSequenceMatch(sequenceMatchRegex,

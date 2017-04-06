@@ -3,6 +3,8 @@ package edu.mit.scansite.server.updater;
 import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.RunEvidenceInserter;
 import edu.mit.scansite.server.motifinserter.RunMotifInserter;
+import edu.mit.scansite.server.updater.RunSequenceModifier;
+import edu.mit.scansite.server.updater.RunUpdater;
 import edu.mit.scansite.shared.DatabaseException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -20,11 +22,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Created by Thomas Bernwinkler on 15.12.2016.
+ * Created by Thomas Bernwinkler on 12/15/2016.
  * Runs the following database insertion features for an empty database
  * - DatabaseUpdater
- * - MotifInserter (Mammals & Yeast)
  * - EvidenceInserter
+ * - SequenceModifier
+ * - MotifInserter (Mammals & Yeast)
  *
  * @author Thomas Bernwinkler
  */

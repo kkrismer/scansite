@@ -22,7 +22,7 @@ public class ProteinIdentifierScanServiceTest {
         int predictedSites = 28;
         assert (result != null);
         assert (result.getProteinName().equals(proteinIdentifier));
-        assert (result.getProteinSequence().equals(sequence));
+        assert (result.getProteinSequence().equalsIgnoreCase(sequence));
         assert (result.getPredictedSite() != null);
         assert (result.getPredictedSite().length > 0);
         assert (result.getPredictedSite().length == predictedSites);
@@ -39,7 +39,7 @@ public class ProteinIdentifierScanServiceTest {
 
         assert (result != null);
         assert (result.getProteinName().equals(proteinIdentifier));
-        assert (result.getProteinSequence().equals(sequence));
+        assert (result.getProteinSequence().equalsIgnoreCase(sequence));
         assert (result.getPredictedSite() != null);
         assert (result.getPredictedSite().length ==0);
     }
@@ -54,7 +54,7 @@ public class ProteinIdentifierScanServiceTest {
         int predictedSites = 1;
         assert (result != null);
         assert (result.getProteinName().equals(proteinIdentifier));
-        assert (result.getProteinSequence().equals(sequence));
+        assert (result.getProteinSequence().equalsIgnoreCase(sequence));
         assert (result.getPredictedSite() != null);
         assert (result.getPredictedSite().length > 0);
         assert (result.getPredictedSite().length == predictedSites);

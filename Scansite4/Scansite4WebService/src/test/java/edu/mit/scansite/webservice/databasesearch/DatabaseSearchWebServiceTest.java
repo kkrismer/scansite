@@ -59,8 +59,8 @@ public class DatabaseSearchWebServiceTest {
     public void databaseSearchWebServiceTest() {
         double median = 0.29375;
         double medianAbsDev = 0.024150000000000005;
-        int numberOfProteinsInDb = 553474;
-        int numberOfProteinsMatched = 20172;
+        int numberOfProteinsInDb = 553941;
+        int numberOfProteinsMatched = 20184;
         int numberOfSitesFound = 2534;
 
         evaluateResults(DatabaseSearchWebService.doDatabaseSearch(motifShortName, dsShortName,
@@ -76,9 +76,9 @@ public class DatabaseSearchWebServiceTest {
 
         double median = 0.293;
         double medianAbsDev = 0.02510000000000001;
-        int numberOfProteinsInDb = 553474;
-        int numberOfProteinsMatched = 66582;
-        int numberOfSitesFound = 6749;
+        int numberOfProteinsInDb = 553941;
+        int numberOfProteinsMatched = 66610;
+        int numberOfSitesFound = 6751;
 
         evaluateResults(DatabaseSearchWebService.doDatabaseSearch(motifShortName, dsShortName,
                 organismClass, speciesRestriction, phosphorylations, mwFrom, mwTo, pIFrom, pITo,

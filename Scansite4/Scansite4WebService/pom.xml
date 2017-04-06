@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.5</version>
+			<version>5.1.39</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.gwtupload</groupId>
@@ -145,7 +145,7 @@
 	</repositories>
 
 	<build>
-        <finalName>Scansite4WebService</finalName>
+        <finalName>webservice</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

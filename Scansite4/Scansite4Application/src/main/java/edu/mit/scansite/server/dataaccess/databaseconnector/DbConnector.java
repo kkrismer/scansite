@@ -77,7 +77,7 @@ public class DbConnector {
                 connections[activeConnectionNo] = DriverManager.getConnection(url, usr, pwd);
                 logger.info("New connection was established.");
             } catch (SQLException e) {
-                logger.error("Could not establish connection based on configuration");
+                logger.error("Could not establish connection based on configuration\n" + e.getMessage());
             }
         } catch (SQLException e) {
             logger.error("Could not check SQL connection status \n" + e.getMessage());
