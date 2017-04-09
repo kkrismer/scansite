@@ -10,13 +10,13 @@
 		<link type="text/css" rel="stylesheet" href="Scansite4.css">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
-		
+
 		<title>Scansite 4 Web Service</title>
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push([ '_setAccount', 'UA-32141370-1' ]);
 			_gaq.push([ '_trackPageview' ]);
-		
+
 			(function() {
 				var ga = document.createElement('script');
 				ga.type = 'text/javascript';
@@ -28,34 +28,58 @@
 				s.parentNode.insertBefore(ga, s);
 			})();
 		</script>
-		
+
 		<script type="text/javascript">
 			function errorCallback() {
 				console.log("Error! Could not run REST call");
 			}
-		
-			function loadResultList(targetUrl) {
-				if (targetUrl == "/stringency") {
-					printStringencies(targetUrl);
-				}
-				if (targetUrl == "/datasources") {
-					printDataSources(targetUrl);
-				}
-				if (targetUrl == "/motifclasses") {
-					printMotifClasses(targetUrl);
-				}
-				if (targetUrl == "/organismclasses") {
-					printOrganismClasses(targetUrl);
-				}
-				if (targetUrl == "/motifdefinitions/motifclass=YEAST"
-						|| targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
-					printMotifDefinition(targetUrl);
-				}
-				if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
-					printProteinExists(targetUrl);
-				}
-			}
-		
+
+			// LOCALHOST DEVELOPMENT
+//			function loadResultList(targetUrl) {
+//				if (targetUrl == "/stringency") {
+//					printStringencies(targetUrl);
+//				}
+//				if (targetUrl == "/datasources") {
+//					printDataSources(targetUrl);
+//				}
+//				if (targetUrl == "/motifclasses") {
+//					printMotifClasses(targetUrl);
+//				}
+//				if (targetUrl == "/organismclasses") {
+//					printOrganismClasses(targetUrl);
+//				}
+//				if (targetUrl == "/motifdefinitions/motifclass=YEAST"
+//						|| targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
+//					printMotifDefinition(targetUrl);
+//				}
+//				if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+//					printProteinExists(targetUrl);
+//				}
+//			}
+
+			// SERVER DEPLOYMENT
+            function loadResultList(targetUrl) {
+                if (targetUrl == "/stringency") {
+                    printStringencies("/webservice" + targetUrl);
+                }
+                if (targetUrl == "/datasources") {
+                    printDataSources("/webservice" + targetUrl);
+                }
+                if (targetUrl == "/motifclasses") {
+                    printMotifClasses("/webservice" + targetUrl);
+                }
+                if (targetUrl == "/organismclasses") {
+                    printOrganismClasses("/webservice" + targetUrl);
+                }
+                if (targetUrl == "/motifdefinitions/motifclass=YEAST"
+                    || targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
+                    printMotifDefinition("/webservice" + targetUrl);
+                }
+                if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+                    printProteinExists("/webservice" + targetUrl);
+                }
+            }
+
 			function printStringencies(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -77,7 +101,7 @@
 				req.open("GET", targetUrl, true);
 				req.send(null);
 			}
-		
+
 			function printDataSources(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -99,7 +123,7 @@
 				req.open("GET", targetUrl, true);
 				req.send(null);
 			}
-		
+
 			function printMotifClasses(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -119,7 +143,7 @@
 				req.open("GET", targetUrl, true);
 				req.send(null);
 			}
-		
+
 			function printOrganismClasses(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -137,7 +161,7 @@
 				req.open("GET", targetUrl, true);
 				req.send(null);
 			}
-		
+
 			function printMotifDefinition(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -165,7 +189,7 @@
 				req.open("GET", targetUrl, true);
 				req.send(null);
 			}
-		
+
 			function printProteinExists(targetUrl) {
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
@@ -195,7 +219,7 @@
 			<nav id="majornav">
 				<h2>Navigation</h2>
 				<div>
-					<ul> 
+					<ul>
 						<li id="homeLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4rc.mit.edu/4.0/#home">Home</a></div></li>
 						<li id="newsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4rc.mit.edu/4.0/#news">News</a></div> </li>
 						<li><h3>Features</h3>
@@ -266,7 +290,7 @@
 					and valid XML-files.
 				</p>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			
+
 				<!-- ########################################################################################################## -->
 				<h3 id='sec_defs'>2. Definitions</h3>
 				<p>In the following sections some abbreviations and quantifiers
@@ -361,7 +385,7 @@
 					</tr>
 				</table>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			
+
 				<!-- ########################################################################################################## -->
 				<h3 id='sec_usageExample'>3. Usage-Example</h3>
 				<p>In order to make it easier to understand how valid
@@ -487,7 +511,7 @@
 					other Scansite3-features and hopefully helps you using this and other
 					Scansite3 webservices.</p>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			
+
 				<!-- ########################################################################################################## -->
 				<!-- ########################################################################################################## -->
 				<!-- #####################################  4. BASIC FUNCTIONS ################################################ -->
@@ -502,7 +526,7 @@
 <a href="javascript:void(0);" onclick="loadResultList('/stringency')">../stringency</a>
 </pre>
 						<div id="demoStringency"></div></li>
-			
+
 					<li id='svc_datasources'><b>Query valid dataSources and their
 							nicknames:</b><br /> URL: <pre>
 ../datasources
@@ -510,7 +534,7 @@
 <a href="javascript:void(0);" onclick="loadResultList('/datasources')">../datasources</a>
 </pre>
 						<div id="demoDataSources"></div></li>
-			
+
 					<li id='svc_motifClasses'><b>Query valid motif classes:</b><br />
 						URL: <pre>
 ../motifclasses
@@ -518,7 +542,7 @@
 <a href="javascript:void(0);" onclick="loadResultList('/motifclasses')">../motifclasses</a>
 </pre>
 						<div id="demoMotifClasses"></div></li>
-			
+
 					<li id='svc_organismClasses'><b>Query valid organism classes:</b><br />
 						URL: <pre>
 ../organismclasses
@@ -526,7 +550,7 @@
 <a href="javascript:void(0);" onclick="loadResultList('/organismclasses')">../organismclasses</a>
 </pre>
 						<div id="demoOrganismClasses"></div></li>
-			
+
 					<li id='svc_motifDefs'><b>Query valid motifs, their group,
 							classes and nicknames:</b><br /> URL: <pre>
 ../motifdefinitions/motifclass=<a href='#cmd_mc'>[MC]</a>
@@ -535,7 +559,7 @@
 <a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=MAMMALIAN')">../motifdefinitions/motifclass=MAMMALIAN</a>
 </pre>
 						<div id="demoMotifDefinition"></div></li>
-			
+
 					<li id='svc_proteinExists'><b>Check if a protein exists in
 							one of our database mirrors:</b><br /> URL: <pre>
 ../proteinexists/identifier=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
@@ -545,7 +569,7 @@
 						<div id="demoProteinExists"></div></li>
 				</ol>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			
+
 				<!-- ########################################################################################################## -->
 				<h3 id='sec_scansiteFunctions'>5. Scansite functions</h3>
 				Please note that in the following definitions line breaks are used to
@@ -557,11 +581,11 @@
 							protein identifier:</b><br /> URL: <!--/proteinScan/identifier={identifier: \S+}/dsshortname={dsshortname: [A-Za-z]+}
 			        /motifclass={motifclass: [A-Za-z]+}/motifshortnames={motifshortnames: [\S~]*}
 			        /stringency={stringency: [A-Za-z]+}/referenceproteome={referenceproteome: [A-Za-z]+}")-->
-			
+
 						<!--../proteinscan--> <!--/identifier=<a href='#cmd_p'>[P]</a> \--> <!--/dsshortname=<a href='#cmd_ds'>[DS]</a> \-->
 						<!--/motifclass=<a href='#cmd_mc'>[MC]</a> \--> <!--/motifshortnames=<a href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a> \-->
 						<!--/stringency=<a href='#cmd_st'>[ST]</a> \--> <!--/referenceproteome=[Vertebrata | Yeast]</a>-->
-			
+
 						<pre>
 ../proteinscan/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/motifclass=<a href='#cmd_mc'>[MC]</a>/motifshortnames=<a
 								href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>/stringency=<a
@@ -576,7 +600,7 @@
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High/referenceproteome=Vertebrata
 </pre></li>
-			
+
 					<li id='svc_scanProtSeq'><b>Scan a protein for motifs using a
 							protein sequence:</b><br /> URL: <!--../proteinscan--> <!--/identifier=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a> \-->
 						<!--/sequence=<a href='#cmd_seq'>[SEQ]</a> \--> <!--/motifclass=<a href='#cmd_mc'>[MC]</a> \-->
@@ -598,7 +622,7 @@
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low/referenceproteome=Vertebrata
 </pre></li>
-			
+
 					<li id='svc_searchDb'><b>Search a sequence database for a
 							motif:</b><br /> URL: <!--
 			        /databasesearch
@@ -639,7 +663,7 @@
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=rattus/numberofphosphorylations=1/molweightfrom=5000/molweightto=20000/isoelectricpointfrom=4/keywordrestriction=cell/sequencerestriction=PPP
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/numberofphosphorylations=0
 </pre></li>
-			
+
 					<li id='svc_seqMatch'><b>Search a protein database for a
 							sequence pattern:</b><br /> URL: <!--
 			        /sequencematch
@@ -699,10 +723,10 @@
 </pre> Example: <pre>
 ../predictlocation/localizationdsshortname=loctree/identifier=BRCA2_HUMAN/dsshortname=swissprot
 </pre></li>
-			
+
 				</ol>
 				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			
+
 				<!-- ########################################################################################################## -->
 				<h3 id='sec_errors'>6. Errors</h3>
 				<p>If you do not get the expected result there are usually two ways
