@@ -35,7 +35,6 @@ public class MotifLogoPainter extends Painter {
 
     public MotifLogoPainter(Motif motif, boolean toggled) {
         this.motif = motif;
-        List<Integer> centralPositions;
 
         bImg = new BufferedImage(MotifLogoConstants.IMAGE_WIDTH,
                 MotifLogoConstants.IMAGE_HEIGHT, MotifLogoConstants.IMAGE_TYPE);
@@ -173,10 +172,15 @@ public class MotifLogoPainter extends Painter {
             rowSums[i] = 0;
             rowSumTemp[i] = 0;
         }
+        boolean usesMagicNumber = false;
+        int magicNumber = 21;
         // calc sums
         for (int aa = 0; aa < singleAas.size(); ++aa) {
             for (i = 0; i < ScansiteConstants.WINDOW_SIZE; ++i) {
                 rowSums[i] += motif.getValue(singleAas.get(aa), i);
+                if (i == 7 && rowSums[i] == magicNumber) {
+                    usesMagicNumber = true;
+                }
             }
         }
 
@@ -206,11 +210,45 @@ public class MotifLogoPainter extends Painter {
         for (i = 0; i < ScansiteConstants.WINDOW_SIZE; ++i) {
             double iHeight = (rowSums[i] == 0) ? 0 : rowSums[i] / maxR
                     * (double) MotifLogoConstants.FULL_LOGO_HEIGHT; // scale
-            // position-height
-            // to
-            // logo-height
+            // position-height to logo-height
             for (int aa = 0; aa < singleAas.size(); ++aa) {
                 aminoAcidHeights[aa][i] = (freqData[aa][i] * iHeight);
+            }
+        }
+
+        // adjusting height of the motif logos if necessary
+        if (usesMagicNumber) {
+            Double[] positionSpecificHeights = {0.0, 0.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+            boolean centralPositionDominates = true;
+            int centralPosition = (ScansiteConstants.WINDOW_SIZE - 1) / 2;
+
+            for (int j = 0; j < ScansiteConstants.WINDOW_SIZE; j++) {
+                for (int aa = 0; aa < singleAas.size(); aa++) {
+                    positionSpecificHeights[j] += aminoAcidHeights[aa][j];
+                }
+            }
+            double maxNonCentralPositionHeight = 0;
+            for (int j = 0; j < ScansiteConstants.WINDOW_SIZE; j++) {
+                if (positionSpecificHeights[j] > positionSpecificHeights[centralPosition]) {
+                    centralPositionDominates = false;
+                }
+                if (j != centralPosition &&
+                        positionSpecificHeights[j] > maxNonCentralPositionHeight) {
+                    maxNonCentralPositionHeight = positionSpecificHeights[j];
+                }
+            }
+
+            if (centralPositionDominates) {
+                double scalingFactor = positionSpecificHeights[centralPosition]
+                        / maxNonCentralPositionHeight;
+                for (int j = 0; j < ScansiteConstants.WINDOW_SIZE; j++) {
+                    for (int aa = 0; aa < singleAas.size(); aa++) {
+                        if (j != centralPosition) {
+                            aminoAcidHeights[aa][j] *= scalingFactor;
+                        }
+                    }
+                }
             }
         }
 
