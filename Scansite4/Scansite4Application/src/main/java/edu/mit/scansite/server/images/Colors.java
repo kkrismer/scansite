@@ -31,7 +31,8 @@ public class Colors {
   
   public static final Color ORANGE = new Color(230, 180, 0);
   public static final Color ORANGE_DARK = new Color(255, 150, 0);
-  
+
+  public static final Color PINK = new Color(255, 100, 255);
   public static final Color PURPLE = new Color(200, 0, 255);
   public static final Color PURPLE_DARK = new Color(150, 0, 150);
   

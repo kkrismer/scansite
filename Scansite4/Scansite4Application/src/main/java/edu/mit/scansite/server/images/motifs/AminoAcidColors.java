@@ -8,25 +8,27 @@ import edu.mit.scansite.server.images.Colors;
 import edu.mit.scansite.shared.transferobjects.AminoAcid;
 
 /**
+ * @author Thomas (reassigned colors)
  * @author Tobieh
  */
 public enum AminoAcidColors {
   P (AminoAcid.P, Colors.GREEN_DARK),  // small
 
-  D (AminoAcid.D, Colors.RED_DARK), // negative
-  E (AminoAcid.E, Colors.RED_DARK), // negative
+  D (AminoAcid.D, Colors.RED_LIGHT), // negative
+  E (AminoAcid.E, Colors.RED_LIGHT), // negative
 
   H (AminoAcid.H, Colors.BLUE_DARK),  // positive
   K (AminoAcid.K, Colors.BLUE_DARK),  // positive
   O (AminoAcid.O, Colors.BLUE_DARK), // positive
   R (AminoAcid.R, Colors.BLUE_DARK), // positive
 
-  G (AminoAcid.G, Colors.ORANGE),  // small
-  A (AminoAcid.A, Colors.ORANGE),  // small
-  V (AminoAcid.V, Colors.ORANGE), // aliphatic
-  I (AminoAcid.I, Colors.ORANGE), // aliphatic
-  L (AminoAcid.L, Colors.ORANGE), // aliphatic
-  M (AminoAcid.M, Colors.ORANGE),
+  G (AminoAcid.G, Colors.YELLOW),  // small
+  A (AminoAcid.A, Colors.YELLOW),  // small
+  V (AminoAcid.V, Colors.YELLOW), // aliphatic
+
+  I (AminoAcid.I, Colors.TAN), // aliphatic
+  L (AminoAcid.L, Colors.TAN), // aliphatic
+  M (AminoAcid.M, Colors.TAN),
 
   S (AminoAcid.S, Colors.ORANGE), // small
   T (AminoAcid.T, Colors.ORANGE),  // small
@@ -35,9 +37,9 @@ public enum AminoAcidColors {
   N (AminoAcid.N, Colors.ORANGE),  // small
   Q (AminoAcid.Q, Colors.ORANGE),
 
-  F (AminoAcid.F, Colors.PURPLE), // aromatic
-  Y (AminoAcid.Y, Colors.PURPLE), // aromatic
-  W (AminoAcid.W, Colors.PURPLE), // aromatic
+  F (AminoAcid.F, Colors.PURPLE_DARK), // aromatic
+  Y (AminoAcid.Y, Colors.PURPLE_DARK), // aromatic
+  W (AminoAcid.W, Colors.PURPLE_DARK), // aromatic
 
   
   _N (AminoAcid._N, Colors.MARPLE),
@@ -46,8 +48,13 @@ public enum AminoAcidColors {
                
   B (AminoAcid.B, Colors.BLACK),
   Z (AminoAcid.Z, Colors.BLACK),
-  J (AminoAcid.J, Colors.BLACK);
-  
+  J (AminoAcid.J, Colors.BLACK),
+
+  pS (AminoAcid.pS, Colors.PINK),
+  pT (AminoAcid.pT, Colors.PINK),
+  pY (AminoAcid.pY, Colors.PINK);
+
+
   final AminoAcid aa;
   final Color color;
   

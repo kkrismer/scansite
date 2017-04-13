@@ -12,9 +12,14 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceConfigurationError;
 
+import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dataaccess.commands.motifrealcentralvalues.MotifValueGetCommand;
 import edu.mit.scansite.server.images.Colors;
 import edu.mit.scansite.server.images.Painter;
+import edu.mit.scansite.shared.DataAccessException;
+import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.transferobjects.AminoAcid;
 import edu.mit.scansite.shared.transferobjects.Motif;
@@ -50,6 +55,7 @@ public class MotifLogoPainter extends Painter {
     private void init(boolean toggled) {
         drawBaseLine();
         drawMotifName();
+        checkForOriginalCentralPositionValues();
         prepareData();
         printAminoAcids(toggled);
 
@@ -68,7 +74,7 @@ public class MotifLogoPainter extends Painter {
             int nextHeight = 1;
             double xPrintOffset = MotifLogoConstants.SPACE_WIDTH * (1 + i)
                     + aaWidth * i;
-            for (int aa = 0; aa < singleAas.size(); ++aa) { // todo: if toggled -- special treatment?
+            for (int aa = 0; aa < singleAas.size(); ++aa) {
                 // print amino acid
                 boolean isCentralPosition = (i == (ScansiteConstants.WINDOW_SIZE-1)/2
                         && motif.getValue(singleAas.get(aaIdxs[aa]), i) > 0);
@@ -100,6 +106,13 @@ public class MotifLogoPainter extends Painter {
                                FontMetrics fm, boolean toggled, boolean isCentralPosition) {
         if (aminoAcidHeight >= 1) {
             String s = Character.toString(aminoAcid.getOneLetterCode());
+
+            if (Character.isLowerCase(s.charAt(0))) {
+                s = s.replaceAll("s", "pS");
+                s = s.replaceAll("t", "pT");
+                s = s.replaceAll("y", "pY");
+            }
+
             s = s.equals("*") ? "!" : s;
             FontRenderContext frc = image.getFontRenderContext();
             TextLayout tl = new TextLayout(s, image.getFont(), frc);
@@ -109,8 +122,7 @@ public class MotifLogoPainter extends Painter {
             double scaleY = aminoAcidHeight
                     / (tl.getOutline(null).getBounds().getMaxY() - tl
                     .getOutline(null).getBounds().getMinY());
-            transform
-                    .scale(aminoAcidWidth / (double) fm.stringWidth(s), scaleY);
+            transform.scale(aminoAcidWidth / (double) fm.stringWidth(s), scaleY);
             Shape shape = tl.getOutline(transform);
             aminoAcidHeight = shape.getBounds().getMaxY()
                     - shape.getBounds().getMinY();
@@ -148,6 +160,38 @@ public class MotifLogoPainter extends Painter {
         }
         return toSort;
     }
+
+
+    private void checkForOriginalCentralPositionValues() {
+        try {
+            MotifValueGetCommand cmd = new MotifValueGetCommand(ServiceLocator.getDbAccessProperties(),
+                    ServiceLocator.getDbConstantsProperties(), motif.getId());
+
+            Double[] values = cmd.execute();
+            int centralPosition = 7;
+            if (values[0] != 0) {
+                motif.setValue(AminoAcid.S, centralPosition, values[0]);
+                if (motif.getValue(AminoAcid.pS, centralPosition) > 0) {
+                    motif.setValue(AminoAcid.pS, centralPosition, values[0]);
+                }
+            }
+            if(values[1] != 0) {
+                motif.setValue(AminoAcid.T, centralPosition, values[1]);
+                if (motif.getValue(AminoAcid.pT, centralPosition) > 0) {
+                    motif.setValue(AminoAcid.pT, centralPosition, values[1]);
+                }
+            }
+            if (values[2] != 0) {
+                motif.setValue(AminoAcid.Y, centralPosition, values[2]);
+                if (motif.getValue(AminoAcid.pY, centralPosition) > 0) {
+                    motif.setValue(AminoAcid.pY, centralPosition, values[2]);
+                }
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void prepareData() {
         int i = 0;
@@ -196,6 +240,7 @@ public class MotifLogoPainter extends Painter {
             }
         }
 
+        boolean centerDominates = false;
         // calculate: R(i) = log2(N_AA) - (-H(i)) = log2(N_AA) + H(i)
         double log2OfNAminoAcids = ScansiteAlgorithms.log2(singleAas.size());
         double maxR = 0;
@@ -203,6 +248,7 @@ public class MotifLogoPainter extends Painter {
             rowSums[i] = log2OfNAminoAcids + rowSumTemp[i]; // R(i)
             if (rowSums[i] > maxR) {
                 maxR = rowSums[i];
+                centerDominates = (i == 7);
             }
         }
 
@@ -217,7 +263,7 @@ public class MotifLogoPainter extends Painter {
         }
 
         // adjusting height of the motif logos if necessary
-        if (usesMagicNumber) {
+        if (usesMagicNumber || centerDominates) {
             Double[] positionSpecificHeights = {0.0, 0.0, 0.0, 0.0,
                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
             boolean centralPositionDominates = true;
@@ -320,16 +366,16 @@ public class MotifLogoPainter extends Painter {
      *               otherwise left aligned to given X/Y.
      * @param font   The string's font.
      */
-    protected void drawString(String s, double x, double y, Font font,
-                              boolean center) {
+    protected void drawString(String s, double x, double y, Font font, boolean center) {
         image.setFont(font);
+
         String lines[] = s.split("\n");
         for (int i = 0; i < lines.length; ++i) {
             String line = lines[i];
             Rectangle2D rect = getStringBoundsRect(line, font);
 
             int textHeight = (int) (rect.getHeight());
-            int textWidth = (int) (rect.getWidth());
+            int textWidth = (int) (rect.getWidth()); //pY, pT, pS
             int lineHeight = textHeight / 2 + getFontHeight(font);
             int xx = (int) x;
             if (center) {
