@@ -24,12 +24,7 @@ import edu.mit.scansite.client.ui.widgets.features.ProteinScanResultSiteTable;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.URIs;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
-import edu.mit.scansite.shared.transferobjects.LightWeightLocalization;
-import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
-import edu.mit.scansite.shared.transferobjects.Parameter;
-import edu.mit.scansite.shared.transferobjects.Protein;
-import edu.mit.scansite.shared.transferobjects.ScanResults;
-import edu.mit.scansite.shared.transferobjects.User;
+import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.shared.transferobjects.states.ScanProteinResultPageState;
 
 /**
@@ -220,13 +215,43 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
     private void setProteinPlot(ScanResults result) {
         if (result.isShowDomains() && result.getDomainPositions() != null
                 && !result.getDomainPositions().isEmpty()) {
-            domainPanel.add(new DomainInformationWidget(result.getProtein(), result
-                    .getDomainPositions()));
+            domainPanel.add(new DomainInformationWidget(result.getProtein(),
+                    result.getDomainPositions()));
         }
+
+//        <table>
+//            <tr>
+//                <td><strong>Full Domain Name</strong></td>
+//                <td><strong>IPR Code</strong></td>
+//                <td><strong>Alternative Name</strong></td>
+//            </tr>
+//            <tr>
+//                <td></td>
+//                <td><a href="http://www.ebi.ac.uk/interpro/entry/"></a></td>
+//                <td></td>
+//            </tr>
+//        </table>
+
+        List<DomainPosition> domainPositions = result.getDomainPositions();
+        String domainDataTable = "<br/><br/>";
+        domainDataTable += "<table><tr>";
+        domainDataTable += "<td><strong>Full Domain Name</strong></td>";
+        domainDataTable += "<td><strong>IPR Code</strong></td>";
+        domainDataTable += "<td><strong>Alternative Name</strong></td>";
+
+        for (DomainPosition domainPosition : domainPositions) {
+            domainDataTable += "</tr><tr><td>" + domainPosition.getName() + "</td>";
+            domainDataTable += "<td><a href=\"http://www.ebi.ac.uk/interpro/entry/"
+                    + domainPosition.getIPRCode() + "\">"
+                    + domainPosition.getIPRCode() + "</a></td>";
+            domainDataTable += "<td>" + domainPosition.getAlternativeName() + "</td>";
+        }
+
+        domainDataTable += "</tr></table><br/>";
+
         if (result.getImagePath() != null) {
             DOM.getElementById("proteinPlot").setInnerHTML(
-                    "<img alt=\"protein plot\" src=\"" + result.getImagePath()
-                            + "\"/>");
+                    "<img alt=\"protein plot\" src=\"" + result.getImagePath() + "\"/>" + domainDataTable);
         }
     }
 

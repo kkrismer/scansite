@@ -13,6 +13,8 @@ public class DomainPosition implements IsSerializable, Comparable<DomainPosition
   private String name;
   private String method;
   private String domainId;
+  private String IPRCode;
+  private String alternativeName;
   private int colorR = -1;
   private int colorG = -1;
   private int colorB = -1;
@@ -20,12 +22,14 @@ public class DomainPosition implements IsSerializable, Comparable<DomainPosition
   public DomainPosition() {
   }
   
-  public DomainPosition(int from, int to, String name, String method, String id) {
+  public DomainPosition(int from, int to, String name, String method, String id, String IPRCode, String alternativeName) {
     this.from = from;
     this.to = to;
     this.name = name;
     this.method = method;
     this.domainId = id;
+    this.IPRCode = IPRCode;
+    this.alternativeName = alternativeName;
   }
   
   public int getFrom() {
@@ -66,6 +70,22 @@ public class DomainPosition implements IsSerializable, Comparable<DomainPosition
   
   public void setDomainId(String domainId) {
     this.domainId = domainId;
+  }
+
+  public String getIPRCode() {
+    return IPRCode;
+  }
+
+  public void setIPRCode(String IPRCode) {
+    this.IPRCode = IPRCode;
+  }
+
+  public String getAlternativeName() {
+    return alternativeName;
+  }
+
+  public void setAlternativeName(String alternativeName) {
+    this.alternativeName = alternativeName;
   }
 
   public int getColorR() {

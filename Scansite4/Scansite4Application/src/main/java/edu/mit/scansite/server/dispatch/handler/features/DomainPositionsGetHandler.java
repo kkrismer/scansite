@@ -52,9 +52,8 @@ public class DomainPositionsGetHandler implements
 					DomainLocator domainLocator = DomainLocatorFactory
 							.getDomainLocator();
 					domainLocator.init();
-					domainPositions = domainLocator
-							.getDomainPositions(contextProvider.get()
-									.getRealPath("/"), sequence);
+					domainPositions = domainLocator.getDomainPositions(contextProvider
+							.get().getRealPath("/"), sequence);
 				} catch (DomainLocatorException e) {
 					domainPositions = null;
 				}

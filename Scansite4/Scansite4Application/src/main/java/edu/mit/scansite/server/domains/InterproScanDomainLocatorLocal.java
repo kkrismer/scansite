@@ -23,6 +23,7 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 	private static final String CMD_IN = " -i ";
 	private static final String CMD_OUT = " -o ";
 	private static final String CMD_APPS = " -appl Pfam ";
+	private static final String CMD_IPR  = "-iprlookup ";
 	private static final String CMD_END = "-t p -f TSV -u ./";
 	//feel free to adjust the memory use to your preferences
 	private static final String JAVA_CMD = "java -Xms512M -Xmx2048M -jar interproscan-5.jar";
@@ -62,7 +63,8 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			writer.close();
 			
 			String iprDir = reader.get(CFG_IPRSCAN_BIN);
-			String command = JAVA_CMD + CMD_IN + localFilePath + CMD_OUT + localOutFilePath + CMD_APPS + CMD_END;
+			String command = JAVA_CMD + CMD_IN + localFilePath + CMD_OUT
+					+ localOutFilePath + CMD_APPS + CMD_IPR + CMD_END;
 
 			Process logProcess = Runtime.getRuntime().exec("cat " + localFilePath);
 			int catExitVal = logProcess.waitFor();
@@ -113,16 +115,13 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			int exitVal = p.waitFor();
 			f.delete();
 
-			ArrayList<DomainPosition> domains = new ArrayList<DomainPosition>();
 			if (exitVal == 0) {
-				domains = parseInterproScanOutputRAW(localOutFilePath);
+				return parseInterproScanOutputRAW(localOutFilePath);
 			} else {
 				throw new DomainLocatorException(
 						"Failed to run iprscan! Call:\n" + command
-								+ "\nexit code " + String.valueOf(exitVal)
-								+ ": ");
+								+ "\nexit code " + String.valueOf(exitVal) + ": ");
 			}
-			return domains;
 		} catch (DomainLocatorException e) {
 			logger.error(e.toString());
 			throw e;
@@ -135,12 +134,14 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 	private ArrayList<DomainPosition> parseInterproScanOutputRAW(
 			String localOutputFilePath) throws DomainLocatorException {
 		final String SPLIT_PATTERN = "\t";
-		final int LINEDATA_LENGTH = 11;
+		final int LINEDATA_LENGTH = 11+2; //IPR code and alternative name
 		final int IDX_METHOD = 3;
 		final int IDX_NAME = 5;
 		final int IDX_START = 6;
 		final int IDX_END = 7;
 		final int IDX_ID = 4;
+		final int IDX_IPR = 11;
+		final int IDX_ALT = 12;
 		final String NO_DESC = "no description";
 		ArrayList<DomainPosition> domains = new ArrayList<DomainPosition>();
 		File f = new File(localOutputFilePath);
@@ -150,13 +151,15 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			while (line != null) {
 				String[] lineData = line.split(SPLIT_PATTERN);
 				if (lineData != null && lineData.length == LINEDATA_LENGTH) {
-					String name = lineData[IDX_NAME].equalsIgnoreCase(NO_DESC) ? lineData[IDX_ID]
-							: lineData[IDX_NAME];
+					String name = lineData[IDX_NAME].equalsIgnoreCase(NO_DESC)
+                            ? lineData[IDX_ID] : lineData[IDX_NAME];
 					String id = lineData[IDX_ID];
+					String IPRCode = lineData[IDX_IPR];
+					String alternativeName = lineData[IDX_ALT];
 					domains.add(new DomainPosition(Integer
 							.valueOf(lineData[IDX_START]), Integer
 							.valueOf(lineData[IDX_END]), name,
-							lineData[IDX_METHOD], id));
+							lineData[IDX_METHOD], id, IPRCode, alternativeName));
 				}
 				line = reader.readLine();
 			}
