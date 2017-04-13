@@ -131,7 +131,7 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 		}
 	}
 
-	private ArrayList<DomainPosition> parseInterproScanOutputRAW(
+	public static ArrayList<DomainPosition> parseInterproScanOutputRAW(
 			String localOutputFilePath) throws DomainLocatorException {
 		final String SPLIT_PATTERN = "\t";
 		final int LINEDATA_LENGTH = 11+2; //IPR code and alternative name
@@ -167,7 +167,6 @@ public class InterproScanDomainLocatorLocal extends DomainLocator {
 			f.delete();
 			return domains;
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
 			throw new DomainLocatorException(e);
 		}
 	}

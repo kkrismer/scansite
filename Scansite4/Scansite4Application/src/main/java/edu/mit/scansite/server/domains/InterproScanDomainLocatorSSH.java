@@ -14,6 +14,8 @@ import edu.mit.scansite.server.dataaccess.ssh.SshConnector.SshResult;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.transferobjects.DomainPosition;
 
+import static edu.mit.scansite.server.domains.InterproScanDomainLocatorLocal.parseInterproScanOutputRAW;
+
 /**
  * @author Tobieh
  */
@@ -88,40 +90,5 @@ public class InterproScanDomainLocatorSSH extends DomainLocator {
 		}
 	}
 
-	private ArrayList<DomainPosition> parseInterproScanOutputRAW(
-			String localOutputFilePath) throws DomainLocatorException {
-		final String SPLIT_PATTERN = "\t";
-		final int LINEDATA_LENGTH = 11;
-		final int IDX_METHOD = 3;
-		final int IDX_NAME = 5;
-		final int IDX_START = 6;
-		final int IDX_END = 7;
-		final int IDX_ID = 4;
-		final String NO_DESC = "no description";
-		ArrayList<DomainPosition> domains = new ArrayList<DomainPosition>();
-		File f = new File(localOutputFilePath);
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(f));
-			String line = reader.readLine();
-			while (line != null) {
-				String[] lineData = line.split(SPLIT_PATTERN);
-				if (lineData != null && lineData.length == LINEDATA_LENGTH) {
-					String name = lineData[IDX_NAME].equalsIgnoreCase(NO_DESC) ? lineData[IDX_ID]
-							: lineData[IDX_NAME];
-					String id = lineData[IDX_ID];
-					domains.add(new DomainPosition(Integer
-							.valueOf(lineData[IDX_START]), Integer
-							.valueOf(lineData[IDX_END]), name,
-							lineData[IDX_METHOD], id));
-				}
-				line = reader.readLine();
-			}
-			reader.close();
-			f.delete();
-			return domains;
-		} catch (Exception e) {
-			throw new DomainLocatorException(e);
-		}
-	}
 
 }

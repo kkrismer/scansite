@@ -22,7 +22,8 @@ public class DomainPosition implements IsSerializable, Comparable<DomainPosition
   public DomainPosition() {
   }
   
-  public DomainPosition(int from, int to, String name, String method, String id, String IPRCode, String alternativeName) {
+  public DomainPosition(int from, int to, String name, String method,
+                        String id, String IPRCode, String alternativeName) {
     this.from = from;
     this.to = to;
     this.name = name;
