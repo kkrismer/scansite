@@ -2,9 +2,8 @@ package edu.mit.scansite.server.updater;
 
 import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.RunEvidenceInserter;
+import edu.mit.scansite.server.motifinserter.RunMotifCentralPositionValueInserter;
 import edu.mit.scansite.server.motifinserter.RunMotifInserter;
-import edu.mit.scansite.server.updater.RunSequenceModifier;
-import edu.mit.scansite.server.updater.RunUpdater;
 import edu.mit.scansite.shared.DatabaseException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -37,6 +36,8 @@ public class RunDatabaseInsertionManager {
 
     private static final String mammalFileIdentifier = "-moma";
     private static final String yeastFileIdentifier = "-moye";
+    private static final String modifiedFileIdentifier = "-momo";
+    private static final String originalValueFilesIdentifier = "-orig";
     private static final String emailIdentifier = "-mail";
     private static final String evidenceIdentifier = "-evid";
     private static final String helpIdentifier = "-help";
@@ -44,12 +45,16 @@ public class RunDatabaseInsertionManager {
 
     private static String motifMammalFile;
     private static String motifYeastFile;
+    private static String motifPTMFile;
+    private static String originalPTMMotifsPath;
     private static String motifEmail;
     private static String evidenceFile;
     private static String sqlScriptFile;
 
     private static boolean isMammal = false;
     private static boolean isYeast = false;
+    private static boolean isPTM  = false;
+    private static boolean isOrig = false;
     private static boolean isMail = false;
     private static boolean isEvid = false;
     private static boolean isHelp = false;
@@ -75,15 +80,18 @@ public class RunDatabaseInsertionManager {
         String[] updaterParams = new String[0];
         String[] motifMammalsParams = new String[2];
         String[] motifYeastParams = new String[2];
+        String[] motifPTMParams = new String[2];
+        String[] motifOrigParam = new String[1];
         String[] evidenceParams = new String[1];
 
         String exampleCall = "Parameter arguments should be given like:" +
                 " -moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
-                " -mail krismer@mit.edu -evid misc/siteEvidence/evidence.txt" +
-                " -msql misc/database/scansiteDb.sql";
+                " -mail tbernwin@mit.edu -evid misc/siteEvidence/evidence.txt" +
+                " -msql misc/database/scansiteDb.sql -momo misc/motifs/motifsPTM" +
+                " -orig misc/motifs/originalPSSMvalues";
 
         for (String arg : args) {
-            if (isMammal || isYeast || isMail || isEvid || isScript) {
+            if (isMammal || isYeast || isMail || isEvid || isScript || isPTM || isOrig) {
                 if (!assignParam(arg)) {
                     logger.error("ERROR! A parameter could not be assigned!\n" + exampleCall);
                     return;
@@ -112,6 +120,12 @@ public class RunDatabaseInsertionManager {
                 case sqlScriptIdentifier:
                     isScript = true;
                     break;
+                case modifiedFileIdentifier:
+                    isPTM = true;
+                    break;
+                case originalValueFilesIdentifier:
+                    isOrig = true;
+                    break;
             }
         }
 
@@ -119,17 +133,25 @@ public class RunDatabaseInsertionManager {
         motifMammalsParams[1] = motifEmail;
         motifYeastParams[0] = motifYeastFile;
         motifYeastParams[1] = motifEmail;
+        motifPTMParams[0] = motifPTMFile;
+        motifPTMParams[1] = motifEmail;
+
         evidenceParams[0] = evidenceFile;
+        motifOrigParam[0] = originalPTMMotifsPath;
 
         String errorFile = "";
         if (motifMammalFile == null || motifMammalFile.isEmpty()) {
-            errorFile += "the Motif file (mammals)\n";
+            errorFile += "The Motif file (mammals)\n";
         } else if (motifYeastFile == null || motifYeastFile.isEmpty()) {
             errorFile += "The Motif file (yeast)\n";
         } else if (motifEmail == null || motifEmail.isEmpty()) {
             errorFile += "User email for motif runs\n";
         } else if (evidenceFile == null || evidenceFile.isEmpty()) {
             errorFile += "The evidence file\n";
+        } else if (motifPTMFile == null || motifPTMFile.isEmpty()) {
+            errorFile += "The Motif file (PTMs)";
+        } else if (originalPTMMotifsPath == null || originalPTMMotifsPath.isEmpty()) {
+            errorFile += "The original PSSMs path";
         }
 
         cleanTempFiles();
@@ -174,6 +196,11 @@ public class RunDatabaseInsertionManager {
             logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
             RunMotifInserter.main(motifYeastParams);
 
+            logger.info("Running \"RunMotifInserter\" to insert PTM Motifs...");
+            RunMotifInserter.main(motifPTMParams);
+
+            logger.info("Running \"RunMotifCentralPositionValueInserter\" to insert actual motif values...");
+            RunMotifCentralPositionValueInserter.main(motifOrigParam);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
@@ -316,6 +343,14 @@ public class RunDatabaseInsertionManager {
             sqlScriptFile = value;
             isScript = false;
             return !sqlScriptFile.startsWith("<");
+        } else if (isPTM) {
+            motifPTMFile = value;
+            isPTM = false;
+            return !motifPTMFile.startsWith("<");
+        } else if (isOrig) {
+            originalPTMMotifsPath = value;
+            isOrig = false;
+            return !originalPTMMotifsPath.startsWith("<");
         }
         return false;
     }
