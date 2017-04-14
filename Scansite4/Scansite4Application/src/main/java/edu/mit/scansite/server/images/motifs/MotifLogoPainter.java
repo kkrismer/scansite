@@ -201,6 +201,9 @@ public class MotifLogoPainter extends Painter {
                 if (aa.isModifiedAa()) {
                     displayAminoAcid = modValueDiffersFromOriginal(aa);
                 }
+                if (aa.equals(AminoAcid.O) || aa.equals(AminoAcid.U)) {
+                    displayAminoAcid = false;
+                }
                 if (displayAminoAcid) {
                     singleAas.add(aa);
                 }

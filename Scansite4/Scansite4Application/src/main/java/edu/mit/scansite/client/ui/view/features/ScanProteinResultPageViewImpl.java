@@ -250,7 +250,7 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
 
             domainDataTable += "</tr></table><br/>";
         }
-        
+
         if (result.getImagePath() != null) {
             DOM.getElementById("proteinPlot").setInnerHTML(
                     "<img alt=\"protein plot\" src=\"" + result.getImagePath() + "\"/>" + domainDataTable);
