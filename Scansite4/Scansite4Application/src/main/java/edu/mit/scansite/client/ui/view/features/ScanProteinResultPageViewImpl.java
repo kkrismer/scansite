@@ -213,11 +213,12 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
     }
 
     private void setProteinPlot(ScanResults result) {
+        String domainDataTable = "";
         if (result.isShowDomains() && result.getDomainPositions() != null
                 && !result.getDomainPositions().isEmpty()) {
             domainPanel.add(new DomainInformationWidget(result.getProtein(),
                     result.getDomainPositions()));
-        }
+
 
 //        <table>
 //            <tr>
@@ -232,23 +233,24 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
 //            </tr>
 //        </table>
 
-        List<DomainPosition> domainPositions = result.getDomainPositions();
-        String domainDataTable = "<br/><br/>";
-        domainDataTable += "<table><tr>";
-        domainDataTable += "<td><strong>Full Domain Name</strong></td>";
-        domainDataTable += "<td><strong>IPR Code</strong></td>";
-        domainDataTable += "<td><strong>Alternative Name</strong></td>";
+            List<DomainPosition> domainPositions = result.getDomainPositions();
+            domainDataTable += "<br/><br/>";
+            domainDataTable += "<table><tr>";
+            domainDataTable += "<td><strong>Full Domain Name</strong></td>";
+            domainDataTable += "<td><strong>IPR Code</strong></td>";
+            domainDataTable += "<td><strong>Alternative Name</strong></td>";
 
-        for (DomainPosition domainPosition : domainPositions) {
-            domainDataTable += "</tr><tr><td>" + domainPosition.getName() + "</td>";
-            domainDataTable += "<td><a target=\"_blank\" href=\"http://www.ebi.ac.uk/interpro/entry/"
-                    + domainPosition.getIPRCode() + "\">"
-                    + domainPosition.getIPRCode() + "</a></td>";
-            domainDataTable += "<td>" + domainPosition.getAlternativeName() + "</td>";
+            for (DomainPosition domainPosition : domainPositions) {
+                domainDataTable += "</tr><tr><td>" + domainPosition.getName() + "</td>";
+                domainDataTable += "<td><a target=\"_blank\" href=\"http://www.ebi.ac.uk/interpro/entry/"
+                        + domainPosition.getIPRCode() + "\">"
+                        + domainPosition.getIPRCode() + "</a></td>";
+                domainDataTable += "<td>" + domainPosition.getAlternativeName() + "</td>";
+            }
+
+            domainDataTable += "</tr></table><br/>";
         }
-
-        domainDataTable += "</tr></table><br/>";
-
+        
         if (result.getImagePath() != null) {
             DOM.getElementById("proteinPlot").setInnerHTML(
                     "<img alt=\"protein plot\" src=\"" + result.getImagePath() + "\"/>" + domainDataTable);

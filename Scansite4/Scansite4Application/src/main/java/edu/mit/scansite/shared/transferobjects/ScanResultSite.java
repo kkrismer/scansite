@@ -88,7 +88,7 @@ public class ScanResultSite implements IsSerializable {
     /**
      * Sets the sites position.
      *
-     * @param po The position of the site (0 <= position < sequenceLength)
+     * @param position The position of the site (0 <= position < sequenceLength)
      */
     public void setPosition(int position) {
         this.position = position;
@@ -115,7 +115,7 @@ public class ScanResultSite implements IsSerializable {
      * protein's sequence.
      */
     public String getSite() {
-        return protein.getSequence().charAt(position)
+        return Character.toUpperCase(protein.getSequence().charAt(position))
                 + String.valueOf(position + 1);
     }
 
