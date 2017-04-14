@@ -22,12 +22,8 @@
 		</fieldset>
 		<div class="note">
 			<strong>Note about motif logos:</strong>
-			We enabled Scansite4 to also match quite uncommon amino acids, like
-			Pyrrolysine (O) and Selenocysteine (U) which use the affinities of
-			Lysine (K) and Cysteine (C) if no specific values for these amino acids
-			are given, respectively. In addition, you might notice '$' or '!' in some
-			motif logos: If binding motifs have some preference for an amino acids
-			terminus, '$' is used to represent the N-terminus, and '!' the C-Terminus.
+			You might notice '$' or '!' in some motif logos: If binding motifs have some preference
+			for an amino acids terminus, '$' is used to represent the N-terminus, and '!' the C-Terminus.
             <br/><br/>
 			<table>
                 <tr>
