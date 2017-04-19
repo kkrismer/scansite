@@ -54,6 +54,7 @@ public class Updater {
 					updaterConfig.getInvalidFilePrefix(), db);
 			es.execute(updater);
 			logger.info("Running updater: " + updaterClass);
+			logger.info("Setting up: " + updater.getDatabase().getDataSource().getDisplayName());
 			es.shutdown();
 			try {
 				es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
