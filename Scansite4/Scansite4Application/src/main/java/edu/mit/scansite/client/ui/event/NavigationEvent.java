@@ -17,11 +17,12 @@ public class NavigationEvent extends GwtEvent<NavigationEventHandler> {
 				"scanOrthologsResult"), FEATURE_PREDICT_LOCALIZATION(
 				"predictLocalization"), FEATURE_PREDICT_LOCALIZATION_RESULT(
 				"predictLocalizationResult"), FEATURE_CALC_MOLWEIGHT(
-				"calcMolWeight"), FEATURE_CALC_COMPOSITION("calcComposition"), MOTIFS(
-				"motifs"), TUTORIAL("tutorial"), ABOUT("about"), FAQ("faq"), CITE(
-				"cite"), FEEDBACK("feedback"), ADMIN("admin"), ADMIN_MOTIF(
-				"motifMgmt"), ADMIN_MOTIF_GROUP("motifGroupMgmt"), ADMIN_NEWS(
-				"newsMgmt"), ADMIN_USER("userMgmt");
+				"calcMolWeight"), FEATURE_CALC_COMPOSITION("calcComposition"), MOTIFS("motifs"),
+				TUTORIAL("tutorial"), PSCAN_TUTORIAL("scanProteinTutorial"),
+				DBSEARCH_TUTORIAL("scanDbTutorial"), SEQMATCH_TUTORIAL("scanSeqResultTutorial"),
+				ABOUT("about"), FAQ("faq"), CITE("cite"), FEEDBACK("feedback"), ADMIN("admin"),
+				ADMIN_MOTIF("motifMgmt"), ADMIN_MOTIF_GROUP("motifGroupMgmt"),
+				ADMIN_NEWS("newsMgmt"), ADMIN_USER("userMgmt");
 
 		String id;
 

@@ -69,6 +69,12 @@ public class Breadcrumbs {
 			+ "\">Databases and Motifs</a>";
 	public static final String TUTORIAL = BASE + SEPARATOR + "<a href=\"#"
 			+ NavigationEvent.PageId.TUTORIAL.getId() + "\">Tutorial</a>";
+	public static final String PSCAN_TUTORIAL = BASE + SEPARATOR + "<a href=\"#"
+            + NavigationEvent.PageId.PSCAN_TUTORIAL.getId() +  "\">Protein Scan Tutorial</a>";
+	public static final String DBSEARCH_TUTORIAL = BASE + SEPARATOR + "<a href=\"#"
+            + NavigationEvent.PageId.DBSEARCH_TUTORIAL.getId() +  "\">Protein Scan Tutorial</a>";
+	public static final String SEQMATCH_TUTORIAL = BASE + SEPARATOR + "<a href=\"#"
+            + NavigationEvent.PageId.SEQMATCH_TUTORIAL.getId() +  "\">Protein Scan Tutorial</a>";
 	public static final String ABOUT = BASE + SEPARATOR + "<a href=\"#"
 			+ NavigationEvent.PageId.ABOUT.getId() + "\">About</a>";
 	public static final String FAQ = BASE + SEPARATOR + "<a href=\"#"

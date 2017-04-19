@@ -50,8 +50,23 @@
 					targetHistoryToken="{MOTIFS.getId}" />
 			</li>
 			<li id="tutorialLink">
-				<g:Hyperlink ui:field="tutorialButton" text="Tutorial"
+				<h3>Tutorials</h3>
+				<g:Hyperlink ui:field="tutorialButton" text="Tutorial Overview"
 					targetHistoryToken="{TUTORIAL.getId}" />
+				<ul>
+					<li id="PScanTutorialLink">
+						<g:Hyperlink ui:field="tutorialPScanButton" text="Protein Scan"
+									 targetHistoryToken="{PSCAN_TUTORIAL.getId}" />
+					</li>
+					<li id="dbSearchTutorialLink">
+						<g:Hyperlink ui:field="tutorialDBSearchButton" text="Database Search"
+									 targetHistoryToken="{DBSEARCH_TUTORIAL.getId}" />
+					</li>
+					<li id="SeqMatchTutorialLink">
+						<g:Hyperlink ui:field="tutorialSeqMatchButton" text="Sequence Match"
+									 targetHistoryToken="{SEQMATCH_TUTORIAL.getId}" />
+					</li>
+				</ul>
 			</li>
 			<li id="adminLink" style="display: none">
 				<h3>Administration Area</h3>

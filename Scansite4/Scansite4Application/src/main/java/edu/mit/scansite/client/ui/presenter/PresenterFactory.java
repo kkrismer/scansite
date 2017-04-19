@@ -29,7 +29,10 @@ import edu.mit.scansite.client.ui.presenter.footer.FeedbackPagePresenter;
 import edu.mit.scansite.client.ui.presenter.main.HomePagePresenter;
 import edu.mit.scansite.client.ui.presenter.main.MotifsPagePresenter;
 import edu.mit.scansite.client.ui.presenter.main.NewsPagePresenter;
-import edu.mit.scansite.client.ui.presenter.main.TutorialPagePresenter;
+import edu.mit.scansite.client.ui.presenter.tutorial.ScanProteinTutorialPagePresenter;
+import edu.mit.scansite.client.ui.presenter.tutorial.SearchDbTutorialPagePresenter;
+import edu.mit.scansite.client.ui.presenter.tutorial.SequenceMatchTutorialPagePresenter;
+import edu.mit.scansite.client.ui.presenter.tutorial.TutorialPagePresenter;
 import edu.mit.scansite.client.ui.view.NotFoundPageView;
 import edu.mit.scansite.client.ui.view.PageView;
 import edu.mit.scansite.client.ui.view.admin.MotifGroupMgmtPageView;
@@ -74,7 +77,10 @@ import edu.mit.scansite.client.ui.view.main.HomePageView;
 import edu.mit.scansite.client.ui.view.main.MotifsPageView;
 import edu.mit.scansite.client.ui.view.main.MotifsPageViewImpl;
 import edu.mit.scansite.client.ui.view.main.NewsPageView;
-import edu.mit.scansite.client.ui.view.main.TutorialPageView;
+import edu.mit.scansite.client.ui.view.tutorial.ScanProteinTutorialPageView;
+import edu.mit.scansite.client.ui.view.tutorial.SearchDbTutorialPageView;
+import edu.mit.scansite.client.ui.view.tutorial.SequenceMatchTutorialPageView;
+import edu.mit.scansite.client.ui.view.tutorial.TutorialPageView;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
 import edu.mit.scansite.shared.dispatch.features.OrthologScanResult;
 import edu.mit.scansite.shared.dispatch.features.PredictLocalizationResult;
@@ -289,10 +295,18 @@ public class PresenterFactory {
 				.equalsIgnoreCase(NavigationEvent.PageId.MOTIFS.getId())) {
 			view = new MotifsPageViewImpl(user);
 			presenter = new MotifsPagePresenter((MotifsPageView) view);
-		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.TUTORIAL
-				.getId())) {
+		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.TUTORIAL.getId())) {
 			view = new TutorialPageView();
 			presenter = new TutorialPagePresenter((TutorialPageView) view);
+		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.PSCAN_TUTORIAL.getId())) {
+			view = new ScanProteinTutorialPageView();
+			presenter = new ScanProteinTutorialPagePresenter((ScanProteinTutorialPageView) view);
+		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.DBSEARCH_TUTORIAL.getId())) {
+			view = new SearchDbTutorialPageView();
+			presenter = new SearchDbTutorialPagePresenter((SearchDbTutorialPageView) view);
+		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.SEQMATCH_TUTORIAL.getId())) {
+			view = new SequenceMatchTutorialPageView();
+			presenter = new SequenceMatchTutorialPagePresenter((SequenceMatchTutorialPageView) view);
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ABOUT.getId())) {
 			view = new AboutPageView();
 			presenter = new AboutPagePresenter((AboutPageView) view);

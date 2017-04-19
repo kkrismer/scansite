@@ -1,9 +1,9 @@
-package edu.mit.scansite.client.ui.presenter.main;
+package edu.mit.scansite.client.ui.presenter.tutorial;
 
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import edu.mit.scansite.client.ui.presenter.Presenter;
-import edu.mit.scansite.client.ui.view.main.TutorialPageView;
+import edu.mit.scansite.client.ui.view.tutorial.TutorialPageView;
 
 /**
  * @author Tobieh

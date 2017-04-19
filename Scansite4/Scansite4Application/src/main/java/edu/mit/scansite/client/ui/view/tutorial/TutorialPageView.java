@@ -1,4 +1,4 @@
-package edu.mit.scansite.client.ui.view.main;
+package edu.mit.scansite.client.ui.view.tutorial;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
