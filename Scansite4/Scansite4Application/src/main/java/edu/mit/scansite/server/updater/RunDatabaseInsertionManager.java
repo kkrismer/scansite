@@ -191,10 +191,10 @@ public class RunDatabaseInsertionManager {
             RunSequenceModifier.run();
 
             logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
-            //RunMotifInserter.main(motifMammalsParams);
+            RunMotifInserter.main(motifMammalsParams);
 
             logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
-            //RunMotifInserter.main(motifYeastParams);
+            RunMotifInserter.main(motifYeastParams);
 
             logger.info("Running \"RunMotifInserter\" to insert PTM Motifs...");
             RunMotifInserter.main(motifPTMParams);
