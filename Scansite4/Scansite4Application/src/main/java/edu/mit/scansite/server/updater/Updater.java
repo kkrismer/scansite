@@ -55,6 +55,7 @@ public class Updater {
 			es.execute(updater);
 			logger.info("Running updater: " + updaterClass);
 			logger.info("Setting up: " + updater.getDatabase().getDataSource().getDisplayName());
+			logger.info("Data source link: " + updater.getDatabase().getUrl());
 			es.shutdown();
 			try {
 				es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);

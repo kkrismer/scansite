@@ -152,9 +152,39 @@
 
 			<h4>Development, Web Design and System Administration</h4>
 			<b> Scansite 4</b>
-			<p>Konstantin Krismer and Thomas Bernwinkler</p>
-			<b> Scansite 3 </b>
-			<p>Tobias Ehrenberger</p>
+			<table>
+				<tr>
+					<td colspan="2"><center><u>Developers</u></center></td>
+				</tr>
+				<tr>
+					<td>
+                        <ul>
+                            <li>Konstantin Krismer</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Thomas Bernwinkler</li>
+                        </ul>
+                    </td>
+				</tr>
+                <tr>
+                    <td colspan="2"><center><u>Testing and content contribution</u></center></td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>Anne Van Vlimmeren</li>
+                            <li>Pau Creixell</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Bert van de Kooij</li>
+                        </ul>
+                    </td>
+                </tr>
+			</table>
 			<b> Preceding versions </b>
 			<table>
 				<tr>

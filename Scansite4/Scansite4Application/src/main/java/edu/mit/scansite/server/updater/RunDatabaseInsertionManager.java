@@ -191,10 +191,10 @@ public class RunDatabaseInsertionManager {
             RunSequenceModifier.run();
 
             logger.info("Running \"RunMotifInserter\" to insert mammal Motifs...");
-            RunMotifInserter.main(motifMammalsParams);
+            //RunMotifInserter.main(motifMammalsParams);
 
             logger.info("Running \"RunMotifInserter\" to insert yeast Motifs...");
-            RunMotifInserter.main(motifYeastParams);
+            //RunMotifInserter.main(motifYeastParams);
 
             logger.info("Running \"RunMotifInserter\" to insert PTM Motifs...");
             RunMotifInserter.main(motifPTMParams);
@@ -243,7 +243,8 @@ public class RunDatabaseInsertionManager {
      */
     private static void resetDatabase() throws SQLException, DatabaseException {
         String sqlCommands;
-        String inserts;
+        String userInserts;
+        String newsInserts;
         try {
             Charset enconding = StandardCharsets.UTF_8;
             byte[] content = Files.readAllBytes(Paths.get(sqlScriptFile));
@@ -253,9 +254,13 @@ public class RunDatabaseInsertionManager {
 
             int insertStart = sqlCommands.indexOf("INSERT INTO");
             int insertStop = sqlCommands.indexOf("CREATE TABLE", insertStart);
-            inserts = sqlCommands.substring(insertStart, insertStop);
-            sqlCommands = sqlCommands.replace(inserts, "");
+            userInserts = sqlCommands.substring(insertStart, insertStop);
+            sqlCommands = sqlCommands.replace(userInserts, "");
 
+            insertStart = sqlCommands.indexOf("INSERT INTO");
+            insertStop = sqlCommands.indexOf("CREATE TABLE", insertStart);
+            newsInserts = sqlCommands.substring(insertStart, insertStop);
+            sqlCommands = sqlCommands.substring(0, insertStart) + sqlCommands.substring(insertStop);
         } catch (IOException e) {
             logger.error("Could not read the SQL file for the database reset!");
             return;
@@ -273,7 +278,8 @@ public class RunDatabaseInsertionManager {
 
         final String endOfCommand = ";";
         runDatabaseCommands(stmt, sqlCommands, "CREATE TABLE", endOfCommand);
-        runDatabaseCommands(stmt, inserts, "INSERT INTO", endOfCommand);
+        runDatabaseCommands(stmt, userInserts, "INSERT INTO", endOfCommand);
+        runDatabaseCommands(stmt, newsInserts, "INSERT INTO", ");");
 
         stmt.close();
         conn.close();
@@ -306,7 +312,7 @@ public class RunDatabaseInsertionManager {
      */
     private static void runDatabaseCommands(Statement stmt, String sqlCommands, String beginOfCommand, String endOfCommand) throws SQLException {
         while (!sqlCommands.isEmpty()) {
-            String nextCommand = sqlCommands.substring(sqlCommands.indexOf(beginOfCommand), sqlCommands.indexOf(endOfCommand) + 1);
+            String nextCommand = sqlCommands.substring(sqlCommands.indexOf(beginOfCommand), sqlCommands.indexOf(endOfCommand) + endOfCommand.length());
             sqlCommands = sqlCommands.replace(nextCommand, "");
             while (sqlCommands.startsWith(" ") || sqlCommands.startsWith("\n") || sqlCommands.startsWith("\r")) {
                 sqlCommands = sqlCommands.substring(1);
