@@ -22,8 +22,8 @@ import java.util.List;
  */
 
 public class ExampleUtils {
-    public static String baseURL = "http://localhost:8080/";
-//    public static String baseURL = "http://scansite4.mit.edu/webservice/";
+//    public static String baseURL = "http://localhost:8080/";
+    public static String baseURL = "https://scansite4.mit.edu/webservice/";
     String baseUrl = "";
 
     public static void writeToFile(String content, String fileName) {
