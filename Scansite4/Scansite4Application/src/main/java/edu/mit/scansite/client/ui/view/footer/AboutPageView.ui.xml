@@ -169,13 +169,14 @@
                     </td>
 				</tr>
                 <tr>
-                    <td colspan="2"><center><u>Testing and content contribution</u></center></td>
+                    <td colspan="3"><center><u>Testing and content contribution</u></center></td>
                 </tr>
+            </table>
+            <table>
                 <tr>
                     <td>
                         <ul>
                             <li>Anne Van Vlimmeren</li>
-                            <li>Pau Creixell</li>
                         </ul>
                     </td>
                     <td>
@@ -183,8 +184,13 @@
                             <li>Bert van de Kooij</li>
                         </ul>
                     </td>
+                    <td>
+                        <ul>
+                            <li>Pau Creixell</li>
+                        </ul>
+                    </td>
                 </tr>
-			</table>
+            </table>
 			<b> Preceding versions </b>
 			<table>
 				<tr>
