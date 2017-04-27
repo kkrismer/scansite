@@ -157,14 +157,18 @@ public class Downloader {
 	 */
 	public String downloadString(URL fileUrl) throws ScansiteUpdaterException {
 		final int BUFFER_SIZE = 1024;
-		HttpsURLConnection URLConn = null;
 		InputStream instream = null;
 		StringBuilder s = new StringBuilder();
 		try {
 			byte[] buffer;
 
-			URLConn = prepareConnection(fileUrl);
-			instream = URLConn.getInputStream();
+			if(fileUrl.toString().startsWith("https")) {
+				HttpsURLConnection httpsConn = prepareConnection(fileUrl);
+				instream = httpsConn.getInputStream();
+			} else {
+				URLConnection httpConn = fileUrl.openConnection();
+				instream = httpConn.getInputStream();
+			}
 			buffer = new byte[BUFFER_SIZE];
 
 			@SuppressWarnings("unused")
@@ -174,16 +178,11 @@ public class Downloader {
 				s.append(String.valueOf(str));
 			}
 			return s.toString();
-		} catch (IOException e) {
+		} catch (IOException | NoSuchAlgorithmException
+                | KeyManagementException e) {
 			logger.error(e.getMessage(), e);
 			throw new ScansiteUpdaterException(e.getMessage(), e);
-		} catch (NoSuchAlgorithmException e) {
-            logger.error(e.getMessage(), e);
-            throw new ScansiteUpdaterException(e.getMessage(), e);
-        } catch (KeyManagementException e) {
-            logger.error(e.getMessage(), e);
-            throw new ScansiteUpdaterException(e.getMessage(), e);
-        } finally {
+		} finally {
 			try {
 				if (instream != null) {
 					instream.close();
