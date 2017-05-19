@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.mit.scansite.client.ui.event.NavigationEvent;
@@ -18,6 +19,7 @@ import edu.mit.scansite.client.ui.widgets.features.SequenceAlignmentTable;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.dispatch.features.OrthologScanResult;
 import edu.mit.scansite.shared.transferobjects.Parameter;
+import edu.mit.scansite.shared.transferobjects.SequenceAlignment;
 import edu.mit.scansite.shared.transferobjects.states.ScanOrthologsResultPageState;
 
 /**
@@ -121,10 +123,17 @@ public class ScanOrthologsResultPageViewImpl extends
 
 	private void initSequenceAlignmentTable(OrthologScanResult result) {
 		sequenceAlignmentFlowPanel.clear();
-		SequenceAlignmentTable sequenceAlignmentTable = new SequenceAlignmentTable(
-				result);
-		sequenceAlignmentTable.setWidth("100%");
-		sequenceAlignmentFlowPanel.add(sequenceAlignmentTable);
+        if (result.getSequenceAlignment() == null) {
+            HTML content = new HTML();
+            content.setHTML("<span style=\"color: orange\">Could not align sequences! Only a single sequence was available for the scan!</span>");
+            sequenceAlignmentFlowPanel.add(content);
+        } else {
+            SequenceAlignmentTable sequenceAlignmentTable =
+                    new SequenceAlignmentTable(result);
+            sequenceAlignmentTable.setWidth("100%");
+            sequenceAlignmentFlowPanel.add(sequenceAlignmentTable);
+        }
+
 	}
 
 	@Override

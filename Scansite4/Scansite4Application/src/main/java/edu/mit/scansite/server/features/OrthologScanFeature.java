@@ -278,11 +278,15 @@ public class OrthologScanFeature {
 				try {
 					List<ProteinSequence> downstreamSequences = getDownstreamSequences(siteRegions);
 					List<ProteinSequence> upstreamSequences = getUpstreamSequences(siteRegions);
-					Profile<ProteinSequence, AminoAcidCompound> downstreamProfile = Alignments
-							.getMultipleSequenceAlignment(downstreamSequences);
-					Profile<ProteinSequence, AminoAcidCompound> upstreamProfile = Alignments
-							.getMultipleSequenceAlignment(upstreamSequences);
-					result.setSequenceAlignment(combineAlignments(downstreamProfile, upstreamProfile, siteRegions));
+					if(downstreamSequences.size() > 1 && upstreamSequences.size() > 1) {
+						Profile<ProteinSequence, AminoAcidCompound> downstreamProfile = Alignments
+								.getMultipleSequenceAlignment(downstreamSequences);
+						Profile<ProteinSequence, AminoAcidCompound> upstreamProfile = Alignments
+								.getMultipleSequenceAlignment(upstreamSequences);
+						result.setSequenceAlignment(combineAlignments(downstreamProfile, upstreamProfile, siteRegions));
+					} else {
+					    result.setSequenceAlignment(null);
+                    }
 				} catch (CompoundNotFoundException ex) {
 					logger.error(ex.getMessage(), ex);
 					return; // todo check if this is ok?
