@@ -361,9 +361,9 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 			}
 			Double mw = site.getProtein().getMolecularWeight();
 			Double kMultiplier = 1000.0;
-			if (mw > kMultiplier) {
-				mw /= kMultiplier;
-			}
+			//if (mw > kMultiplier) {
+			mw /= kMultiplier;
+			//}
 			return ((mw == null) ? EMPTY_CELL_TEXT : String
 					.valueOf(NumberFormat.getFormat("0.00").format(mw)));
 		}

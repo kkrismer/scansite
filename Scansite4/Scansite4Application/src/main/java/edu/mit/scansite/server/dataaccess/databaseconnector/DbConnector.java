@@ -129,13 +129,35 @@ public class DbConnector {
      */
     public Connection getConnection() {
         Connection con = establishConnection();
-        while (con == null) { // RPC thread issue prevention
-            con = establishConnection();
-        }
+//        while (con == null) { // RPC thread issue prevention
+//            con = establishConnection();
+//        }
+        checkConnection(con);
         if (poolSize > 1) { //poolSize is reduced to 1 for database setup
             updateActiveConnectionNo(); // which is necessary for disabling auto commits and constraints
         }
         return con;
+    }
+
+    private Connection checkConnection (Connection connection) {
+        final int timeout = 3;
+        try {
+            while(connection == null || !connection.isValid(timeout)) {
+                if (connection != null) {
+                    connection.close();
+                }
+                connection = establishConnection();
+            }
+        } catch (SQLException e) {
+            logger.warn("Failed checking connection. Closing and reestablishing, if possible");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                logger.warn("Could not close connection after failed check. Trying to replace it anyway.");
+            }
+            connection = establishConnection();
+        }
+        return connection;
     }
 
 

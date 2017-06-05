@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
@@ -58,27 +59,75 @@ public class OrthologScanResultTable extends Composite {
 	private CellTable<Ortholog> resultTable;
 	private ListDataProvider<Ortholog> dataProvider = new ListDataProvider<Ortholog>();
 
-	private TextColumn<Ortholog> proteinInfoColumn = new TextColumn<Ortholog>() {
-		@Override
-		public String getValue(Ortholog match) {
-			if (match == null || match.getProtein() == null) {
-				return EMPTY_CELL_TEXT;
-			}
-			HashMap<String, Set<String>> annos = match.getProtein()
-					.getAnnotations();
-			String info = "";
-			for (String title : annos.keySet()) {
-				for (String val : annos.get(title)) {
-					info += val;
-					if (!val.endsWith(";")) {
-						info += ";";
+	private Column<Ortholog, String> proteinInfoColumn = getColumn(
+			new ClickableTextCell(), new GetValue<String>() {
+				@Override
+				public String getValue(Ortholog match) {
+					if (match == null || match.getProtein() == null
+							|| match.getProtein().getAnnotations() == null
+							|| match.getProtein().getAnnotations().isEmpty()) {
+						return EMPTY_CELL_TEXT;
 					}
-					info += " ";
+
+					if (match.getProtein().getAnnotations() == null) {
+						return EMPTY_CELL_TEXT;
+					} else {
+						String proteinInfo = getProteinInformation(match);
+						int skipLength = (new String("Description: ").length());
+						int maxLength = 50;
+						int substr = (proteinInfo.length() < maxLength ? proteinInfo.length() : maxLength);
+						proteinInfo = proteinInfo.substring(skipLength, substr);
+						proteinInfo += " (click to expand)";
+						return proteinInfo;
+					}
+				}
+			}, new FieldUpdater<Ortholog, String>() {
+				@Override
+				public void update(int index, Ortholog match, String value) {
+					String description = getProteinInformation(match);
+					description = description.replaceAll("Description: ", "<strong>Description:</strong> </br>");
+					description = description.replaceAll(";;", ";");
+					description = description.replaceAll(";", "</br>");
+					SafeHtmlBuilder builder = new SafeHtmlBuilder();
+					builder.appendHtmlConstant(description);
+
+					showPopupPanel(resultTable.getRowElement(index).getAbsoluteBottom(),
+							resultTable.getRowElement(index).getAbsoluteLeft(), builder.toSafeHtml());
+
+				}
+			});
+
+	private String getProteinInformation(Ortholog match) {
+		if (match != null && match.getProtein() != null
+				&& match.getProtein().getAnnotations() != null
+				&& !match.getProtein().getAnnotations().isEmpty()) {
+			StringBuilder s = new StringBuilder();
+			HashMap<String, Set<String>> anns = match.getProtein()
+					.getAnnotations();
+			for (String key : anns.keySet()) {
+				s.append(key.substring(0, 1).toUpperCase()).append(
+						key.substring(1));
+				if (anns.get(key).size() > 1) {
+					s.append('s');
+				}
+				s.append(": ");
+				boolean first = true;
+				for (String a : anns.get(key)) {
+					if (first) {
+						first = false;
+					} else {
+						s.append(", ");
+					}
+					s.append(a);
+				}
+				if (!key.endsWith(";")) {
+					s.append("; ");
 				}
 			}
-			return info;
+			return s.toString();
 		}
-	};
+		return "";
+	}
 
 	private TextColumn<Ortholog> mwColumn = new TextColumn<Ortholog>() {
 		@Override

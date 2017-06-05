@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
 import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
@@ -63,27 +64,75 @@ public class SequenceMatchResultTable extends Composite {
 	private boolean isCompatibleIdentifierType;
 	private User user;
 
-	private TextColumn<ProteinSequenceMatch> proteinInfoColumn = new TextColumn<ProteinSequenceMatch>() {
-		@Override
-		public String getValue(ProteinSequenceMatch match) {
-			if (match == null || match.getProtein() == null) {
-				return EMPTY_CELL_TEXT;
-			}
-			HashMap<String, Set<String>> annos = match.getProtein()
-					.getAnnotations();
-			String info = "";
-			for (String title : annos.keySet()) {
-				for (String val : annos.get(title)) {
-					info += val;
-					if (!val.endsWith(";")) {
-						info += ";";
-					}
-					info += " ";
-				}
-			}
-			return info;
-		}
-	};
+	private Column<ProteinSequenceMatch, String> proteinInfoColumn = getColumn(
+            new ClickableTextCell(), new GetValue<String>() {
+                @Override
+                public String getValue(ProteinSequenceMatch match) {
+                    if (match == null || match.getProtein() == null
+                            || match.getProtein().getAnnotations() == null
+                            || match.getProtein().getAnnotations().isEmpty()) {
+                        return EMPTY_CELL_TEXT;
+                    }
+
+                    if (match.getProtein().getAnnotations() == null) {
+                        return EMPTY_CELL_TEXT;
+                    } else {
+                        String proteinInfo = getProteinInformation(match);
+                        int skipLength = (new String("Description: ").length());
+                        int maxLength = 50;
+                        int substr = (proteinInfo.length() < maxLength ? proteinInfo.length() : maxLength);
+                        proteinInfo = proteinInfo.substring(skipLength, substr);
+                        proteinInfo += " (click to expand)";
+                        return proteinInfo;
+                    }
+                }
+            }, new FieldUpdater<ProteinSequenceMatch, String>() {
+                @Override
+                public void update(int index, ProteinSequenceMatch match, String value) {
+                    String description = getProteinInformation(match);
+                    description = description.replaceAll("Description: ", "<strong>Description:</strong> </br>");
+                    description = description.replaceAll(";;", ";");
+                    description = description.replaceAll(";", "</br>");
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    builder.appendHtmlConstant(description);
+
+                    showPopupPanel(resultTable.getRowElement(index).getAbsoluteBottom(),
+                            resultTable.getRowElement(index).getAbsoluteLeft(), builder.toSafeHtml());
+
+                }
+            });
+
+    private String getProteinInformation(ProteinSequenceMatch match) {
+        if (match != null && match.getProtein() != null
+                && match.getProtein().getAnnotations() != null
+                && !match.getProtein().getAnnotations().isEmpty()) {
+            StringBuilder s = new StringBuilder();
+            HashMap<String, Set<String>> anns = match.getProtein()
+                    .getAnnotations();
+            for (String key : anns.keySet()) {
+                s.append(key.substring(0, 1).toUpperCase()).append(
+                        key.substring(1));
+                if (anns.get(key).size() > 1) {
+                    s.append('s');
+                }
+                s.append(": ");
+                boolean first = true;
+                for (String a : anns.get(key)) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        s.append(", ");
+                    }
+                    s.append(a);
+                }
+                if (!key.endsWith(";")) {
+                    s.append("; ");
+                }
+            }
+            return s.toString();
+        }
+        return "";
+    }
 
 	private TextColumn<ProteinSequenceMatch> mwColumn = new TextColumn<ProteinSequenceMatch>() {
 		@Override
@@ -92,7 +141,10 @@ public class SequenceMatchResultTable extends Composite {
 				return EMPTY_CELL_TEXT;
 			}
 			Double mw = match.getProtein().getMolecularWeight();
-			return NumberFormat.getFormat("0.000").format(mw);
+			final Double kMultiplier = 1000.0;
+			mw /= kMultiplier;
+			return ((mw == null) ? EMPTY_CELL_TEXT : String
+					.valueOf(NumberFormat.getFormat("0.00").format(mw)));
 		}
 	};
 
@@ -103,7 +155,7 @@ public class SequenceMatchResultTable extends Composite {
 				return EMPTY_CELL_TEXT;
 			}
 			Double pI = match.getProtein().getpI();
-			return NumberFormat.getFormat("0.000").format(pI);
+			return NumberFormat.getFormat("0.00").format(pI);
 		}
 	};
 
@@ -321,7 +373,7 @@ public class SequenceMatchResultTable extends Composite {
 		}
 		resultTable.addColumn(proteinInfoColumn, "Protein Annotations",
 				"Protein Annotations");
-		resultTable.addColumn(mwColumn, "Molecular Weight", "Molecular Weight");
+		resultTable.addColumn(mwColumn, "Molecular Weight [kDa]", "Molecular Weight [kDa]");
 		resultTable.addColumn(piColumn, "Isoelectric Point",
 				"Isoelectric Point");
 		resultTable.addColumn(phosphoSitesColumn, "Motifs at expected sites",
