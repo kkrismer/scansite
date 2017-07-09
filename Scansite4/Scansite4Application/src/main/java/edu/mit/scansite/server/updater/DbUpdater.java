@@ -117,7 +117,7 @@ public abstract class DbUpdater implements Runnable {
 		logger.info("transliterating files to temporary scansite-specific files (extracting information)");
 		if (!f.exists()) {
 			for (String dbFileName : dbFileNames) {
-				logger.info("Transliterating file: {}\n", dbFileName);
+				logger.info("Transliterating file: {}", dbFileName);
 				initReader(dbFileName);
 				FileTransliterator transliterator = getDbFileTransliterator(
 						tempFilePath, getFilePath(errFileName));

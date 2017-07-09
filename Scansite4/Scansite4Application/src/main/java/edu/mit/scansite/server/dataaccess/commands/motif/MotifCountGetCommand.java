@@ -27,7 +27,7 @@ public class MotifCountGetCommand extends DbQueryCommand<Integer> {
 	}
 
 	@Override
-	protected Integer doProcessResults(ResultSet result)
+	public Integer doProcessResults(ResultSet result)
 			throws DataAccessException {
 		try {
 			if (result.next()) {
@@ -41,7 +41,7 @@ public class MotifCountGetCommand extends DbQueryCommand<Integer> {
 	}
 
 	@Override
-	protected String doGetSqlStatement() throws DataAccessException {
+	public String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 		// SELECT COUNT(*) FROM `motifs` WHERE motifClass="MAMMALIAN"
 		sql.append(CommandConstants.SELECT).append(" COUNT(*) ");

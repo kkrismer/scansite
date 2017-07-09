@@ -1,12 +1,16 @@
 package edu.mit.scansite.server.dataaccess.databaseconnector;
 
 import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dataaccess.commands.motif.MotifCountGetCommand;
 import edu.mit.scansite.shared.DataAccessException;
+import edu.mit.scansite.shared.DatabaseException;
+import edu.mit.scansite.shared.transferobjects.MotifClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple class for using a database (SELECT, INSERT und UPDATE).
@@ -23,6 +27,8 @@ public class DbConnector {
     private int activeConnectionNo;
     private static DbConnector instance;
     private Properties properties;
+
+    private boolean reestablishMode = false;
 
     private DbConnector() {
         activeConnectionNo = 0;
@@ -128,6 +134,15 @@ public class DbConnector {
      * single connection in single connection mode
      */
     public Connection getConnection() {
+        while (reestablishMode) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+                logger.info("Reestablishing database connections...");
+            } catch (InterruptedException e) {
+                logger.error("Wait while reestablishing database connections was interrupted.");
+                e.printStackTrace();
+            }
+        }
         Connection con = establishConnection();
 //        while (con == null) { // RPC thread issue prevention
 //            con = establishConnection();
@@ -141,23 +156,70 @@ public class DbConnector {
 
     private Connection checkConnection (Connection connection) {
         final int timeout = 3;
-        try {
-            while(connection == null || !connection.isValid(timeout)) {
-                if (connection != null) {
-                    connection.close();
-                }
-                connection = establishConnection();
+        try { // if one connection is inactive: reestablish pool
+            if(connection == null || !connection.isValid(timeout) || !testConnection()) {
+                resetConnections();
             }
         } catch (SQLException e) {
             logger.warn("Failed checking connection. Closing and reestablishing, if possible");
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                logger.warn("Could not close connection after failed check. Trying to replace it anyway.");
-            }
-            connection = establishConnection();
         }
         return connection;
+    }
+
+
+    boolean testConnection() {
+        boolean expected = false;
+        try {
+            MotifCountGetCommand cmd = new MotifCountGetCommand(ServiceLocator.getDbAccessProperties(),
+                    ServiceLocator.getDbConstantsProperties(), MotifClass.MAMMALIAN, true);
+
+            String query = "";
+            try {
+                Statement statement = connections[activeConnectionNo].createStatement();
+                query = cmd.doGetSqlStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+
+                Integer result = null;
+                if (!resultSet.isLast()) {
+                    result = cmd.doProcessResults(resultSet);
+                }
+                DbConnector.getInstance().close(resultSet);
+                DbConnector.getInstance().close(statement);
+
+                expected = result > -1;
+            } catch (Exception e) {
+                DataAccessException e2 = new DataAccessException(
+                        "executing SELECT-Statement failed: " + query + " (" + e.getMessage() + ")", e);
+                logger.error(e2.getMessage(), e2);
+                throw e2;
+            }
+        } catch (DatabaseException e1) {
+            logger.warn("Could not connect to database. Resetting connections");
+            e1.printStackTrace();
+            try {
+                resetConnections();
+            } catch (SQLException  e2) {
+                logger.error("Resetting connections failed!");
+                e2.printStackTrace();
+            }
+            return false;
+        }
+
+        return expected;
+    }
+
+    void resetConnections() throws SQLException {
+        reestablishMode = true;
+        for (int i = 0; i < connections.length; i++) {
+            if (connections[i] != null) {
+                connections[i].close();
+                connections[i] = null;
+            }
+        }
+        for (int i = 0; i < connections.length; i++) {
+            connections[i] = establishConnection();
+        }
+        reestablishMode = false;
     }
 
 
