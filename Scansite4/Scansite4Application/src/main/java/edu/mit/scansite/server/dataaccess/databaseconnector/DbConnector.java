@@ -169,6 +169,9 @@ public class DbConnector {
 
     boolean testConnection() {
         boolean expected = false;
+        if(connections.length == 1) {
+            return true;
+        }
         try {
             MotifCountGetCommand cmd = new MotifCountGetCommand(ServiceLocator.getDbAccessProperties(),
                     ServiceLocator.getDbConstantsProperties(), MotifClass.MAMMALIAN, true);
@@ -208,7 +211,7 @@ public class DbConnector {
         return expected;
     }
 
-    void resetConnections() throws SQLException {
+    public void resetConnections() throws SQLException {
         reestablishMode = true;
         for (int i = 0; i < connections.length; i++) {
             if (connections[i] != null) {

@@ -2,6 +2,7 @@ package edu.mit.scansite.server.dataaccess.file;
 
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.commands.motif.MotifCountGetCommand;
+import edu.mit.scansite.server.updater.GenPeptDbUpdater;
 import edu.mit.scansite.server.updater.ScansiteUpdaterException;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class Downloader {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String ENCODING = "UTF-8";
+	private static boolean mirroredGenpept = false;
 
 	public Downloader() {
 	}
@@ -66,15 +68,17 @@ public class Downloader {
 	 * @throws ScansiteUpdaterException
 	 */
 	public void downloadFile(URL fileUrl, String localOutputPath) throws ScansiteUpdaterException {
+
+        if (fileUrl.toString().startsWith("ftp://ftp.ncbi.nlm.nih.gov/refseq/release/complete/") && !mirroredGenpept) {
+            mirrorGenpeptDatabase(fileUrl);
+            return;
+        }
+
         final int unit_factor = 1024;
-//        OutputStream outstream = null;
-//        InputStream instream = null;
 
         HttpsURLConnection httpsConn;
         URLConnection httpConn;
 
-        //final int position = 0;
-        //final Long count = Long.MAX_VALUE; //maximum transfer 2^63 bytes, more than any meaningful file size at this point
         long downloadSize = -1;
         long formattedSize = 0;
 
@@ -104,12 +108,6 @@ public class Downloader {
                 logger.info("Attempting to download " + downloadSize + " bytes (" + formattedSize + " MB , or " + (formattedSize / unit_factor) + " GB).");
             }
 
-//			FileOutputStream fos = new FileOutputStream(localOutputPath);
-//			ReadableByteChannel rbc = Channels.newChannel(fileUrl.openStream());
-//			fos.getChannel().transferFrom(rbc, position, count);
-
-//			fos.close();
-//			rbc.close();
         } catch (IOException | NoSuchAlgorithmException | KeyManagementException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
@@ -132,39 +130,11 @@ public class Downloader {
             Process p = Runtime.getRuntime().exec(command, null);
             // ##############################################
 
-            new Thread(new Runnable() {
-                public void run() {
-                    BufferedReader stdInput = new BufferedReader(new
-                            InputStreamReader(p.getInputStream()));
+            Thread infoLogs = getInfoLogger(p);
+            infoLogs.start();
 
-                    // read the output from the command
-                    String s = null;
-                    try {
-                        while ((s = stdInput.readLine()) != null) {
-                            System.out.println("[Download] (I) Process: " + s);
-                        }
-                    } catch (IOException e) {
-                        logger.error(e.getMessage());
-                    }
-                }
-            }).start();
-
-            new Thread(new Runnable() {
-                public void run() {
-                    BufferedReader stdError = new BufferedReader(new
-                            InputStreamReader(p.getErrorStream()));
-
-                    // read any errors from the attempted command, also wget progress logs on Linux
-                    String s = null;
-                    try {
-                        while ((s = stdError.readLine()) != null) {
-                            System.out.println("[Download] (E) Process: " + s);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            Thread errorLogs = getErrorLogger(p);
+            errorLogs.start();
 
             long expectedSize = downloadSize; // separate variable due to threading
             final boolean[] downloadSucceeded = {true};
@@ -230,6 +200,13 @@ public class Downloader {
             } else {
                 int exitVal = p.waitFor();
             }
+
+            infoLogs.interrupt();
+            errorLogs.interrupt();
+
+            infoLogs.join();
+            errorLogs.join();
+
             if (!downloadSucceeded[0]) {
                 downloadFile(fileUrl, localOutputPath);
             }
@@ -242,6 +219,66 @@ public class Downloader {
 
         logger.info("Completed download from URL: " + fileUrl);
         logger.info("Saved content in file: " + localOutputPath);
+    }
+
+
+    private void mirrorGenpeptDatabase(URL fileUrl) {
+        String fileName = FilenameUtils.getBaseName(fileUrl.toString())
+                + "." + FilenameUtils.getExtension(fileUrl.toString());
+        String downloadUrl = fileUrl.toString().replace(fileName, "");
+
+        URL baseURL = null;
+        try {
+            baseURL = new URL(downloadUrl);
+        } catch (MalformedURLException e) {
+            logger.error("Invalid URL: " + downloadUrl, e);
+        }
+
+        try {
+            new GenPeptDbUpdater().runDownloads(baseURL);
+        } catch (IOException e) {
+            logger.error("Could not mirror the Genpept database!");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            logger.error("Genpept download was interrupted!");
+            e.printStackTrace();
+        }
+        mirroredGenpept = true;
+    }
+
+
+    private Thread getInfoLogger(Process p) {
+        return new Thread(() -> {
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(p.getInputStream()));
+
+            // read the output from the command
+            String s = null;
+            try {
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println("[Download] (I) Process: " + s);
+                }
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        });
+    }
+
+    private Thread getErrorLogger(Process p) {
+	    return new Thread(() -> {
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(p.getErrorStream()));
+
+            // read any errors from the attempted command, also wget progress logs on Linux
+            String s = null;
+            try {
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println("[Download] (E) Process: " + s);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 

@@ -1,23 +1,22 @@
 package edu.mit.scansite.server.updater;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.mit.scansite.server.dataaccess.file.Downloader;
 import edu.mit.scansite.server.updater.transliterator.GenPeptGenbankFileTransliterator;
 import edu.mit.scansite.server.updater.transliterator.ProteinFileTransliterator;
 import edu.mit.scansite.server.updater.transliterator.ProteinTransliteratorFileWriter;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * @author Tobieh
  */
 public class GenPeptDbUpdater extends ProteinDbUpdater {
-	private String FILE_PREFIX = "complete.";
-	private String FILE_SUFFIX = ".protein.gpff.gz";
+	private static String FILE_PREFIX = "complete.";
+	private static String FILE_SUFFIX = ".protein.gpff.gz";
 
 	private String VERSION_PREFIX = "RefSeq-release";
 	private String VERSION_SUFFIX = ".txt";
@@ -82,6 +81,88 @@ public class GenPeptDbUpdater extends ProteinDbUpdater {
 			throw new ScansiteUpdaterException(e.getMessage(), e);
 		}
 		return from;
+	}
+
+
+
+	public void runDownloads(URL baseURL) throws IOException, InterruptedException {
+        if (System.getProperty("os.name").contains("Windows")) {
+            logger.info("Genpept is not supposed to be setup on a test environment and is currently not available.");
+            logger.info("Please make sure to isntall wget for Windows and add " +
+                    "'C:\\Program Files (x86)\\GnuWin32\\bin' to the system path! " +
+                    "Any other way mirroring the database does not work");
+        }
+
+	    List<URL> from = new ArrayList<>();
+	    from.add(baseURL);
+        try {
+            List<URL> downloadUrls = prepareDownloadUrls(from);
+
+            int count = 0;
+            logger.info("Starting wget downloads...");
+            for(URL downloadUrl : downloadUrls) {
+                //String command = "wget -P ./temp/ -m " + downloadUrl;
+                String fileName = FilenameUtils.getBaseName(downloadUrl.toString())
+                        + "." + FilenameUtils.getExtension(downloadUrl.toString());
+                String outputFileName = "genpept_" + fileName;
+                String command = "wget -O " + outputFileName + " " + downloadUrl;
+                Process p = Runtime.getRuntime().exec(command, null, new File("./temp/"));
+
+                Thread infoLogs = getInfoLogger(p);
+                Thread errorLogs = getErrorLogger(p);
+
+                infoLogs.start();
+                errorLogs.start();
+//                logger.info("Downloading " + outputFileName);
+
+                p.waitFor();
+                count++;
+                logger.info("Downloads finished " + count + "/" + downloadUrls.size());
+
+                infoLogs.interrupt();
+                errorLogs.interrupt();
+
+                infoLogs.join();
+                errorLogs.join();
+            }
+        } catch (ScansiteUpdaterException e) {
+            e.printStackTrace();
+        }
+	}
+
+
+	private Thread getInfoLogger(Process p) {
+		return new Thread(() -> {
+			BufferedReader stdInput = new BufferedReader(new
+					InputStreamReader(p.getInputStream()));
+
+			// read the output from the command
+			String s = null;
+			try {
+				while ((s = stdInput.readLine()) != null) {
+					System.out.println("[Download] (I) Process: " + s);
+				}
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+		});
+	}
+
+	private Thread getErrorLogger(Process p) {
+		return new Thread(() -> {
+			BufferedReader stdError = new BufferedReader(new
+					InputStreamReader(p.getErrorStream()));
+
+			// read any errors from the attempted command, also wget progress logs on Linux
+			String s = null;
+			try {
+				while ((s = stdError.readLine()) != null) {
+					System.out.println("[Download] (E) Process: " + s);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 }

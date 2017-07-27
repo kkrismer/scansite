@@ -3,6 +3,7 @@ package edu.mit.scansite.server.updater;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -123,7 +124,13 @@ public abstract class DbUpdater implements Runnable {
 						tempFilePath, getFilePath(errFileName));
 				transliterator.transliterate();
 			}
-		}
+            try {
+			    logger.info("Reestablishing database connection to be on the safe side (long download and transliteration times may cause issues)");
+                DbConnector.getInstance().resetConnections();
+            } catch (SQLException e) {
+                logger.error("Failed to reestablish the database connection after long period timeout", e);
+            }
+        }
 
 		logger.info("prepare file transliterator");
 		initReader(tempFileName);
