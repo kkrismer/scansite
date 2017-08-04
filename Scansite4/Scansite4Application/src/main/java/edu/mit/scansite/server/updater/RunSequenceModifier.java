@@ -4,17 +4,13 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.DataSourceDao;
 import edu.mit.scansite.server.dataaccess.ProteinDao;
-import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinAddCommand;
-import edu.mit.scansite.server.dataaccess.commands.protein.ProteinUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
+import edu.mit.scansite.server.dataaccess.commands.protein.CountProteinsCommand;
+import edu.mit.scansite.server.dataaccess.commands.protein.ProteinGetNCommand;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
-import edu.mit.scansite.shared.transferobjects.EvidenceResource;
 import edu.mit.scansite.shared.transferobjects.Protein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,73 +25,93 @@ public class RunSequenceModifier {
 
     public static void run() throws ScansiteUpdaterException {
         try {
-            DaoFactory factory = ServiceLocator.getDaoFactory();
-            SiteEvidenceDao evidenceDao = factory.getSiteEvidenceDao();
-            ProteinDao proteinDao = factory.getProteinDao();
-            DataSource swissProtDataSource = getSwissprotDataSource(factory);
-            logger.info("Loading proteins from swissprot ...");
-            List<Protein> proteins = proteinDao.getAll(swissProtDataSource);
+            DataSource swissProtDataSource = getSwissprotDataSource(ServiceLocator.getDaoFactory());
+            CountProteinsCommand countCmd = new CountProteinsCommand(ServiceLocator.getDbAccessProperties(),
+                    ServiceLocator.getDbConstantsProperties(), swissProtDataSource);
 
-            int outputAfter = 1000;
-            int totalProteins = proteins.size();
-            int currentProtein = 0;
+            ProteinDao proteinDao = ServiceLocator.getDaoFactory().getProteinDao();
+
+            Integer count = countCmd.execute();
+
+            if (count == null) {
+                logger.error("Could not read database size! Aborting sequence modifier...");
+                return;
+            } else  {
+                logger.info("Found " + count + " proteins to process. Preparing for processing...");
+            }
+
+            int iterationProteinCount = 100;
             logger.info("Loading site evidence ...");
-            HashMap<String, List<String> > evidenceMap = evidenceDao.getEvidenceMap();
+
+            HashMap<String, List<String> > evidenceMap = ServiceLocator
+                    .getDaoFactory().getSiteEvidenceDao().getEvidenceMap();
+
             logger.info("Starting processing of protein sequences ...");
-            for (Protein protein : proteins) {
-                if (currentProtein % outputAfter == 0 && currentProtein > 0) {
-                    logger.info("Processed sequence modification for " +  currentProtein + " out of " + totalProteins + " proteins");
-                }
-                if (protein == null) {
-                    continue;
-                }
+            for (int i = 0; i < count; i += iterationProteinCount) {
+                ProteinGetNCommand proteinCmd = new ProteinGetNCommand(ServiceLocator.getDbAccessProperties(),
+                        ServiceLocator.getDbConstantsProperties(),
+                        swissProtDataSource, i, iterationProteinCount);
 
-                String sequence = protein.getSequence();
-                if (sequence == null || sequence.isEmpty()) {
-                    continue;
-                }
-                Set<String> accessions = protein.getAnnotation("accession");
-                if (accessions == null) {
-                    continue;
-                }
-                List<String> siteList = new ArrayList<>();
-                for (String accession : accessions) {
-                    if(evidenceMap.containsKey(accession)) {
-                        siteList.addAll(evidenceMap.get(accession));
+
+                //List<Protein> test = ServiceLocator.getDaoFactory().getProteinDao().getAll(swissProtDataSource);
+                List<Protein> ps = proteinCmd.execute();
+                List<Protein> proteins = ServiceLocator.getDaoFactory().getProteinDao().getProteinInformation(ps, swissProtDataSource);
+                for (Protein protein : proteins) {
+                    if (protein == null) {
+                        continue;
                     }
-                }
 
-                boolean foundEvidence = false;
-                for (String site : siteList) {
-                    String evidenceSite = site.substring(1);
-                    int position = Integer.valueOf(evidenceSite)-1;
-                    if (isPotentiallyPhosphorylated(site, 0)) {
-                        if(isPotentiallyPhosphorylated(sequence, position)) {
-                            sequence = adjustSequencePosition(sequence, position);
-                            foundEvidence = true;
+                    String sequence = protein.getSequence();
+                    if (sequence == null || sequence.isEmpty()) {
+                        continue;
+                    }
+                    Set<String> accessions = protein.getAnnotation("accession");
+                    if (accessions == null) {
+                        continue;
+                    }
+                    List<String> siteList = new ArrayList<>();
+                    for (String accession : accessions) {
+                        if(evidenceMap.containsKey(accession)) {
+                            siteList.addAll(evidenceMap.get(accession));
                         }
-                    } else { // other modifications in site evidence data
-                        if (isOtherModification(site, 0)) {
-                            if (isOtherModification(sequence, position)) {
-                                logger.info("Detected Arginine/Lysine site: " + site);
-                                //with the current data structure one cen not distinguish between
-                                // acetylation and methylatioon on lysine. One would need to add another column to the
-                                // siteEvidence table which contains the modification type
+                    }
+
+                    boolean foundEvidence = false;
+                    for (String site : siteList) {
+                        String evidenceSite = site.substring(1);
+                        int position = Integer.valueOf(evidenceSite)-1;
+                        if (isPotentiallyPhosphorylated(site, 0)) {
+                            if(isPotentiallyPhosphorylated(sequence, position)) {
                                 sequence = adjustSequencePosition(sequence, position);
                                 foundEvidence = true;
                             }
-                        } else {
-                            logger.warn("Skipped undefined site (not in {S,T,Y,K,R}): " + site);
+                        } else { // other modifications in site evidence data
+                            if (isOtherModification(site, 0)) {
+                                if (isOtherModification(sequence, position)) {
+                                    logger.info("Detected Arginine/Lysine site: " + site);
+                                    //with the current data structure one cen not distinguish between
+                                    // acetylation and methylatioon on lysine. One would need to add another column to the
+                                    // siteEvidence table which contains the modification type
+                                    sequence = adjustSequencePosition(sequence, position);
+                                    foundEvidence = true;
+                                }
+                            } else {
+                                logger.warn("Skipped undefined site (not in {S,T,Y,K,R}): " + site);
+                            }
                         }
                     }
-                }
-                if (foundEvidence) {
-                    protein.setSequence(sequence);
-                    proteinDao.updateProtein(swissProtDataSource, protein);
-                }
+                    if (foundEvidence) {
+                        protein.setSequence(sequence);
+                        proteinDao.updateProtein(swissProtDataSource, protein);
+                    }
 
-                currentProtein++;
+                }
+                if (i % 1000 == 0) {
+                    logger.info("Processed proteins: " + i);
+                }
             }
+
+
             logger.info("Finished editing protein sequences");
         } catch (Exception e) {
             logger.error("Could not run Sequence Modifier due to the following error:\n" + e.getMessage());

@@ -68,8 +68,7 @@ public class OrthologScanMotifHandler implements
 				IdentifierDao dao = ServiceLocator.getDaoFactory().getIdentifierDao();
 				List<DataSource> orthologyDataSources = dao
 						.getCompatibleOrthologyDataSourcesForIdentifierType(action
-								.getProtein().getDataSource()
-								.getIdentifierType());
+								.getProtein().getDataSource().getIdentifierType());
 				if (orthologyDataSources.size() > 0) {
 					// compatible orthology data source available
 					return feature.scanOrthologsByMotifGroup(action

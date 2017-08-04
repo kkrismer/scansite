@@ -81,7 +81,7 @@
             <groupId>org.biojava</groupId>
             <artifactId>biojava-core</artifactId>
             <version>4.2.4</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.biojava</groupId>

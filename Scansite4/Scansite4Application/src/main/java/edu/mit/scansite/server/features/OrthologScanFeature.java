@@ -384,10 +384,16 @@ public class OrthologScanFeature {
 				targetSequence, Alignments.PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
 
 		// remove gaps
-		int offset = targetSequence.getSequenceAsString()
-				.indexOf(pair.getTarget().getSequenceAsString().replaceAll(Character.toString(GAP_SYMBOL), ""));
+		String targetWithoutGaps = pair.getTarget().getSequenceAsString()
+				.replaceAll(Character.toString(GAP_SYMBOL), "");
+		int offset = targetSequence.getSequenceAsString().indexOf(targetWithoutGaps);
+
 		try {
-			return pair.getIndexInQueryAt(ScansiteConstants.HALF_WINDOW - offset);
+			int index = ScansiteConstants.HALF_WINDOW - offset;
+			if (index < 1) { //workaround for negative index issues
+				index = 1;
+			}
+			return pair.getIndexInQueryAt(index);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			// TODO used to be unreliable - solved?
