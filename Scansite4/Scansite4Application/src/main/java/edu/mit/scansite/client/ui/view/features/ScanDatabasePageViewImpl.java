@@ -86,8 +86,7 @@ public class ScanDatabasePageViewImpl extends ScanDatabasePageView {
 			public void execute() {
 				outputListSizeListBox.getElement().setId(
 						"outputListSizeListBoxId");
-				motifWidget = chooseSelectedMotifWidget; // set default motif
-															// widget
+				motifWidget = chooseSelectedMotifWidget; // set default motif widget
 				chooseSelectedMotifWidget.setUser(user);
 			}
 		});

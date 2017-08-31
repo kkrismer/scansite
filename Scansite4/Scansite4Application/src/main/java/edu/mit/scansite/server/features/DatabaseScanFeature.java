@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
+import edu.mit.scansite.shared.transferobjects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,15 +19,6 @@ import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
-import edu.mit.scansite.shared.transferobjects.DataSource;
-import edu.mit.scansite.shared.transferobjects.DatabaseSearchScanResultSite;
-import edu.mit.scansite.shared.transferobjects.HistogramDataPoint;
-import edu.mit.scansite.shared.transferobjects.HistogramStringency;
-import edu.mit.scansite.shared.transferobjects.Motif;
-import edu.mit.scansite.shared.transferobjects.MotifSelection;
-import edu.mit.scansite.shared.transferobjects.Protein;
-import edu.mit.scansite.shared.transferobjects.RestrictionProperties;
-import edu.mit.scansite.shared.transferobjects.Taxon;
 
 /**
  * @author Tobieh
@@ -60,7 +52,18 @@ public class DatabaseScanFeature {
 			List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);
 			List<Double> motifScoreThresholds = scoreMotifs(motifs);
 
-			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs, motifScoreThresholds, proteins, false, null);
+			boolean isMultipleMotifs = motifs.size() > 1;
+            DatabaseSearchMultipleRestriction restrictions = null;
+            if (isMultipleMotifs) {
+                List<String> dbMotifShortNames = new ArrayList<>();
+                for (Motif motif : motifs) {
+                    dbMotifShortNames.add(motif.getShortName());
+                }
+                boolean isGapRestrictionSearch = false;
+                restrictions = new DatabaseSearchMultipleRestriction(motifs, dbMotifShortNames, isGapRestrictionSearch);
+            }
+
+			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs, motifScoreThresholds, proteins, isMultipleMotifs, restrictions);
 			try {
 				scorer.doScoring();
 			} catch (Exception e1) {

@@ -12,7 +12,7 @@
 					<g:RadioButton ui:field="searchMethodDatabaseMotifRadioButton"
 						ui:name="searchMethod" checked="true">Database motif</g:RadioButton>
 					<g:RadioButton ui:field="searchMethodDatabaseMotifsRadioButton"
-						ui:name="searchMethod" visible="false">Multiple database motifs</g:RadioButton>
+						ui:name="searchMethod">Multiple database motifs</g:RadioButton>
 					<g:RadioButton ui:field="searchMethodUserDefinedMotifsRadioButton"
 						ui:name="searchMethod">User defined motifs</g:RadioButton>
 					<g:RadioButton ui:field="searchMethodQuickMotifsRadioButton"
