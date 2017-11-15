@@ -36,6 +36,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.0</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -59,7 +60,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.0</version>
+					<version>3.7.0</version>
 					<configuration>
 						<compilerVersion>1.8</compilerVersion>
 						<source>1.8</source>

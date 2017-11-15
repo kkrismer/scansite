@@ -16,7 +16,7 @@
 	</parent>
 
 	<properties>
-		<gwtVersion>2.8.0</gwtVersion>
+		<gwtVersion>2.8.2</gwtVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -151,7 +151,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.1</version>
+					<version>3.7.0</version>
 					<configuration>
 						<compilerVersion>1.8</compilerVersion>
 						<source>1.8</source>
@@ -161,7 +161,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.2.0</version>
 					<configuration>
 						<attachClasses>true</attachClasses>
 						<archive>
