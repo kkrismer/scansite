@@ -19,3 +19,4 @@ src/main/resources/cfg
 .classpath
 .project
 /target/
+/build/

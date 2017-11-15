@@ -10,7 +10,7 @@
 	<modules>
 		<module>Scansite4Application</module>
 		<module>Scansite4WebService</module>
-        <module>Scansite4DatabaseManager</module>
+		<module>Scansite4DatabaseManager</module>
 		<module>Scansite4MotifInserter</module>
 	</modules>
 
