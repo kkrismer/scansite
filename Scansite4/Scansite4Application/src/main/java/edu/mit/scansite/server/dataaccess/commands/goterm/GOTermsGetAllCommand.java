@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.GOTerm;
 
@@ -16,14 +15,12 @@ import edu.mit.scansite.shared.transferobjects.GOTerm;
  */
 public class GOTermsGetAllCommand extends DbQueryCommand<List<GOTerm>> {
 
-	public GOTermsGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public GOTermsGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override
-	protected List<GOTerm> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<GOTerm> doProcessResults(ResultSet result) throws DataAccessException {
 		List<GOTerm> goTerms = new LinkedList<GOTerm>();
 		try {
 			while (result.next()) {
@@ -41,9 +38,8 @@ public class GOTermsGetAllCommand extends DbQueryCommand<List<GOTerm>> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcGOTermsId())
-				.append(CommandConstants.COMMA).append(c.getcGOTermsName())
-				.append(CommandConstants.FROM).append(c.gettGOTerms());
+		sql.append(CommandConstants.SELECT).append(c.getcGOTermsId()).append(CommandConstants.COMMA)
+				.append(c.getcGOTermsName()).append(CommandConstants.FROM).append(c.gettGOTerms());
 		return sql.toString();
 	}
 }

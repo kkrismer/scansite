@@ -2,42 +2,27 @@ package edu.mit.scansite.server.dispatch.handler.features;
 
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
-
-import net.customware.gwt.dispatch.server.ActionHandler;
-import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.ActionException;
-import net.customware.gwt.dispatch.shared.DispatchException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dispatch.BootstrapListener;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.dispatch.features.UtilitiesMwAndPiAction;
 import edu.mit.scansite.shared.dispatch.features.UtilitiesMwAndPiResult;
 import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.shared.transferobjects.Protein;
 import edu.mit.scansite.shared.util.ScansiteAlgorithms;
+import net.customware.gwt.dispatch.server.ActionHandler;
+import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class UtilitiesMwAndPiHandler implements
-		ActionHandler<UtilitiesMwAndPiAction, UtilitiesMwAndPiResult> {
+public class UtilitiesMwAndPiHandler implements ActionHandler<UtilitiesMwAndPiAction, UtilitiesMwAndPiResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final Provider<ServletContext> contextProvider;
-
-	@Inject
-	public UtilitiesMwAndPiHandler(
-			final Provider<ServletContext> contextProvider) {
-		this.contextProvider = contextProvider;
-	}
 
 	@Override
 	public Class<UtilitiesMwAndPiAction> getActionType() {
@@ -45,23 +30,20 @@ public class UtilitiesMwAndPiHandler implements
 	}
 
 	@Override
-	public UtilitiesMwAndPiResult execute(UtilitiesMwAndPiAction action,
-			ExecutionContext context) throws DispatchException {
+	public UtilitiesMwAndPiResult execute(UtilitiesMwAndPiAction action, ExecutionContext context)
+			throws DispatchException {
 		LightWeightProtein protein = action.getProtein();
-		if ((protein.getSequence() == null || protein.getSequence().isEmpty())
-				&& protein.getDataSource() != null) {
+		if ((protein.getSequence() == null || protein.getSequence().isEmpty()) && protein.getDataSource() != null) {
 			try {
-				Protein p = ServiceLocator.getDaoFactory().getProteinDao()
-						.get(protein.getIdentifier(), protein.getDataSource());
+				Protein p = ServiceLocator.getDaoFactory().getProteinDao().get(protein.getIdentifier(),
+						protein.getDataSource());
 				if (p == null) {
-					return new UtilitiesMwAndPiResult(false,
-							"Protein not found in database");
+					return new UtilitiesMwAndPiResult(false, "Protein not found in database");
 				} else {
 					protein.setSequence(p.getSequence());
 				}
 			} catch (DataAccessException e) {
-				logger.error("Error getting protein for Mw/pI calculation: "
-						+ e.getMessage());
+				logger.error("Error getting protein for Mw/pI calculation: " + e.getMessage());
 				throw new ActionException(e.getMessage());
 			}
 		}
@@ -69,18 +51,14 @@ public class UtilitiesMwAndPiHandler implements
 		ArrayList<Double> molecularWeights = new ArrayList<Double>();
 		ArrayList<Double> isoelectricPoints = new ArrayList<Double>();
 		for (int nPhos = 0; nPhos <= action.getMaxSites(); ++nPhos) {
-			molecularWeights.add(algs.calculateMolecularWeight(
-					protein.getSequence(), nPhos));
-			isoelectricPoints.add(algs.calculateIsoelectricPoint(
-					protein.getSequence(), nPhos));
+			molecularWeights.add(algs.calculateMolecularWeight(protein.getSequence(), nPhos));
+			isoelectricPoints.add(algs.calculateIsoelectricPoint(protein.getSequence(), nPhos));
 		}
-		return new UtilitiesMwAndPiResult(molecularWeights, isoelectricPoints,
-				protein, action.getMaxSites());
+		return new UtilitiesMwAndPiResult(molecularWeights, isoelectricPoints, protein, action.getMaxSites());
 	}
 
 	@Override
-	public void rollback(UtilitiesMwAndPiAction action,
-			UtilitiesMwAndPiResult result, ExecutionContext context)
+	public void rollback(UtilitiesMwAndPiAction action, UtilitiesMwAndPiResult result, ExecutionContext context)
 			throws DispatchException {
 	}
 }

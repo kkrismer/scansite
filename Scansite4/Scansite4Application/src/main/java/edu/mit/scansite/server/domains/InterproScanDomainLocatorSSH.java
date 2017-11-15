@@ -1,9 +1,9 @@
 package edu.mit.scansite.server.domains;
 
-import java.io.BufferedReader;
+import static edu.mit.scansite.server.domains.InterproScanDomainLocatorLocal.parseInterproScanOutputRAW;
+
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
@@ -13,8 +13,6 @@ import edu.mit.scansite.server.dataaccess.ssh.SshConnector;
 import edu.mit.scansite.server.dataaccess.ssh.SshConnector.SshResult;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.transferobjects.DomainPosition;
-
-import static edu.mit.scansite.server.domains.InterproScanDomainLocatorLocal.parseInterproScanOutputRAW;
 
 /**
  * @author Tobieh
@@ -51,13 +49,11 @@ public class InterproScanDomainLocatorSSH extends DomainLocator {
 			throws DomainLocatorException {
 		try {
 			connector.connect();
-			String seqFileName = FILE_BASENAME
-					+ String.valueOf(System.nanoTime());
+			String seqFileName = FILE_BASENAME + String.valueOf(System.nanoTime());
 			DirectoryManagement.prepareDomainSeqDirectory(realPath);
 			String localFilePath = FilePaths.getDomainSeqFilePath(realPath, seqFileName);
 			String outFileName = seqFileName + OUTFILE_SUFFIX;
-			String localOutFilePath = FilePaths
-					.getDomainSeqFilePath(realPath, outFileName);
+			String localOutFilePath = FilePaths.getDomainSeqFilePath(realPath, outFileName);
 
 			// create sequence file on server
 			File f = new File(localFilePath);
@@ -68,8 +64,8 @@ public class InterproScanDomainLocatorSSH extends DomainLocator {
 			f.delete();
 
 			// run iprscan and copy result-file to local machine
-			String command = reader.get(CFG_IPRSCAN_BIN) + CMD_BASE + CMD_IN
-					+ seqFileName + CMD_OUT + outFileName + CMD_APPS + CMD_END;
+			String command = reader.get(CFG_IPRSCAN_BIN) + CMD_BASE + CMD_IN + seqFileName + CMD_OUT + outFileName
+					+ CMD_APPS + CMD_END;
 			SshResult result = connector.runCommand(command);
 			connector.copyFileRemoteToLocal(outFileName, localOutFilePath);
 
@@ -89,6 +85,5 @@ public class InterproScanDomainLocatorSSH extends DomainLocator {
 			connector.disconnect();
 		}
 	}
-
 
 }

@@ -1,22 +1,26 @@
 package edu.mit.scansite.server.motifinserter;
 
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.commands.motif.MotifGetCommand;
-import edu.mit.scansite.server.dataaccess.commands.motifrealcentralvalues.MotifValuesAddCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
-import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
-import edu.mit.scansite.shared.transferobjects.Motif;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dataaccess.commands.motif.MotifGetCommand;
+import edu.mit.scansite.server.dataaccess.commands.motifrealcentralvalues.MotifValuesAddCommand;
+import edu.mit.scansite.shared.DatabaseException;
+import edu.mit.scansite.shared.transferobjects.Motif;
+
 /**
- * Created by Thomas on 4/12/2017.
  * Requires only the path of all the relevant motif files are in (PSSMs with central position values != 21)
+ * 
+ * @author Thomas Bernwinkler
  */
 public class RunMotifCentralPositionValueInserter {
     private static final Logger logger = LoggerFactory
@@ -106,5 +110,4 @@ public class RunMotifCentralPositionValueInserter {
         }
         return content;
     }
-
 }

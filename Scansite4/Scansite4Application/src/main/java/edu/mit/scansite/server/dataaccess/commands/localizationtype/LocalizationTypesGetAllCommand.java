@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.LocalizationType;
@@ -15,20 +14,17 @@ import edu.mit.scansite.shared.transferobjects.LocalizationType;
 /**
  * @author Konstantin Krismer
  */
-public class LocalizationTypesGetAllCommand extends
-		DbQueryCommand<List<LocalizationType>> {
+public class LocalizationTypesGetAllCommand extends DbQueryCommand<List<LocalizationType>> {
 	private DataSource localizationDataSource;
 
-	public LocalizationTypesGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
+	public LocalizationTypesGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
 			DataSource localizationDataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.localizationDataSource = localizationDataSource;
 	}
 
 	@Override
-	protected List<LocalizationType> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<LocalizationType> doProcessResults(ResultSet result) throws DataAccessException {
 		List<LocalizationType> localizationTypes = null;
 
 		try {
@@ -36,9 +32,8 @@ public class LocalizationTypesGetAllCommand extends
 				if (localizationTypes == null) {
 					localizationTypes = new LinkedList<>();
 				}
-				localizationTypes.add(new LocalizationType(result.getInt(c
-						.getcLocalizationTypesId()), result.getString(c
-						.getcLocalizationTypesName())));
+				localizationTypes.add(new LocalizationType(result.getInt(c.getcLocalizationTypesId()),
+						result.getString(c.getcLocalizationTypesName())));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -49,11 +44,8 @@ public class LocalizationTypesGetAllCommand extends
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append('*')
-				.append(CommandConstants.FROM)
-				.append(c.gettLocalizationTypes())
-				.append(CommandConstants.WHERE).append(c.getcDataSourcesId())
-				.append(CommandConstants.EQ)
+		sql.append(CommandConstants.SELECT).append('*').append(CommandConstants.FROM).append(c.gettLocalizationTypes())
+				.append(CommandConstants.WHERE).append(c.getcDataSourcesId()).append(CommandConstants.EQ)
 				.append(localizationDataSource.getId());
 
 		return sql.toString();

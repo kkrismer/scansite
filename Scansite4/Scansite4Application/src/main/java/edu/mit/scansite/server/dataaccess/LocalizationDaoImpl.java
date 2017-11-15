@@ -13,7 +13,6 @@ import edu.mit.scansite.server.dataaccess.commands.localization.LocalizationGetC
 import edu.mit.scansite.server.dataaccess.commands.localization.MotifLocalizationGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.localizationtype.LocalizationTypeAddCommand;
 import edu.mit.scansite.server.dataaccess.commands.localizationtype.LocalizationTypesGetAllCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.DataSource;

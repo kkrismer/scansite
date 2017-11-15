@@ -9,7 +9,6 @@ import edu.mit.scansite.server.dataaccess.commands.evidencecode.EvidenceCodesGet
 import edu.mit.scansite.server.dataaccess.commands.goterm.GOTermAddCommand;
 import edu.mit.scansite.server.dataaccess.commands.goterm.GOTermGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.goterm.GOTermsGetAllCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.EvidenceCode;
@@ -24,20 +23,22 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#addEvidenceCode(edu.mit.scansite.shared.transferobjects.EvidenceCode)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.GOTermDao#addEvidenceCode(edu.mit.scansite
+	 * .shared.transferobjects.EvidenceCode)
 	 */
 	@Override
-	public EvidenceCode addEvidenceCode(EvidenceCode evidenceCode)
-			throws DataAccessException {
+	public EvidenceCode addEvidenceCode(EvidenceCode evidenceCode) throws DataAccessException {
 		try {
 			EvidenceCode temp = null;
 			if (evidenceCode.getId() <= 0) {
 				temp = getEvidenceCode(evidenceCode.getCode());
 			}
 			if (temp == null) {
-				EvidenceCodeAddCommand cmd = new EvidenceCodeAddCommand(
-						dbAccessConfig, dbConstantsConfig,
+				EvidenceCodeAddCommand cmd = new EvidenceCodeAddCommand(dbAccessConfig, dbConstantsConfig,
 						evidenceCode);
 				evidenceCode.setId(cmd.execute());
 				return evidenceCode;
@@ -51,13 +52,15 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#getEvidenceCode(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#getEvidenceCode(java.lang.
+	 * String)
 	 */
 	@Override
 	public EvidenceCode getEvidenceCode(String code) throws DataAccessException {
-		EvidenceCodeGetCommand cmd = new EvidenceCodeGetCommand(dbAccessConfig,
-				dbConstantsConfig, code);
+		EvidenceCodeGetCommand cmd = new EvidenceCodeGetCommand(dbAccessConfig, dbConstantsConfig, code);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -66,13 +69,14 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#getAllEvidenceCodes()
 	 */
 	@Override
 	public List<EvidenceCode> getAllEvidenceCodes() throws DataAccessException {
-		EvidenceCodesGetAllCommand cmd = new EvidenceCodesGetAllCommand(
-				dbAccessConfig, dbConstantsConfig);
+		EvidenceCodesGetAllCommand cmd = new EvidenceCodesGetAllCommand(dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {
@@ -81,16 +85,18 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#addGOTerm(edu.mit.scansite.shared.transferobjects.GOTerm)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#addGOTerm(edu.mit.scansite.
+	 * shared.transferobjects.GOTerm)
 	 */
 	@Override
 	public GOTerm addGOTerm(GOTerm goTerm) throws DataAccessException {
 		try {
 			GOTerm temp = getGOTerm(goTerm.getId());
 			if (temp == null) {
-				GOTermAddCommand cmd = new GOTermAddCommand(dbAccessConfig,
-						dbConstantsConfig, goTerm);
+				GOTermAddCommand cmd = new GOTermAddCommand(dbAccessConfig, dbConstantsConfig, goTerm);
 				cmd.execute();
 				return goTerm;
 			} else {
@@ -103,13 +109,14 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#getGOTerm(java.lang.String)
 	 */
 	@Override
 	public GOTerm getGOTerm(String id) throws DataAccessException {
-		GOTermGetCommand cmd = new GOTermGetCommand(dbAccessConfig,
-				dbConstantsConfig, id);
+		GOTermGetCommand cmd = new GOTermGetCommand(dbAccessConfig, dbConstantsConfig, id);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -118,13 +125,14 @@ public class GOTermDaoImpl extends DaoImpl implements GOTermDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.GOTermDao#getAllGOTerms()
 	 */
 	@Override
 	public List<GOTerm> getAllGOTerms() throws DataAccessException {
-		GOTermsGetAllCommand cmd = new GOTermsGetAllCommand(dbAccessConfig,
-				dbConstantsConfig);
+		GOTermsGetAllCommand cmd = new GOTermsGetAllCommand(dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {

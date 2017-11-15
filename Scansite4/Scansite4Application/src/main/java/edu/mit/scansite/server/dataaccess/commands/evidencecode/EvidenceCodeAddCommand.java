@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbInsertCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.EvidenceCode;
 
@@ -14,8 +13,7 @@ import edu.mit.scansite.shared.transferobjects.EvidenceCode;
 public class EvidenceCodeAddCommand extends DbInsertCommand {
 	private EvidenceCode evidenceCode;
 
-	public EvidenceCodeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, EvidenceCode evidenceCode) {
+	public EvidenceCodeAddCommand(Properties dbAccessConfig, Properties dbConstantsConfig, EvidenceCode evidenceCode) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.evidenceCode = evidenceCode;
 	}
@@ -34,15 +32,11 @@ public class EvidenceCodeAddCommand extends DbInsertCommand {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(CommandConstants.INSERTINTO).append(c.gettEvidenceCodes())
-				.append('(').append(c.getcEvidenceCodesCode())
-				.append(CommandConstants.COMMA)
-				.append(c.getcEvidenceCodesName()).append(')')
-				.append(CommandConstants.VALUES).append('(')
-				.append(CommandConstants.enquote(evidenceCode.getCode()))
-				.append(CommandConstants.COMMA)
-				.append(CommandConstants.enquote(evidenceCode.getName()))
-				.append(')');
+		sql.append(CommandConstants.INSERTINTO).append(c.gettEvidenceCodes()).append('(')
+				.append(c.getcEvidenceCodesCode()).append(CommandConstants.COMMA).append(c.getcEvidenceCodesName())
+				.append(')').append(CommandConstants.VALUES).append('(')
+				.append(CommandConstants.enquote(evidenceCode.getCode())).append(CommandConstants.COMMA)
+				.append(CommandConstants.enquote(evidenceCode.getName())).append(')');
 		return sql.toString();
 	}
 }

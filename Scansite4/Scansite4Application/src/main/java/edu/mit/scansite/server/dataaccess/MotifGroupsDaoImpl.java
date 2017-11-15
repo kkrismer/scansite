@@ -3,13 +3,12 @@ package edu.mit.scansite.server.dataaccess;
 import java.util.List;
 import java.util.Properties;
 
+import edu.mit.scansite.server.dataaccess.commands.motifgroup.LightWeightMotifGroupGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifgroup.MotifGroupAddCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifgroup.MotifGroupDeleteCommand;
-import edu.mit.scansite.server.dataaccess.commands.motifgroup.LightWeightMotifGroupGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifgroup.MotifGroupGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifgroup.MotifGroupGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifgroup.MotifGroupUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup;
@@ -22,18 +21,20 @@ import edu.mit.scansite.shared.transferobjects.MotifGroup;
  */
 public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 
-	public MotifGroupsDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public MotifGroupsDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#add(edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.MotifGroupsDao#add(edu.mit.scansite.shared
+	 * .transferobjects.LightWeightMotifGroup)
 	 */
 	@Override
 	public void add(LightWeightMotifGroup group) throws DataAccessException {
-		MotifGroupAddCommand command = new MotifGroupAddCommand(dbAccessConfig,
-				dbConstantsConfig, group);
+		MotifGroupAddCommand command = new MotifGroupAddCommand(dbAccessConfig, dbConstantsConfig, group);
 		try {
 			group.setId(command.execute());
 		} catch (Exception e) {
@@ -41,14 +42,16 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#update(edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.MotifGroupsDao#update(edu.mit.scansite.
+	 * shared.transferobjects.LightWeightMotifGroup)
 	 */
 	@Override
-	public boolean update(LightWeightMotifGroup group)
-			throws DataAccessException {
-		MotifGroupUpdateCommand command = new MotifGroupUpdateCommand(
-				dbAccessConfig, dbConstantsConfig, group);
+	public boolean update(LightWeightMotifGroup group) throws DataAccessException {
+		MotifGroupUpdateCommand command = new MotifGroupUpdateCommand(dbAccessConfig, dbConstantsConfig, group);
 		try {
 			return command.execute() > 0;
 		} catch (Exception e) {
@@ -57,13 +60,14 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#delete(int)
 	 */
 	@Override
 	public void delete(int id) throws DataAccessException {
-		MotifGroupDeleteCommand command = new MotifGroupDeleteCommand(
-				dbAccessConfig, dbConstantsConfig, id);
+		MotifGroupDeleteCommand command = new MotifGroupDeleteCommand(dbAccessConfig, dbConstantsConfig, id);
 		try {
 			command.execute();
 		} catch (DatabaseException e) {
@@ -72,44 +76,46 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#get(int)
 	 */
 	@Override
 	public LightWeightMotifGroup get(int id) throws DataAccessException {
-		MotifGroupGetCommand command = new MotifGroupGetCommand(dbAccessConfig,
-				dbConstantsConfig, id);
+		MotifGroupGetCommand command = new MotifGroupGetCommand(dbAccessConfig, dbConstantsConfig, id);
 		LightWeightMotifGroup group;
 		try {
 			group = command.execute();
 		} catch (DatabaseException e) {
 			logger.error(e.getMessage(), e);
-			throw new DataAccessException("Retrieving group from DB failed.",
-					e);
+			throw new DataAccessException("Retrieving group from DB failed.", e);
 		}
 		return group;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#getAllLightWeight()
 	 */
 	@Override
-	public List<LightWeightMotifGroup> getAllLightWeight()
-			throws DataAccessException {
-		LightWeightMotifGroupGetAllCommand command = new LightWeightMotifGroupGetAllCommand(
-				dbAccessConfig, dbConstantsConfig);
+	public List<LightWeightMotifGroup> getAllLightWeight() throws DataAccessException {
+		LightWeightMotifGroupGetAllCommand command = new LightWeightMotifGroupGetAllCommand(dbAccessConfig,
+				dbConstantsConfig);
 		List<LightWeightMotifGroup> groups;
 		try {
 			groups = command.execute();
 		} catch (DatabaseException e) {
 			logger.error(e.getMessage(), e);
-			throw new DataAccessException("Retrieving groups from DB failed.",
-					e);
+			throw new DataAccessException("Retrieving groups from DB failed.", e);
 		}
 		return groups;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#getAll()
 	 */
 	@Override
@@ -117,7 +123,9 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 		return getAll(null, true);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#getAll(boolean)
 	 */
 	@Override
@@ -125,21 +133,23 @@ public class MotifGroupsDaoImpl extends DaoImpl implements MotifGroupsDao {
 		return getAll(null, publicOnly);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.MotifGroupsDao#getAll(edu.mit.scansite.shared.transferobjects.MotifClass, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.MotifGroupsDao#getAll(edu.mit.scansite.
+	 * shared.transferobjects.MotifClass, boolean)
 	 */
 	@Override
-	public List<MotifGroup> getAll(MotifClass motifClass, boolean publicOnly)
-			throws DataAccessException {
-		MotifGroupGetAllCommand command = new MotifGroupGetAllCommand(
-				dbAccessConfig, dbConstantsConfig, motifClass, publicOnly);
+	public List<MotifGroup> getAll(MotifClass motifClass, boolean publicOnly) throws DataAccessException {
+		MotifGroupGetAllCommand command = new MotifGroupGetAllCommand(dbAccessConfig, dbConstantsConfig, motifClass,
+				publicOnly);
 		List<MotifGroup> groups;
 		try {
 			groups = command.execute();
 		} catch (DatabaseException e) {
 			logger.error(e.getMessage(), e);
-			throw new DataAccessException("Retrieving groups from DB failed.",
-					e);
+			throw new DataAccessException("Retrieving groups from DB failed.", e);
 		}
 		return groups;
 	}

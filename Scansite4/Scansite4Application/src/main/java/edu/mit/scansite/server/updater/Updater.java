@@ -1,7 +1,7 @@
 package edu.mit.scansite.server.updater;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +13,6 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DataSourceDao;
 import edu.mit.scansite.server.dataaccess.GOTermDao;
 import edu.mit.scansite.server.dataaccess.IdentifierDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.UpdaterConfigXmlFileReader;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.DataSourceType;
@@ -36,8 +35,7 @@ public class Updater {
 			InputStream configFileStream = ServiceLocator.getUpdaterConstantsFileProperties();
 			InputStream configDTDFileStream = ServiceLocator.getUpdaterConstantsDTDFileProperties();
 			UpdaterConfigXmlFileReader reader = new UpdaterConfigXmlFileReader();
-			updaterConfig = reader.readConfig(configFileStream,
-					configDTDFileStream);
+			updaterConfig = reader.readConfig(configFileStream, configDTDFileStream);
 		} catch (Exception e) {
 			throw new ScansiteUpdaterException(e);
 		}
@@ -46,12 +44,11 @@ public class Updater {
 		fillIdentifierTypesTable(updaterConfig.getIdentifierTypes());
 		fillEvidenceCodesTable(updaterConfig.getEvidenceCodes());
 
-		//database issues with parallel attempt -> switch to serial
+		// database issues with parallel attempt -> switch to serial
 		for (DataSourceMetaInfo db : updaterConfig.getDataSourceMetaInfos()) {
 			ExecutorService es = Executors.newCachedThreadPool();
 			String updaterClass = db.getUpdaterClass();
-			DbUpdater updater = getUpdater(updaterConfig.getTempDirPath(),
-					updaterConfig.getInvalidFilePrefix(), db);
+			DbUpdater updater = getUpdater(updaterConfig.getTempDirPath(), updaterConfig.getInvalidFilePrefix(), db);
 			es.execute(updater);
 			logger.info("Running updater: " + updaterClass);
 			logger.info("Setting up: " + updater.getDatabase().getDataSource().getDisplayName());
@@ -66,8 +63,7 @@ public class Updater {
 		}
 	}
 
-
-    private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
+	private void fillIdentifierTypesTable(List<IdentifierType> identifierTypes) {
 		try {
 			IdentifierDao dao = ServiceLocator.getDaoFactory().getIdentifierDao();
 			for (IdentifierType identifierType : identifierTypes) {
@@ -101,17 +97,15 @@ public class Updater {
 	}
 
 	/**
-	 * Instantiates an updater by reflection (using DbUpdaterFactory) and
-	 * returns it
+	 * Instantiates an updater by reflection (using DbUpdaterFactory) and returns it
 	 * 
 	 * @param tempDirPath
-     * @param invalidFilePrefix
+	 * @param invalidFilePrefix
 	 * @param db
 	 * @return
 	 * @throws ScansiteUpdaterException
 	 */
-	private DbUpdater getUpdater(String tempDirPath, String invalidFilePrefix,
-			DataSourceMetaInfo db)
+	private DbUpdater getUpdater(String tempDirPath, String invalidFilePrefix, DataSourceMetaInfo db)
 			throws ScansiteUpdaterException {
 		DbUpdater updater;
 		try {

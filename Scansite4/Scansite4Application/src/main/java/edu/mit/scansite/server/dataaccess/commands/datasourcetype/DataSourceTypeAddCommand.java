@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbInsertCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSourceType;
 
@@ -14,8 +13,8 @@ import edu.mit.scansite.shared.transferobjects.DataSourceType;
 public class DataSourceTypeAddCommand extends DbInsertCommand {
 	private DataSourceType dataSourceType = null;
 
-	public DataSourceTypeAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DataSourceType dataSourceType) {
+	public DataSourceTypeAddCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			DataSourceType dataSourceType) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSourceType = dataSourceType;
 	}
@@ -28,23 +27,13 @@ public class DataSourceTypeAddCommand extends DbInsertCommand {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.INSERTINTO)
-				.append(c.gettDataSourceTypes())
-				.append('(')
-				.append(c.getcDataSourceTypesId())
-				.append(CommandConstants.COMMA)
-				.append(c.getcDataSourceTypesShortName())
-				.append(CommandConstants.COMMA)
-				.append(c.getcDataSourceTypesDisplayName())
-				.append(')')
-				.append(CommandConstants.VALUES)
-				.append('(')
-				.append(dataSourceType.getId())
-				.append(CommandConstants.COMMA)
-				.append(CommandConstants.enquote(dataSourceType.getShortName()))
-				.append(CommandConstants.COMMA)
-				.append(CommandConstants.enquote(dataSourceType
-						.getDisplayName())).append(')');
+		sql.append(CommandConstants.INSERTINTO).append(c.gettDataSourceTypes()).append('(')
+				.append(c.getcDataSourceTypesId()).append(CommandConstants.COMMA)
+				.append(c.getcDataSourceTypesShortName()).append(CommandConstants.COMMA)
+				.append(c.getcDataSourceTypesDisplayName()).append(')').append(CommandConstants.VALUES).append('(')
+				.append(dataSourceType.getId()).append(CommandConstants.COMMA)
+				.append(CommandConstants.enquote(dataSourceType.getShortName())).append(CommandConstants.COMMA)
+				.append(CommandConstants.enquote(dataSourceType.getDisplayName())).append(')');
 		return sql.toString();
 	}
 

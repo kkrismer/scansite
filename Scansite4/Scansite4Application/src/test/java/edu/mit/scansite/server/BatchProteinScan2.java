@@ -12,12 +12,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.MotifFileReader;
 import edu.mit.scansite.server.dataaccess.file.ProteinScanResultFileWriter;
 import edu.mit.scansite.server.dataaccess.file.ResultFileWriterException;
-import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.Protein;
@@ -56,8 +53,7 @@ public class BatchProteinScan2 {
 		try {
 			reader = new BufferedReader(new FileReader(f));
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found in location: "
-					+ f.getAbsolutePath());
+			System.err.println("File not found in location: " + f.getAbsolutePath());
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
@@ -97,8 +93,7 @@ public class BatchProteinScan2 {
 			Double[] saValues = alg.calculateSurfaceAccessibility(seq);
 
 			double maxScore = ScansiteConstants.MAX_SCORING_SCORE;
-			ArrayList<ScanResultSite> sites = scoring.scoreProtein(m, p,
-					maxScore);
+			ArrayList<ScanResultSite> sites = scoring.scoreProtein(m, p, maxScore);
 			for (ScanResultSite site : sites) {
 				site.setSurfaceAccessValue(saValues[site.getPosition()]);
 			}
@@ -106,8 +101,7 @@ public class BatchProteinScan2 {
 
 		}
 		try {
-			ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(
-					resultPathPrefix);
+			ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(resultPathPrefix);
 			fileWriter.setMotifName(organism);
 			// realPath - realPath // should be only relevant in client mode
 			fileWriter.writeResults("", results);
@@ -140,8 +134,7 @@ public class BatchProteinScan2 {
 		}
 
 		@Override
-		public String writeResults(String realPath, List<ScanResultSite> hits)
-				throws ResultFileWriterException {
+		public String writeResults(String realPath, List<ScanResultSite> hits) throws ResultFileWriterException {
 			String currentFilePath = getFilePath(realPath);
 			BufferedWriter writer = null;
 			try {

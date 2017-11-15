@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 
 /**
@@ -14,8 +13,7 @@ public class MotifIdentifierDeleteCommand extends DbUpdateCommand {
 
 	private int motifId;
 
-	public MotifIdentifierDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int motifId) {
+	public MotifIdentifierDeleteCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int motifId) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 	}
@@ -24,10 +22,8 @@ public class MotifIdentifierDeleteCommand extends DbUpdateCommand {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(CommandConstants.DELETEFROM)
-				.append(c.gettMotifIdentifierMapping())
-				.append(CommandConstants.WHERE).append(c.getcMotifsId())
-				.append(CommandConstants.EQ).append(motifId);
+		sql.append(CommandConstants.DELETEFROM).append(c.gettMotifIdentifierMapping()).append(CommandConstants.WHERE)
+				.append(c.getcMotifsId()).append(CommandConstants.EQ).append(motifId);
 		return sql.toString();
 	}
 }

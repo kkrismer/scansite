@@ -1,17 +1,10 @@
 package edu.mit.scansite.server.dataaccess.file;
 
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.commands.motif.MotifCountGetCommand;
-import edu.mit.scansite.server.updater.GenPeptDbUpdater;
-import edu.mit.scansite.server.updater.ScansiteUpdaterException;
-import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.transferobjects.MotifClass;
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,6 +14,19 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.mit.scansite.server.updater.GenPeptDbUpdater;
+import edu.mit.scansite.server.updater.ScansiteUpdaterException;
 
 /**
  * @author Thomas Bernwinkler

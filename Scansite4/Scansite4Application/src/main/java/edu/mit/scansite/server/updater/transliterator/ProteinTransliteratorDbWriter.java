@@ -11,7 +11,6 @@ import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.ProteinDao;
 import edu.mit.scansite.server.dataaccess.TaxonDao;
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.updater.DataSourceMetaInfo;
 import edu.mit.scansite.server.updater.ScansiteUpdaterException;
 import edu.mit.scansite.shared.DataAccessException;
@@ -49,8 +48,7 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 	 */
 	private HashMap<String, Integer> taxaIds = new HashMap<String, Integer>();
 
-	public ProteinTransliteratorDbWriter(BufferedWriter errorWriter,
-			DataSourceMetaInfo dataSourceMetaInfo)
+	public ProteinTransliteratorDbWriter(BufferedWriter errorWriter, DataSourceMetaInfo dataSourceMetaInfo)
 			throws ScansiteUpdaterException {
 		this.errorWriter = errorWriter;
 		this.dataSourceMetaInfo = dataSourceMetaInfo;
@@ -72,34 +70,28 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 	}
 
 	@Override
-	public void saveInvalidEntry(String proteinId)
-			throws ScansiteUpdaterException {
+	public void saveInvalidEntry(String proteinId) throws ScansiteUpdaterException {
 		try {
 			errorWriter.write(proteinId + "\n");
 			errorWriter.flush();
 		} catch (Exception e) {
-			throw new ScansiteUpdaterException(
-					"Error writing invalid entry to file.", e);
+			throw new ScansiteUpdaterException("Error writing invalid entry to file.", e);
 		}
 	}
 
 	@Override
-	public void saveEntry(String proteinId,
-			HashMap<String, Set<String>> annotations, Double mw, Double pI,
-			ArrayList<String> taxa, String species, String sequence)
-			throws ScansiteUpdaterException {
+	public void saveEntry(String proteinId, HashMap<String, Set<String>> annotations, Double mw, Double pI,
+			ArrayList<String> taxa, String species, String sequence) throws ScansiteUpdaterException {
 		try {
 			Taxon tx = createTaxon(taxa, species);
-			Protein p = new Protein(proteinId,
-					dataSourceMetaInfo.getDataSource(), sequence, tx, mw, pI);
+			Protein p = new Protein(proteinId, dataSourceMetaInfo.getDataSource(), sequence, tx, mw, pI);
 			p.setOrganismClass(getClass(taxa));
 			p.setpIPhos1(algs.calculateIsoelectricPoint(sequence, 1));
 			p.setpIPhos2(algs.calculateIsoelectricPoint(sequence, 2));
 			p.setpIPhos3(algs.calculateIsoelectricPoint(sequence, 3));
 			proteinDao.add(p, false, dataSourceMetaInfo.getDataSource());
 			if (annotations != null) {
-				annoDao.addAnnotations(annotations, proteinId,
-						dataSourceMetaInfo.getDataSource());
+				annoDao.addAnnotations(annotations, proteinId, dataSourceMetaInfo.getDataSource());
 			}
 		} catch (Exception e) {
 			saveInvalidEntry(proteinId + "\t---\t" + e.getMessage());
@@ -111,8 +103,7 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 		for (String t : taxa) {
 			if (t.matches(".*[Vv]irus.*")) {
 				return OrganismClass.VIRUSES;
-			} else if (t.matches(".*[Aa]rchaea.*")
-					|| t.matches(".*[Bb]acteria.*")) {
+			} else if (t.matches(".*[Aa]rchaea.*") || t.matches(".*[Bb]acteria.*")) {
 				return OrganismClass.BACTERIA;
 			} else if (t.matches(".*[Ee]u[ck]aryota.*")) {
 				orgClass = OrganismClass.INVERTEBRATA; // all eucaryota that are
@@ -120,14 +111,10 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 														// vertebrates
 			} else if (t.matches(".*[Vv]iridiplantae.*")) {
 				return OrganismClass.PLANTS;
-			} else if (t.matches(".*[fF]ungi.*") || t.matches(".*[Yy]east.*")
-					|| t.matches(".*[sS]accharomyces.*")) {
+			} else if (t.matches(".*[fF]ungi.*") || t.matches(".*[Yy]east.*") || t.matches(".*[sS]accharomyces.*")) {
 				return OrganismClass.FUNGI;
-			} else if (t.matches(".*[Mm]ammalia.*")
-					|| t.matches(".*[Hh]uman.*")
-					|| t.matches(".*[Hh]omo Sapiens.*")
-					|| t.matches(".*[Mm]ouse.*")
-					|| t.matches(".*[Mm]us [Mm]usculus.*")) {
+			} else if (t.matches(".*[Mm]ammalia.*") || t.matches(".*[Hh]uman.*") || t.matches(".*[Hh]omo Sapiens.*")
+					|| t.matches(".*[Mm]ouse.*") || t.matches(".*[Mm]us [Mm]usculus.*")) {
 				return OrganismClass.MAMMALIA;
 			} else if (t.matches(".*[Vv]ertebrata.*")) {
 				orgClass = OrganismClass.VERTEBRATA;
@@ -136,8 +123,7 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 		return orgClass;
 	}
 
-	private Taxon createTaxon(ArrayList<String> taxaNames, String species)
-			throws ScansiteUpdaterException {
+	private Taxon createTaxon(ArrayList<String> taxaNames, String species) throws ScansiteUpdaterException {
 		taxaNames.add(species);
 		Taxon finalTaxon = null;
 		String parentName = "";
@@ -147,15 +133,11 @@ public class ProteinTransliteratorDbWriter implements ProteinTransliteratorWrite
 				parentList = PARENT_TAXON_SEPARATOR;
 			}
 			try {
-				int id = (taxaIds.containsKey(taxonName)) ? taxaIds
-						.get(taxonName) : -1;
-				finalTaxon = new Taxon(id, taxonName, parentList,
-						taxonName.equals(species));
-				id = taxonDao.add(finalTaxon,
-						dataSourceMetaInfo.getDataSource());
+				int id = (taxaIds.containsKey(taxonName)) ? taxaIds.get(taxonName) : -1;
+				finalTaxon = new Taxon(id, taxonName, parentList, taxonName.equals(species));
+				id = taxonDao.add(finalTaxon, dataSourceMetaInfo.getDataSource());
 				taxaIds.put(taxonName, id);
-				parentsMap.put(taxonName, parentList + id
-						+ PARENT_TAXON_SEPARATOR);
+				parentsMap.put(taxonName, parentList + id + PARENT_TAXON_SEPARATOR);
 				parentName = taxonName;
 				finalTaxon.setId(id);
 			} catch (DataAccessException e) {

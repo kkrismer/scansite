@@ -19,17 +19,14 @@ import edu.mit.scansite.client.ui.widgets.features.SequenceAlignmentTable;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.dispatch.features.OrthologScanResult;
 import edu.mit.scansite.shared.transferobjects.Parameter;
-import edu.mit.scansite.shared.transferobjects.SequenceAlignment;
 import edu.mit.scansite.shared.transferobjects.states.ScanOrthologsResultPageState;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class ScanOrthologsResultPageViewImpl extends
-		ScanOrthologsResultPageView {
-	interface ScanOrthologsResultPageViewImplUiBinder extends
-			UiBinder<Widget, ScanOrthologsResultPageViewImpl> {
+public class ScanOrthologsResultPageViewImpl extends ScanOrthologsResultPageView {
+	interface ScanOrthologsResultPageViewImplUiBinder extends UiBinder<Widget, ScanOrthologsResultPageViewImpl> {
 	}
 
 	private static ScanOrthologsResultPageViewImplUiBinder uiBinder = GWT
@@ -98,41 +95,34 @@ public class ScanOrthologsResultPageViewImpl extends
 
 	private void initScanResultProperties(OrthologScanResult result) {
 		List<Parameter> scanResultProperties = new LinkedList<>();
+		scanResultProperties.add(new Parameter("Number of orthologous proteins", result.getOrthologs().size()));
+		scanResultProperties.add(new Parameter("Number of orthologous proteins with conserved phosphorylation site",
+				result.getNrOfConservedPhosphoSites()));
 		scanResultProperties
-				.add(new Parameter("Number of orthologous proteins", result
-						.getOrthologs().size()));
-		scanResultProperties
-				.add(new Parameter(
-						"Number of orthologous proteins with conserved phosphorylation site",
-						result.getNrOfConservedPhosphoSites()));
-		scanResultProperties.add(new Parameter(
-				"Evolutionary conservation of phosphorylation site",
-				NumberFormat.getPercentFormat().format(
-						(float) result.getNrOfConservedPhosphoSites()
-								/ (float) result.getOrthologs().size())));
+				.add(new Parameter("Evolutionary conservation of phosphorylation site", NumberFormat.getPercentFormat()
+						.format((float) result.getNrOfConservedPhosphoSites() / (float) result.getOrthologs().size())));
 		displayScanResultPropertiesWidget.setProperties(scanResultProperties);
 	}
 
 	private void initOrthologousProteinsTable(OrthologScanResult result) {
 		orthologousProteinsFlowPanel.clear();
-		OrthologScanResultTable resultTable = new OrthologScanResultTable(
-				result);
+		OrthologScanResultTable resultTable = new OrthologScanResultTable(result);
 		resultTable.setWidth("100%");
 		orthologousProteinsFlowPanel.add(resultTable);
 	}
 
 	private void initSequenceAlignmentTable(OrthologScanResult result) {
 		sequenceAlignmentFlowPanel.clear();
-        if (result.getSequenceAlignment() == null) {
-            HTML content = new HTML();
-            content.setHTML("<span style=\"color: orange\">Could not align sequences! Only a single sequence was available for the scan!</span>");
-            sequenceAlignmentFlowPanel.add(content);
-        } else {
-            SequenceAlignmentTable sequenceAlignmentTable =
-                    new SequenceAlignmentTable(result);
-            sequenceAlignmentTable.setWidth("100%");
-            sequenceAlignmentFlowPanel.add(sequenceAlignmentTable);
-        }
+		if (result.getSequenceAlignment() == null) {
+			HTML content = new HTML();
+			content.setHTML(
+					"<span style=\"color: orange\">Could not align sequences! Only a single sequence was available for the scan!</span>");
+			sequenceAlignmentFlowPanel.add(content);
+		} else {
+			SequenceAlignmentTable sequenceAlignmentTable = new SequenceAlignmentTable(result);
+			sequenceAlignmentTable.setWidth("100%");
+			sequenceAlignmentFlowPanel.add(sequenceAlignmentTable);
+		}
 
 	}
 

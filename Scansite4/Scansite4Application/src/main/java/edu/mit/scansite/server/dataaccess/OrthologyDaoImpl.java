@@ -8,7 +8,6 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.commands.orthology.OrthologProteinsGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.orthology.OrthologsCountByIdentifierGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.orthology.OrthologyAddCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
@@ -19,28 +18,33 @@ import edu.mit.scansite.shared.transferobjects.Protein;
  */
 public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 
-	public OrthologyDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public OrthologyDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.OrthologyDao#setUseTempTablesForUpdate(boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.OrthologyDao#setUseTempTablesForUpdate(
+	 * boolean)
 	 */
 	@Override
 	public void setUseTempTablesForUpdate(boolean useTempTablesForUpdate) {
 		this.useTempTablesForUpdate = useTempTablesForUpdate;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.OrthologyDao#addOrthologyEntry(edu.mit.scansite.shared.transferobjects.DataSource, int, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.OrthologyDao#addOrthologyEntry(edu.mit.
+	 * scansite.shared.transferobjects.DataSource, int, java.lang.String)
 	 */
 	@Override
-	public void addOrthologyEntry(DataSource orthologyDataSource,
-			int orthologsGroupId, String orthologsIdentifier)
+	public void addOrthologyEntry(DataSource orthologyDataSource, int orthologsGroupId, String orthologsIdentifier)
 			throws DataAccessException {
-		OrthologyAddCommand command = new OrthologyAddCommand(dbAccessConfig,
-				dbConstantsConfig, useTempTablesForUpdate,
+		OrthologyAddCommand command = new OrthologyAddCommand(dbAccessConfig, dbConstantsConfig, useTempTablesForUpdate,
 				orthologyDataSource, orthologsGroupId, orthologsIdentifier);
 		try {
 			command.execute();
@@ -53,17 +57,20 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 	// public List<Protein> getOrthologs(DataSource orthologyDataSource,
 	// DataSource proteinDataSource, String identifier,
 	// IdentifierType proteinIdentifierType) throws DatabaseException {
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.OrthologyDao#getOrthologs(edu.mit.scansite.shared.transferobjects.DataSource, edu.mit.scansite.shared.transferobjects.DataSource, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.OrthologyDao#getOrthologs(edu.mit.scansite
+	 * .shared.transferobjects.DataSource,
+	 * edu.mit.scansite.shared.transferobjects.DataSource, java.lang.String)
 	 */
 	@Override
-	public List<Protein> getOrthologs(DataSource orthologyDataSource,
-			DataSource proteinDataSource, String identifier)
+	public List<Protein> getOrthologs(DataSource orthologyDataSource, DataSource proteinDataSource, String identifier)
 			throws DatabaseException {
 		// assume orthology data source and protein data source have the same
 		// identifier type
-		List<Protein> proteins = getOrthologProteins(orthologyDataSource,
-				proteinDataSource, identifier);
+		List<Protein> proteins = getOrthologProteins(orthologyDataSource, proteinDataSource, identifier);
 		// IdentifierDaoImpl identifierDao = ServiceLocator.getInstance()
 		// .getDaoFactory(dbConnector).getIdentifierDao();
 		// IdentifierType orthologyIdentifierType = identifierDao
@@ -132,25 +139,20 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 	// return new ArrayList<String>(uniqueValues);
 	// }
 
-	private List<Protein> getOrthologProteins(DataSource orthologyDataSource,
-			DataSource proteinDataSource, String identifier)
-			throws DataAccessException {
-		return getOrthologProteins(orthologyDataSource, proteinDataSource,
-				Arrays.asList(identifier));
+	private List<Protein> getOrthologProteins(DataSource orthologyDataSource, DataSource proteinDataSource,
+			String identifier) throws DataAccessException {
+		return getOrthologProteins(orthologyDataSource, proteinDataSource, Arrays.asList(identifier));
 	}
 
-	private List<Protein> getOrthologProteins(DataSource orthologyDataSource,
-			DataSource proteinDataSource, List<String> identifiers)
-			throws DataAccessException {
+	private List<Protein> getOrthologProteins(DataSource orthologyDataSource, DataSource proteinDataSource,
+			List<String> identifiers) throws DataAccessException {
 		try {
 			if (identifiers != null && identifiers.size() > 0) {
-				OrthologProteinsGetCommand cmd = new OrthologProteinsGetCommand(
-						dbAccessConfig, dbConstantsConfig,
-						useTempTablesForUpdate, orthologyDataSource,
-						identifiers, proteinDataSource);
+				OrthologProteinsGetCommand cmd = new OrthologProteinsGetCommand(dbAccessConfig, dbConstantsConfig,
+						useTempTablesForUpdate, orthologyDataSource, identifiers, proteinDataSource);
 				List<Protein> proteins = cmd.execute();
-				proteins = ServiceLocator.getDaoFactory().getProteinDao()
-						.getProteinInformation(proteins, proteinDataSource);
+				proteins = ServiceLocator.getDaoFactory().getProteinDao().getProteinInformation(proteins,
+						proteinDataSource);
 				return proteins;
 			} else {
 				return null;
@@ -179,15 +181,18 @@ public class OrthologyDaoImpl extends DaoImpl implements OrthologyDao {
 	// }
 	// }
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.OrthologyDao#getOrthologsCountByIdentifier(edu.mit.scansite.shared.transferobjects.DataSource, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.OrthologyDao#getOrthologsCountByIdentifier
+	 * (edu.mit.scansite.shared.transferobjects.DataSource, java.lang.String)
 	 */
 	@Override
-	public int getOrthologsCountByIdentifier(DataSource orthologyDataSource,
-			String identifier) throws DataAccessException {
-		OrthologsCountByIdentifierGetCommand cmd = new OrthologsCountByIdentifierGetCommand(
-				dbAccessConfig, dbConstantsConfig,
-				useTempTablesForUpdate, orthologyDataSource, identifier);
+	public int getOrthologsCountByIdentifier(DataSource orthologyDataSource, String identifier)
+			throws DataAccessException {
+		OrthologsCountByIdentifierGetCommand cmd = new OrthologsCountByIdentifierGetCommand(dbAccessConfig,
+				dbConstantsConfig, useTempTablesForUpdate, orthologyDataSource, identifier);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {

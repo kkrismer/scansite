@@ -7,7 +7,6 @@ import java.util.Set;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
@@ -20,9 +19,8 @@ public class TaxonIdGetSubTaxaIdCommand extends DbQueryCommand<Set<Integer>> {
 	private DataSource dataSource;
 	private boolean getSpeciesOnly = true;
 
-	public TaxonIdGetSubTaxaIdCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, String parentPath, boolean useTempTablesForUpdate,
-			DataSource dataSource) {
+	public TaxonIdGetSubTaxaIdCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String parentPath,
+			boolean useTempTablesForUpdate, DataSource dataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.dataSource = dataSource;
@@ -34,8 +32,7 @@ public class TaxonIdGetSubTaxaIdCommand extends DbQueryCommand<Set<Integer>> {
 	}
 
 	@Override
-	protected Set<Integer> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Set<Integer> doProcessResults(ResultSet result) throws DataAccessException {
 		Set<Integer> ts = new HashSet<Integer>();
 		try {
 			while (result.next()) {
@@ -54,8 +51,7 @@ public class TaxonIdGetSubTaxaIdCommand extends DbQueryCommand<Set<Integer>> {
 		sql.append(CommandConstants.FROM).append(c.gettTaxa(dataSource));
 		sql.append(CommandConstants.WHERE);
 		if (getSpeciesOnly) {
-			sql.append(c.getcTaxaIsSpecies()).append(CommandConstants.EQ)
-					.append(1).append(CommandConstants.AND);
+			sql.append(c.getcTaxaIsSpecies()).append(CommandConstants.EQ).append(1).append(CommandConstants.AND);
 		}
 		sql.append(c.getcTaxaParentTaxa()).append(CommandConstants.LIKE)
 				.append(CommandConstants.enquote(parentPath + "%"));

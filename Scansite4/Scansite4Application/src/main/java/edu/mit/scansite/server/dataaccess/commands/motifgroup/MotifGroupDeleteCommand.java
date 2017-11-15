@@ -3,7 +3,6 @@ package edu.mit.scansite.server.dataaccess.commands.motifgroup;
 import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.DbUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 
 /**
@@ -14,8 +13,7 @@ public class MotifGroupDeleteCommand extends DbUpdateCommand {
 
 	private int id;
 
-	public MotifGroupDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int id) {
+	public MotifGroupDeleteCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int id) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
@@ -24,8 +22,8 @@ public class MotifGroupDeleteCommand extends DbUpdateCommand {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(c.DELETEFROM).append(c.gettMotifGroups()).append(c.WHERE)
-				.append(c.getcMotifGroupsId()).append(c.EQ).append(id);
+		sql.append(c.DELETEFROM).append(c.gettMotifGroups()).append(c.WHERE).append(c.getcMotifGroupsId()).append(c.EQ)
+				.append(id);
 		return sql.toString();
 	}
 

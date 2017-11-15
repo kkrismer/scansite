@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.mit.scansite.shared.transferobjects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.ImageInOut;
 import edu.mit.scansite.server.dataaccess.file.ProteinScanResultFileWriter;
 import edu.mit.scansite.server.domains.DomainLocator;
@@ -22,6 +20,18 @@ import edu.mit.scansite.server.images.proteins.ProteinPlotPainter;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
+import edu.mit.scansite.shared.transferobjects.DataSource;
+import edu.mit.scansite.shared.transferobjects.DomainPosition;
+import edu.mit.scansite.shared.transferobjects.HistogramStringency;
+import edu.mit.scansite.shared.transferobjects.LightWeightLocalization;
+import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
+import edu.mit.scansite.shared.transferobjects.Localization;
+import edu.mit.scansite.shared.transferobjects.LocalizationType;
+import edu.mit.scansite.shared.transferobjects.Motif;
+import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.ScanResultSite;
+import edu.mit.scansite.shared.transferobjects.ScanResults;
+import edu.mit.scansite.shared.transferobjects.Taxon;
 import edu.mit.scansite.shared.util.ScansiteAlgorithms;
 import edu.mit.scansite.shared.util.ScansiteScoring;
 
@@ -42,11 +52,10 @@ public class ProteinScanFeature {
 	 * @throws DataAccessException
 	 *             Is thrown if a database access related error occurs.
 	 */
-	public ProteinScanResult doProteinScan(LightWeightProtein protein,
-			MotifSelection motifSelection, HistogramStringency stringency,
-			boolean showDomains, String histogramDataSource,
-			String histogramTaxon, DataSource localizationDataSource,
-			boolean doCreateFiles, boolean publicOnly, String realPath) throws DataAccessException {
+	public ProteinScanResult doProteinScan(LightWeightProtein protein, MotifSelection motifSelection,
+			HistogramStringency stringency, boolean showDomains, String histogramDataSource, String histogramTaxon,
+			DataSource localizationDataSource, boolean doCreateFiles, boolean publicOnly, String realPath)
+			throws DataAccessException {
 
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 		ArrayList<DomainPosition> domainPositions = null;
@@ -56,20 +65,17 @@ public class ProteinScanFeature {
 		Localization proteinLocalization = null;
 		if (localizationDataSource != null) {
 			if (locatableMotifs(motifs)) {
-				motifLocalizations = factory.getLocalizationDao()
-						.retrieveLocalizationsForMotifs(localizationDataSource, motifs);
+				motifLocalizations = factory.getLocalizationDao().retrieveLocalizationsForMotifs(localizationDataSource,
+						motifs);
 			}
-			proteinLocalization = factory.getLocalizationDao()
-					.retrieveLocalization(localizationDataSource, protein);
+			proteinLocalization = factory.getLocalizationDao().retrieveLocalization(localizationDataSource, protein);
 		}
 
 		if (showDomains) {
 			try {
-				DomainLocator domainLocator = DomainLocatorFactory
-						.getDomainLocator();
+				DomainLocator domainLocator = DomainLocatorFactory.getDomainLocator();
 				domainLocator.init();
-				domainPositions = domainLocator.getDomainPositions(realPath, protein
-						.getSequence());
+				domainPositions = domainLocator.getDomainPositions(realPath, protein.getSequence());
 			} catch (DomainLocatorException e) {
 				logger.error(e.getMessage(), e);
 				domainPositions = null;
@@ -89,19 +95,18 @@ public class ProteinScanFeature {
 				List<ServerHistogram> sHists = histDao.getHistograms(motifs, ds, t.getId());
 				for (ServerHistogram sh : sHists) {
 					double maxScore = sh.getScore(stringency.getPercentileValue());
-					ArrayList<ScanResultSite> sites = scoring.scoreProtein(
-							sh.getMotif(), protein, maxScore);
+					ArrayList<ScanResultSite> sites = scoring.scoreProtein(sh.getMotif(), protein, maxScore);
 					for (ScanResultSite site : sites) {
 						if (motifLocalizations != null) {
 							if (motifLocalizations.containsKey(sh.getMotif())) {
 								site.setMotifLocalization(motifLocalizations.get(sh.getMotif()));
 							} else {
-								site.setMotifLocalization(new LightWeightLocalization(
-										new LocalizationType("unknown / NA"), 0));
+								site.setMotifLocalization(
+										new LightWeightLocalization(new LocalizationType("unknown / NA"), 0));
 							}
 						} else {
-							site.setMotifLocalization(new LightWeightLocalization(
-									new LocalizationType("unknown / NA"), 0));
+							site.setMotifLocalization(
+									new LightWeightLocalization(new LocalizationType("unknown / NA"), 0));
 						}
 						site.setLocalizationDataSource(localizationDataSource);
 						site.setPercentile(sh.getPercentile(site.getScore()));
@@ -122,8 +127,7 @@ public class ProteinScanFeature {
 			}
 		}
 
-		ProteinPlotPainter ppPainter = new ProteinPlotPainter(
-				protein.toString(), protein.getSequence(), saValues,
+		ProteinPlotPainter ppPainter = new ProteinPlotPainter(protein.toString(), protein.getSequence(), saValues,
 				showDomains, domainPositions);
 		ppPainter.applyHits(hits);
 
@@ -133,15 +137,13 @@ public class ProteinScanFeature {
 			ImageInOut iio = new ImageInOut();
 			iio.saveImage(ppPainter.getBufferedImage(), imagePath);
 			String clientImagePath = imagePath.replace(realPath, "");
-			if (clientImagePath.startsWith("/")
-					|| clientImagePath.startsWith("\\")) {
+			if (clientImagePath.startsWith("/") || clientImagePath.startsWith("\\")) {
 				clientImagePath = clientImagePath.substring(1);
 			}
 			results.setImagePath(clientImagePath);
 		}
 
-		results.setOrthologyDataSources(findOrthologyDataSource(factory,
-				protein.getDataSource()));
+		results.setOrthologyDataSources(findOrthologyDataSource(factory, protein.getDataSource()));
 		results.setLocalizationDataSource(localizationDataSource);
 		results.setProteinLocalization(proteinLocalization);
 		results.setHistogramThreshold(stringency);
@@ -156,12 +158,9 @@ public class ProteinScanFeature {
 		if (doCreateFiles) {
 			try { // write result file for user download
 				ProteinScanResultFileWriter writer = new ProteinScanResultFileWriter();
-				results.setResultFilePath(writer.writeResults(realPath, hits)
-						.replace(realPath, ""));
+				results.setResultFilePath(writer.writeResults(realPath, hits).replace(realPath, ""));
 			} catch (Exception e) {
-				logger.error(
-						"Error writing result file for protein scan: "
-								+ e.toString(), e);
+				logger.error("Error writing result file for protein scan: " + e.toString(), e);
 			}
 		}
 
@@ -170,21 +169,18 @@ public class ProteinScanFeature {
 
 	private boolean locatableMotifs(List<Motif> motifs) {
 		for (Motif motif : motifs) {
-			if (motif.getId() > 0 && motif.getIdentifiers() != null
-					&& !motif.getIdentifiers().isEmpty()) {
+			if (motif.getId() > 0 && motif.getIdentifiers() != null && !motif.getIdentifiers().isEmpty()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private List<DataSource> findOrthologyDataSource(DaoFactory factory,
-			DataSource dataSource) {
+	private List<DataSource> findOrthologyDataSource(DaoFactory factory, DataSource dataSource) {
 		try {
 			if (dataSource != null) {
 				return factory.getIdentifierDao()
-						.getCompatibleOrthologyDataSourcesForIdentifierType(
-								dataSource.getIdentifierType());
+						.getCompatibleOrthologyDataSourcesForIdentifierType(dataSource.getIdentifierType());
 			} else {
 				return null;
 			}

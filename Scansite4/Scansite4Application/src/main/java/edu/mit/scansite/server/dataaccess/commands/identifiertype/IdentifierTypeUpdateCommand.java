@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.IdentifierType;
 
@@ -14,8 +13,8 @@ import edu.mit.scansite.shared.transferobjects.IdentifierType;
 public class IdentifierTypeUpdateCommand extends DbUpdateCommand {
 	private IdentifierType identifierType;
 
-	public IdentifierTypeUpdateCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, IdentifierType identifierType) {
+	public IdentifierTypeUpdateCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			IdentifierType identifierType) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.identifierType = identifierType;
 	}
@@ -28,8 +27,7 @@ public class IdentifierTypeUpdateCommand extends DbUpdateCommand {
 		sql.append(c.getcIdentifierTypesName()).append(CommandConstants.EQ)
 				.append(CommandConstants.enquote(identifierType.getName()));
 		sql.append(CommandConstants.WHERE);
-		sql.append(c.getcIdentifierTypesId()).append(CommandConstants.EQ)
-				.append(identifierType.getId());
+		sql.append(c.getcIdentifierTypesId()).append(CommandConstants.EQ).append(identifierType.getId());
 		return sql.toString();
 	}
 }

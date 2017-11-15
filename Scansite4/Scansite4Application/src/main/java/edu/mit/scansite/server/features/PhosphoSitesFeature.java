@@ -6,7 +6,6 @@ import java.util.List;
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.images.histograms.ServerHistogram;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.ScansiteConstants;
@@ -38,32 +37,27 @@ public class PhosphoSitesFeature {
 	private List<ServerHistogram> yeastServerHistograms = new ArrayList<ServerHistogram>();
 	private List<ServerHistogram> otherServerHistograms = new ArrayList<ServerHistogram>();
 
-	public List<ScanResultSite> checkPositionSpecificPhosphoSites(
-			Protein protein, int position, HistogramStringency stringency,
-			boolean publicOnly) throws DataAccessException {
-		return checkPositionSpecificPhosphoSites(protein, position, stringency,
-				null, protein.getOrganismClass(), publicOnly);
+	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
+			HistogramStringency stringency, boolean publicOnly) throws DataAccessException {
+		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, protein.getOrganismClass(),
+				publicOnly);
 	}
 
-	public List<ScanResultSite> checkPositionSpecificPhosphoSites(
-			Protein protein, int position, HistogramStringency stringency,
-			LightWeightMotifGroup motifGroup, boolean publicOnly)
+	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
+			HistogramStringency stringency, LightWeightMotifGroup motifGroup, boolean publicOnly)
 			throws DataAccessException {
-		return checkPositionSpecificPhosphoSites(protein, position, stringency,
-				motifGroup, protein.getOrganismClass(), publicOnly);
+		return checkPositionSpecificPhosphoSites(protein, position, stringency, motifGroup, protein.getOrganismClass(),
+				publicOnly);
 	}
 
-	public List<ScanResultSite> checkPositionSpecificPhosphoSites(
-			Protein protein, int position, HistogramStringency stringency,
-			OrganismClass motifOrganismClass, boolean publicOnly)
+	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
+			HistogramStringency stringency, OrganismClass motifOrganismClass, boolean publicOnly)
 			throws DataAccessException {
-		return checkPositionSpecificPhosphoSites(protein, position, stringency,
-				null, motifOrganismClass, publicOnly);
+		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, motifOrganismClass, publicOnly);
 	}
 
-	public List<ScanResultSite> checkPositionSpecificPhosphoSites(
-			Protein protein, int position, HistogramStringency stringency,
-			LightWeightMotifGroup motifGroup, OrganismClass motifOrganismClass,
+	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
+			HistogramStringency stringency, LightWeightMotifGroup motifGroup, OrganismClass motifOrganismClass,
 			boolean publicOnly) throws DataAccessException {
 		DaoFactory daoFac = ServiceLocator.getDaoFactory();
 		ScansiteAlgorithms alg = new ScansiteAlgorithms();
@@ -71,11 +65,9 @@ public class PhosphoSitesFeature {
 		List<ScanResultSite> hits = new ArrayList<ScanResultSite>();
 		List<ServerHistogram> sHists;
 
-		Double[] saValues = alg.calculateSurfaceAccessibility(protein
-				.getSequence());
+		Double[] saValues = alg.calculateSurfaceAccessibility(protein.getSequence());
 
-		DataSource ds = daoFac.getDataSourceDao().get(
-				histogramDatasourceShortName);
+		DataSource ds = daoFac.getDataSourceDao().get(histogramDatasourceShortName);
 		Taxon t = daoFac.getTaxonDao().getByName(histogramTaxonName, ds);
 		HistogramDao histDao = daoFac.getHistogramDao();
 
@@ -85,15 +77,12 @@ public class PhosphoSitesFeature {
 			if (yeastServerHistograms.size() == 0) {
 				List<Motif> yeastMotifs;
 				if (motifGroup != null) {
-					yeastMotifs = daoFac.getMotifDao().getByGroup(motifGroup,
-							MotifClass.YEAST, publicOnly);
+					yeastMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.YEAST, publicOnly);
 				} else {
-					yeastMotifs = daoFac.getMotifDao().getAll(MotifClass.YEAST,
-							publicOnly);
+					yeastMotifs = daoFac.getMotifDao().getAll(MotifClass.YEAST, publicOnly);
 				}
 
-				yeastServerHistograms = histDao.getHistograms(yeastMotifs, ds,
-						t.getId());
+				yeastServerHistograms = histDao.getHistograms(yeastMotifs, ds, t.getId());
 			}
 			sHists = yeastServerHistograms;
 			break;
@@ -102,15 +91,12 @@ public class PhosphoSitesFeature {
 			if (mammalianServerHistograms.size() == 0) {
 				List<Motif> mammalianMotifs;
 				if (motifGroup != null) {
-					mammalianMotifs = daoFac.getMotifDao().getByGroup(
-							motifGroup, MotifClass.MAMMALIAN, publicOnly);
+					mammalianMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.MAMMALIAN, publicOnly);
 				} else {
-					mammalianMotifs = daoFac.getMotifDao().getAll(
-							MotifClass.MAMMALIAN, publicOnly);
+					mammalianMotifs = daoFac.getMotifDao().getAll(MotifClass.MAMMALIAN, publicOnly);
 				}
 
-				mammalianServerHistograms = histDao.getHistograms(
-						mammalianMotifs, ds, t.getId());
+				mammalianServerHistograms = histDao.getHistograms(mammalianMotifs, ds, t.getId());
 			}
 			sHists = mammalianServerHistograms;
 			break;
@@ -119,15 +105,12 @@ public class PhosphoSitesFeature {
 			if (otherServerHistograms.size() == 0) {
 				List<Motif> otherMotifs;
 				if (motifGroup != null) {
-					otherMotifs = daoFac.getMotifDao().getByGroup(motifGroup,
-							MotifClass.OTHER, publicOnly);
+					otherMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.OTHER, publicOnly);
 				} else {
-					otherMotifs = daoFac.getMotifDao().getAll(MotifClass.OTHER,
-							publicOnly);
+					otherMotifs = daoFac.getMotifDao().getAll(MotifClass.OTHER, publicOnly);
 				}
 
-				otherServerHistograms = histDao.getHistograms(otherMotifs, ds,
-						t.getId());
+				otherServerHistograms = histDao.getHistograms(otherMotifs, ds, t.getId());
 			}
 			sHists = otherServerHistograms;
 			break;
@@ -135,13 +118,11 @@ public class PhosphoSitesFeature {
 
 		for (ServerHistogram sh : sHists) {
 			double maxScore = sh.getScore(stringency.getPercentileValue());
-			double score = scoring.calculateSiteScore(position, protein
-					.getSequence().toCharArray(), sh.getMotif());
+			double score = scoring.calculateSiteScore(position, protein.getSequence().toCharArray(), sh.getMotif());
 
 			if (score >= 0.0 && score <= maxScore) {
-				ScanResultSite site = new ScanResultSite(sh.getMotif(),
-						new LightWeightProtein(protein), null, null, position,
-						scoring.roundScore(score));
+				ScanResultSite site = new ScanResultSite(sh.getMotif(), new LightWeightProtein(protein), null, null,
+						position, scoring.roundScore(score));
 				site.setPercentile(sh.getPercentile(site.getScore()));
 				site.setSurfaceAccessValue(saValues[site.getPosition()]);
 				hits.add(site);

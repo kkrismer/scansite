@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.HistogramStringency;
@@ -20,8 +19,7 @@ public class HistogramGetThresholdCommand extends DbQueryCommand<Double> {
 	private DataSource dataSource;
 	private HistogramStringency stringency;
 
-	public HistogramGetThresholdCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int motifId,
+	public HistogramGetThresholdCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int motifId,
 			int taxonId, DataSource dataSource, HistogramStringency stringency) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
@@ -31,8 +29,7 @@ public class HistogramGetThresholdCommand extends DbQueryCommand<Double> {
 	}
 
 	@Override
-	protected Double doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Double doProcessResults(ResultSet result) throws DataAccessException {
 		try {
 			if (result.next()) {
 				return result.getDouble(1);
@@ -57,14 +54,11 @@ public class HistogramGetThresholdCommand extends DbQueryCommand<Double> {
 		sql.append(CommandConstants.FROM);
 		sql.append(c.gettHistograms());
 		sql.append(CommandConstants.WHERE);
-		sql.append(c.getcMotifsId()).append(CommandConstants.EQ)
-				.append(motifId);
+		sql.append(c.getcMotifsId()).append(CommandConstants.EQ).append(motifId);
 		sql.append(CommandConstants.AND);
-		sql.append(c.getcHistogramsTaxonId()).append(CommandConstants.EQ)
-				.append(taxonId);
+		sql.append(c.getcHistogramsTaxonId()).append(CommandConstants.EQ).append(taxonId);
 		sql.append(CommandConstants.AND);
-		sql.append(c.getcDataSourcesId()).append(CommandConstants.EQ)
-				.append(dataSource.getId());
+		sql.append(c.getcDataSourcesId()).append(CommandConstants.EQ).append(dataSource.getId());
 
 		return sql.toString();
 	}

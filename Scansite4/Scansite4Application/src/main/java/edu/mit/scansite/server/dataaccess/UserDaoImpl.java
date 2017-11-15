@@ -8,7 +8,6 @@ import edu.mit.scansite.server.dataaccess.commands.user.UserDeleteCommand;
 import edu.mit.scansite.server.dataaccess.commands.user.UserGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.user.UserGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.user.UserUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.User;
@@ -31,8 +30,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	 */
 	@Override
 	public User get(String email, String password) throws DataAccessException {
-		UserGetCommand command = new UserGetCommand(dbAccessConfig,
-				dbConstantsConfig, email, password);
+		UserGetCommand command = new UserGetCommand(dbAccessConfig, dbConstantsConfig, email, password);
 		User user = null;
 		try {
 			user = command.execute();
@@ -46,14 +44,12 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * edu.mit.scansite.server.dataaccess.UserDao#add(edu.mit.scansite.shared
+	 * @see edu.mit.scansite.server.dataaccess.UserDao#add(edu.mit.scansite.shared
 	 * .transferobjects.User)
 	 */
 	@Override
 	public void add(User entry) throws DataAccessException {
-		UserAddCommand command = new UserAddCommand(dbAccessConfig,
-				dbConstantsConfig, entry);
+		UserAddCommand command = new UserAddCommand(dbAccessConfig, dbConstantsConfig, entry);
 		try {
 			command.execute();
 		} catch (Exception e) {
@@ -69,10 +65,8 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	 * .transferobjects.User, boolean)
 	 */
 	@Override
-	public boolean update(User entry, boolean changePassword)
-			throws DataAccessException {
-		UserUpdateCommand command = new UserUpdateCommand(dbAccessConfig,
-				dbConstantsConfig, entry, changePassword);
+	public boolean update(User entry, boolean changePassword) throws DataAccessException {
+		UserUpdateCommand command = new UserUpdateCommand(dbAccessConfig, dbConstantsConfig, entry, changePassword);
 		try {
 			return command.execute() > 0;
 		} catch (Exception e) {
@@ -104,8 +98,7 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	 */
 	@Override
 	public User get(String email) throws DataAccessException {
-		UserGetCommand command = new UserGetCommand(dbAccessConfig,
-				dbConstantsConfig, email);
+		UserGetCommand command = new UserGetCommand(dbAccessConfig, dbConstantsConfig, email);
 		User user;
 		try {
 			user = command.execute();
@@ -123,15 +116,13 @@ public class UserDaoImpl extends DaoImpl implements UserDao {
 	 */
 	@Override
 	public ArrayList<User> getAll() throws DataAccessException {
-		UserGetAllCommand command = new UserGetAllCommand(dbAccessConfig,
-				dbConstantsConfig);
+		UserGetAllCommand command = new UserGetAllCommand(dbAccessConfig, dbConstantsConfig);
 		ArrayList<User> users;
 		try {
 			users = command.execute();
 		} catch (DatabaseException e) {
 			logger.error(e.getMessage(), e);
-			throw new DataAccessException("Retrieving users from DB failed.",
-					e);
+			throw new DataAccessException("Retrieving users from DB failed.", e);
 		}
 		return users;
 	}

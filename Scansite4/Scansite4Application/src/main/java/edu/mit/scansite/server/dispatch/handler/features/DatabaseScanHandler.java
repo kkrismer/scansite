@@ -1,35 +1,28 @@
 package edu.mit.scansite.server.dispatch.handler.features;
 
+import javax.servlet.ServletContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.DaoFactory;
-import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
-import edu.mit.scansite.server.dispatch.BootstrapListener;
+
 import edu.mit.scansite.server.dispatch.handler.user.LoginHandler;
 import edu.mit.scansite.server.features.DatabaseScanFeature;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanAction;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
-import edu.mit.scansite.shared.transferobjects.DatabaseSearchScanResultSite;
-import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
  * @author Thomas Bernwinkler
  */
-public class DatabaseScanHandler implements
-		ActionHandler<DatabaseScanAction, DatabaseScanResult> {
+public class DatabaseScanHandler implements ActionHandler<DatabaseScanAction, DatabaseScanResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Provider<ServletContext> contextProvider;
 	private final LoginHandler loginHandler;
@@ -47,18 +40,16 @@ public class DatabaseScanHandler implements
 	}
 
 	@Override
-	public DatabaseScanResult execute(DatabaseScanAction action,
-			ExecutionContext context) throws DispatchException {
+	public DatabaseScanResult execute(DatabaseScanAction action, ExecutionContext context) throws DispatchException {
 		try {
 			DatabaseScanFeature feature = new DatabaseScanFeature();
-			DatabaseScanResult result = feature.doDatabaseSearch(action.getMotifSelection(), action
-					.getDataSource(), action.getRestrictionProperties(), action
-					.getOutputListSize(), true, !loginHandler
-					.isSessionValidLogin(action.getUserSessionId()),
+			DatabaseScanResult result = feature.doDatabaseSearch(action.getMotifSelection(), action.getDataSource(),
+					action.getRestrictionProperties(), action.getOutputListSize(), true,
+					!loginHandler.isSessionValidLogin(action.getUserSessionId()),
 					contextProvider.get().getRealPath("/"), action.isPreviouslyMappedSitesOnly());
 
-            DaoFactory factory = ServiceLocator.getDaoFactory();
-            // check if the sites are PhosphoSiteSites if swissprot is selected
+			// DaoFactory factory = ServiceLocator.getDaoFactory();
+			// check if the sites are PhosphoSiteSites if swissprot is selected
 
 			return result;
 		} catch (Exception e) {
@@ -68,7 +59,7 @@ public class DatabaseScanHandler implements
 	}
 
 	@Override
-	public void rollback(DatabaseScanAction action, DatabaseScanResult result,
-			ExecutionContext context) throws DispatchException {
+	public void rollback(DatabaseScanAction action, DatabaseScanResult result, ExecutionContext context)
+			throws DispatchException {
 	}
 }

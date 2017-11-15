@@ -3,7 +3,6 @@ package edu.mit.scansite.server.dataaccess.commands.news;
 import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.DbInsertCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.NewsEntry;
 
@@ -15,8 +14,7 @@ public class NewsAddCommand extends DbInsertCommand {
 
 	private NewsEntry entry;
 
-	public NewsAddCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, NewsEntry entry) {
+	public NewsAddCommand(Properties dbAccessConfig, Properties dbConstantsConfig, NewsEntry entry) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.entry = entry;
 	}
@@ -30,13 +28,11 @@ public class NewsAddCommand extends DbInsertCommand {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(c.INSERTINTO).append(c.gettNews()).append(" ( ")
-				.append(c.getcNewsTitle()).append(c.COMMA)
-				.append(c.getcNewsText()).append(c.COMMA)
-				.append(c.getcUsersEmail()).append(" ) ").append(c.VALUES)
-				.append('(').append(c.enquote(entry.getTitle()))
-				.append(c.COMMA).append(c.enquote(entry.getText()) + c.COMMA)
-				.append(c.enquote(entry.getUser().getEmail())).append(" ) ");
+		sql.append(c.INSERTINTO).append(c.gettNews()).append(" ( ").append(c.getcNewsTitle()).append(c.COMMA)
+				.append(c.getcNewsText()).append(c.COMMA).append(c.getcUsersEmail()).append(" ) ").append(c.VALUES)
+				.append('(').append(c.enquote(entry.getTitle())).append(c.COMMA)
+				.append(c.enquote(entry.getText()) + c.COMMA).append(c.enquote(entry.getUser().getEmail()))
+				.append(" ) ");
 		return sql.toString();
 	}
 

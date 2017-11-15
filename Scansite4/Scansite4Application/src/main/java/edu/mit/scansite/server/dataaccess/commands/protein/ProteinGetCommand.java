@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.OrganismClass;
@@ -25,17 +24,16 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	protected String identifier = null;
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
-	public ProteinGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
-	 	DataSource dataSource, boolean useTempTablesForUpdate) {
+	public ProteinGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, DataSource dataSource,
+			boolean useTempTablesForUpdate) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
 		this.dataSource = dataSource;
 	}
 
-	public ProteinGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, String identifier,
-            DataSource dataSource, boolean useTempTablesForUpdate) {
+	public ProteinGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String identifier,
+			DataSource dataSource, boolean useTempTablesForUpdate) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
@@ -43,8 +41,7 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 		this.identifier = identifier;
 	}
 
-	public ProteinGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int taxonId,
+	public ProteinGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int taxonId,
 			DataSource dataSource, boolean useTempTablesForUpdate) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
@@ -60,8 +57,7 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	}
 
 	@Override
-	protected ArrayList<Protein> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected ArrayList<Protein> doProcessResults(ResultSet result) throws DataAccessException {
 		ArrayList<Protein> ps = new ArrayList<Protein>();
 		try {
 			while (result.next()) {
@@ -71,10 +67,8 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 				int taxonId = result.getInt(c.getcTaxaId());
 				String seq = result.getString(c.getcProteinsSequence());
 
-				Protein p = new Protein(accNr, dataSource, seq, new Taxon(
-						taxonId), mw, pI);
-				p.setOrganismClass(classMap.get(result.getString(c
-						.getcProteinsClass())));
+				Protein p = new Protein(accNr, dataSource, seq, new Taxon(taxonId), mw, pI);
+				p.setOrganismClass(classMap.get(result.getString(c.getcProteinsClass())));
 				ps.add(p);
 			}
 		} catch (Exception e) {
@@ -86,24 +80,17 @@ public class ProteinGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsMolWeight())
-				.append(CommandConstants.COMMA).append(c.getcProteinsClass())
-				.append(CommandConstants.COMMA).append(c.getcProteinsPI())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsSequence())
-				.append(CommandConstants.COMMA).append(c.getcTaxaId());
-		sql.append(CommandConstants.FROM).append(
-				c.getProteins(dataSource));
+		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsMolWeight()).append(CommandConstants.COMMA).append(c.getcProteinsClass())
+				.append(CommandConstants.COMMA).append(c.getcProteinsPI()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsSequence()).append(CommandConstants.COMMA).append(c.getcTaxaId());
+		sql.append(CommandConstants.FROM).append(c.getProteins(dataSource));
 		sql.append(CommandConstants.WHERE);
 		if (identifier != null) {
-			sql.append(c.getcProteinsIdentifier())
-					.append(CommandConstants.LIKE)
+			sql.append(c.getcProteinsIdentifier()).append(CommandConstants.LIKE)
 					.append(CommandConstants.enquote(identifier));
 		} else if (taxonId >= 0) {
-			sql.append(c.getcTaxaId()).append(CommandConstants.EQ)
-					.append(taxonId);
+			sql.append(c.getcTaxaId()).append(CommandConstants.EQ).append(taxonId);
 		}
 		return sql.toString();
 	}

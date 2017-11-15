@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.OrganismClass;
@@ -26,9 +25,9 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 	protected DataSource proteinSource;
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
-	public OrthologProteinsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, boolean useTempTablesForUpdate, DataSource orthologySource,
-			List<String> identifiers, DataSource proteinSource) {
+	public OrthologProteinsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			boolean useTempTablesForUpdate, DataSource orthologySource, List<String> identifiers,
+			DataSource proteinSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
@@ -37,10 +36,8 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 		this.proteinSource = proteinSource;
 	}
 
-	public OrthologProteinsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
-			DataSource orthologySource, String identifier,
-			DataSource proteinSource, boolean useTempTablesForUpdate) {
+	public OrthologProteinsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			DataSource orthologySource, String identifier, DataSource proteinSource, boolean useTempTablesForUpdate) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
@@ -60,27 +57,17 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 		// WHERE oo.identifier = "NP_001120800" )
 		// AND o.identifier = p.accessionNumber
 
-		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsMolWeight())
-				.append(CommandConstants.COMMA).append(c.getcProteinsClass())
-				.append(CommandConstants.COMMA).append(c.getcProteinsPI())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsSequence())
-				.append(CommandConstants.COMMA).append(c.getcTaxaId());
-		sql.append(CommandConstants.FROM)
-				.append(c.getOrthologsTableName(orthologySource))
-				.append(CommandConstants.COMMA)
-				.append(c.getProteinsTableName(proteinSource));
+		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsMolWeight()).append(CommandConstants.COMMA).append(c.getcProteinsClass())
+				.append(CommandConstants.COMMA).append(c.getcProteinsPI()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsSequence()).append(CommandConstants.COMMA).append(c.getcTaxaId());
+		sql.append(CommandConstants.FROM).append(c.getOrthologsTableName(orthologySource))
+				.append(CommandConstants.COMMA).append(c.getProteinsTableName(proteinSource));
 		sql.append(CommandConstants.WHERE);
-		sql.append(c.getcOrthologsGroupId()).append(CommandConstants.EQ)
-				.append(CommandConstants.LPAR);
-		sql.append(CommandConstants.SELECT).append(c.getcOrthologsGroupId())
-				.append(CommandConstants.FROM)
-				.append(c.getOrthologsTableName(orthologySource))
-				.append(CommandConstants.WHERE)
-				.append(c.getcOrthologsIdentifier())
-				.append(CommandConstants.IN).append(CommandConstants.LPAR);
+		sql.append(c.getcOrthologsGroupId()).append(CommandConstants.EQ).append(CommandConstants.LPAR);
+		sql.append(CommandConstants.SELECT).append(c.getcOrthologsGroupId()).append(CommandConstants.FROM)
+				.append(c.getOrthologsTableName(orthologySource)).append(CommandConstants.WHERE)
+				.append(c.getcOrthologsIdentifier()).append(CommandConstants.IN).append(CommandConstants.LPAR);
 		for (int i = 0; i < identifiers.size(); ++i) {
 			sql.append(CommandConstants.enquote(identifiers.get(i)));
 			if (i + 1 < identifiers.size()) {
@@ -88,15 +75,14 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 			}
 		}
 		sql.append(CommandConstants.RPAR).append(CommandConstants.RPAR);
-		sql.append(CommandConstants.AND).append(c.getcOrthologsIdentifier())
-				.append(CommandConstants.EQ).append(c.getcProteinsIdentifier());
+		sql.append(CommandConstants.AND).append(c.getcOrthologsIdentifier()).append(CommandConstants.EQ)
+				.append(c.getcProteinsIdentifier());
 
 		return sql.toString();
 	}
 
 	@Override
-	protected List<Protein> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<Protein> doProcessResults(ResultSet result) throws DataAccessException {
 		List<Protein> ps = new ArrayList<Protein>();
 
 		try {
@@ -107,10 +93,8 @@ public class OrthologProteinsGetCommand extends DbQueryCommand<List<Protein>> {
 				int taxonId = result.getInt(c.getcTaxaId());
 				String seq = result.getString(c.getcProteinsSequence());
 
-				Protein p = new Protein(accNr, proteinSource, seq, new Taxon(
-						taxonId), mw, pI);
-				p.setOrganismClass(classMap.get(result.getString(c
-						.getcProteinsClass())));
+				Protein p = new Protein(accNr, proteinSource, seq, new Taxon(taxonId), mw, pI);
+				p.setOrganismClass(classMap.get(result.getString(c.getcProteinsClass())));
 				ps.add(p);
 			}
 		} catch (Exception e) {

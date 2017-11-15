@@ -1,6 +1,5 @@
 package edu.mit.scansite.server.dataaccess;
 
-import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -28,7 +27,9 @@ public abstract class DaoImpl implements Dao {
 		this.dbConstantsConfig = dbConstantsConfig;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.Dao#disableChecks()
 	 */
 	@Override
@@ -45,7 +46,9 @@ public abstract class DaoImpl implements Dao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.Dao#enableChecks()
 	 */
 	@Override

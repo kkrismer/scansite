@@ -1,16 +1,18 @@
 package edu.mit.scansite.server.features;
 
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
-import edu.mit.scansite.shared.transferobjects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
+import edu.mit.scansite.server.dataaccess.SiteEvidenceDao;
 import edu.mit.scansite.server.dataaccess.file.DatabaseSearchResultFileWriter;
 import edu.mit.scansite.server.dataaccess.file.ImageInOut;
 import edu.mit.scansite.server.images.histograms.ServerHistogram;
@@ -19,6 +21,16 @@ import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.dispatch.features.DatabaseScanResult;
+import edu.mit.scansite.shared.transferobjects.DataSource;
+import edu.mit.scansite.shared.transferobjects.DatabaseSearchMultipleRestriction;
+import edu.mit.scansite.shared.transferobjects.DatabaseSearchScanResultSite;
+import edu.mit.scansite.shared.transferobjects.HistogramDataPoint;
+import edu.mit.scansite.shared.transferobjects.HistogramStringency;
+import edu.mit.scansite.shared.transferobjects.Motif;
+import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.Protein;
+import edu.mit.scansite.shared.transferobjects.RestrictionProperties;
+import edu.mit.scansite.shared.transferobjects.Taxon;
 
 /**
  * @author Tobieh
@@ -30,10 +42,9 @@ public class DatabaseScanFeature {
 	public DatabaseScanFeature() {
 	}
 
-	public DatabaseScanResult doDatabaseSearch(MotifSelection motifSelection,
-			DataSource dataSource, RestrictionProperties restrictionProperties,
-			int outputListSize, boolean doCreateFiles, boolean publicOnly,
-		    String realPath, boolean previouslyMappedSitesOnly) throws DataAccessException {
+	public DatabaseScanResult doDatabaseSearch(MotifSelection motifSelection, DataSource dataSource,
+			RestrictionProperties restrictionProperties, int outputListSize, boolean doCreateFiles, boolean publicOnly,
+			String realPath, boolean previouslyMappedSitesOnly) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 
 		DatabaseScanResult result = new DatabaseScanResult();
@@ -53,39 +64,36 @@ public class DatabaseScanFeature {
 			List<Double> motifScoreThresholds = scoreMotifs(motifs);
 
 			boolean isMultipleMotifs = motifs.size() > 1;
-            DatabaseSearchMultipleRestriction restrictions = null;
-            if (isMultipleMotifs) {
-                List<String> dbMotifShortNames = new ArrayList<>();
-                for (Motif motif : motifs) {
-                    dbMotifShortNames.add(motif.getShortName());
-                }
-                boolean isGapRestrictionSearch = false;
-                restrictions = new DatabaseSearchMultipleRestriction(motifs, dbMotifShortNames, isGapRestrictionSearch);
-            }
+			DatabaseSearchMultipleRestriction restrictions = null;
+			if (isMultipleMotifs) {
+				List<String> dbMotifShortNames = new ArrayList<>();
+				for (Motif motif : motifs) {
+					dbMotifShortNames.add(motif.getShortName());
+				}
+				boolean isGapRestrictionSearch = false;
+				restrictions = new DatabaseSearchMultipleRestriction(motifs, dbMotifShortNames, isGapRestrictionSearch);
+			}
 
-			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs, motifScoreThresholds, proteins, isMultipleMotifs, restrictions);
+			ParallelDbSearchScorer scorer = new ParallelDbSearchScorer(motifs, motifScoreThresholds, proteins,
+					isMultipleMotifs, restrictions);
 			try {
 				scorer.doScoring();
 			} catch (Exception e1) {
-				logger.error("Error scoring proteins for database search: "
-						+ e1.toString());
-				return new DatabaseScanResult(
-						"Error scoring proteins for database search");
+				logger.error("Error scoring proteins for database search: " + e1.toString());
+				return new DatabaseScanResult("Error scoring proteins for database search");
 			}
 			double median = scorer.getMedian();
 			double medianAbsDev = scorer.getMedianAbsDev();
-			ArrayList<HistogramDataPoint> histDpList = scorer
-					.getHistogramDataPointList();
+			ArrayList<HistogramDataPoint> histDpList = scorer.getHistogramDataPointList();
 			int protCount = scorer.getProteinCount();
 			int totalSiteCount = scorer.getTotalSiteCount();
 			int combinedSiteCount = scorer.getCombinedSiteCount();
 			ArrayList<DatabaseSearchScanResultSite> sites = scorer.getSites();
 
 			try {
-				String histTaxonName = (restrictionProperties.getSpeciesRegEx() != null && !restrictionProperties
-						.getSpeciesRegEx().isEmpty()) ? restrictionProperties
-						.getSpeciesRegEx() : restrictionProperties
-						.getOrganismClass().getDisplayName();
+				String histTaxonName = (restrictionProperties.getSpeciesRegEx() != null
+						&& !restrictionProperties.getSpeciesRegEx().isEmpty()) ? restrictionProperties.getSpeciesRegEx()
+								: restrictionProperties.getOrganismClass().getDisplayName();
 				Motif histMotif = null;
 				if (motifs.size() > 1) {
 					histMotif = new Motif();
@@ -98,8 +106,7 @@ public class DatabaseScanFeature {
 					histMotif.setDisplayName("None");
 					histMotif.setShortName("None");
 				}
-				ServerHistogram sHist = new ServerHistogram(histMotif,
-						dataSource, new Taxon(histTaxonName));
+				ServerHistogram sHist = new ServerHistogram(histMotif, dataSource, new Taxon(histTaxonName));
 				sHist.setDataPoints(histDpList);
 				sHist.setMedian(median);
 				sHist.setMedianAbsDev(medianAbsDev);
@@ -108,14 +115,12 @@ public class DatabaseScanFeature {
 				BufferedImage hist = sHist.getDbHistogramPlot();
 				if (doCreateFiles) {
 					ImageInOut iio = new ImageInOut();
-					String filePath = FilePaths.getHistogramFilePath(realPath, null,
-							System.nanoTime());
+					String filePath = FilePaths.getHistogramFilePath(realPath, null, System.nanoTime());
 					iio.saveImage(hist, filePath);
 					result.setHistogramBasePath(filePath.replace(realPath, ""));
 				}
 			} catch (Exception e) {
-				logger.error("Error creating reference histogram: "
-						+ e.toString());
+				logger.error("Error creating reference histogram: " + e.toString());
 			}
 
 			Collections.sort(sites);
@@ -133,16 +138,14 @@ public class DatabaseScanFeature {
 				if (accessions != null && !accessions.isEmpty()) {
 					SiteEvidenceDao evidenceDao = factory.getSiteEvidenceDao();
 					try {
-						site.getSite().setEvidence(evidenceDao.getSiteEvidence(
-								accessions, site.getSite().getSite()));
+						site.getSite().setEvidence(evidenceDao.getSiteEvidence(accessions, site.getSite().getSite()));
 					} catch (Exception e) {
-						logger.error("Error checking PSP database: "
-								+ e.toString());
+						logger.error("Error checking PSP database: " + e.toString());
 					}
 				}
 			}
 
-			if(previouslyMappedSitesOnly) {
+			if (previouslyMappedSitesOnly) {
 				ArrayList<DatabaseSearchScanResultSite> allHits = new ArrayList<>(sites);
 				sites.clear();
 				for (DatabaseSearchScanResultSite hit : allHits) {
@@ -174,45 +177,35 @@ public class DatabaseScanFeature {
 
 			if (doCreateFiles) {
 				try {
-					DatabaseSearchResultFileWriter writer = new DatabaseSearchResultFileWriter(
-							motifs);
+					DatabaseSearchResultFileWriter writer = new DatabaseSearchResultFileWriter(motifs);
 					result.setResultFilePath(writer.writeResults(realPath, sites).replace(realPath, ""));
 				} catch (Exception e) {
-					logger.error("Error writing result file: " + e.toString(),
-							e);
+					logger.error("Error writing result file: " + e.toString(), e);
 				}
 			}
 
 			return result;
 		} else {
-			return new DatabaseScanResult(
-					"No proteins meet specified restrictions");
+			return new DatabaseScanResult("No proteins meet specified restrictions");
 		}
 	}
 
-	private List<Double> scoreMotifs(List<Motif> motifs)
-			throws DataAccessException {
+	private List<Double> scoreMotifs(List<Motif> motifs) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
-		DataSource defaultHistogramDataSource = factory
-				.getDataSourceDao()
+		DataSource defaultHistogramDataSource = factory.getDataSourceDao()
 				.get(ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX]);
-		Taxon defaultHistogramTaxon = factory
-				.getTaxonDao()
-				.getByName(
-						ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
-						defaultHistogramDataSource);
+		Taxon defaultHistogramTaxon = factory.getTaxonDao().getByName(
+				ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
+				defaultHistogramDataSource);
 		HistogramStringency stringency = HistogramStringency.STRINGENCY_HIGH;
 
 		List<Double> motifScoreThresholds = new ArrayList<Double>();
 		for (Motif motif : motifs) {
 			if (motif.getId() > 0) {
-				motifScoreThresholds.add(factory.getHistogramDao()
-						.getThresholdValue(motif.getId(),
-								defaultHistogramTaxon.getId(),
-								defaultHistogramDataSource, stringency));
+				motifScoreThresholds.add(factory.getHistogramDao().getThresholdValue(motif.getId(),
+						defaultHistogramTaxon.getId(), defaultHistogramDataSource, stringency));
 			} else {
-				motifScoreThresholds
-						.add(ScansiteConstants.MAX_SCORING_SCORE_DBSEARCH_USERMOTIF);
+				motifScoreThresholds.add(ScansiteConstants.MAX_SCORING_SCORE_DBSEARCH_USERMOTIF);
 			}
 		}
 		return motifScoreThresholds;

@@ -10,7 +10,6 @@ import edu.mit.scansite.server.dataaccess.commands.identifiertype.IdentifierType
 import edu.mit.scansite.server.dataaccess.commands.identifiertype.IdentifierTypeByIdGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.identifiertype.IdentifierTypeUpdateCommand;
 import edu.mit.scansite.server.dataaccess.commands.identifiertype.IdentifierTypesGetAllCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
@@ -21,19 +20,22 @@ import edu.mit.scansite.shared.transferobjects.IdentifierType;
  */
 public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 
-	public IdentifierDaoImpl(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public IdentifierDaoImpl(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#getCompatibleProteinDataSourcesForIdentifierType(edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#
+	 * getCompatibleProteinDataSourcesForIdentifierType(edu.mit.scansite.shared.
+	 * transferobjects.IdentifierType)
 	 */
 	@Override
-	public List<DataSource> getCompatibleProteinDataSourcesForIdentifierType(
-			IdentifierType type) throws DataAccessException {
-		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, type);
+	public List<DataSource> getCompatibleProteinDataSourcesForIdentifierType(IdentifierType type)
+			throws DataAccessException {
+		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(dbAccessConfig,
+				dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -49,14 +51,18 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#getCompatibleOrthologyDataSourcesForIdentifierType(edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#
+	 * getCompatibleOrthologyDataSourcesForIdentifierType(edu.mit.scansite.shared.
+	 * transferobjects.IdentifierType)
 	 */
 	@Override
-	public List<DataSource> getCompatibleOrthologyDataSourcesForIdentifierType(
-			IdentifierType type) throws DataAccessException {
-		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, type);
+	public List<DataSource> getCompatibleOrthologyDataSourcesForIdentifierType(IdentifierType type)
+			throws DataAccessException {
+		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(dbAccessConfig,
+				dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -72,14 +78,18 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#getCompatibleLocalizationDataSourcesForIdentifierType(edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#
+	 * getCompatibleLocalizationDataSourcesForIdentifierType(edu.mit.scansite.shared
+	 * .transferobjects.IdentifierType)
 	 */
 	@Override
-	public List<DataSource> getCompatibleLocalizationDataSourcesForIdentifierType(
-			IdentifierType type) throws DataAccessException {
-		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(
-				dbAccessConfig, dbConstantsConfig, type);
+	public List<DataSource> getCompatibleLocalizationDataSourcesForIdentifierType(IdentifierType type)
+			throws DataAccessException {
+		DataSourcesByIdentifierTypeGetCommand cmd = new DataSourcesByIdentifierTypeGetCommand(dbAccessConfig,
+				dbConstantsConfig, type);
 		try {
 			List<DataSource> dataSources = cmd.execute();
 			List<DataSource> result = new LinkedList<DataSource>();
@@ -136,21 +146,24 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 	// }
 	// }
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#addOrUpdateIdentifierType(edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.IdentifierDao#addOrUpdateIdentifierType(
+	 * edu.mit.scansite.shared.transferobjects.IdentifierType)
 	 */
 	@Override
-	public void addOrUpdateIdentifierType(IdentifierType identifierType)
-			throws DataAccessException {
+	public void addOrUpdateIdentifierType(IdentifierType identifierType) throws DataAccessException {
 		try {
 			IdentifierType temp = getIdentifierType(identifierType.getId());
 			if (temp == null) {
-				IdentifierTypeAddCommand cmd = new IdentifierTypeAddCommand(
-						dbAccessConfig, dbConstantsConfig, identifierType);
+				IdentifierTypeAddCommand cmd = new IdentifierTypeAddCommand(dbAccessConfig, dbConstantsConfig,
+						identifierType);
 				cmd.execute();
 			} else {
-				IdentifierTypeUpdateCommand cmd = new IdentifierTypeUpdateCommand(
-						dbAccessConfig, dbConstantsConfig, identifierType);
+				IdentifierTypeUpdateCommand cmd = new IdentifierTypeUpdateCommand(dbAccessConfig, dbConstantsConfig,
+						identifierType);
 				cmd.execute();
 			}
 		} catch (DatabaseException e) {
@@ -158,13 +171,14 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#getIdentifierType(int)
 	 */
 	@Override
 	public IdentifierType getIdentifierType(int id) throws DataAccessException {
-		IdentifierTypeByIdGetCommand cmd = new IdentifierTypeByIdGetCommand(
-				dbAccessConfig, dbConstantsConfig, id);
+		IdentifierTypeByIdGetCommand cmd = new IdentifierTypeByIdGetCommand(dbAccessConfig, dbConstantsConfig, id);
 		try {
 			return cmd.execute();
 		} catch (Exception e) {
@@ -173,14 +187,14 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#getAllIdentifierTypes()
 	 */
 	@Override
-	public List<IdentifierType> getAllIdentifierTypes()
-			throws DataAccessException {
-		IdentifierTypesGetAllCommand cmd = new IdentifierTypesGetAllCommand(
-				dbAccessConfig, dbConstantsConfig);
+	public List<IdentifierType> getAllIdentifierTypes() throws DataAccessException {
+		IdentifierTypesGetAllCommand cmd = new IdentifierTypesGetAllCommand(dbAccessConfig, dbConstantsConfig);
 		try {
 			return cmd.execute();
 		} catch (DatabaseException e) {
@@ -189,12 +203,16 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#mapIdentifiers(java.util.List, edu.mit.scansite.shared.transferobjects.IdentifierType, edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.IdentifierDao#mapIdentifiers(java.util.
+	 * List, edu.mit.scansite.shared.transferobjects.IdentifierType,
+	 * edu.mit.scansite.shared.transferobjects.IdentifierType)
 	 */
 	@Override
-	public Map<String, List<String>> mapIdentifiers(List<String> identifiers,
-			IdentifierType inputIdentifierType,
+	public Map<String, List<String>> mapIdentifiers(List<String> identifiers, IdentifierType inputIdentifierType,
 			IdentifierType outputIdentifierType) throws NoSuchMethodException {
 		// BioDBnetImpl client;
 		// try {
@@ -210,18 +228,21 @@ public class IdentifierDaoImpl extends DaoImpl implements IdentifierDao {
 		throw new NoSuchMethodException();
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.mit.scansite.server.dataaccess.IdentifierDao#mapIdentifier(java.lang.String, edu.mit.scansite.shared.transferobjects.IdentifierType, edu.mit.scansite.shared.transferobjects.IdentifierType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.IdentifierDao#mapIdentifier(java.lang.
+	 * String, edu.mit.scansite.shared.transferobjects.IdentifierType,
+	 * edu.mit.scansite.shared.transferobjects.IdentifierType)
 	 */
 	@Override
-	public List<String> mapIdentifier(String identifier,
-			IdentifierType inputIdentifierType,
-			IdentifierType outputIdentifierType) throws DataAccessException,
-			NoSuchMethodException {
+	public List<String> mapIdentifier(String identifier, IdentifierType inputIdentifierType,
+			IdentifierType outputIdentifierType) throws DataAccessException, NoSuchMethodException {
 		List<String> identifiers = new LinkedList<String>();
 		identifiers.add(identifier);
-		Map<String, List<String>> mappedIdentifiers = mapIdentifiers(
-				identifiers, inputIdentifierType, outputIdentifierType);
+		Map<String, List<String>> mappedIdentifiers = mapIdentifiers(identifiers, inputIdentifierType,
+				outputIdentifierType);
 		if (mappedIdentifiers.containsKey(identifier)) {
 			return mappedIdentifiers.get(identifier);
 		} else {

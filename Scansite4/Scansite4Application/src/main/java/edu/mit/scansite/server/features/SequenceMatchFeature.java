@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.SequenceMatchResultFileWriter;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.ScansiteConstants;
@@ -35,20 +34,17 @@ public class SequenceMatchFeature {
 	public SequenceMatchFeature() {
 	}
 
-	public SequenceMatchResult doSequenceMatch(
-			List<SequencePattern> sequencePatterns, DataSource dataSource,
-			RestrictionProperties restrictionProperties,
-			boolean limitResultsToPhosphorylatedProteins,
-			boolean doCreateFiles, boolean publicOnly, String realPath)
-			throws DataAccessException {
+	public SequenceMatchResult doSequenceMatch(List<SequencePattern> sequencePatterns, DataSource dataSource,
+			RestrictionProperties restrictionProperties, boolean limitResultsToPhosphorylatedProteins,
+			boolean doCreateFiles, boolean publicOnly, String realPath) throws DataAccessException {
 		return doSequenceMatch(sequencePatterns, dataSource, restrictionProperties,
 				restrictionProperties.getOrganismClass(), HistogramStringency.STRINGENCY_HIGH,
 				limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);
 	}
 
 	/**
-	 * Description not up to date
-	 * Runs a sequence match search using the given parameters.
+	 * Description not up to date Runs a sequence match search using the given
+	 * parameters.
 	 * 
 	 * @param sequenceMatchRegexs
 	 *            An array of regular expressions that are applied to match
@@ -61,13 +57,13 @@ public class SequenceMatchFeature {
 	 * @param organismClass
 	 *            An organism class.
 	 * @param speciesRegexRestriction
-	 *            A regular expression that restricts the search to proteins of
-	 *            a single species.
+	 *            A regular expression that restricts the search to proteins of a
+	 *            single species.
 	 * @param numberOfPhosphorylations
-	 *            A number of phosphorylations >= 0 and <=3. This parameter is
-	 *            only applied to searches using a molecular weight or pI limit.
-	 *            The MWs or pIs of single or multiple phosphorylated proteins
-	 *            are then checked for the given limit.
+	 *            A number of phosphorylations >= 0 and <=3. This parameter is only
+	 *            applied to searches using a molecular weight or pI limit. The MWs
+	 *            or pIs of single or multiple phosphorylated proteins are then
+	 *            checked for the given limit.
 	 * @param molWeightFrom
 	 *            A lower molecular weight limit.
 	 * @param molWeightTo
@@ -77,37 +73,29 @@ public class SequenceMatchFeature {
 	 * @param isoelectricPointTo
 	 *            An upper pI limit.
 	 * @param keywordRegexRestriction
-	 *            A regular expression that restricts the search to proteins
-	 *            related to a given keyword.
+	 *            A regular expression that restricts the search to proteins related
+	 *            to a given keyword.
 	 * @param doCreateFiles
-	 *            TRUE if files should be created on the server, otherwise
-	 *            FALSE.
+	 *            TRUE if files should be created on the server, otherwise FALSE.
 	 * @return An object containing a list of sites that are found searching the
 	 *         selected database using the selected motif.
 	 */
-	public SequenceMatchResult doSequenceMatch(
-			List<SequencePattern> sequencePatterns, DataSource dataSource,
-			RestrictionProperties restrictionProperties,
-			OrganismClass motifOrganismClass, HistogramStringency stringency,
-			boolean limitResultsToPhosphorylatedProteins,
-			boolean doCreateFiles, boolean publicOnly, String realPath)
-			throws DataAccessException {
+	public SequenceMatchResult doSequenceMatch(List<SequencePattern> sequencePatterns, DataSource dataSource,
+			RestrictionProperties restrictionProperties, OrganismClass motifOrganismClass,
+			HistogramStringency stringency, boolean limitResultsToPhosphorylatedProteins, boolean doCreateFiles,
+			boolean publicOnly, String realPath) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
-		restrictionProperties.setSequenceRegEx(SequencePattern
-				.getRegExs(sequencePatterns));
-		List<Protein> proteins = factory.getProteinDao().get(dataSource,
-				restrictionProperties, true, true);
+		restrictionProperties.setSequenceRegEx(SequencePattern.getRegExs(sequencePatterns));
+		List<Protein> proteins = factory.getProteinDao().get(dataSource, restrictionProperties, true, true);
 		restrictionProperties.setSequenceRegEx(null);
 		SequenceMatchResult result = new SequenceMatchResult();
-		result.setProteinsInDbCount(factory.getProteinDao().getProteinCount(
-				dataSource));
+		result.setProteinsInDbCount(factory.getProteinDao().getProteinCount(dataSource));
 		result.setDataSource(dataSource);
 		result.setRestrictedProteinsInDbCount(proteins.size());
 		result.setRestrictionProperties(restrictionProperties);
 		result.setSequencePatterns(sequencePatterns);
 		result.setCompatibleOrthologyDataSources(factory.getIdentifierDao()
-				.getCompatibleOrthologyDataSourcesForIdentifierType(
-						dataSource.getIdentifierType()));
+				.getCompatibleOrthologyDataSourcesForIdentifierType(dataSource.getIdentifierType()));
 		ArrayList<ProteinSequenceMatch> matches = new ArrayList<ProteinSequenceMatch>();
 		ProteinSequenceMatch match = null;
 		int totalNrOfMatches = 0;
@@ -119,9 +107,8 @@ public class SequenceMatchFeature {
 			List<ScanResultSite> phosphoSites = new LinkedList<ScanResultSite>();
 			for (int i = 0; i < sequencePatterns.size(); ++i) {
 				List<Integer> patternStartPositions = new LinkedList<Integer>();
-				Pattern regex = Pattern.compile(sequencePatterns.get(i)
-						.getRegEx(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL
-						| Pattern.MULTILINE);
+				Pattern regex = Pattern.compile(sequencePatterns.get(i).getRegEx(),
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
 				Matcher matcher = regex.matcher(p.getSequence());
 				nrOfMatches[i] = 0;
 				while (matcher.find()) {
@@ -132,15 +119,10 @@ public class SequenceMatchFeature {
 
 				if (sequencePatterns.get(i).hasExpectedPhosphorylationSites()) {
 					for (Integer patternStartPosition : patternStartPositions) {
-						for (int j = 0; j < sequencePatterns.get(i)
-								.getPositions().size(); ++j) {
-							if (sequencePatterns.get(i).getPositions().get(j)
-									.isExpectedPhosphorylationSite()) {
-								phosphoSites.addAll(phosphoSiteFinder
-										.checkPositionSpecificPhosphoSites(p,
-												patternStartPosition + j,
-												stringency, motifOrganismClass,
-												publicOnly));
+						for (int j = 0; j < sequencePatterns.get(i).getPositions().size(); ++j) {
+							if (sequencePatterns.get(i).getPositions().get(j).isExpectedPhosphorylationSite()) {
+								phosphoSites.addAll(phosphoSiteFinder.checkPositionSpecificPhosphoSites(p,
+										patternStartPosition + j, stringency, motifOrganismClass, publicOnly));
 							}
 						}
 					}
@@ -152,8 +134,7 @@ public class SequenceMatchFeature {
 								// much
 								// data to client
 			match.setProtein(p);
-			if (!limitResultsToPhosphorylatedProteins
-					|| phosphoSites.size() > 0) {
+			if (!limitResultsToPhosphorylatedProteins || phosphoSites.size() > 0) {
 				match.setPhosphorylationSites(phosphoSites);
 				matches.add(match);
 			}
@@ -162,8 +143,7 @@ public class SequenceMatchFeature {
 		if (matches.size() > ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER) {
 			ArrayList<ProteinSequenceMatch> tempMatches = new ArrayList<ProteinSequenceMatch>(
 					ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER);
-			for (int i = 0; i < ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER
-					&& i < matches.size(); ++i) {
+			for (int i = 0; i < ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER && i < matches.size(); ++i) {
 				tempMatches.add(matches.get(i));
 			}
 			matches = tempMatches;
@@ -171,14 +151,11 @@ public class SequenceMatchFeature {
 		}
 
 		if (doCreateFiles) {
-			SequenceMatchResultFileWriter writer = new SequenceMatchResultFileWriter(
-					sequencePatterns);
+			SequenceMatchResultFileWriter writer = new SequenceMatchResultFileWriter(sequencePatterns);
 			try {
-				result.setResultFileName(writer.writeResults(realPath, matches)
-						.replace(realPath, ""));
+				result.setResultFileName(writer.writeResults(realPath, matches).replace(realPath, ""));
 			} catch (Exception e) {
-				logger.error("Error writing result file for sequence match feature: "
-						+ e.toString());
+				logger.error("Error writing result file for sequence match feature: " + e.toString());
 			}
 		}
 

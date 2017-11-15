@@ -11,7 +11,6 @@ import java.util.Set;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.Protein;
@@ -20,8 +19,7 @@ import edu.mit.scansite.shared.transferobjects.Protein;
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class AnnotationGetForAllProteinsCommand extends
-		DbQueryCommand<List<Protein>> {
+public class AnnotationGetForAllProteinsCommand extends DbQueryCommand<List<Protein>> {
 
 	private List<Protein> proteins;
 	private Map<Integer, String> annotationTypes; // id->value
@@ -29,9 +27,9 @@ public class AnnotationGetForAllProteinsCommand extends
 	private DataSource dataSource;
 	private String regex = null;
 
-	public AnnotationGetForAllProteinsCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, List<Protein> proteins, Map<Integer, String> annotationTypes,
-			boolean useTempTablesForUpdate, DataSource dataSource, String regex) {
+	public AnnotationGetForAllProteinsCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			List<Protein> proteins, Map<Integer, String> annotationTypes, boolean useTempTablesForUpdate,
+			DataSource dataSource, String regex) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		this.annotationTypes = annotationTypes;
@@ -41,14 +39,12 @@ public class AnnotationGetForAllProteinsCommand extends
 	}
 
 	@Override
-	protected List<Protein> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<Protein> doProcessResults(ResultSet result) throws DataAccessException {
 		Set<Protein> ps = new HashSet<Protein>();
 		try {
 			while (result.next()) {
 				String protAcc = result.getString(c.getcProteinsIdentifier());
-				String annotation = result.getString(c
-						.getcAnnotationsAnnotation());
+				String annotation = result.getString(c.getcAnnotationsAnnotation());
 				Integer typeId = result.getInt(c.getcAnnotationTypesId());
 				Protein p = protAccToProtein.get(protAcc);
 				if (p != null) {
@@ -65,13 +61,9 @@ public class AnnotationGetForAllProteinsCommand extends
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.COMMA)
-				.append(c.getcAnnotationTypesId())
-				.append(CommandConstants.COMMA)
-				.append(c.getcAnnotationsAnnotation())
-				.append(CommandConstants.FROM)
-				.append(c.gettAnnotations(dataSource));
+		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier()).append(CommandConstants.COMMA)
+				.append(c.getcAnnotationTypesId()).append(CommandConstants.COMMA).append(c.getcAnnotationsAnnotation())
+				.append(CommandConstants.FROM).append(c.gettAnnotations(dataSource));
 		String conj = CommandConstants.WHERE;
 		boolean first = true;
 		if (proteins != null && !proteins.isEmpty()) {
@@ -81,8 +73,7 @@ public class AnnotationGetForAllProteinsCommand extends
 				if (!first) {
 					sql.append(conj);
 				}
-				sql.append(c.getcProteinsIdentifier())
-						.append(CommandConstants.EQ)
+				sql.append(c.getcProteinsIdentifier()).append(CommandConstants.EQ)
 						.append(CommandConstants.enquote(p.getIdentifier()));
 				protAccToProtein.put(p.getIdentifier(), p);
 				if (first) {
@@ -94,8 +85,7 @@ public class AnnotationGetForAllProteinsCommand extends
 			conj = CommandConstants.AND;
 		}
 		if (regex != null && !regex.isEmpty()) {
-			sql.append(conj).append(c.getcAnnotationsAnnotation())
-					.append(CommandConstants.REGEXP)
+			sql.append(conj).append(c.getcAnnotationsAnnotation()).append(CommandConstants.REGEXP)
 					.append(CommandConstants.enquote(regex));
 		}
 		return sql.toString();

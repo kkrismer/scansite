@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.User;
 
@@ -27,9 +26,7 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	private String cIsSuperAdmin;
 	private String cPassword;
 
-	public UserGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
-			String email, String password) {
+	public UserGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String email, String password) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.email = email;
 		this.password = password;
@@ -43,23 +40,18 @@ public class UserGetCommand extends DbQueryCommand<User> {
 		cIsSuperAdmin = c.getcUsersIsSuperAdmin();
 	}
 
-	public UserGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, String email) {
+	public UserGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String email) {
 		this(dbAccessConfig, dbConstantsConfig, email, "");
 		withPassword = false;
 	}
 
 	@Override
-	protected User doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected User doProcessResults(ResultSet result) throws DataAccessException {
 		User user = null;
 		try {
 			if (result.next()) {
-				user = new User(result.getString(cEmail),
-						result.getString(cFirstName),
-						result.getString(cLastName), "",
-						result.getBoolean(cIsAdmin),
-						result.getBoolean(cIsSuperAdmin));
+				user = new User(result.getString(cEmail), result.getString(cFirstName), result.getString(cLastName), "",
+						result.getBoolean(cIsAdmin), result.getBoolean(cIsSuperAdmin));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -71,14 +63,11 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName)
-				.append(c.COMMA).append(cLastName).append(c.COMMA)
-				.append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin)
-				.append(c.FROM).append(tUsers).append(c.WHERE).append(cEmail)
-				.append(" LIKE \"").append(email).append('\"');
+		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName).append(c.COMMA).append(cLastName)
+				.append(c.COMMA).append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin).append(c.FROM).append(tUsers)
+				.append(c.WHERE).append(cEmail).append(" LIKE \"").append(email).append('\"');
 		if (withPassword) {
-			sql.append(c.AND).append(" PASSWORD(\"").append(password)
-					.append("\")").append(c.LIKE).append(cPassword);
+			sql.append(c.AND).append(" PASSWORD(\"").append(password).append("\")").append(c.LIKE).append(cPassword);
 		}
 		return sql.toString();
 	}

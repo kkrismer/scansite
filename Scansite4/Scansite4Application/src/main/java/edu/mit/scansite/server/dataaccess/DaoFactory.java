@@ -2,8 +2,6 @@ package edu.mit.scansite.server.dataaccess;
 
 import java.util.Properties;
 
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
-
 /**
  * @author Tobieh
  * @author Konstantin Krismer

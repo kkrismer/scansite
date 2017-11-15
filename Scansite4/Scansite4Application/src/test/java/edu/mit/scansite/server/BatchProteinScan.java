@@ -17,12 +17,10 @@ import org.junit.Test;
 
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.ProteinScanResultFileWriter;
 import edu.mit.scansite.server.dataaccess.file.ResultFileWriterException;
 import edu.mit.scansite.server.images.histograms.ServerHistogram;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.ScansiteConstants;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.HistogramStringency;
@@ -60,8 +58,7 @@ public class BatchProteinScan {
 		try {
 			reader = new BufferedReader(new FileReader(f));
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found in location: "
-					+ f.getAbsolutePath());
+			System.err.println("File not found in location: " + f.getAbsolutePath());
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
@@ -88,21 +85,16 @@ public class BatchProteinScan {
 		String seq = null;
 		try {
 			DaoFactory daoFac = ServiceLocator.getDaoFactory();
-			Set<String> motifNicks = new HashSet<String>(new ArrayList<String>(
-					Arrays.asList(new String[] { motifName })));
+			Set<String> motifNicks = new HashSet<String>(
+					new ArrayList<String>(Arrays.asList(new String[] { motifName })));
 			List<Motif> motifs = new ArrayList<Motif>();
 			motifs = daoFac.getMotifDao().getAll(motifNicks, motifClass, false);
-			DataSource ds = daoFac
-					.getDataSourceDao()
+			DataSource ds = daoFac.getDataSourceDao()
 					.get(ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[referenceHistogram]);
-			Taxon t = daoFac
-					.getTaxonDao()
-					.getByName(
-							ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[referenceHistogram],
-							ds);
+			Taxon t = daoFac.getTaxonDao().getByName(ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[referenceHistogram],
+					ds);
 			HistogramDao histDao = daoFac.getHistogramDao();
-			List<ServerHistogram> sHists = histDao.getHistograms(motifs, ds,
-					t.getId());
+			List<ServerHistogram> sHists = histDao.getHistograms(motifs, ds, t.getId());
 			for (int i = 0; i < names.size(); ++i) {
 				proteinName = names.get(i);
 				seq = seqs.get(i);
@@ -112,10 +104,8 @@ public class BatchProteinScan {
 
 				Double[] saValues = alg.calculateSurfaceAccessibility(seq);
 				for (ServerHistogram sh : sHists) {
-					double maxScore = sh.getScore(stringency
-							.getPercentileValue());
-					ArrayList<ScanResultSite> sites = scoring.scoreProtein(
-							sh.getMotif(), p, maxScore);
+					double maxScore = sh.getScore(stringency.getPercentileValue());
+					ArrayList<ScanResultSite> sites = scoring.scoreProtein(sh.getMotif(), p, maxScore);
 					for (ScanResultSite site : sites) {
 						site.setPercentile(sh.getPercentile(site.getScore()));
 						site.setSurfaceAccessValue(saValues[site.getPosition()]);
@@ -124,8 +114,7 @@ public class BatchProteinScan {
 				}
 			}
 			try {
-				ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(
-						resultPathPrefix);
+				ProtScanResultFileWriter fileWriter = new ProtScanResultFileWriter(resultPathPrefix);
 				fileWriter.setMotifName(motifName);
 				fileWriter.writeResults("", results); // TODO check - added
 														// realPath - realPath
@@ -164,8 +153,7 @@ public class BatchProteinScan {
 		}
 
 		@Override
-		public String writeResults(String realPath, List<ScanResultSite> hits)
-				throws ResultFileWriterException {
+		public String writeResults(String realPath, List<ScanResultSite> hits) throws ResultFileWriterException {
 			String currentFilePath = getFilePath(realPath);
 			BufferedWriter writer = null;
 			try {

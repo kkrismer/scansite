@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
@@ -16,35 +15,30 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class ProteinGetAccessionsLikeCommand extends
-		DbQueryCommand<List<String>> {
+public class ProteinGetAccessionsLikeCommand extends DbQueryCommand<List<String>> {
 
 	private String accessionContains;
 	private DataSource dataSource;
 	private int maxSuggestionsProteinAccessions = -1;
 
-	public ProteinGetAccessionsLikeCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
-			String accessionContains, boolean beginningOnly,
-			DataSource dataSource, int maxSuggestionsProteinAccessions) {
+	public ProteinGetAccessionsLikeCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			String accessionContains, boolean beginningOnly, DataSource dataSource,
+			int maxSuggestionsProteinAccessions) {
 		super(dbAccessConfig, dbConstantsConfig);
-		this.accessionContains = (beginningOnly ? "" : "%") + accessionContains
-				+ "%";
+		this.accessionContains = (beginningOnly ? "" : "%") + accessionContains + "%";
 		this.dataSource = dataSource;
 		this.maxSuggestionsProteinAccessions = maxSuggestionsProteinAccessions;
 	}
 
 	@Override
-	protected List<String> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<String> doProcessResults(ResultSet result) throws DataAccessException {
 		List<String> accs = new LinkedList<String>();
 		try {
 			while (result.next()) {
 				accs.add(result.getString(c.getcProteinsIdentifier()));
 			}
 		} catch (SQLException e) {
-			throw new DataAccessException(
-					"Error fetching protein accessions from database", e);
+			throw new DataAccessException("Error fetching protein accessions from database", e);
 		}
 		return accs;
 	}
@@ -55,14 +49,11 @@ public class ProteinGetAccessionsLikeCommand extends
 		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier());
 		sql.append(CommandConstants.FROM).append(c.getProteins(dataSource));
 		if (accessionContains != null && !accessionContains.isEmpty()) {
-			sql.append(CommandConstants.WHERE)
-					.append(c.getcProteinsIdentifier())
-					.append(CommandConstants.LIKE)
+			sql.append(CommandConstants.WHERE).append(c.getcProteinsIdentifier()).append(CommandConstants.LIKE)
 					.append(CommandConstants.enquote(accessionContains));
 		}
 		if (maxSuggestionsProteinAccessions > 0) {
-			sql.append(CommandConstants.LIMIT).append(
-					maxSuggestionsProteinAccessions);
+			sql.append(CommandConstants.LIMIT).append(maxSuggestionsProteinAccessions);
 		}
 		return sql.toString();
 	}

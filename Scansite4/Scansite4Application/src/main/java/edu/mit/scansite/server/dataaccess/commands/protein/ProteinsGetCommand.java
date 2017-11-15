@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.OrganismClass;
@@ -25,8 +24,8 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	protected List<String> identifiers = null;
 	private HashMap<String, OrganismClass> classMap = new HashMap<String, OrganismClass>();
 
-	public ProteinsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
-		  	List<String> identifiers, DataSource dataSource, boolean useTempTablesForUpdate) {
+	public ProteinsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, List<String> identifiers,
+			DataSource dataSource, boolean useTempTablesForUpdate) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
 		initClassMap();
@@ -41,8 +40,7 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	}
 
 	@Override
-	protected ArrayList<Protein> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected ArrayList<Protein> doProcessResults(ResultSet result) throws DataAccessException {
 		ArrayList<Protein> proteins = new ArrayList<Protein>();
 		try {
 			while (result.next()) {
@@ -52,10 +50,8 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 				int taxonId = result.getInt(c.getcTaxaId());
 				String seq = result.getString(c.getcProteinsSequence());
 
-				Protein p = new Protein(accNr, dataSource, seq, new Taxon(
-						taxonId), mw, pI);
-				p.setOrganismClass(classMap.get(result.getString(c
-						.getcProteinsClass())));
+				Protein p = new Protein(accNr, dataSource, seq, new Taxon(taxonId), mw, pI);
+				p.setOrganismClass(classMap.get(result.getString(c.getcProteinsClass())));
 				proteins.add(p);
 			}
 		} catch (Exception e) {
@@ -67,18 +63,13 @@ public class ProteinsGetCommand extends DbQueryCommand<ArrayList<Protein>> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsMolWeight())
-				.append(CommandConstants.COMMA).append(c.getcProteinsClass())
-				.append(CommandConstants.COMMA).append(c.getcProteinsPI())
-				.append(CommandConstants.COMMA)
-				.append(c.getcProteinsSequence())
-				.append(CommandConstants.COMMA).append(c.getcTaxaId());
-		sql.append(CommandConstants.FROM).append(
-				c.getProteins(dataSource));
-		sql.append(CommandConstants.WHERE).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.IN).append(CommandConstants.LPAR);
+		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsMolWeight()).append(CommandConstants.COMMA).append(c.getcProteinsClass())
+				.append(CommandConstants.COMMA).append(c.getcProteinsPI()).append(CommandConstants.COMMA)
+				.append(c.getcProteinsSequence()).append(CommandConstants.COMMA).append(c.getcTaxaId());
+		sql.append(CommandConstants.FROM).append(c.getProteins(dataSource));
+		sql.append(CommandConstants.WHERE).append(c.getcProteinsIdentifier()).append(CommandConstants.IN)
+				.append(CommandConstants.LPAR);
 		for (int i = 0; i < identifiers.size(); ++i) {
 			sql.append(CommandConstants.enquote(identifiers.get(i)));
 			if (i + 1 < identifiers.size()) {

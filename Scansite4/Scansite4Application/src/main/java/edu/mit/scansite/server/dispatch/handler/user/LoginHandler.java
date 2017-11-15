@@ -2,25 +2,18 @@ package edu.mit.scansite.server.dispatch.handler.user;
 
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
-
-import net.customware.gwt.dispatch.server.ActionHandler;
-import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.ActionException;
-import net.customware.gwt.dispatch.shared.DispatchException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dispatch.BootstrapListener;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.dispatch.user.LoginAction;
 import edu.mit.scansite.shared.dispatch.user.LoginResult;
 import edu.mit.scansite.shared.transferobjects.User;
+import net.customware.gwt.dispatch.server.ActionHandler;
+import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 /**
  * @author Tobieh
@@ -28,12 +21,6 @@ import edu.mit.scansite.shared.transferobjects.User;
  */
 public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final Provider<ServletContext> contextProvider;
-
-	@Inject
-	public LoginHandler(final Provider<ServletContext> contextProvider) {
-		this.contextProvider = contextProvider;
-	}
 
 	@Override
 	public Class<LoginAction> getActionType() {
@@ -41,8 +28,7 @@ public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 	}
 
 	@Override
-	public LoginResult execute(LoginAction action, ExecutionContext context)
-			throws DispatchException {
+	public LoginResult execute(LoginAction action, ExecutionContext context) throws DispatchException {
 		try {
 			return tryLogin(action);
 		} catch (DataAccessException e) {
@@ -67,8 +53,7 @@ public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 		User user;
 		String sessionId = action.getSessionId();
 		if (sessionId == null) {
-			user = ServiceLocator.getDaoFactory().getUserDao()
-					.get(action.getUserEmail(), action.getUserPassword());
+			user = ServiceLocator.getDaoFactory().getUserDao().get(action.getUserEmail(), action.getUserPassword());
 		} else {
 			user = getUserBySessionId(action.getSessionId());
 		}
@@ -81,8 +66,7 @@ public class LoginHandler implements ActionHandler<LoginAction, LoginResult> {
 	}
 
 	@Override
-	public void rollback(LoginAction action, LoginResult result,
-			ExecutionContext context) throws DispatchException {
+	public void rollback(LoginAction action, LoginResult result, ExecutionContext context) throws DispatchException {
 	}
 
 	public User getUserBySessionId(String sessionId) throws DataAccessException {

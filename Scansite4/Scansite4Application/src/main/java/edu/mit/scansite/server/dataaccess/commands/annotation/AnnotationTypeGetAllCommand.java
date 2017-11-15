@@ -7,24 +7,20 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class AnnotationTypeGetAllCommand extends
-		DbQueryCommand<Map<Integer, String>> {
+public class AnnotationTypeGetAllCommand extends DbQueryCommand<Map<Integer, String>> {
 
-	public AnnotationTypeGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public AnnotationTypeGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 	}
 
 	@Override
-	protected Map<Integer, String> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Map<Integer, String> doProcessResults(ResultSet result) throws DataAccessException {
 		Map<Integer, String> types = new HashMap<Integer, String>();
 		try {
 			while (result.next()) {
@@ -41,10 +37,8 @@ public class AnnotationTypeGetAllCommand extends
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcAnnotationTypesId())
-				.append(CommandConstants.COMMA)
-				.append(c.getcAnnotationTypesTitle())
-				.append(CommandConstants.FROM).append(c.gettAnnotationTypes());
+		sql.append(CommandConstants.SELECT).append(c.getcAnnotationTypesId()).append(CommandConstants.COMMA)
+				.append(c.getcAnnotationTypesTitle()).append(CommandConstants.FROM).append(c.gettAnnotationTypes());
 		return sql.toString();
 	}
 }

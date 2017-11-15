@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.LocalizationDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.updater.DataSourceMetaInfo;
 import edu.mit.scansite.server.updater.ScansiteUpdaterException;
 import edu.mit.scansite.shared.transferobjects.DataSource;

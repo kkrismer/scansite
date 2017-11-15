@@ -6,7 +6,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.Taxon;
@@ -22,8 +21,7 @@ public class TaxonGetCommand extends DbQueryCommand<Taxon> {
 	private DataSource dataSource;
 	private boolean getSpeciesOnly = false;
 
-	public TaxonGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int id,
+	public TaxonGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int id,
 			boolean useTempTablesForUpdate, DataSource dataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
@@ -31,8 +29,7 @@ public class TaxonGetCommand extends DbQueryCommand<Taxon> {
 		this.id = id;
 	}
 
-	public TaxonGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, String name,
+	public TaxonGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String name,
 			boolean useTempTablesForUpdate, DataSource dataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		setUseOfTempTables(useTempTablesForUpdate);
@@ -45,15 +42,12 @@ public class TaxonGetCommand extends DbQueryCommand<Taxon> {
 	}
 
 	@Override
-	protected Taxon doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Taxon doProcessResults(ResultSet result) throws DataAccessException {
 		Taxon taxon = null;
 		try {
 			if (result.next()) {
-				taxon = new Taxon(result.getInt(c.getcTaxaId()),
-						result.getString(c.getcTaxaName()), result.getString(c
-								.getcTaxaParentTaxa()), result.getBoolean(c
-								.getcTaxaIsSpecies()));
+				taxon = new Taxon(result.getInt(c.getcTaxaId()), result.getString(c.getcTaxaName()),
+						result.getString(c.getcTaxaParentTaxa()), result.getBoolean(c.getcTaxaIsSpecies()));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -64,21 +58,17 @@ public class TaxonGetCommand extends DbQueryCommand<Taxon> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcTaxaId())
-				.append(CommandConstants.COMMA).append(c.getcTaxaName())
-				.append(CommandConstants.COMMA).append(c.getcTaxaParentTaxa())
+		sql.append(CommandConstants.SELECT).append(c.getcTaxaId()).append(CommandConstants.COMMA)
+				.append(c.getcTaxaName()).append(CommandConstants.COMMA).append(c.getcTaxaParentTaxa())
 				.append(CommandConstants.COMMA).append(c.getcTaxaIsSpecies());
-		sql.append(CommandConstants.FROM).append(c.gettTaxa(dataSource))
-				.append(CommandConstants.WHERE);
+		sql.append(CommandConstants.FROM).append(c.gettTaxa(dataSource)).append(CommandConstants.WHERE);
 		if (getSpeciesOnly) {
-			sql.append(c.getcTaxaIsSpecies()).append(CommandConstants.EQ)
-					.append(1).append(CommandConstants.AND);
+			sql.append(c.getcTaxaIsSpecies()).append(CommandConstants.EQ).append(1).append(CommandConstants.AND);
 		}
 		if (name == null) {
 			sql.append(c.getcTaxaId()).append(CommandConstants.EQ).append(id);
 		} else {
-			sql.append(c.getcTaxaName()).append(CommandConstants.LIKE)
-					.append(CommandConstants.enquote(name));
+			sql.append(c.getcTaxaName()).append(CommandConstants.LIKE).append(CommandConstants.enquote(name));
 		}
 		return sql.toString();
 	}

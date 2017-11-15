@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
@@ -19,20 +18,18 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class DataSourceEntryCountsGetCommand extends
-		DbQueryCommand<Map<DataSource, Integer>> {
+public class DataSourceEntryCountsGetCommand extends DbQueryCommand<Map<DataSource, Integer>> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private List<DataSource> dataSources = null;
 
-	public DataSourceEntryCountsGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, List<DataSource> dataSources) {
+	public DataSourceEntryCountsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			List<DataSource> dataSources) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSources = dataSources;
 	}
 
 	@Override
-	protected Map<DataSource, Integer> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Map<DataSource, Integer> doProcessResults(ResultSet result) throws DataAccessException {
 		Map<DataSource, Integer> dataSourcesSizes = new HashMap<>();
 		try {
 			while (result.next()) {
@@ -46,9 +43,7 @@ public class DataSourceEntryCountsGetCommand extends
 		return dataSourcesSizes;
 	}
 
-	private void addSizeToDataSourceMetaInfo(
-			Map<DataSource, Integer> dataSourcesSizes, String shortName,
-			int size) {
+	private void addSizeToDataSourceMetaInfo(Map<DataSource, Integer> dataSourcesSizes, String shortName, int size) {
 		for (DataSource dataSource : dataSources) {
 			if (dataSource.getShortName().equalsIgnoreCase(shortName)) {
 				dataSourcesSizes.put(dataSource, size);
@@ -66,10 +61,8 @@ public class DataSourceEntryCountsGetCommand extends
 		// SELECT table_name, TABLE_ROWS FROM INFORMATION_SCHEMA.TABLES WHERE
 		// table_name IN ('proteins_genpept', 'orthologs_homologene')
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append("table_name, TABLE_ROWS")
-				.append(CommandConstants.FROM)
-				.append(" INFORMATION_SCHEMA.TABLES ")
-				.append(CommandConstants.WHERE).append(" table_name ")
+		sql.append(CommandConstants.SELECT).append("table_name, TABLE_ROWS").append(CommandConstants.FROM)
+				.append(" INFORMATION_SCHEMA.TABLES ").append(CommandConstants.WHERE).append(" table_name ")
 				.append(CommandConstants.IN).append(CommandConstants.LPAR);
 		for (int i = 0; i < dataSources.size(); ++i) {
 			if (i == 0) {
@@ -90,8 +83,7 @@ public class DataSourceEntryCountsGetCommand extends
 		} else if (dataSource.getType().getShortName().equals("localization")) {
 			return c.getLocalizationTableName(dataSource);
 		} else {
-			logger.warn("Unknown data source type: "
-					+ dataSource.getType().getShortName() + " of data source "
+			logger.warn("Unknown data source type: " + dataSource.getType().getShortName() + " of data source "
 					+ dataSource.getShortName());
 			return dataSource.getShortName();
 		}

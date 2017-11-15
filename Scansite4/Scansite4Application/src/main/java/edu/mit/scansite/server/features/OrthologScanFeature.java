@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.mit.scansite.server.ServiceLocator;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.ScansiteConstants;
@@ -67,8 +66,8 @@ public class OrthologScanFeature {
 	public OrthologScanSequencePatternResult scanOrthologsBySequencePattern(SequencePattern sequencePattern,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
 			int alignmentRadius, boolean publicOnly) throws DatabaseException {
-		Protein protein = ServiceLocator.getDaoFactory().getProteinDao()
-				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
+		Protein protein = ServiceLocator.getDaoFactory().getProteinDao().get(lightWeightProtein.getIdentifier(),
+				lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanSequencePatternResult(
 					"No protein with protein identifier " + lightWeightProtein.getIdentifier() + " and data source "
@@ -152,8 +151,8 @@ public class OrthologScanFeature {
 	public OrthologScanMotifResult scanOrthologsByMotifGroup(int sitePosition, LightWeightMotifGroup motifGroup,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
 			int alignmentRadius, boolean publicOnly) throws DatabaseException {
-		Protein protein = ServiceLocator.getDaoFactory().getProteinDao()
-				.get(lightWeightProtein.getIdentifier(), lightWeightProtein.getDataSource());
+		Protein protein = ServiceLocator.getDaoFactory().getProteinDao().get(lightWeightProtein.getIdentifier(),
+				lightWeightProtein.getDataSource());
 		if (protein == null) {
 			return new OrthologScanMotifResult(
 					"No protein with protein identifier " + lightWeightProtein.getIdentifier() + " and data source "
@@ -278,15 +277,15 @@ public class OrthologScanFeature {
 				try {
 					List<ProteinSequence> downstreamSequences = getDownstreamSequences(siteRegions);
 					List<ProteinSequence> upstreamSequences = getUpstreamSequences(siteRegions);
-					if(downstreamSequences.size() > 1 && upstreamSequences.size() > 1) {
+					if (downstreamSequences.size() > 1 && upstreamSequences.size() > 1) {
 						Profile<ProteinSequence, AminoAcidCompound> downstreamProfile = Alignments
 								.getMultipleSequenceAlignment(downstreamSequences);
 						Profile<ProteinSequence, AminoAcidCompound> upstreamProfile = Alignments
 								.getMultipleSequenceAlignment(upstreamSequences);
 						result.setSequenceAlignment(combineAlignments(downstreamProfile, upstreamProfile, siteRegions));
 					} else {
-					    result.setSequenceAlignment(null);
-                    }
+						result.setSequenceAlignment(null);
+					}
 				} catch (CompoundNotFoundException ex) {
 					logger.error(ex.getMessage(), ex);
 					return; // todo check if this is ok?
@@ -384,13 +383,13 @@ public class OrthologScanFeature {
 				targetSequence, Alignments.PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
 
 		// remove gaps
-		String targetWithoutGaps = pair.getTarget().getSequenceAsString()
-				.replaceAll(Character.toString(GAP_SYMBOL), "");
+		String targetWithoutGaps = pair.getTarget().getSequenceAsString().replaceAll(Character.toString(GAP_SYMBOL),
+				"");
 		int offset = targetSequence.getSequenceAsString().indexOf(targetWithoutGaps);
 
 		try {
 			int index = ScansiteConstants.HALF_WINDOW - offset;
-			if (index < 1) { //workaround for negative index issues
+			if (index < 1) { // workaround for negative index issues
 				index = 1;
 			}
 			return pair.getIndexInQueryAt(index);

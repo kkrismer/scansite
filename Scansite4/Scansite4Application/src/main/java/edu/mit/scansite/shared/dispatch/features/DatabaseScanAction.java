@@ -26,9 +26,9 @@ public class DatabaseScanAction implements Action<DatabaseScanResult> {
 	public DatabaseScanAction() {
 	}
 
-	public DatabaseScanAction(MotifSelection motifSelection,
-			DataSource dataSource, RestrictionProperties restrictionProperties,
-			int outputListSize, boolean previouslyMappedSitesOnly, String userSessionId) {
+	public DatabaseScanAction(MotifSelection motifSelection, DataSource dataSource,
+			RestrictionProperties restrictionProperties, int outputListSize, boolean previouslyMappedSitesOnly,
+			String userSessionId) {
 		this.motifSelection = motifSelection;
 		this.dataSource = dataSource;
 		this.restrictionProperties = restrictionProperties;
@@ -57,8 +57,7 @@ public class DatabaseScanAction implements Action<DatabaseScanResult> {
 		return restrictionProperties;
 	}
 
-	public void setRestrictionProperties(
-			RestrictionProperties restrictionProperties) {
+	public void setRestrictionProperties(RestrictionProperties restrictionProperties) {
 		this.restrictionProperties = restrictionProperties;
 	}
 
@@ -75,7 +74,7 @@ public class DatabaseScanAction implements Action<DatabaseScanResult> {
 	}
 
 	public void setPreviouslyMappedSitesOnly(boolean previouslyMappedSitesOnly) {
-		previouslyMappedSitesOnly = previouslyMappedSitesOnly;
+		this.previouslyMappedSitesOnly = previouslyMappedSitesOnly;
 	}
 
 	public String getUserSessionId() {

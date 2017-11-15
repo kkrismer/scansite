@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 
 /**
@@ -17,8 +16,7 @@ public class HistogramDataDeleteCommand extends DbUpdateCommand {
 	private int datasourceId = -1;
 	private int motifId = -1;
 
-	public HistogramDataDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int motifId,
+	public HistogramDataDeleteCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int motifId,
 			int datasourceId, int taxonId) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.taxonId = taxonId;
@@ -26,8 +24,7 @@ public class HistogramDataDeleteCommand extends DbUpdateCommand {
 		this.motifId = motifId;
 	}
 
-	public HistogramDataDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int motifId) {
+	public HistogramDataDeleteCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int motifId) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.motifId = motifId;
 	}
@@ -36,16 +33,15 @@ public class HistogramDataDeleteCommand extends DbUpdateCommand {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(CommandConstants.DELETEFROM).append(c.gettHistogramData())
-				.append(CommandConstants.WHERE).append(c.getcMotifsId())
-				.append(CommandConstants.EQ).append(motifId);
+		sql.append(CommandConstants.DELETEFROM).append(c.gettHistogramData()).append(CommandConstants.WHERE)
+				.append(c.getcMotifsId()).append(CommandConstants.EQ).append(motifId);
 		if (datasourceId > 0) {
-			sql.append(CommandConstants.AND).append(c.getcDataSourcesId())
-					.append(CommandConstants.EQ).append(datasourceId);
+			sql.append(CommandConstants.AND).append(c.getcDataSourcesId()).append(CommandConstants.EQ)
+					.append(datasourceId);
 		}
 		if (taxonId > 0) {
-			sql.append(CommandConstants.AND).append(c.getcHistogramsTaxonId())
-					.append(CommandConstants.EQ).append(taxonId);
+			sql.append(CommandConstants.AND).append(c.getcHistogramsTaxonId()).append(CommandConstants.EQ)
+					.append(taxonId);
 		}
 		return sql.toString();
 	}

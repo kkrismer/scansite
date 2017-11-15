@@ -1,16 +1,15 @@
 package edu.mit.scansite.server.dataaccess.commands.evidence;
 
-import com.google.gwt.user.client.Command;
-import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
-import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.transferobjects.EvidenceResource;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
+import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
+import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
+import edu.mit.scansite.shared.DataAccessException;
+import edu.mit.scansite.shared.transferobjects.EvidenceResource;
 
 /**
  * Created by Thomas on 3/25/2017.

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.User;
 
@@ -23,8 +22,7 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	private String cIsAdmin;
 	private String cIsSuperAdmin;
 
-	public UserGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig) {
+	public UserGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
 		tUsers = c.gettUsers();
 		cEmail = c.getcUsersEmail();
@@ -35,15 +33,12 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	}
 
 	@Override
-	protected ArrayList<User> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected ArrayList<User> doProcessResults(ResultSet result) throws DataAccessException {
 		ArrayList<User> users = new ArrayList<User>();
 		try {
 			while (result.next()) {
-				users.add(new User(result.getString(cEmail), result
-						.getString(cFirstName), result.getString(cLastName),
-						"", result.getBoolean(cIsAdmin), result
-								.getBoolean(cIsSuperAdmin)));
+				users.add(new User(result.getString(cEmail), result.getString(cFirstName), result.getString(cLastName),
+						"", result.getBoolean(cIsAdmin), result.getBoolean(cIsSuperAdmin)));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -55,11 +50,9 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName)
-				.append(c.COMMA).append(cLastName).append(c.COMMA)
-				.append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin)
-				.append(c.FROM).append(tUsers).append(c.ORDERBY)
-				.append(cFirstName).append(c.COMMA).append(cLastName);
+		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName).append(c.COMMA).append(cLastName)
+				.append(c.COMMA).append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin).append(c.FROM).append(tUsers)
+				.append(c.ORDERBY).append(cFirstName).append(c.COMMA).append(cLastName);
 		return sql.toString();
 	}
 }

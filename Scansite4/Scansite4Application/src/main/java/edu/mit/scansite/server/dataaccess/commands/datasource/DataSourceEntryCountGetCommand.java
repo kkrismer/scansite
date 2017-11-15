@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
@@ -16,15 +15,14 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
 public class DataSourceEntryCountGetCommand extends DbQueryCommand<Integer> {
 	private DataSource dataSource = null;
 
-	public DataSourceEntryCountGetCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, DataSource dataSource) {
+	public DataSourceEntryCountGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			DataSource dataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	protected Integer doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected Integer doProcessResults(ResultSet result) throws DataAccessException {
 		try {
 			if (result.next()) {
 				return result.getInt(1);
@@ -39,8 +37,7 @@ public class DataSourceEntryCountGetCommand extends DbQueryCommand<Integer> {
 	protected String doGetSqlStatement() throws DataAccessException {
 		// SELECT COUNT(*) FROM `orthologs_swissprotorthology`
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(CommandConstants.count("*"))
-				.append(CommandConstants.FROM);
+		sql.append(CommandConstants.SELECT).append(CommandConstants.count("*")).append(CommandConstants.FROM);
 		if (dataSource.getType().getShortName().equals("proteins")) {
 			sql.append(c.getProteinsTableName(dataSource));
 		} else if (dataSource.getType().getShortName().equals("orthologs")) {

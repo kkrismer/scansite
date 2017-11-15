@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.images.histograms.ServerHistogram;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
@@ -24,8 +23,7 @@ import edu.mit.scansite.shared.transferobjects.Taxon;
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class HistogramGetAllCommand extends
-		DbQueryCommand<List<ServerHistogram>> {
+public class HistogramGetAllCommand extends DbQueryCommand<List<ServerHistogram>> {
 
 	private int m = -1;
 	private DataSource dataSource = null;
@@ -40,8 +38,7 @@ public class HistogramGetAllCommand extends
 		}
 	}
 
-	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int motifId,
+	public HistogramGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int motifId,
 			DataSource dataSource, int taxonId) {
 		super(dbAccessConfig, dbConstantsConfig);
 		m = motifId;
@@ -49,10 +46,8 @@ public class HistogramGetAllCommand extends
 		t = taxonId;
 	}
 
-	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
-			List<Motif> motifs, DataSource dataSource, int taxonId,
-			GetHistogramMode mode) {
+	public HistogramGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, List<Motif> motifs,
+			DataSource dataSource, int taxonId, GetHistogramMode mode) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.dataSource = dataSource;
 		t = taxonId;
@@ -73,16 +68,13 @@ public class HistogramGetAllCommand extends
 		}
 	}
 
-	public HistogramGetAllCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig,
-			List<Motif> motifs, DataSource dataSource, int taxonId) {
-		this(dbAccessConfig, dbConstantsConfig, motifs,
-				dataSource, taxonId, GetHistogramMode.ALL);
+	public HistogramGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, List<Motif> motifs,
+			DataSource dataSource, int taxonId) {
+		this(dbAccessConfig, dbConstantsConfig, motifs, dataSource, taxonId, GetHistogramMode.ALL);
 	}
 
 	@Override
-	protected List<ServerHistogram> doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected List<ServerHistogram> doProcessResults(ResultSet result) throws DataAccessException {
 		List<ServerHistogram> hists = new ArrayList<ServerHistogram>();
 		try {
 			ServerHistogram h = null;
@@ -94,8 +86,7 @@ public class HistogramGetAllCommand extends
 				int taxonId = result.getInt(c.getcHistogramsTaxonId());
 				int datasourceId = result.getInt(c.getcDataSourcesId());
 
-				if (motifId != lastMotifId || taxonId != lastTaxonId
-						|| datasourceId != lastDatasourceId) {
+				if (motifId != lastMotifId || taxonId != lastTaxonId || datasourceId != lastDatasourceId) {
 					if (h != null) {
 						hists.add(h);
 					}
@@ -111,37 +102,24 @@ public class HistogramGetAllCommand extends
 					DataSource dataSource = new DataSource();
 					dataSource.setId(datasourceId);
 
-					if (mode == GetHistogramMode.ALL
-							|| mode == GetHistogramMode.GENERAL_INFO_ONLY) {
-						InputStream is = result.getBinaryStream(c
-								.getcHistogramsPlotImage());
-						h = new ServerHistogram(
-								m,
-								dataSource,
-								t,
-								result.getInt(c.getcHistogramsSitesScored()),
-								result.getInt(c.getcHistogramsProteinsScored()),
-								ImageIO.read(is));
+					if (mode == GetHistogramMode.ALL || mode == GetHistogramMode.GENERAL_INFO_ONLY) {
+						InputStream is = result.getBinaryStream(c.getcHistogramsPlotImage());
+						h = new ServerHistogram(m, dataSource, t, result.getInt(c.getcHistogramsSitesScored()),
+								result.getInt(c.getcHistogramsProteinsScored()), ImageIO.read(is));
 						is.close();
 
 						h.setMedian(result.getDouble(c.getcHistogramsMedian()));
-						h.setMedianAbsDev(result.getDouble(c
-								.getcHistogramsMedianAbsDev()));
-						h.setThresholdHigh(result.getDouble(c
-								.getcHistogramsThreshHigh()));
-						h.setThresholdMedium(result.getDouble(c
-								.getcHistogramsThreshMed()));
-						h.setThresholdLow(result.getDouble(c
-								.getcHistogramsThreshLow()));
+						h.setMedianAbsDev(result.getDouble(c.getcHistogramsMedianAbsDev()));
+						h.setThresholdHigh(result.getDouble(c.getcHistogramsThreshHigh()));
+						h.setThresholdMedium(result.getDouble(c.getcHistogramsThreshMed()));
+						h.setThresholdLow(result.getDouble(c.getcHistogramsThreshLow()));
 					} else if (mode == GetHistogramMode.DATA_ONLY) {
 						h = new ServerHistogram(m, dataSource, t);
 					}
 				}
-				if (mode == GetHistogramMode.ALL
-						|| mode == GetHistogramMode.DATA_ONLY) {
-					h.addDataPoint(new HistogramDataPoint(result.getDouble(c
-							.getcHistogramDataScore()), result.getInt(c
-							.getcHistogramDataAbsFreq())));
+				if (mode == GetHistogramMode.ALL || mode == GetHistogramMode.DATA_ONLY) {
+					h.addDataPoint(new HistogramDataPoint(result.getDouble(c.getcHistogramDataScore()),
+							result.getInt(c.getcHistogramDataAbsFreq())));
 				}
 				lastMotifId = motifId;
 				lastTaxonId = taxonId;
@@ -162,54 +140,36 @@ public class HistogramGetAllCommand extends
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(CommandConstants.SELECT);
-		sql.append(c.getcMotifsId()).append(CommandConstants.COMMA)
-				.append(c.getcDataSourcesId()).append(CommandConstants.COMMA)
-				.append(c.getcHistogramsTaxonId());
-		if (mode == GetHistogramMode.GENERAL_INFO_ONLY
-				|| mode == GetHistogramMode.ALL) {
-			sql.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsThreshHigh())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsThreshMed())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsThreshLow())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsMedian())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsMedianAbsDev())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsSitesScored())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsPlotImage())
-					.append(CommandConstants.COMMA)
+		sql.append(c.getcMotifsId()).append(CommandConstants.COMMA).append(c.getcDataSourcesId())
+				.append(CommandConstants.COMMA).append(c.getcHistogramsTaxonId());
+		if (mode == GetHistogramMode.GENERAL_INFO_ONLY || mode == GetHistogramMode.ALL) {
+			sql.append(CommandConstants.COMMA).append(c.getcHistogramsThreshHigh()).append(CommandConstants.COMMA)
+					.append(c.getcHistogramsThreshMed()).append(CommandConstants.COMMA)
+					.append(c.getcHistogramsThreshLow()).append(CommandConstants.COMMA).append(c.getcHistogramsMedian())
+					.append(CommandConstants.COMMA).append(c.getcHistogramsMedianAbsDev())
+					.append(CommandConstants.COMMA).append(c.getcHistogramsSitesScored()).append(CommandConstants.COMMA)
+					.append(c.getcHistogramsPlotImage()).append(CommandConstants.COMMA)
 					.append(c.getcHistogramsProteinsScored());
 		}
 		if (mode == GetHistogramMode.DATA_ONLY || mode == GetHistogramMode.ALL) {
 			sql.append(CommandConstants.COMMA);
-			sql.append(c.getcHistogramDataScore())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramDataAbsFreq());
+			sql.append(c.getcHistogramDataScore()).append(CommandConstants.COMMA).append(c.getcHistogramDataAbsFreq());
 		}
 		sql.append(CommandConstants.FROM);
-		if (mode == GetHistogramMode.GENERAL_INFO_ONLY
-				|| mode == GetHistogramMode.ALL) {
+		if (mode == GetHistogramMode.GENERAL_INFO_ONLY || mode == GetHistogramMode.ALL) {
 			sql.append(c.gettHistograms());
 		}
 		if (mode == GetHistogramMode.ALL) {
-			sql.append(CommandConstants.JOIN).append(c.gettHistogramData())
-					.append(CommandConstants.USING).append('(')
-					.append(c.getcMotifsId()).append(CommandConstants.COMMA)
-					.append(c.getcDataSourcesId())
-					.append(CommandConstants.COMMA)
-					.append(c.getcHistogramsTaxonId()).append(')');
+			sql.append(CommandConstants.JOIN).append(c.gettHistogramData()).append(CommandConstants.USING).append('(')
+					.append(c.getcMotifsId()).append(CommandConstants.COMMA).append(c.getcDataSourcesId())
+					.append(CommandConstants.COMMA).append(c.getcHistogramsTaxonId()).append(')');
 		} else if (mode == GetHistogramMode.DATA_ONLY) {
 			sql.append(c.gettHistogramData());
 		}
 		if (m > 0 || (t > 0 && dataSource != null)) {
 			String where = CommandConstants.WHERE;
 			if (m > 0) {
-				sql.append(where).append(c.getcMotifsId())
-						.append(CommandConstants.EQ).append(m);
+				sql.append(where).append(c.getcMotifsId()).append(CommandConstants.EQ).append(m);
 				where = CommandConstants.AND;
 			} else if (mIds != null && mIds.length > 0) {
 				sql.append(where).append(" ( ");
@@ -218,19 +178,16 @@ public class HistogramGetAllCommand extends
 					if (i > 0) {
 						sql.append(where);
 					}
-					sql.append(c.getcMotifsId()).append(CommandConstants.EQ)
-							.append(mIds[i]);
+					sql.append(c.getcMotifsId()).append(CommandConstants.EQ).append(mIds[i]);
 				}
 				sql.append(" ) ");
 				where = CommandConstants.AND;
 			}
 			if (dataSource != null) {
-				sql.append(where).append(c.getcDataSourcesId())
-						.append(CommandConstants.EQ).append(dataSource.getId());
+				sql.append(where).append(c.getcDataSourcesId()).append(CommandConstants.EQ).append(dataSource.getId());
 				if (t > 0) {
-					sql.append(CommandConstants.AND)
-							.append(c.getcHistogramsTaxonId())
-							.append(CommandConstants.EQ).append(t);
+					sql.append(CommandConstants.AND).append(c.getcHistogramsTaxonId()).append(CommandConstants.EQ)
+							.append(t);
 				}
 			}
 		}
@@ -238,8 +195,7 @@ public class HistogramGetAllCommand extends
 		sql.append(CommandConstants.COMMA).append(c.getcDataSourcesId());
 		sql.append(CommandConstants.COMMA).append(c.getcHistogramsTaxonId());
 		if (mode == GetHistogramMode.DATA_ONLY || mode == GetHistogramMode.ALL) {
-			sql.append(CommandConstants.COMMA).append(
-					c.getcHistogramDataScore());
+			sql.append(CommandConstants.COMMA).append(c.getcHistogramDataScore());
 		}
 		return sql.toString();
 	}

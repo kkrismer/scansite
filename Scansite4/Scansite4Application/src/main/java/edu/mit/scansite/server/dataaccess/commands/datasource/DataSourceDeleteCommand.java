@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbUpdateCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 
 /**
@@ -15,8 +14,7 @@ public class DataSourceDeleteCommand extends DbUpdateCommand {
 
 	private int id = -1;
 
-	public DataSourceDeleteCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, int id) {
+	public DataSourceDeleteCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int id) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.id = id;
 	}
@@ -24,9 +22,8 @@ public class DataSourceDeleteCommand extends DbUpdateCommand {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.DELETEFROM).append(c.gettDataSources())
-				.append(CommandConstants.WHERE).append(c.getcDataSourcesId())
-				.append(CommandConstants.EQ).append(id);
+		sql.append(CommandConstants.DELETEFROM).append(c.gettDataSources()).append(CommandConstants.WHERE)
+				.append(c.getcDataSourcesId()).append(CommandConstants.EQ).append(id);
 		return sql.toString();
 	}
 }

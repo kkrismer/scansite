@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
@@ -18,17 +17,15 @@ public class AnnotationGetProteinAccCommand extends DbQueryCommand<String> {
 	private String accessionAnnotation = null;
 	private DataSource dataSource;
 
-	public AnnotationGetProteinAccCommand(Properties dbAccessConfig,
-			Properties dbConstantsConfig, String accessionAnnotation,
-		    boolean useTempTablesForUpdate, DataSource dataSource) {
+	public AnnotationGetProteinAccCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
+			String accessionAnnotation, boolean useTempTablesForUpdate, DataSource dataSource) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.accessionAnnotation = accessionAnnotation;
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	protected String doProcessResults(ResultSet result)
-			throws DataAccessException {
+	protected String doProcessResults(ResultSet result) throws DataAccessException {
 		String proteinAcc = null;
 		try {
 			if (result.next()) {
@@ -43,12 +40,9 @@ public class AnnotationGetProteinAccCommand extends DbQueryCommand<String> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier())
-				.append(CommandConstants.FROM)
-				.append(c.gettAnnotations(dataSource))
-				.append(CommandConstants.WHERE)
-				.append(c.getcAnnotationsAnnotation())
-				.append(CommandConstants.LIKE)
+		sql.append(CommandConstants.SELECT).append(c.getcProteinsIdentifier()).append(CommandConstants.FROM)
+				.append(c.gettAnnotations(dataSource)).append(CommandConstants.WHERE)
+				.append(c.getcAnnotationsAnnotation()).append(CommandConstants.LIKE)
 				.append(CommandConstants.enquote(accessionAnnotation));
 		return sql.toString();
 	}
