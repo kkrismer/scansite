@@ -155,6 +155,16 @@ public class DatabaseScanFeature {
 				}
 			}
 
+			// write results to file
+			if (doCreateFiles) {
+				try {
+					DatabaseSearchResultFileWriter writer = new DatabaseSearchResultFileWriter(motifs);
+					result.setResultFilePath(writer.writeResults(realPath, sites).replace(realPath, ""));
+				} catch (Exception e) {
+					logger.error("Error writing result file: " + e.toString(), e);
+				}
+			}
+			
 			ArrayList<DatabaseSearchScanResultSite> temp = new ArrayList<DatabaseSearchScanResultSite>();
 			if (outputListSize <= 0) {
 				outputListSize = sites.size();
@@ -174,15 +184,6 @@ public class DatabaseScanFeature {
 			result.setMedianAbsDev(medianAbsDev);
 			result.setSuccess(true);
 			Runtime.getRuntime().gc();
-
-			if (doCreateFiles) {
-				try {
-					DatabaseSearchResultFileWriter writer = new DatabaseSearchResultFileWriter(motifs);
-					result.setResultFilePath(writer.writeResults(realPath, sites).replace(realPath, ""));
-				} catch (Exception e) {
-					logger.error("Error writing result file: " + e.toString(), e);
-				}
-			}
 
 			return result;
 		} else {

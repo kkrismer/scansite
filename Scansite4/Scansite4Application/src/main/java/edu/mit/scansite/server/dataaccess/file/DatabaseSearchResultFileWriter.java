@@ -10,6 +10,7 @@ import edu.mit.scansite.shared.transferobjects.Motif;
 
 /**
  * @author Tobieh
+ * @author Konstantin Krismer
  */
 public class DatabaseSearchResultFileWriter extends
 		ResultFileWriter<DatabaseSearchScanResultSite> {
@@ -38,22 +39,21 @@ public class DatabaseSearchResultFileWriter extends
 		try {
 			DirectoryManagement.prepareDirectory(currentFilePath, true);
 			writer = new BufferedWriter(new FileWriter(currentFilePath));
-			writer.write("SCORE");
+			writer.write("score");
 			writer.write(SEPARATOR);
-			writer.write("PROTEIN_ACCESSION");
+			writer.write("protein_accession");
 			writer.write(SEPARATOR);
 			for (int i = 0; i < nMotifs; ++i) {
-				writer.write("SITE_");
+				writer.write("site_");
 				writer.write(motifs.get(i).getDisplayName());
 				writer.write(SEPARATOR);
-				writer.write("SEQ_");
+				writer.write("seq_");
 				writer.write(motifs.get(i).getDisplayName());
 				writer.write(SEPARATOR);
 			}
-			writer.write("PROTEIN_MW");
+			writer.write("protein_mw");
 			writer.write(SEPARATOR);
-			writer.write("PROTEIN_PI");
-			writer.write(SEPARATOR);
+			writer.write("protein_pi");
 			writer.newLine();
 			for (DatabaseSearchScanResultSite site : sites) {
 				writer.write(String.valueOf(site.getCombinedScore()));
@@ -64,20 +64,21 @@ public class DatabaseSearchResultFileWriter extends
 					for (int i = 0; i < site.getSites().size(); ++i) {
 						writer.write(site.getSites().get(i).getSite());
 						writer.write(SEPARATOR);
-						writer.write(site.getSites().get(i).getSiteSequence());
+						// first, remove HTML tags from sequence
+						writer.write(site.getSites().get(i).getSiteSequence().replaceAll("\\<.*?\\>", ""));
 						writer.write(SEPARATOR);
 					}
 				} else {
 					writer.write(site.getSite().getSite());
 					writer.write(SEPARATOR);
-					writer.write(site.getSite().getSiteSequence());
+					// first, remove HTML tags from sequence
+					writer.write(site.getSite().getSiteSequence().replaceAll("\\<.*?\\>", ""));
 					writer.write(SEPARATOR);
 				}
 				writer.write(String.valueOf(site.getProtein()
 						.getMolecularWeight()));
 				writer.write(SEPARATOR);
 				writer.write(String.valueOf(site.getProtein().getpI()));
-				writer.write(SEPARATOR);
 				writer.newLine();
 			}
 			writer.close();
