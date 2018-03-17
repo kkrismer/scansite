@@ -22,7 +22,8 @@ import edu.mit.scansite.shared.Breadcrumbs;
 import javafx.scene.input.KeyCode;
 
 /**
- * @author Konstantin Krismer, Thomas Bernwinkler
+ * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class AdminLoginPageView extends PageView {
 	interface AdminLoginPageViewUiBinder extends

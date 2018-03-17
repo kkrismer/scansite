@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import edu.mit.scansite.server.dataaccess.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class DataSourceEntryCountsGetCommand extends DbQueryCommand<Map<DataSource, Integer>> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -66,26 +68,14 @@ public class DataSourceEntryCountsGetCommand extends DbQueryCommand<Map<DataSour
 				.append(CommandConstants.IN).append(CommandConstants.LPAR);
 		for (int i = 0; i < dataSources.size(); ++i) {
 			if (i == 0) {
-				sql.append("'" + getTableName(dataSources.get(i)) + "'");
+				sql.append("'" + DataUtils.getTableName(dataSources.get(i), c) + "'");
 			} else {
-				sql.append(", '" + getTableName(dataSources.get(i)) + "'");
+				sql.append(", '" + DataUtils.getTableName(dataSources.get(i), c) + "'");
 			}
 		}
 		sql.append(CommandConstants.RPAR);
 		return sql.toString();
 	}
 
-	private String getTableName(DataSource dataSource) {
-		if (dataSource.getType().getShortName().equals("proteins")) {
-			return c.getProteinsTableName(dataSource);
-		} else if (dataSource.getType().getShortName().equals("orthologs")) {
-			return c.getOrthologsTableName(dataSource);
-		} else if (dataSource.getType().getShortName().equals("localization")) {
-			return c.getLocalizationTableName(dataSource);
-		} else {
-			logger.warn("Unknown data source type: " + dataSource.getType().getShortName() + " of data source "
-					+ dataSource.getShortName());
-			return dataSource.getShortName();
-		}
-	}
+
 }

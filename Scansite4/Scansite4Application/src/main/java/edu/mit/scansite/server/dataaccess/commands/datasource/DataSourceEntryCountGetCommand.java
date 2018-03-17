@@ -3,6 +3,7 @@ package edu.mit.scansite.server.dataaccess.commands.datasource;
 import java.sql.ResultSet;
 import java.util.Properties;
 
+import edu.mit.scansite.server.dataaccess.DataUtils;
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
 import edu.mit.scansite.shared.DataAccessException;
@@ -11,6 +12,7 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class DataSourceEntryCountGetCommand extends DbQueryCommand<Integer> {
 	private DataSource dataSource = null;
@@ -36,16 +38,7 @@ public class DataSourceEntryCountGetCommand extends DbQueryCommand<Integer> {
 	@Override
 	protected String doGetSqlStatement() throws DataAccessException {
 		// SELECT COUNT(*) FROM `orthologs_swissprotorthology`
-		StringBuilder sql = new StringBuilder();
-		sql.append(CommandConstants.SELECT).append(CommandConstants.count("*")).append(CommandConstants.FROM);
-		if (dataSource.getType().getShortName().equals("proteins")) {
-			sql.append(c.getProteinsTableName(dataSource));
-		} else if (dataSource.getType().getShortName().equals("orthologs")) {
-			sql.append(c.getOrthologsTableName(dataSource));
-		} else if (dataSource.getType().getShortName().equals("localization")) {
-			sql.append(c.getLocalizationTableName(dataSource));
-		}
-
-		return sql.toString();
+		return CommandConstants.SELECT + CommandConstants.count("*")
+				+ CommandConstants.FROM + DataUtils.getTableName(dataSource, c);
 	}
 }

@@ -1,10 +1,8 @@
 package edu.mit.scansite.server.dataaccess;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
+import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceAddCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceDeleteCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceEntryCountGetCommand;
@@ -24,6 +22,7 @@ import edu.mit.scansite.shared.transferobjects.DataSourceType;
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 
@@ -168,31 +167,6 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 		return dataSourceType;
 	}
 
-	// private boolean checkAvailabilityOfAuxiliaryDataSource(
-	// DataSource majorDataSource, DataSourceType auxiliaryDataSourceType)
-	// throws DataAccessException, DatabaseException {
-	// IdentifierTypeCompatibilityByDataSourceShortNameGetCommand
-	// identifierTypeCommand = new
-	// IdentifierTypeCompatibilityByDataSourceShortNameGetCommand(
-	// dbAccessConfig, dbConstantsConfig, dbConnector,
-	// majorDataSource.getShortName());
-	// IdentifierType dataSourceIdentifierType =
-	// identifierTypeCommand.execute();
-	// DataSourcesByIdentifierTypeGetCommand compatibleDataSources = new
-	// DataSourcesByIdentifierTypeGetCommand(
-	// dbAccessConfig, dbConstantsConfig, dbConnector,
-	// dataSourceIdentifierType);
-	// List<DataSource> dataSources = compatibleDataSources.execute();
-	// if (dataSources != null) {
-	// for (DataSource dataSource : dataSources) {
-	// if (dataSource.getType().equals(auxiliaryDataSourceType)) {
-	// return true;
-	// }
-	// }
-	// }
-	// return false;
-	// }
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -254,9 +228,24 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 
 		try {
 			List<DataSource> dataSources = getAll(true);
-			DataSourceEntryCountsGetCommand sizesCommand = new DataSourceEntryCountsGetCommand(dbAccessConfig,
-					dbConstantsConfig, dataSources);
-			return sizesCommand.execute();
+			Map<DataSource, Integer> sizes = new HashMap<>();
+			boolean isInitialized = true;
+			for (DataSource dataSource : dataSources) {
+				int count = TableSizeInfo.getCount(DataUtils.getTableName(dataSource,
+                        CommandConstants.instance(dbConstantsConfig)));
+				if (count == 0) {
+				    DataSourceEntryCountGetCommand sizeCommand = new DataSourceEntryCountGetCommand(dbAccessConfig,
+                            dbConstantsConfig, dataSource);
+				    count = sizeCommand.execute();
+					isInitialized = false;
+				}
+				sizes.put(dataSource, count);
+			}
+			if (!isInitialized) {
+				TableSizeInfo.init(sizes);
+			}
+
+			return sizes;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
