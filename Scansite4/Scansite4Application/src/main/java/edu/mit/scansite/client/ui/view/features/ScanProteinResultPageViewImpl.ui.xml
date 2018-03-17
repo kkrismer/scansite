@@ -26,8 +26,7 @@
 		<g:FlowPanel ui:field="domainPanel" />
 		<div class="scrollable" id="proteinPlot"></div>
 		<h3>Predicted motif sites</h3>
-		<span class="warningMessage">Warning: Popup blockers may disable the links in the
-			result table</span>
+		<span class="warningMessage">Warning: Popup blockers may disable the links in the result table</span>
 		<g:FlowPanel ui:field="motifSitesTable" styleName="scrollable" />
 		<span class="warningMessage" style="display: block;">
 			DISCLAIMER:These results are

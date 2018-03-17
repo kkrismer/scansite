@@ -2,6 +2,9 @@ package edu.mit.scansite.client.ui.view.footer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -16,9 +19,10 @@ import edu.mit.scansite.client.ui.event.LoginEvent;
 import edu.mit.scansite.client.ui.event.NavigationEvent;
 import edu.mit.scansite.client.ui.view.PageView;
 import edu.mit.scansite.shared.Breadcrumbs;
+import javafx.scene.input.KeyCode;
 
 /**
- * @author Konstantin Krismer
+ * @author Konstantin Krismer, Thomas Bernwinkler
  */
 public class AdminLoginPageView extends PageView {
 	interface AdminLoginPageViewUiBinder extends
@@ -49,16 +53,24 @@ public class AdminLoginPageView extends PageView {
 			}
 		});
 	}
-	
+
+    @UiHandler({"emailAddressTextBox", "passwordTextBox"})
+    void onTextBoxKeyPress(KeyPressEvent event) {
+	    if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	        loginButton.click();
+        }
+    }
+
 	@UiHandler("loginButton")
 	public void onLoginButtonClick(ClickEvent event) {
-		if(emailAddressTextBox.getText().isEmpty() || passwordTextBox.getText().isEmpty()) {
-			showWarningMessage("E-mail or password were empty");
-		} else {
-			hideMessage();
-			EventBus.instance().fireEvent(new LoginEvent(emailAddressTextBox.getText(), passwordTextBox.getText()));
-		}
+        if(emailAddressTextBox.getText().isEmpty() || passwordTextBox.getText().isEmpty()) {
+            showWarningMessage("E-mail or password were empty");
+        } else {
+            hideMessage();
+            EventBus.instance().fireEvent(new LoginEvent(emailAddressTextBox.getText(), passwordTextBox.getText()));
+        }
 	}
+
 
 	@Override
 	public String getPageTitle() {
