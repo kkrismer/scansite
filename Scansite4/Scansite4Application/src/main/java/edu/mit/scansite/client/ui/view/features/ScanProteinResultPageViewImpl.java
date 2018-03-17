@@ -1,10 +1,5 @@
 package edu.mit.scansite.client.ui.view.features;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -15,7 +10,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import edu.mit.scansite.client.ui.event.NavigationEvent;
 import edu.mit.scansite.client.ui.widgets.features.DisplayGeneralPropertiesWidget;
 import edu.mit.scansite.client.ui.widgets.features.DisplayMotifSelectionWidget;
@@ -27,9 +21,15 @@ import edu.mit.scansite.shared.dispatch.features.ProteinScanResult;
 import edu.mit.scansite.shared.transferobjects.*;
 import edu.mit.scansite.shared.transferobjects.states.ScanProteinResultPageState;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
     interface ScanProteinResultPageViewImplUiBinder extends
@@ -122,25 +122,22 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
         HashMap<String, Set<String>> annotations = null;
 
         if (protein.getDataSource() != null
-                && protein.getDataSource().getShortName()
-                .equalsIgnoreCase("swissprot")) {
+                && protein.getDataSource().getShortName().equalsIgnoreCase("swissprot")) {
             if (protein instanceof Protein) {
                 annotations = ((Protein) protein).getAnnotations();
             }
             Set<String> anns = annotations.get("accession");
             if (anns != null && !anns.isEmpty()) {
-                phosphosite = ", see <a href='"
-                        + URIs.directPhosphositeProteinLink(anns.iterator()
-                        .next()) + "' target='_blank'>PhosphoSite</a>";
+                phosphosite = ", see <a href='" + URIs.directPhosphositeProteinLink(anns.iterator().next())
+                        + "' target='_blank'>PhosphoSite</a>";
             }
         }
 
         List<Parameter> parameters = new LinkedList<>();
         parameters.add(new Parameter("Identifier", protein.getIdentifier()
-                + (dbLink == null ? "" : " (see <a target='_blank' href=\""
-                + dbLink + "\">"
-                + protein.getDataSource().getDisplayName() + "</a>"
-                + phosphosite + ")")));
+                + (dbLink == null || protein.getDataSource() == null ? ""
+                : " (see <a target='_blank' href=\"" + dbLink + "\">"
+                + protein.getDataSource().getDisplayName() + "</a>" + phosphosite + ")")));
 
         if (annotations != null && !annotations.isEmpty()) {
             for (String type : annotations.keySet()) {
@@ -155,12 +152,11 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
                 }
 
                 if (type.equalsIgnoreCase("Keyword")) {
-                    parameters.add(new Parameter(type.substring(0, 1)
-                            .toUpperCase() + type.substring(1) + "s", txt,
-                            true, false));
+                    parameters.add(new Parameter(type.substring(0, 1).toUpperCase()
+                            + type.substring(1) + "s", txt,true, false));
                 } else {
-                    parameters.add(new Parameter(type.substring(0, 1)
-                            .toUpperCase() + type.substring(1) + "s", txt));
+                    parameters.add(new Parameter(type.substring(0, 1).toUpperCase()
+                            + type.substring(1) + "s", txt));
                 }
             }
         }
@@ -176,8 +172,7 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
             parameters.add(new Parameter("Subcellular localization",
                     localization.getType().getName()));
         } else {
-            parameters
-                    .add(new Parameter("Subcellular localization", "Unknown", false, true));
+            parameters.add(new Parameter("Subcellular localization", "Unknown", false, true));
         }
         displayProteinPropertiesWidget.setProperties(parameters);
     }
@@ -186,27 +181,37 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
         displayMotifSelectionWidget.setMotifSelection(result
                 .getMotifSelection());
         List<Parameter> parameters = new LinkedList<>();
-        parameters.add(new Parameter("Domains requested", result
-                .isShowDomains() ? "Yes" : "No"));
-        parameters.add(new Parameter("Stringency", result
-                .getHistogramThreshold().getName()));
-        parameters.add(new Parameter("Reference histogram", result
-                .getHistogramTaxonName()
-                + " ("
-                + result.getHistogramDataSourceSelection().getDisplayName()
-                + ")"));
-        parameters.add(new Parameter("Number of predicted motif sites", result
-                .getHits().size()));
-        parameters.add(new Parameter("Protein data source", result.getProtein()
-                .getDataSource().getDisplayName()));
+        parameters.add(new Parameter("Domains requested", result.isShowDomains() ? "Yes" : "No"));
+
+        parameters.add(new Parameter("Stringency", result.getHistogramThreshold().getName()));
+
+        parameters.add(new Parameter("Reference histogram", result.getHistogramTaxonName()
+                + " (" + result.getHistogramDataSourceSelection().getDisplayName() + ")"));
+
+        parameters.add(new Parameter("Number of predicted motif sites", result.getHits().size()));
+
+        if (result.getProtein() != null && result.getProtein().getDataSource() != null) {
+            parameters.add(new Parameter("Protein data source",
+                    result.getProtein().getDataSource().getDisplayName()));
+        }
+
         if (result.getLocalizationDataSource() != null) {
-            parameters.add(new Parameter("Localization data source", result
-                    .getLocalizationDataSource().getDisplayName()));
-        } else {
             parameters.add(new Parameter("Localization data source",
-                    "Not available for specified protein identifier type ("
-                            + result.getProtein().getDataSource()
-                            .getIdentifierType().getName() + ")", false, true));
+                    result.getLocalizationDataSource().getDisplayName()));
+        } else {
+            if (result.getProtein() == null
+                    || result.getProtein().getDataSource() == null
+                    || result.getProtein().getDataSource().getIdentifierType() == null
+                    || result.getProtein().getDataSource().getIdentifierType().getName() == null) {
+                parameters.add(new Parameter("Localization data source",
+                        "Not available for specified protein identifier type (null/undefined)", false, true));
+            } else {
+                parameters.add(new Parameter("Localization data source",
+                        "Not available for specified protein identifier type ("
+                                + result.getProtein().getDataSource().getIdentifierType().getName()
+                                + ")", false, true));
+            }
+
         }
 
         displayScanPropertiesWidget.setProperties(parameters);
@@ -218,7 +223,6 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
                 && !result.getDomainPositions().isEmpty()) {
             domainPanel.add(new DomainInformationWidget(result.getProtein(),
                     result.getDomainPositions()));
-
 
 
             List<DomainPosition> domainPositions = result.getDomainPositions();
@@ -247,8 +251,7 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
     }
 
     private void setMotifSitesTable(ScanResults result) {
-        ProteinScanResultSiteTable resultTable = new ProteinScanResultSiteTable(
-                result, user);
+        ProteinScanResultSiteTable resultTable = new ProteinScanResultSiteTable(result, user);
         resultTable.setWidth("100%");
         motifSitesTable.clear();
         motifSitesTable.add(resultTable);

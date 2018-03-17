@@ -38,6 +38,7 @@ import edu.mit.scansite.shared.util.ScansiteScoring;
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public class ProteinScanFeature {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -190,52 +191,4 @@ public class ProteinScanFeature {
 		return null;
 	}
 
-	// /**
-	// * Runs a protein scan using the given parameters. This method is intended
-	// to
-	// * be used by a webservice.
-	// *
-	// * @param proteinName
-	// * A protein name. This parameter either has to be a protein
-	// * accession number if a datasourceShortName is given, or any other
-	// * name, if a proteinSequence is given.
-	// * @param proteinSequence
-	// * A protein sequence.
-	// * @param datasourceShortName
-	// * The shortname of an existing datasource.
-	// * @param motifShortNames
-	// * A list of existing motifshortnames. These motifs will be used to
-	// * scan the given protein.
-	// * @param motifClass
-	// * A motif-class. The given shortnames must describe motifs from the
-	// * given class.
-	// * @param stringency
-	// * A stringency value. If a usermotif is given, no stringency is used
-	// * (because there is no reference histogram available). Instead a
-	// * maximum cutoff score of 5 is used as threshold.
-	// * @return A protein scan result containing the results of the scan.
-	// * @throws DataAccessException
-	// * Is thrown if a database access related error occurs.
-	// */
-	// public ProteinScanResult doProteinScan(boolean isDatabaseProtein,
-	// String proteinName, String proteinSequence, String datasourceShortName,
-	// ArrayList<String> motifShortNames, MotifClass motifClass,
-	// HistogramStringency stringency) throws DataAccessException {
-	// return doProteinScan(
-	// isDatabaseProtein,
-	// proteinName,
-	// proteinSequence,
-	// datasourceShortName,
-	// motifShortNames,
-	// motifClass,
-	// false,
-	// null,
-	// stringency,
-	// null,
-	// false,
-	// null,
-	// ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX],
-	// ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
-	// false, "");
-	// }
 }
