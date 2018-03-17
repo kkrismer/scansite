@@ -220,21 +220,9 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
                     result.getDomainPositions()));
 
 
-//        <table>
-//            <tr>
-//                <td><strong>Full Domain Name</strong></td>
-//                <td><strong>IPR Code</strong></td>
-//                <td><strong>Alternative Name</strong></td>
-//            </tr>
-//            <tr>
-//                <td></td>
-//                <td><a href="http://www.ebi.ac.uk/interpro/entry/"></a></td>
-//                <td></td>
-//            </tr>
-//        </table>
 
             List<DomainPosition> domainPositions = result.getDomainPositions();
-            domainDataTable += "<br/><br/>";
+            domainDataTable += "<br/>";
             domainDataTable += "<table><tr>";
             domainDataTable += "<td><strong>Full Domain Name</strong></td>";
             domainDataTable += "<td><strong>IPR Code</strong></td>";
@@ -253,7 +241,8 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
 
         if (result.getImagePath() != null) {
             DOM.getElementById("proteinPlot").setInnerHTML(
-                    "<img alt=\"protein plot\" src=\"" + result.getImagePath() + "\"/>" + domainDataTable);
+                    "<img alt=\"protein plot\" src=\"" + result.getImagePath() + "\"/>");
+            DOM.getElementById("proteinPlotTable").setInnerHTML(domainDataTable);
         }
     }
 

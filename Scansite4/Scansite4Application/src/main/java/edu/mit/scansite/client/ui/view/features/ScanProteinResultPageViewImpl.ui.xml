@@ -25,6 +25,7 @@
 		<h3>Protein plot</h3>
 		<g:FlowPanel ui:field="domainPanel" />
 		<div class="scrollable" id="proteinPlot"></div>
+		<div class="" id="proteinPlotTable"></div>
 		<h3>Predicted motif sites</h3>
 		<span class="warningMessage">Warning: Popup blockers may disable the links in the result table</span>
 		<g:FlowPanel ui:field="motifSitesTable" styleName="scrollable" />
