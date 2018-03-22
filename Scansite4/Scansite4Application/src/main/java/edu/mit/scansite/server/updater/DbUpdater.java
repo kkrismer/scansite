@@ -1,13 +1,10 @@
 package edu.mit.scansite.server.updater;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +29,7 @@ import edu.mit.scansite.shared.util.Formatter;
 /**
  * @author Tobieh
  * @author Konstantin Krismer
+ * @author Thomas Bernwinkler
  */
 public abstract class DbUpdater implements Runnable {
 	private static final String TEMP_PREFIX = "temp_";
@@ -132,8 +130,16 @@ public abstract class DbUpdater implements Runnable {
 			}
 		}
 
-		logger.info("prepare file transliterator");
+		logger.info("Prepare file transliterator to transfer data to database");
 		initReader(tempFileName);
+		logger.info("Deleting downloaded files after processing to plain text file...");
+        for (String dbFileName : dbFileNames) {
+            try {
+                Files.deleteIfExists(Paths.get(getFilePath(dbFileName)));
+            } catch (IOException e) {
+                logger.error("Could not delete downloaded files after transliterating");
+            }
+        }
 		FileTransliterator ssTransliterator = getScansiteFileTransliterator(getFilePath("DB_" + errFileName));
 		try {
 			logger.info("transliterate scansite-specific files to temporary table in database");
