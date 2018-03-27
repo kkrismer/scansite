@@ -175,7 +175,15 @@ public abstract class DbUpdater implements Runnable {
 		}
 
 		// clean up, remove old tables and delete temporary files
-		cleanup(f);
+		cleanup();
+        System.out.println("Deleting transliterated text file after inserting data into database tables...");
+        try {
+            Files.deleteIfExists(Paths.get(getFilePath(tempFileName)));
+            Files.deleteIfExists(Paths.get(getFilePath("DB_" + errFileName)));
+            Files.deleteIfExists(Paths.get(getFilePath(errFileName)));
+        } catch (IOException e) {
+            logger.error("Could not delete text file after transliterating", e);
+        }
 	}
 
 	private void saveDataSource(DataSource dataSource) {
@@ -324,10 +332,8 @@ public abstract class DbUpdater implements Runnable {
 
 	/**
 	 * Deletes all the files that have been created before.
-	 * 
-	 * @param f
 	 */
-	protected void cleanup(File f) {
+	protected void cleanup() {
 		try {
 			for (BufferedReader reader : readers) {
 				reader.close();
