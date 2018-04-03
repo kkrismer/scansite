@@ -12,6 +12,7 @@
 		<module>Scansite4WebService</module>
 		<module>Scansite4DatabaseManager</module>
 		<module>Scansite4MotifInserter</module>
+		<module>Scansite4BulkSearch</module>
 	</modules>
 
 	<packaging>pom</packaging>

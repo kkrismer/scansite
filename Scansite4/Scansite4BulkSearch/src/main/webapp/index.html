@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description"
+          content="Scansite Web Service: programmatic access to Scansite functionality" />
+    <meta name="keywords"
+          content="restful,webservice,kinases,yaffe,protein,phosphorylation" />
+    <meta name="author"
+          content="Thomas Bernwinkler" />
+    <link type="text/css" rel="stylesheet" href="Scansite4.css">
+    <link type="text/css" rel="stylesheet" href="bulksearch.css">
+
+
+    <!-- for FF, Chrome, Opera -->
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+    <!-- for IE -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" >
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+
+
+    <title>Scansite 4 Web Service</title>
+</head>
+<body>
+<div id="wrapper">
+    <header class="majorheader">
+        <h1>Scansite</h1>
+    </header>
+
+    <nav id="majornav" class="majornav">
+        <h2 class="majornav">Bulk Search</h2>
+        <ul>
+            <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Search 1</a></div></li>
+            <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Search 2</a></div></li>
+            <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Search 3</a></div></li>
+        </ul>
+        <h2 class="majornav">Core Application</h2>
+        <h2>Navigation</h2>
+        <div>
+            <ul>
+                <li id="homeLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#home">Home</a></div></li>
+                <li id="newsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#news">News</a></div> </li>
+                <li><h3>Features</h3>
+                    <ul>
+                        <li id="scanProteinLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanProtein">Scan Protein for Motifs</a></div></li>
+                        <li id="scanDbLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanDb">Search a Sequence Database for Motifs</a></div></li>
+                        <li id="scanSeqLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanSeq">Find Sequence Match</a></div></li>
+                        <li id="scanOrthologsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanOrthologs">Scan Orthologs</a></div></li>
+                        <li id="predictLocalizationLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#predictLocalization">Predict Localization</a></div></li>
+                        <li id="calcMolWeightLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#calcMolWeight">Calculate Molecular Weight and pI</a></div></li>
+                        <li id="calcCompositionLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#calcComposition">Calculate Amino Acid Composition</a></div></li>
+                    </ul>
+                </li>
+                <li id="motifsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#motifs">Databases and Motifs</a></div></li>
+                <li id="tutorialLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#tutorial">Tutorial</a></div></li>
+            </ul>
+            <h2 class="majornav">Web Service</h2>
+            <ul>
+                <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Entry 1</a></div></li>
+                <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Entry 2</a></div></li>
+                <li class="nosel"><div class="gwt-Hyperlink"><a href="#">Entry 3</a></div></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="breadcrumbs">
+        <div>You are here: <span><a href="http://scansite4.mit.edu/4.0/">Scansite 4.0</a> ›
+				<a href="http://scansite4.mit.edu/bulksearch/">Bulk Search</a></span></div>
+    </div>
+    <div id="content">
+        <h2>Scansite 4 Bulk Search</h2>
+        <!--<ol>-->
+            <!--<li><a href='#sec_intro'>Introduction</a></li>-->
+            <!--<li><a href='#sec_defs'>Definitions</a></li>-->
+            <!--<li><a href='#sec_usageExample'>Usage-Example</a></li>-->
+            <!--<li><a href='#sec_basicFunctions'>Basic Functions</a>-->
+                <!--<ol>-->
+                    <!--<li><a href='#svc_stringency'>Get valid stringency values</a></li>-->
+                    <!--<li><a href='#svc_datasources'>Get valid dataSources</a></li>-->
+                    <!--<li><a href='#svc_motifClasses'>Get valid motifs classes</a></li>-->
+                    <!--<li><a href='#svc_organismClasses'>Get organism classes</a></li>-->
+                    <!--<li><a href='#svc_motifDefs'>Get valid motifs from a given-->
+                        <!--class</a></li>-->
+                    <!--<li><a href='#svc_proteinExists'>Check if proteins exist in-->
+                        <!--Scansite's database mirrors</a></li>-->
+                <!--</ol></li>-->
+            <!--<li><a href='#sec_scansiteFunctions'>Scansite Functions</a>-->
+                <!--<ol>-->
+                    <!--<li><a href="#svc_scanProtAcc">Scan a protein for motifs-->
+                        <!--using a protein accession</a></li>-->
+                    <!--<li><a href="#svc_scanProtSeq">Scan a protein for motifs-->
+                        <!--using a protein sequence</a></li>-->
+                    <!--<li><a href="#svc_searchDb">Search a sequence database for-->
+                        <!--a Scansite motif</a></li>-->
+                    <!--<li><a href="#svc_seqMatch">Search a sequence database for-->
+                        <!--a sequence pattern</a></li>-->
+                    <!--<li><a href="#svc_orthScan">Scan a protein for evolutionary-->
+                        <!--conserved phosphorylation sites</a></li>-->
+                    <!--<li><a href="#svc_localizationPrediction">Predict cellular-->
+                        <!--localization of a protein</a></li>-->
+                <!--</ol></li>-->
+            <!--<li><a href='#sec_errors'>Errors</a></li>-->
+        <!--</ol>-->
+        <!-- ########################################################################################################## -->
+        <h3 id='sec_intro'>1. Introduction</h3>
+        <p>Welcome to the Scansite 4 bulk search. This page gives you the opportunity to lift the use of Scansite to an
+            entirely different level.</p>
+        <p>
+            The input fields... file uploads...
+            <!--<a href='#sec_defs'>Defintions-section</a>-->
+        </p>
+        <a href="#top" class='goToTopLink'>[Go to top]</a>
+
+        <!-- ########################################################################################################## -->
+
+    </div>
+    <div
+            style="clear: both; background-image: url(img/background.png); height: 27px; width: 100%; border-top: 1px solid #C0C0C0; border-bottom: 1px solid #C0C0C0;"></div>
+    <footer id="majorfooter">
+        <ul>
+            <li><a id="mit" href="http://web.mit.edu/" target="_blank"></a></li>
+            <li><a id="ki" href="http://ki.mit.edu/" target="_blank"></a></li>
+            <li><a id="fhh"
+                   href="http://www-en.fh-ooe.at/hagenberg-campus/" target="_blank"></a></li>
+            <li><a id="mps" href="http://www.marshallplan.at/"
+                   target="_blank"></a></li>
+            <li><a id="stjude" href="http://www.stjude.org/"
+                   target="_blank"></a></li>
+            <li><a id="mgri" href="http://www.merck.com/" target="_blank"></a></li>
+            <li><a id="bidmc" href="http://bidmc.org/" target="_blank"></a></li>
+        </ul>
+        <p style="clear: both;">
+            <a href="http://scansite4.mit.edu/4.0/#about">About</a> - <a href="http://scansite4.mit.edu/4.0/#faq">FAQ</a> - <a href="http://scansite4.mit.edu/Scansite4Webservice/">Web Service</a> - <a
+                href="http://scansite4.mit.edu/4.0/#cite">Citing Scansite</a> - <a href="http://scansite4.mit.edu/4.0/#feedback">Send
+            Feedback</a> - <a href="http://scansite.mit.edu/">Scansite 2</a> - <a
+                href="http://scansite3.mit.edu/">Scansite 3</a> - <a href="#admin">Administrator
+            and Collaborator Area</a>
+        </p>
+        <p>
+            &copy; 2018 - Scansite 4.00.014 - <a target="_blank"
+                                                 href="http://yaffelab.mit.edu/">Michael B. Yaffe Laboratory</a> -
+            Koch Institute, MIT
+        </p>
+    </footer>
+</div>
+</body>
+</html>
