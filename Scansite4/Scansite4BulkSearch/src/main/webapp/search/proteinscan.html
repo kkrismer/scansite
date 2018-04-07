@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="description"
+          content="Scansite Web Service: programmatic access to Scansite functionality"/>
+    <meta name="keywords"
+          content="restful,webservice,kinases,yaffe,protein,phosphorylation"/>
+    <meta name="author"
+          content="Thomas Bernwinkler"/>
+    <link type="text/css" rel="stylesheet" href="/css/Scansite4.css">
+    <link type="text/css" rel="stylesheet" href="/css/bulksearch.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+    <!-- for FF, Chrome, Opera -->
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+    <!-- for IE -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+
+
+    <title>Scansite 4 - Bulk Search</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#header").load("/html/head.html");
+            $("#footer").load("/html/footer.html");
+        });
+    </script>
+</head>
+
+<body>
+<br/>
+<div class="wrapper">
+
+    <div id="header"></div>
+
+    <div id="breadcrumbs">
+        <div>You are here: <span><a href="http://scansite4.mit.edu/4.0/">Scansite 4.0</a> ›
+				<a href="/index.html">Bulk Search</a> ›
+				<a href="/search/proteinscan.html">Scan Proteins for Motifs</a></span></div>
+    </div>
+    <div id="content">
+        <h2>Scan Proteins for Motifs</h2>
+
+        <form class="form-inline" method="post">
+            <div class="panel panel-default scansite-search-panel">
+                <div class="panel-heading">Protein Input Data</div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" size="80px" placeholder="Readonly input here…" readonly>
+                        <a href="#" class="btn btn-default" type="button">Remove</a>
+                        <hr/>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                   value="option1" checked>
+                            <label class="form-check-label" for="inlineRadio1">Protein / Gene Identifier</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                   value="option2">
+                            <label class="form-check-label" for="inlineRadio2">Input Sequence</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                                   value="option2">
+                            <label class="form-check-label" for="inlineRadio3">File Upload</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <br/>
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="formGroupExampleInput">Protein Identifier</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control select-entry" id="formGroupExampleInput"
+                                   placeholder="BRCA2_HUMAN">
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="sel1">Protein Data Source</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <select class="form-control select-entry" id="sel1">
+                                <option>UniProtKB/TrEMBL</option>
+                                <option>Ensembl Human</option>
+                                <option>Ensembl Mouse</option>
+                                <option>NCBI ...</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="formGroupExampleInput2">Protein Sequence</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <textarea class="form-control select-entry" rows="5" cols="50" id="formGroupExampleInput2" placeholder="alternative input..."></textarea>
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="exampleFormControlFile">Input File</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="file" class="form-control-file select-entry" id="exampleFormControlFile"
+                                   placeholder="alternative input...">
+                        </div>
+                        <div class="col-lg-12"><hr/></div>
+                        <a href="#" class="btn btn-primary" type="button">Add Entry</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Example file input</label>
+            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+
+
+    </div>
+
+    <div id="footer"></div>
+
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>

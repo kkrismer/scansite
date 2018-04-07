@@ -13,6 +13,7 @@
 		<module>Scansite4DatabaseManager</module>
 		<module>Scansite4MotifInserter</module>
 		<module>Scansite4BulkSearch</module>
+		<module>Scansite4Maintenance</module>
 	</modules>
 
 	<packaging>pom</packaging>

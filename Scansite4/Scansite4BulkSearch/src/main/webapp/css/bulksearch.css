@@ -1,0 +1,40 @@
+
+/* TODO: add new styling - specifically for the bulk search - to this file*/
+
+.card-title {
+    color: #ca5b0a;
+    font-size: 200%;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+img.center {
+    width: 30%;
+}
+
+.overview {
+    margin-left: 30px;
+    margin-right: 35px;
+}
+
+.overview-button {
+    margin-left: 65px;
+    margin-bottom: 80px;
+}
+
+.scansite-search-panel {
+    margin-right: 15px;
+}
+
+.select-entry {
+    margin-bottom: 10px;
+}
+
+.scansite-label {
+    font-variant: small-caps;
+}

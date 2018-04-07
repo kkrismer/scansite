@@ -6,7 +6,7 @@
 body {
   	font-family: Arial Unicode MS, Arial, sans-serif;
 	background-color: #F0F0F0 !important;
-	font-size: 100% !important;
+	font-size: 150% !important;
 }
 
 /* avoid font boosting in Android Chrome */
@@ -16,16 +16,16 @@ input[type=text],input[type=password],select,textarea {
 	width: 200px;
 }
 
-div#wrapper {
+.wrapper {
 	background-color: white;
 	min-width: 700px;
-	max-width: 1800px;
+	max-width: 1200px;
 	margin: 0 auto;
 	border: 1px solid #C0C0C0;
 }
 
 header.majorheader {
-	background-image: url(img/logo_scansite.png);
+	background-image: url(/img/logo_scansite.png);
 	background-repeat: no-repeat;
 	background-position: left;
 	height: 103px;
@@ -138,6 +138,7 @@ nav ul {
 	padding: 0;
 }
 
+
 nav ul ul {
 	margin-left: 15px;
 }
@@ -145,7 +146,7 @@ nav ul ul {
 nav a:link,nav a:visited,nav a:active,nav a:focus {
 	font-size: 0.9em;
 	text-align: left;
-	background-image: url(img/nav_bullet_inactive.png);
+	background-image: url(/img/nav_bullet_inactive.png);
 	background-repeat: no-repeat;
 	background-position: left center;
 	border: none;
@@ -158,13 +159,13 @@ nav a:link,nav a:visited,nav a:active,nav a:focus {
 
 nav li.sel a:link,nav li.sel a:visited,nav li.sel a:active,nav li.sel a:focus
 	{
-	background-image: url(img/nav_bullet_selected.png);
+	background-image: url(/img/nav_bullet_selected.png);
 	border-bottom: 1px solid #808080;
 }
 
 nav li.nosel a:link,nav li.nosel a:visited,nav li.nosel a:active,nav li.nosel a:focus
 	{
-	background-image: url(img/nav_bullet_inactive.png);
+	background-image: url(/img/nav_bullet_inactive.png);
 	border-bottom: 1px solid #F0F0F0;
 }
 
@@ -174,7 +175,7 @@ nav a:hover {
 	text-decoration: none;
 	color: #c38816;
 	border-bottom: 1px solid #c38816;
-	background-image: url(img/nav_bullet_active.png);
+	background-image: url(/img/nav_bullet_active.png);
 }
 
 /***************************************************/
@@ -285,52 +286,52 @@ ul.home a:hover {
 
 ul.home a.uniprot:link,ul.home a.uniprot:visited,ul.home a.uniprot:active,ul.home a.uniprot:focus
 	{
-	background-image: url(img/dslogos/uniprot_inactive.png);
+	background-image: url(/img/dslogos/uniprot_inactive.png);
 	background-position: 50% 90px;
 }
 
 ul.home a.uniprot:hover {
-	background-image: url(img/dslogos/uniprot.png);
+	background-image: url(/img/dslogos/uniprot.png);
 }
 
 ul.home a.ncbi:link,ul.home a.ncbi:visited,ul.home a.ncbi:active,ul.home a.ncbi:focus
 	{
-	background-image: url(img/dslogos/ncbi_inactive.png);
+	background-image: url(/img/dslogos/ncbi_inactive.png);
 	background-position: 50% 100px;
 }
 
 ul.home a.ncbi:hover {
-	background-image: url(img/dslogos/ncbi.png);
+	background-image: url(/img/dslogos/ncbi.png);
 }
 
 ul.home a.embl:link,ul.home a.embl:visited,ul.home a.embl:active,ul.home a.embl:focus
 	{
-	background-image: url(img/dslogos/embl_inactive.png);
+	background-image: url(/img/dslogos/embl_inactive.png);
 	background-position: 50% 100px;
 }
 
 ul.home a.embl:hover {
-	background-image: url(img/dslogos/embl.png);
+	background-image: url(/img/dslogos/embl.png);
 }
 
 ul.home a.sgd:link,ul.home a.sgd:visited,ul.home a.sgd:active,ul.home a.sgd:focus
 	{
-	background-image: url(img/dslogos/sgd_inactive.png);
+	background-image: url(/img/dslogos/sgd_inactive.png);
 	background-position: 50% 80px;
 }
 
 ul.home a.sgd:hover {
-	background-image: url(img/dslogos/sgd.png);
+	background-image: url(/img/dslogos/sgd.png);
 }
 
 ul.home a.lc3:link,ul.home a.lc3:visited,ul.home a.lc3:active,ul.home a.lc3:focus
 	{
-	background-image: url(img/dslogos/lc3_inactive.png);
+	background-image: url(/img/dslogos/lc3_inactive.png);
 	background-position: 50% 110px;
 }
 
 ul.home a.lc3:hover {
-	background-image: url(img/dslogos/lc3.png);
+	background-image: url(/img/dslogos/lc3.png);
 }
 
 /***************************************************/
@@ -593,72 +594,72 @@ footer#majorfooter p a:hover {
 
 a#mit:link,a#mit:visited,a#mit:active {
 	width: 73px;
-	background-image: url(img/logos/mit_inactive.png);
+	background-image: url(/img/logos/mit_inactive.png);
 }
 
 a#mit:hover {
 	width: 73px;
-	background-image: url(img/logos/mit_active.png);
+	background-image: url(/img/logos/mit_active.png);
 }
 
 a#ki:link,a#ki:visited,a#ki:active {
 	width: 140px;
-	background-image: url(img/logos/ki_inactive.png);
+	background-image: url(/img/logos/ki_inactive.png);
 }
 
 a#ki:hover {
 	width: 140px;
-	background-image: url(img/logos/ki_active.png);
+	background-image: url(/img/logos/ki_active.png);
 }
 
 a#fhh:link,a#fhh:visited,a#fhh:active {
 	width: 62px;
-	background-image: url(img/logos/fhh_inactive.png);
+	background-image: url(/img/logos/fhh_inactive.png);
 }
 
 a#fhh:hover {
 	width: 62px;
-	background-image: url(img/logos/fhh_active.png);
+	background-image: url(/img/logos/fhh_active.png);
 }
 
 a#mps:link,a#mps:visited,a#mps:active {
 	width: 111px;
-	background-image: url(img/logos/mps_inactive.png);
+	background-image: url(/img/logos/mps_inactive.png);
 }
 
 a#mps:hover {
 	width: 111px;
-	background-image: url(img/logos/mps_active.png);
+	background-image: url(/img/logos/mps_active.png);
 }
 
 a#stjude:link,a#stjude:visited,a#stjude:active {
 	width: 52px;
-	background-image: url(img/logos/stjude_inactive.png);
+	background-image: url(/img/logos/stjude_inactive.png);
 }
 
 a#stjude:hover {
 	width: 52px;
-	background-image: url(img/logos/stjude_active.png);
+	background-image: url(/img/logos/stjude_active.png);
 }
 
 a#mgri:link,a#mgri:visited,a#mgri:active {
 	width: 69px;
-	background-image: url(img/logos/mgri_inactive.png);
+	background-image: url(/img/logos/mgri_inactive.png);
 }
 
 a#mgri:hover {
 	width: 69px;
-	background-image: url(img/logos/mgri_active.png);
+	background-image: url(/img/logos/mgri_active.png);
 }
 
 a#bidmc:link,a#bidmc:visited,a#bidmc:active {
 	width: 36px;
-	background-image: url(img/logos/bidmc_inactive.png);
+	background-image: url(/img/logos/bidmc_inactive.png);
 }
 
 a#bidmc:hover {
 	width: 36px;
-	background-image: url(img/logos/bidmc_active.png);
+	background-image: url(/img/logos/bidmc_active.png);
 }
 
 /***************************************************/
