@@ -230,9 +230,9 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 			List<DataSource> dataSources = getAll(true);
 			Map<DataSource, Integer> sizes = new HashMap<>();
 			boolean isInitialized = true;
+			CommandConstants cc = CommandConstants.instance(dbConstantsConfig);
 			for (DataSource dataSource : dataSources) {
-				int count = TableSizeInfo.getCount(DataUtils.getTableName(dataSource,
-                        CommandConstants.instance(dbConstantsConfig)));
+				int count = TableSizeInfo.getCount(DataUtils.getTableName(dataSource, cc));
 				if (count == 0) {
 				    DataSourceEntryCountGetCommand sizeCommand = new DataSourceEntryCountGetCommand(dbAccessConfig,
                             dbConstantsConfig, dataSource);
@@ -242,7 +242,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 				sizes.put(dataSource, count);
 			}
 			if (!isInitialized) {
-				TableSizeInfo.init(sizes);
+				TableSizeInfo.init(sizes, cc);
 			}
 
 			return sizes;

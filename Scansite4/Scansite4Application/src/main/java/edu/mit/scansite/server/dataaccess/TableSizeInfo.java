@@ -1,5 +1,6 @@
 package edu.mit.scansite.server.dataaccess;
 
+import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 
 import java.util.Map;
@@ -33,29 +34,39 @@ public class TableSizeInfo {
     private static final String LOC_LOCTREE        = "localization_loctree";
 
 
-    public static void init(Map<DataSource, Integer> tableSizes) {
+    public static void init(Map<DataSource, Integer> tableSizes, CommandConstants cc) {
 
         Set<DataSource> dataSources = tableSizes.keySet();
         for (DataSource dataSource : dataSources) {
-            switch (dataSource.getShortName()) {
+            final String tableName = DataUtils.getTableName(dataSource, cc);
+            switch (tableName) {
                 case PROT_SWISSPROT:
                     uniprotSwissprotCountCache = tableSizes.get(dataSource);
+                    break;
                 case PROT_TREMBL:
                     uniprotTremblCountCache  = tableSizes.get(dataSource);
+                    break;
                 case PROT_ENSEMBL_HUMAN:
                     ensemblHumanCountCache = tableSizes.get(dataSource);
+                    break;
                 case PROT_ENSEMBL_MOUSE:
                     ensemblMouseCountCache = tableSizes.get(dataSource);
+                    break;
                 case PROT_GENPEPT:
                     ncbiGenpeptCountCache = tableSizes.get(dataSource);
+                    break;
                 case PROT_YEAST:
                     yeastSgdCountCache = tableSizes.get(dataSource);
+                    break;
                 case ORTH_SWISSPROT:
                     swissprotOrthologyCountCache = tableSizes.get(dataSource);
+                    break;
                 case ORTH_HOMOLOGENE:
                     ncbiHomologeneCountCache = tableSizes.get(dataSource);
+                    break;
                 case LOC_LOCTREE:
                     loctreeCountCache = tableSizes.get(dataSource);
+                    break;
             }
         }
     }
