@@ -97,6 +97,12 @@
                                               placeholder="Enter multiple identifiers..." disabled></textarea>
                                 </div>
                             </div>
+                            <div class="row">
+                                <hr/>
+                                <div class="col-lg-3">
+                                    <a id="addIdentifierSourceEntryButton" href="#" class="btn btn-primary" type="button">Add Entry</a>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -121,6 +127,12 @@
                                               id="proteinScanSequenceTextArea" placeholder="Enter sequence here..."></textarea>
                                 </div>
                             </div>
+                            <div class="row">
+                                <hr/>
+                                <div class="col-lg-3">
+                                    <a id="addSequenceSourceEntryButton" href="#" class="btn btn-primary" type="button">Add Entry</a>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -136,24 +148,169 @@
                                            placeholder="alternative input...">
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    
-                    <div class="row">
-                        <hr/>
-                        <div class="col-lg-3">
-                            <a id="addSourceEntryButton" href="#" class="btn btn-primary" type="button">Add Entry</a>
+                            <div class="row">
+                                <hr/>
+                                <div class="col-lg-3">
+                                    <a id="addFileSourceEntryButton" href="#" class="btn btn-primary" type="button">Use File</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="panel panel-default scansite-search-panel">
+                <div class="panel-heading">Motif Selection</div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a id="motifClassSelector" data-toggle="tab" href="#motifClass">Motif Class</a></li>
+                        <li><a id="specificMotifSelector" data-toggle="tab" href="#specificMotifs">Selected Motifs and Groups</a></li>
+                        <li><a id="userDefinedMotifSelector" data-toggle="tab" href="#userDefinedMotifs">User Defined Motif</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="motifClass" class="tab-pane fade in active">
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label class="scansite-label" for="motifClassSelect">Selected Class</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div id="motifClassSelect" class="radio">
+                                        <label><input type="radio" name="optradio">&nbsp;Mammalian</label>
+                                    </div>
+                                    <br/>
+                                    <div class="radio">
+                                        <label><input type="radio" name="optradio">&nbsp;Yeast</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="specificMotifs" class="tab-pane fade">
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label class="scansite-label" for="motifClassSelect">Motifs</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select multiple class="form-control" id="selectMotifs">
+                                        <option>14-3-3 Mode 1</option>
+                                        <option>AMP Kinase</option>
+                                        <option>ATM Kinase</option>
+                                        <option>Abl Kinase</option>
+                                        <option>Abl SH2</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="scansite-label" for="selectMotifGroups">Motif Groups</label>
+                                </div>
+                                <div class="col-lg-5">
+                                    <select multiple class="form-control" id="selectMotifGroups">
+                                        <option>Acidophilic ...</option>
+                                        <option>Basophilic ...</option>
+                                        <option>DNA damage kinase group</option>
+                                        <option>Kinase binding site group</option>
+                                        <option>...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="userDefinedMotifs" class="tab-pane fade">
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label class="scansite-label" for="userMotifName">Motif Name</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control select-entry"
+                                           id="userMotifName"
+                                           placeholder="My Motif">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label class="scansite-label" for="exampleFormControlFile1">Motif File</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel panel-default scansite-search-panel">
+                <div class="panel-heading">Additional Search Parameters</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="stringencySelect">Stringency</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <select class="form-control select-entry" id="stringencySelect">
+                                <option>High</option>
+                                <option>Medium</option>
+                                <option>Low</option>
+                                <option>Minimum</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="prevMappedSitesCheckBox">Filter Results</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="checkbox">
+                                <label><input id="prevMappedSitesCheckBox" class="proteinSearchIdentifier"
+                                              type="checkbox" value="">&nbsp; Return Only Previously Mapped Sites</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="referenceProteomeCheckBox">Reference Proteome</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="checkbox">
+                                <label><input id="referenceProteomeCheckBox" class="proteinSearchIdentifier"
+                                              type="checkbox" value="">&nbsp; Use non-standard reference proteome</label>
+                            </div>
+                            <br/>
+                            <select class="form-control select-entry" id="refProteomeSelect" disabled>
+                                <option>Vertebrata (Default)</option>
+                                <option>Saccharomyces Cerevisiae (Baker's Yeast)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label class="scansite-label" for="localizationSelect">Localization Data Source</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <select class="form-control select-entry" id="localizationSelect" disabled>
+                                <option>LocTree3 (Rostlab)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <a id="submitButton" href="#" class="btn btn-primary" type="button">Submit Search</a>
+                </div>
+            </div>
+            <br/>
         </form>
 
-        <div class="form-group">
-            <label for="exampleFormControlFile1">Example file input</label>
-            <input type="file" class="form-control-file" id="exampleFormControlFile1">
-        </div>
+        <!--<div class="form-group">-->
+            <!--<label for="exampleFormControlFile1">Example file input</label>-->
+            <!--<input type="file" class="form-control-file" id="exampleFormControlFile1">-->
+        <!--</div>-->
 
 
     </div>
