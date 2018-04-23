@@ -1,5 +1,11 @@
 // ##### PROTEIN SCAN #####
 
+// SHARED VARIABLES
+var selectedTab = document.getElementById('menu1'),
+    addedEntries = [],
+    displayedEntries = [];
+
+
 // PROTEIN IDENTIFIER CHECK BOX
 $('#multipleProteinIdentifierCheckBox').change(function() {
     if ($(this).is(':checked')) {
@@ -11,13 +17,17 @@ $('#multipleProteinIdentifierCheckBox').change(function() {
     }
 });
 
+// REFERENCE PROTEOME CHECK BOX
+$('#referenceProteomeCheckBox').change(function() {
+    if ($(this).is(':checked')) {
+        document.getElementById("refProteomeSelect").disabled = false;
+    } else {
+        document.getElementById("refProteomeSelect").disabled = true;
+    }
+});
+
 
 // PROTEIN SCAN ADD ENTRY BUTTON
-var selectedTab = document.getElementById('menu1'),
-    addedEntries = [],
-    displayedEntries = [];
-
-
 $('#addIdentifierSourceEntryButton').click(function () {
     addInputData();
 });

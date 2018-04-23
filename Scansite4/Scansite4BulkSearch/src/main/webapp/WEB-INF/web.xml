@@ -4,4 +4,39 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+
+  <servlet>
+    <servlet-name>RESTController</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <!-- define package where to search for REST resources -->
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>edu.mit.scansite.rest</param-value>
+    </init-param>
+    <init-param>
+      <!-- automatically convert between plain old Java Objects (POJOs) and JSON representation -->
+      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RESTController</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>/index.html</welcome-file>
+  </welcome-file-list>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.html</location>
+  </error-page>
+  <!--<error-page>-->
+    <!--<exception-type>java.lang.Throwable</exception-type>-->
+    <!--<location>/jsp/errorpage.jsp</location>-->
+  <!--</error-page>-->
 </web-app>

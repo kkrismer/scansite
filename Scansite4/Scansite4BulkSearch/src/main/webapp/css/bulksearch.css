@@ -38,3 +38,23 @@ img.center {
 .scansite-label {
     font-variant: small-caps;
 }
+
+.motif-selection {
+    height: 200px !important;
+}
+
+.motif-selected {
+    overflow-wrap: break-spaces;
+}
+
+.motif-select-group {
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px dotted #cccccc;
+}
+
+/* USED FOR PROTEIN IDENTIFIER AUTO COMPLETE*/
+#scrollable-dropdown-menu .tt-dropdown-menu {
+    max-height: 150px;
+    overflow-y: auto;
+}

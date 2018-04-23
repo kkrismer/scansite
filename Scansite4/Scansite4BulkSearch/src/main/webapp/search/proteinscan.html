@@ -10,16 +10,17 @@
           content="Thomas Bernwinkler"/>
     <link type="text/css" rel="stylesheet" href="../css/Scansite4.css">
     <link type="text/css" rel="stylesheet" href="../css/bulksearch.css">
+    <link type="text/css" rel="stylesheet" href="../css/typeahead.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 
     <!-- for FF, Chrome, Opera -->
-    <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
-    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="../img/icon/favicon.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="../img/icon/favicon.png" sizes="32x32">
 
     <!-- for IE -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="../img/icon/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="../img/icon/favicon.ico"/>
 
 
     <title>Scansite 4 - Bulk Search</title>
@@ -69,10 +70,7 @@
                                 </div>
                                 <div class="col-lg-9">
                                     <select class="form-control select-entry" id="proteinDataSourceSelect">
-                                        <option>UniProtKB/TrEMBL</option>
-                                        <option>Ensembl Human</option>
-                                        <option>Ensembl Mouse</option>
-                                        <option>NCBI ...</option>
+                                        <option disabled>No Data Sources Available</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,9 +80,10 @@
                                         Identifier*</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control select-entry"
-                                           id="singleProteinIdentifierInput"
-                                           placeholder="BRCA2_HUMAN">
+                                    <div id="bloodhound">
+                                        <input id="singleProteinIdentifierInput" type="text"
+                                               class="typeahead form-control select-entry" placeholder="BRCA2_HUMAN">
+                                    </div>
                                     <br/>
                                     <div class="checkbox">
                                         <label><input id="multipleProteinIdentifierCheckBox"
@@ -177,7 +176,7 @@
                                 </div>
                                 <div class="col-lg-9">
                                     <div id="motifClassSelect" class="radio">
-                                        <label><input type="radio" name="optradio">&nbsp;Mammalian</label>
+                                        <label><input type="radio" name="optradio" checked>&nbsp;Mammalian</label>
                                     </div>
                                     <br/>
                                     <div class="radio">
@@ -188,32 +187,54 @@
                         </div>
                         <div id="specificMotifs" class="tab-pane fade">
                             <br/>
+
                             <div class="row">
-                                <div class="col-lg-2">
-                                    <label class="scansite-label" for="motifClassSelect">Motifs</label>
+                                <div class="col-lg-6">
+                                    <div class="motif-select-group">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label class="scansite-label" for="selectMotifs">Motifs (multi-select)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <select multiple class="form-control motif-selection scansite-label" id="selectMotifs" >
+                                                    <option disabled>No Motifs Available</option>
+                                                </select>
+                                                <hr/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div id="selectedMotifs" class="col-lg-12 motif-selected">
+                                                <p>No Motifs are selected.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <select multiple class="form-control" id="selectMotifs">
-                                        <option>14-3-3 Mode 1</option>
-                                        <option>AMP Kinase</option>
-                                        <option>ATM Kinase</option>
-                                        <option>Abl Kinase</option>
-                                        <option>Abl SH2</option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2">
-                                    <label class="scansite-label" for="selectMotifGroups">Motif Groups</label>
-                                </div>
-                                <div class="col-lg-5">
-                                    <select multiple class="form-control" id="selectMotifGroups">
-                                        <option>Acidophilic ...</option>
-                                        <option>Basophilic ...</option>
-                                        <option>DNA damage kinase group</option>
-                                        <option>Kinase binding site group</option>
-                                        <option>...</option>
-                                    </select>
+                                <div class="col-lg-6">
+                                    <div class="motif-select-group">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label class="scansite-label" for="selectMotifGroups">Motif Groups (multi-select)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <select multiple class="form-control motif-selection" id="selectMotifGroups">
+                                                    <option disabled>No Motif Groups Available</option>
+                                                </select>
+                                                <hr/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div id="selectedMotifGroups" class="col-lg-12 motif-selected">
+                                                <p>No Motif Groups are selected.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                         <div id="userDefinedMotifs" class="tab-pane fade">
                             <br/>
@@ -306,20 +327,23 @@
             </div>
             <br/>
         </form>
-
-        <!--<div class="form-group">-->
-            <!--<label for="exampleFormControlFile1">Example file input</label>-->
-            <!--<input type="file" class="form-control-file" id="exampleFormControlFile1">-->
-        <!--</div>-->
-
-
     </div>
 
     <div id="footer"></div>
 
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/typeahead.js/bloodhound.js"></script>
+    <script src="../js/typeahead.js/typeahead.bundle.js"></script>
+    <script src="../js/typeahead.js/typeahead.jquery.js"></script>
+
+    <script src="../js/async.js"></script>
     <script src="../js/bulksearch.js"></script>
+    <script type="text/javascript">
+        loadDataSourceNames();
+        loadMotifNames();
+        loadMotifGroupNames();
+    </script>
 </div>
 
 </body>
