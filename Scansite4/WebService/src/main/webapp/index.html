@@ -67,23 +67,23 @@
 
 			// SERVER DEPLOYMENT
             function loadResultList(targetUrl) {
-                if (targetUrl == "/stringency") {
+                if (targetUrl === "/stringency") {
                     printStringencies("/webservice" + targetUrl);
                 }
-                if (targetUrl == "/datasources") {
+                if (targetUrl === "/datasources") {
                     printDataSources("/webservice" + targetUrl);
                 }
-                if (targetUrl == "/motifclasses") {
+                if (targetUrl === "/motifclasses") {
                     printMotifClasses("/webservice" + targetUrl);
                 }
-                if (targetUrl == "/organismclasses") {
+                if (targetUrl === "/organismclasses") {
                     printOrganismClasses("/webservice" + targetUrl);
                 }
-                if (targetUrl == "/motifdefinitions/motifclass=YEAST"
-                    || targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
+                if (targetUrl === "/motifdefinitions/motifclass=YEAST"
+                    || targetUrl === "/motifdefinitions/motifclass=MAMMALIAN") {
                     printMotifDefinition("/webservice" + targetUrl);
                 }
-                if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+                if (targetUrl === "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
                     printProteinExists("/webservice" + targetUrl);
                 }
             }
@@ -92,16 +92,16 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;") //for <
-		                    resp = resp.replace(/\>/g,"&gt;")   //for >
+						var resp = response.replace(/\</g, "&lt;"); //for <
+		                    resp = resp.replace(/\>/g,"&gt;");   //for >
 						resp = resp.replace(/&lt;stringencyValues&gt;/g,
-								"<br/>&lt;stringencyValues&gt;")
+								"<br/>&lt;stringencyValues&gt;");
 						resp = resp.replace(/&lt;\/stringencyValues&gt;/g,
-								"<br/>&lt;/stringencyValues&gt;")
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;")
-						resp = "<pre>" + resp + "</pre>"
+								"<br/>&lt;/stringencyValues&gt;");
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoStringency").innerHTML = content;
 					}
@@ -114,16 +114,16 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;") //for <
-		                    resp = resp.replace(/>/g,"&gt;")   //for >
+						var resp = response.replace(/</g, "&lt;"); //for <
+		                    resp = resp.replace(/>/g,"&gt;");   //for >
 						resp = resp.replace(/&lt;dataSources&gt;/g,
-								"<br/>&lt;dataSources&gt;")
+								"<br/>&lt;dataSources&gt;");
 						resp = resp.replace(/&lt;\/dataSources&gt;/g,
-								"<br/>&lt;/dataSources&gt;")
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;")
-						resp = "<pre>" + resp + "</pre>"
+								"<br/>&lt;/dataSources&gt;");
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoDataSources").innerHTML = content;
 					}
@@ -136,14 +136,14 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;") //for <
-		                    resp = resp.replace(/>/g,"&gt;")   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>&lt;")
+						var resp = response.replace(/</g, "&lt;"); //for <
+		                    resp = resp.replace(/>/g,"&gt;");   //for >
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>&lt;");
 						resp = resp.replace(/&lt;motifClass&gt;/g,
-								"    &lt;motifClass&gt;")
-						resp = "<pre>" + resp + "</pre>"
+								"    &lt;motifClass&gt;");
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoMotifClasses").innerHTML = content;
 					}
@@ -156,12 +156,12 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;") //for <
-		                    resp = resp.replace(/>/g,"&gt;")   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;")
-						resp = "<pre>" + resp + "</pre>"
+						var resp = response.replace(/</g, "&lt;"); //for <
+		                    resp = resp.replace(/>/g,"&gt;");   //for >
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoOrganismClasses").innerHTML = content;
 					}
@@ -174,11 +174,11 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;") //for <
-		                    resp = resp.replace(/\>/g,"&gt;")   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;")
+						var resp = response.replace(/\</g, "&lt;"); //for <
+		                    resp = resp.replace(/\>/g,"&gt;");   //for >
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
 						resp = resp.replace(/&lt;motifDefinition&gt;/g,
 								"    &lt;motifDefinition&gt;");
 						resp = resp.replace(/&lt;motifClass&gt;/g,
@@ -189,7 +189,7 @@
 								"        &lt;motifName&gt;");
 						resp = resp.replace(/&lt;motifShortName&gt;/g,
 								"        &lt;motifShortName&gt;");
-						resp = "<pre>" + resp + "</pre>"
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoMotifDefinition").innerHTML = content;
 					}
@@ -202,14 +202,14 @@
 				var req = new XMLHttpRequest();
 				req.onerror = errorCallback;
 				req.onreadystatechange = function() {
-					if (req.readyState == 4 && req.status == 200) {
+					if (req.readyState === 4 && req.status === 200) {
 						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;") //for <
-		                    resp = resp.replace(/\>/g,"&gt;")   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;")
+						var resp = response.replace(/\</g, "&lt;"); //for <
+		                    resp = resp.replace(/\>/g,"&gt;");   //for >
+						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
 						resp = resp.replace(/&lt;isSuccess&gt;/g,
-								"    &lt;isSuccess&gt;")
-						resp = "<pre>" + resp + "</pre>"
+								"    &lt;isSuccess&gt;");
+						resp = "<pre>" + resp + "</pre>";
 						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
 						document.getElementById("demoProteinExists").innerHTML = content;
 					}
