@@ -4,8 +4,9 @@ var availableMotifs = [],
     selectedMotifGroups = [],
     selectedDataSource = "UniProtKB/Swiss-Prot",
     identifiers,
+    dataSourceBlackList = [ "NCBI Protein - GenPept/RefSeq" ]; // too large to allow them for bulk searches
     baseUrl = "/bulksearch/rest"; // SERVER
- // baseUrl = "/rest/";            // DEVELOPMENT
+ // baseUrl = "/rest";            // DEVELOPMENT
 
 function loadDataSourceNames() {
     $.ajax({
@@ -13,7 +14,9 @@ function loadDataSourceNames() {
         success: function(result){
             var options = "";
             $.each(result, function (idx) {
+                if (dataSourceBlackList.indexOf(result[idx]) < 0) {
                     options += "<option>" + result[idx] + "</option>";
+                }
             });
             if (result.length > 0) {
                 selectedDataSource = result[0];
