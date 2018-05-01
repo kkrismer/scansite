@@ -3,12 +3,13 @@ var availableMotifs = [],
     selectedMotifs = [],
     selectedMotifGroups = [],
     selectedDataSource = "UniProtKB/Swiss-Prot",
-    identifiers;
-
+    identifiers,
+    baseUrl = "/bulksearch/rest"; // SERVER
+ // baseUrl = "/rest/";            // DEVELOPMENT
 
 function loadDataSourceNames() {
     $.ajax({
-        url: "/rest/data-source-display-names",
+        url: baseUrl + "/data-source-display-names",
         success: function(result){
             var options = "";
             $.each(result, function (idx) {
@@ -28,7 +29,7 @@ function loadDataSourceNames() {
 
 function loadMotifNames() {
     $.ajax({
-        url: "/rest/motif-display-names",
+        url: baseUrl + "/motif-display-names",
         success: function(result){
             availableMotifs = [];
             $.each(result, function (idx) {
@@ -46,7 +47,7 @@ function loadMotifNames() {
 
 function loadMotifGroupNames() {
     $.ajax({
-        url: "/rest/motif-group-display-names",
+        url: baseUrl + "/motif-group-display-names",
         success: function(result){
             availableMotifGroups = [];
             $.each(result, function (idx) {
@@ -194,7 +195,7 @@ function updateIdentifierSource() {
 
         remote: {
             wildcard: '%QUERY',
-            url: '/rest/protein-identifiers?searchPattern=%QUERY&dataSource=' + selectedDataSource,
+            url: baseUrl + '/protein-identifiers?searchPattern=%QUERY&dataSource=' + selectedDataSource,
             transform: function(response) {
                 return response;
             }
