@@ -1,5 +1,5 @@
 <p style="text-align: center">
-  <img src="scansite4/Scansite4/CoreApplication/src/main/webapp/favicon.png" alt = "Scansite 4" />
+  <img src="Scansite4/CoreApplication/src/main/webapp/favicon.png" alt = "Scansite 4" />
 </p>
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
