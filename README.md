@@ -1,4 +1,5 @@
-# Scansite 4
+<div style="background-image: url(Scansite4/CoreApplication/src/main/webapp/img/logo_scansite.png);background-repeat: no-repeat; background-position: left; height: 103px; width: 100%;">
+</div>
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
