@@ -401,8 +401,8 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 		siteSequenceColumns = new SiteSequenceColumn[result
 				.getMotifDisplayNames().size()];
 
-		resultTable.addColumn(submitColumn, "Scan this Protein!",
-				"Scan this Protein!");
+		resultTable.addColumn(submitColumn, "Protein Scan",
+				"Protein Scan");
 		resultTable.addColumn(scoreColumn, "Score", "Score");
 		resultTable.addColumn(proteinAccColumn, "Accession", "Accession");
 		resultTable.addColumn(proteinInfoColumn, "Protein Annotations",

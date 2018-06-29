@@ -4,10 +4,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 
+import edu.mit.scansite.shared.transferobjects.Identifier;
 import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 
 /**
  * @author Tobieh
+ * @author Konstantin Krismer
  */
 public class ProteinScanResultFileWriter extends
 		ResultFileWriter<ScanResultSite> {
@@ -23,23 +25,41 @@ public class ProteinScanResultFileWriter extends
 		try {
 			DirectoryManagement.prepareDirectory(currentFilePath, true);
 			writer = new BufferedWriter(new FileWriter(currentFilePath));
-			writer.write("MOTIF_NAME");
+			writer.write("motif_gene_symbol");
 			writer.write(SEPARATOR);
-			writer.write("MOTIF_GROUP");
+			writer.write("motif_uniprot_entry_name");
 			writer.write(SEPARATOR);
-			writer.write("SCORE");
+			writer.write("motif_name");
 			writer.write(SEPARATOR);
-			writer.write("PERCENTILE");
+			writer.write("motif_group");
 			writer.write(SEPARATOR);
-			writer.write("PROTEIN");
+			writer.write("score");
 			writer.write(SEPARATOR);
-			writer.write("SITE");
+			writer.write("percentile");
 			writer.write(SEPARATOR);
-			writer.write("SITE_SEQUENCE");
+			writer.write("protein");
 			writer.write(SEPARATOR);
-			writer.write("SURFACE_ACCESS_VALUE");
+			writer.write("site");
+			writer.write(SEPARATOR);
+			writer.write("site_sequence");
+			writer.write(SEPARATOR);
+			writer.write("surface_accessibility_value");
 			writer.newLine();
 			for (ScanResultSite site : hits) {
+				List<Identifier> identifiers = site.getMotif().getIdentifiers();
+				String geneSymbol = "";
+				String uniprotEntryName = "";
+				for(Identifier identifier : identifiers) {
+					if(identifier.getType().getId() == 4) {
+						geneSymbol = identifier.getValue();
+					} else if(identifier.getType().getId() == 6) {
+						uniprotEntryName = identifier.getValue();
+					}
+				}
+				writer.write(geneSymbol);
+				writer.write(SEPARATOR);
+				writer.write(uniprotEntryName);
+				writer.write(SEPARATOR);
 				writer.write(site.getMotif().getDisplayName());
 				writer.write(SEPARATOR);
 				writer.write(site.getMotif().getGroup() == null ? "-" : site
@@ -53,7 +73,7 @@ public class ProteinScanResultFileWriter extends
 				writer.write(SEPARATOR);
 				writer.write(site.getSite());
 				writer.write(SEPARATOR);
-				writer.write(site.getSiteSequence());
+				writer.write(site.getSiteSequence().replaceAll("\\<.*?\\>", ""));
 				writer.write(SEPARATOR);
 				writer.write(String.valueOf(site.getSurfaceAccessValue()));
 				writer.newLine();

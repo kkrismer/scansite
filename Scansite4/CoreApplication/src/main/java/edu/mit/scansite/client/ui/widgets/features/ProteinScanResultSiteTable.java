@@ -474,7 +474,7 @@ public class ProteinScanResultSiteTable extends ScansiteWidget {
         }
         resultTable.addColumn(motifColumn, "Motif", "Motif");
         if (results.getMotifSelection().getUserMotif() == null) {
-            resultTable.addColumn(groupColumn, "Motifgroup", "Motifgroup");
+            resultTable.addColumn(groupColumn, "Motif Group", "Motif Group");
         }
         resultTable.addColumn(siteColumn, "Site", "Site");
         resultTable.addColumn(sequenceColumn, "Sequence", "Sequence");
@@ -495,7 +495,7 @@ public class ProteinScanResultSiteTable extends ScansiteWidget {
                 || (results.getOrthologyDataSources() != null && !results
                 .getOrthologyDataSources().isEmpty())) {
             resultTable.addColumn(conservedSitesColumn,
-                    "Evolutionary conservation", "Evolutionary conservation");
+                    "Evolutionary conservation", "Evolutionary Conservation");
         }
 
         if (results.getLocalizationDataSource() != null) {
