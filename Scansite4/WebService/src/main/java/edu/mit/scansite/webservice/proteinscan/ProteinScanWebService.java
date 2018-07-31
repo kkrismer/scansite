@@ -27,13 +27,8 @@ public class ProteinScanWebService extends WebService {
 			String motifClass, String stringencyValue) {
 
 		// check motif input
-		MotifClass mc;
-		try {
-			mc = MotifClass.getDbValue(motifClass.toUpperCase());
-		} catch (Exception e) {
-			throw new ScansiteWebServiceException("Given motif class is invalid!");
-		}
-
+		MotifClass mc = MotifClass.getDbValue(motifClass.toUpperCase());
+		
 		if (dataSourceShortName == null || dataSourceShortName.isEmpty()) {
 			dataSourceShortName = "swissprot";
 		}

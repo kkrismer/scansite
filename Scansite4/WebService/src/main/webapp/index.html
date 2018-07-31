@@ -1,436 +1,481 @@
 <!doctype html>
 
 <html lang="en">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<meta name="description"
-			content="Scansite Web Service: programmatic access to Scansite functionality" />
-		<meta name="keywords"
-			content="restful,webservice,kinases,yaffe,protein,phosphorylation" />
-		<meta name="author"
-			content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler" />
-		<link type="text/css" rel="stylesheet" href="Scansite4.css">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="description"
+	content="Scansite Web Service: programmatic access to Scansite functionality" />
+<meta name="keywords"
+	content="restful,webservice,kinases,yaffe,protein,phosphorylation" />
+<meta name="author"
+	content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler" />
+<link type="text/css" rel="stylesheet" href="Scansite4.css">
 
 
-		<!-- for FF, Chrome, Opera -->
-		<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
-		<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+<!-- for FF, Chrome, Opera -->
+<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
 
-		<!-- for IE -->
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" >
-		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+<!-- for IE -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 
 
-		<title>Scansite 4 Web Service</title>
-		<script type="text/javascript">
-			var _gaq = _gaq || [];
-			_gaq.push([ '_setAccount', 'UA-32141370-1' ]);
-			_gaq.push([ '_trackPageview' ]);
+<title>Scansite 4 Web Service</title>
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push([ '_setAccount', 'UA-32141370-1' ]);
+	_gaq.push([ '_trackPageview' ]);
 
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl'
-						: 'http://www')
-						+ '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-		</script>
+	(function() {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+				: 'http://www')
+				+ '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
 
-		<script type="text/javascript">
-			function errorCallback() {
-				console.log("Error! Could not run REST call");
-			}
+<script type="text/javascript">
+	function errorCallback() {
+		console.log("Error! Could not run REST call");
+	}
 
-			// LOCALHOST DEVELOPMENT
-//			function loadResultList(targetUrl) {
-//				if (targetUrl == "/stringency") {
-//					printStringencies(targetUrl);
-//				}
-//				if (targetUrl == "/datasources") {
-//					printDataSources(targetUrl);
-//				}
-//				if (targetUrl == "/motifclasses") {
-//					printMotifClasses(targetUrl);
-//				}
-//				if (targetUrl == "/organismclasses") {
-//					printOrganismClasses(targetUrl);
-//				}
-//				if (targetUrl == "/motifdefinitions/motifclass=YEAST"
-//						|| targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
-//					printMotifDefinition(targetUrl);
-//				}
-//				if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
-//					printProteinExists(targetUrl);
-//				}
-//			}
+	// LOCALHOST DEVELOPMENT
+	//			function loadResultList(targetUrl) {
+	//				if (targetUrl == "/stringency") {
+	//					printStringencies(targetUrl);
+	//				}
+	//				if (targetUrl == "/datasources") {
+	//					printDataSources(targetUrl);
+	//				}
+	//				if (targetUrl == "/motifclasses") {
+	//					printMotifClasses(targetUrl);
+	//				}
+	//				if (targetUrl == "/organismclasses") {
+	//					printOrganismClasses(targetUrl);
+	//				}
+	//				if (targetUrl == "/motifdefinitions/motifclass=YEAST"
+	//						|| targetUrl == "/motifdefinitions/motifclass=MAMMALIAN") {
+	//					printMotifDefinition(targetUrl);
+	//				}
+	//				if (targetUrl == "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+	//					printProteinExists(targetUrl);
+	//				}
+	//			}
 
-			// SERVER DEPLOYMENT
-            function loadResultList(targetUrl) {
-                if (targetUrl === "/stringency") {
-                    printStringencies("/webservice" + targetUrl);
-                }
-                if (targetUrl === "/datasources") {
-                    printDataSources("/webservice" + targetUrl);
-                }
-                if (targetUrl === "/motifclasses") {
-                    printMotifClasses("/webservice" + targetUrl);
-                }
-                if (targetUrl === "/organismclasses") {
-                    printOrganismClasses("/webservice" + targetUrl);
-                }
-                if (targetUrl === "/motifdefinitions/motifclass=YEAST"
-                    || targetUrl === "/motifdefinitions/motifclass=MAMMALIAN") {
-                    printMotifDefinition("/webservice" + targetUrl);
-                }
-                if (targetUrl === "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
-                    printProteinExists("/webservice" + targetUrl);
-                }
-            }
+	// SERVER DEPLOYMENT
+	function loadResultList(targetUrl) {
+		if (targetUrl === "/stringency") {
+			printStringencies("/webservice" + targetUrl);
+		}
+		if (targetUrl === "/datasources") {
+			printDataSources("/webservice" + targetUrl);
+		}
+		if (targetUrl === "/motifclasses") {
+			printMotifClasses("/webservice" + targetUrl);
+		}
+		if (targetUrl === "/organismclasses") {
+			printOrganismClasses("/webservice" + targetUrl);
+		}
+		if (targetUrl === "/motifdefinitions/motifclass=YEAST"
+				|| targetUrl === "/motifdefinitions/motifclass=MAMMALIAN") {
+			printMotifDefinition("/webservice" + targetUrl);
+		}
+		if (targetUrl === "/proteinexists/identifier=vav_mouse/dsshortname=swissprot") {
+			printProteinExists("/webservice" + targetUrl);
+		}
+	}
 
-			function printStringencies(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;"); //for <
+	function printStringencies(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/\</g, "&lt;"); //for <
 		                    resp = resp.replace(/\>/g,"&gt;");   //for >
-						resp = resp.replace(/&lt;stringencyValues&gt;/g,
-								"<br/>&lt;stringencyValues&gt;");
-						resp = resp.replace(/&lt;\/stringencyValues&gt;/g,
-								"<br/>&lt;/stringencyValues&gt;");
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoStringency").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&lt;stringencyValues&gt;/g,
+						"<br/>&lt;stringencyValues&gt;");
+				resp = resp.replace(/&lt;\/stringencyValues&gt;/g,
+						"<br/>&lt;/stringencyValues&gt;");
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoStringency").innerHTML = content;
 			}
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
 
-			function printDataSources(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;"); //for <
+	function printDataSources(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/</g, "&lt;"); //for <
 		                    resp = resp.replace(/>/g,"&gt;");   //for >
-						resp = resp.replace(/&lt;dataSources&gt;/g,
-								"<br/>&lt;dataSources&gt;");
-						resp = resp.replace(/&lt;\/dataSources&gt;/g,
-								"<br/>&lt;/dataSources&gt;");
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoDataSources").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&lt;dataSources&gt;/g,
+						"<br/>&lt;dataSources&gt;");
+				resp = resp.replace(/&lt;\/dataSources&gt;/g,
+						"<br/>&lt;/dataSources&gt;");
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoDataSources").innerHTML = content;
 			}
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
 
-			function printMotifClasses(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;"); //for <
+	function printMotifClasses(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/</g, "&lt;"); //for <
 		                    resp = resp.replace(/>/g,"&gt;");   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>&lt;");
-						resp = resp.replace(/&lt;motifClass&gt;/g,
-								"    &lt;motifClass&gt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoMotifClasses").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>&lt;");
+				resp = resp.replace(/&lt;motifClass&gt;/g,
+						"    &lt;motifClass&gt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoMotifClasses").innerHTML = content;
 			}
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
 
-			function printOrganismClasses(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/</g, "&lt;"); //for <
+	function printOrganismClasses(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/</g, "&lt;"); //for <
 		                    resp = resp.replace(/>/g,"&gt;");   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoOrganismClasses").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoOrganismClasses").innerHTML = content;
 			}
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
 
-			function printMotifDefinition(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;"); //for <
+	function printMotifDefinition(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/\</g, "&lt;"); //for <
 		                    resp = resp.replace(/\>/g,"&gt;");   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
-						resp = resp.replace(/&lt;motifDefinition&gt;/g,
-								"    &lt;motifDefinition&gt;");
-						resp = resp.replace(/&lt;motifClass&gt;/g,
-								"        &lt;motifClass&gt;");
-						resp = resp.replace(/&lt;motifGroupName&gt;/g,
-								"        &lt;motifGroupName&gt;");
-						resp = resp.replace(/&lt;motifName&gt;/g,
-								"        &lt;motifName&gt;");
-						resp = resp.replace(/&lt;motifShortName&gt;/g,
-								"        &lt;motifShortName&gt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoMotifDefinition").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+				resp = resp.replace(/&lt;motifDefinition&gt;/g,
+						"    &lt;motifDefinition&gt;");
+				resp = resp.replace(/&lt;motifClass&gt;/g,
+						"        &lt;motifClass&gt;");
+				resp = resp.replace(/&lt;motifGroupName&gt;/g,
+						"        &lt;motifGroupName&gt;");
+				resp = resp.replace(/&lt;motifName&gt;/g,
+						"        &lt;motifName&gt;");
+				resp = resp.replace(/&lt;motifShortName&gt;/g,
+						"        &lt;motifShortName&gt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoMotifDefinition").innerHTML = content;
 			}
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
 
-			function printProteinExists(targetUrl) {
-				var req = new XMLHttpRequest();
-				req.onerror = errorCallback;
-				req.onreadystatechange = function() {
-					if (req.readyState === 4 && req.status === 200) {
-						var response = req.responseText;
-						var resp = response.replace(/\</g, "&lt;"); //for <
+	function printProteinExists(targetUrl) {
+		var req = new XMLHttpRequest();
+		req.onerror = errorCallback;
+		req.onreadystatechange = function() {
+			if (req.readyState === 4 && req.status === 200) {
+				var response = req.responseText;
+				var resp = response.replace(/\</g, "&lt;"); //for <
 		                    resp = resp.replace(/\>/g,"&gt;");   //for >
-						resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
-						resp = resp.replace(/&lt;isSuccess&gt;/g,
-								"    &lt;isSuccess&gt;");
-						resp = "<pre>" + resp + "</pre>";
-						content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
-						document.getElementById("demoProteinExists").innerHTML = content;
-					}
-				};
-				req.open("GET", targetUrl, true);
-				req.send(null);
+				resp = resp.replace(/&gt;&lt;/g, "&gt;<br/>    &lt;");
+				resp = resp.replace(/&lt;isSuccess&gt;/g,
+						"    &lt;isSuccess&gt;");
+				resp = "<pre>" + resp + "</pre>";
+				content = "<h3>Demonstration Result</h3>" + resp + "<br/>";
+				document.getElementById("demoProteinExists").innerHTML = content;
 			}
-		</script>
-	</head>
-	<body>
-		<div id="wrapper">
-			<header id="majorheader">
-				<h1>Scansite</h1>
-			</header>
-			<nav id="majornav">
-				<h2>Navigation</h2>
-				<div>
-					<ul>
-						<li id="homeLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#home">Home</a></div></li>
-						<li id="newsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#news">News</a></div> </li>
-						<li><h3>Features</h3>
-							<ul>
-								<li id="scanProteinLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanProtein">Scan Protein for Motifs</a></div></li>
-								<li id="scanDbLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanDb">Search a Sequence Database for Motifs</a></div></li>
-								<li id="scanSeqLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanSeq">Find Sequence Match</a></div></li>
-								<li id="scanOrthologsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#scanOrthologs">Scan Orthologs</a></div></li>
-								<li id="predictLocalizationLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#predictLocalization">Predict Localization</a></div></li>
-								<li id="calcMolWeightLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#calcMolWeight">Calculate Molecular Weight and pI</a></div></li>
-								<li id="calcCompositionLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#calcComposition">Calculate Amino Acid Composition</a></div></li>
-							</ul>
-						</li>
-						<li id="motifsLink" class="nosel"><div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#motifs">Databases and Motifs</a></div></li>
-						<li id="tutorialLink" class="nosel"> <div class="gwt-Hyperlink"><a href="http://scansite4.mit.edu/4.0/#tutorial">Tutorial</a></div></li>
-					</ul>
-				</div>
-			</nav>
-			<div id="breadcrumbs">
-				<div>You are here: <span><a href="http://scansite4.mit.edu/4.0/">Scansite 4.0</a> ›
-				<a href="http://scansite4.mit.edu/webservice/">Web Service</a></span></div>
+		};
+		req.open("GET", targetUrl, true);
+		req.send(null);
+	}
+</script>
+</head>
+<body>
+	<div id="wrapper">
+		<header id="majorheader">
+			<h1>Scansite</h1>
+		</header>
+		<nav id="majornav">
+			<h2>Navigation</h2>
+			<div>
+				<ul>
+					<li id="homeLink" class="nosel"><div class="gwt-Hyperlink">
+							<a href="http://scansite4.mit.edu/4.0/#home">Home</a>
+						</div></li>
+					<li id="newsLink" class="nosel"><div class="gwt-Hyperlink">
+							<a href="http://scansite4.mit.edu/4.0/#news">News</a>
+						</div></li>
+					<li><h3>Features</h3>
+						<ul>
+							<li id="scanProteinLink" class="nosel">
+								<div class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#scanProtein">Scan
+										Protein for Motifs</a>
+								</div>
+							</li>
+							<li id="scanDbLink" class="nosel"><div class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#scanDb">Search a
+										Sequence Database for Motifs</a>
+								</div></li>
+							<li id="scanSeqLink" class="nosel"><div
+									class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#scanSeq">Find
+										Sequence Match</a>
+								</div></li>
+							<li id="scanOrthologsLink" class="nosel"><div
+									class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#scanOrthologs">Scan
+										Orthologs</a>
+								</div></li>
+							<li id="predictLocalizationLink" class="nosel"><div
+									class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#predictLocalization">Predict
+										Localization</a>
+								</div></li>
+							<li id="calcMolWeightLink" class="nosel">
+								<div class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#calcMolWeight">Calculate
+										Molecular Weight and pI</a>
+								</div>
+							</li>
+							<li id="calcCompositionLink" class="nosel">
+								<div class="gwt-Hyperlink">
+									<a href="http://scansite4.mit.edu/4.0/#calcComposition">Calculate
+										Amino Acid Composition</a>
+								</div>
+							</li>
+						</ul></li>
+					<li id="motifsLink" class="nosel"><div class="gwt-Hyperlink">
+							<a href="http://scansite4.mit.edu/4.0/#motifs">Databases and
+								Motifs</a>
+						</div></li>
+					<li id="tutorialLink" class="nosel">
+						<div class="gwt-Hyperlink">
+							<a href="http://scansite4.mit.edu/4.0/#tutorial">Tutorial</a>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<div id="content">
-				<h2>Scansite 4 Web Service</h2>
-				<ol>
-					<li><a href='#sec_intro'>Introduction</a></li>
-					<li><a href='#sec_defs'>Definitions</a></li>
-					<li><a href='#sec_usageExample'>Usage-Example</a></li>
-					<li><a href='#sec_basicFunctions'>Basic Functions</a>
-						<ol>
-							<li><a href='#svc_stringency'>Get valid stringency values</a></li>
-							<li><a href='#svc_datasources'>Get valid dataSources</a></li>
-							<li><a href='#svc_motifClasses'>Get valid motifs classes</a></li>
-							<li><a href='#svc_organismClasses'>Get organism classes</a></li>
-							<li><a href='#svc_motifDefs'>Get valid motifs from a given
-									class</a></li>
-							<li><a href='#svc_proteinExists'>Check if proteins exist in
-									Scansite's database mirrors</a></li>
-						</ol></li>
-					<li><a href='#sec_scansiteFunctions'>Scansite Functions</a>
-						<ol>
-							<li><a href="#svc_scanProtAcc">Scan a protein for motifs
-									using a protein accession</a></li>
-							<li><a href="#svc_scanProtSeq">Scan a protein for motifs
-									using a protein sequence</a></li>
-							<li><a href="#svc_searchDb">Search a sequence database for
-									a Scansite motif</a></li>
-							<li><a href="#svc_seqMatch">Search a sequence database for
-									a sequence pattern</a></li>
-							<li><a href="#svc_orthScan">Scan a protein for evolutionary
-									conserved phosphorylation sites</a></li>
-							<li><a href="#svc_localizationPrediction">Predict cellular
-									localization of a protein</a></li>
-						</ol></li>
-					<li><a href='#sec_errors'>Errors</a></li>
-				</ol>
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_intro'>1. Introduction</h3>
-				<p>Welcome to the Scansite 3 webservice. This page gives you
-					instructions about how to access the most important Scansite 3
-					features programmatically.</p>
-				<p>
-					The RESTful interface allows you to run most features using a URI in
-					which you specify the desired parameters. Many parameters that are
-					needed are restricted, which means that only specific values are
-					allowed. Please read the <a href='#sec_defs'>Defintions-section</a>
-					for further information. The results of all services are well-formed
-					and valid XML-files.
-				</p>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
+		</nav>
+		<div id="breadcrumbs">
+			<div>
+				You are here: <span><a href="http://scansite4.mit.edu/4.0/">Scansite
+						4.0</a> › <a href="http://scansite4.mit.edu/webservice/">Web
+						Service</a></span>
+			</div>
+		</div>
+		<div id="content">
+			<h2>Scansite 4 Web Service</h2>
+			<ol>
+				<li><a href='#sec_intro'>Introduction</a></li>
+				<li><a href='#sec_defs'>Definitions</a></li>
+				<li><a href='#sec_usageExample'>Usage-Example</a></li>
+				<li><a href='#sec_basicFunctions'>Basic Functions</a>
+					<ol>
+						<li><a href='#svc_stringency'>Get valid stringency values</a></li>
+						<li><a href='#svc_datasources'>Get valid dataSources</a></li>
+						<li><a href='#svc_motifClasses'>Get valid motifs classes</a></li>
+						<li><a href='#svc_organismClasses'>Get organism classes</a></li>
+						<li><a href='#svc_motifDefs'>Get valid motifs from a
+								given class</a></li>
+						<li><a href='#svc_proteinExists'>Check if proteins exist
+								in Scansite's database mirrors</a></li>
+					</ol></li>
+				<li><a href='#sec_scansiteFunctions'>Scansite Functions</a>
+					<ol>
+						<li><a href="#svc_scanProtAcc">Scan a protein for motifs
+								using a protein accession</a></li>
+						<li><a href="#svc_scanProtSeq">Scan a protein for motifs
+								using a protein sequence</a></li>
+						<li><a href="#svc_searchDb">Search a sequence database
+								for a Scansite motif</a></li>
+						<li><a href="#svc_seqMatch">Search a sequence database
+								for a sequence pattern</a></li>
+						<li><a href="#svc_orthScan">Scan a protein for
+								evolutionary conserved phosphorylation sites</a></li>
+						<li><a href="#svc_localizationPrediction">Predict
+								cellular localization of a protein</a></li>
+					</ol></li>
+				<li><a href='#sec_errors'>Errors</a></li>
+			</ol>
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_intro'>1. Introduction</h3>
+			<p>Welcome to the Scansite 3 webservice. This page gives you
+				instructions about how to access the most important Scansite 3
+				features programmatically.</p>
+			<p>
+				The RESTful interface allows you to run most features using a URI in
+				which you specify the desired parameters. Many parameters that are
+				needed are restricted, which means that only specific values are
+				allowed. Please read the <a href='#sec_defs'>Defintions-section</a>
+				for further information. The results of all services are well-formed
+				and valid XML-files.
+			</p>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_defs'>2. Definitions</h3>
-				<p>In the following sections some abbreviations and quantifiers
-					will be used for defining parameters. The meaning of these is
-					explained here:</p>
-				<table class='descriptionTable'>
-					<tr>
-						<td><b><a id='cmd_any'>[ANY]</a></b></td>
-						<td>Any value</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_dec'>[DEC]</a></b></td>
-						<td>Numbers with decimal point are allowed</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_ds'>[DS]</a></b></td>
-						<td>Only dataSource's nicknames as returned by the <a
-							href='#svc_datasources'>dataSources-service</a> are permitted.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_m'>[M]</a></b></td>
-						<td>Only one motif nickname as returned by the <a
-							href='#svc_motifDefs'>motifDefinitions-service</a> is permitted.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_mc'>[MC]</a></b></td>
-						<td>Only a motif class as returned by the <a
-							href='#svc_motifClasses'>motifClasses-service</a> is permitted.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_ms'>[MS]</a></b></td>
-						<td>Only motif nicknames as returned by the <a
-							href='#svc_motifDefs'>motifDefinitions-service</a> are permitted. If
-							you choose to enter more than one motif nickname, separate the nicks
-							by a tilde ('~').
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_np'>[NP]</a></b></td>
-						<td>Only a number in the range [0-3] is allowed.</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_num'>[NUM]</a></b></td>
-						<td>Integer value</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_oc'>[OC]</a></b></td>
-						<td>Only organism classes as returned by the <a
-							href='#svc_organismClasses'>organismClasses-service</a> are
-							permitted.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_p'>[P]</a></b></td>
-						<td>A valid protein accession is needed here. You can use the <a
-							href='#svc_proteinExists'>proteinExists-service</a> to find out
-							whether a protein exists in our database.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_seq'>[SEQ]</a></b></td>
-						<td>Only a protein sequence is permitted.</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_st'>[ST]</a></b></td>
-						<td>Only stringency values as returned by the <a
-							href='#svc_stringency'>stringencyValues-service</a> are permitted.
-						</td>
-					</tr>
-					<tr>
-						<td><b><a id='cmd_qmark'>?</a></b></td>
-						<td>Optional parameter. If you find this quantifier, the value
-							of the parameter ( ie. the right-hand-side of the equals-sign '=')
-							can be left blank.<br /> <i>In general, if no quantifiers are
-								given, parameters are mandatory!</i>
-						</td>
-					</tr>
-					<tr>
-						<td><b>..</b></td>
-						<td>This web-page's base-URI. All Services will be an extension
-							of this pages URI (without any index.html). For example, if this
-							pages URI is <i>http://scansite4.mit.edu/webservice/</i>,
-							then ".." is equivalent to this URI and the <a
-							href='#svc_organismClasses'>organismClasses-service</a> can be
-							accessed using this URI:<br /> <i>http://scansite4.mit.edu/webservice/organismClasses</i><br />
-							This convention has been chosen to easier fit the services' URIs
-							described below on your screen.
-						</td>
-					</tr>
-				</table>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_defs'>2. Definitions</h3>
+			<p>In the following sections some abbreviations and quantifiers
+				will be used for defining parameters. The meaning of these is
+				explained here:</p>
+			<table class='descriptionTable'>
+				<tr>
+					<td><b><a id='cmd_any'>[ANY]</a></b></td>
+					<td>Any value</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_dec'>[DEC]</a></b></td>
+					<td>Numbers with decimal point are allowed</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_ds'>[DS]</a></b></td>
+					<td>Only dataSource's nicknames as returned by the <a
+						href='#svc_datasources'>dataSources-service</a> are permitted.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_m'>[M]</a></b></td>
+					<td>Only one motif nickname as returned by the <a
+						href='#svc_motifDefs'>motifDefinitions-service</a> is permitted.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_mc'>[MC]</a></b></td>
+					<td>Only a motif class as returned by the <a
+						href='#svc_motifClasses'>motifClasses-service</a> is permitted.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_ms'>[MS]</a></b></td>
+					<td>Only motif nicknames as returned by the <a
+						href='#svc_motifDefs'>motifDefinitions-service</a> are permitted.
+						If you choose to enter more than one motif nickname, separate the
+						nicks by a tilde ('~').
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_np'>[NP]</a></b></td>
+					<td>Only a number in the range [0-3] is allowed.</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_num'>[NUM]</a></b></td>
+					<td>Integer value</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_oc'>[OC]</a></b></td>
+					<td>Only organism classes as returned by the <a
+						href='#svc_organismClasses'>organismClasses-service</a> are
+						permitted.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_p'>[P]</a></b></td>
+					<td>A valid protein accession is needed here. You can use the
+						<a href='#svc_proteinExists'>proteinExists-service</a> to find out
+						whether a protein exists in our database.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_seq'>[SEQ]</a></b></td>
+					<td>Only a protein sequence is permitted.</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_st'>[ST]</a></b></td>
+					<td>Only stringency values as returned by the <a
+						href='#svc_stringency'>stringencyValues-service</a> are permitted.
+					</td>
+				</tr>
+				<tr>
+					<td><b><a id='cmd_qmark'>?</a></b></td>
+					<td>Optional parameter. If you find this quantifier, the value
+						of the parameter ( ie. the right-hand-side of the equals-sign '=')
+						can be left blank.<br /> <i>In general, if no quantifiers are
+							given, parameters are mandatory!</i>
+					</td>
+				</tr>
+				<tr>
+					<td><b>..</b></td>
+					<td>This web-page's base-URI. All Services will be an
+						extension of this pages URI (without any index.html). For example,
+						if this pages URI is <i>http://scansite4.mit.edu/webservice/</i>,
+						then ".." is equivalent to this URI and the <a
+						href='#svc_organismClasses'>organismClasses-service</a> can be
+						accessed using this URI:<br /> <i>http://scansite4.mit.edu/webservice/organismClasses</i><br />
+						This convention has been chosen to easier fit the services' URIs
+						described below on your screen.
+					</td>
+				</tr>
+			</table>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_usageExample'>3. Usage-Example</h3>
-				<p>In order to make it easier to understand how valid
-					Scansite3-webservice URIs are put together this section will walk you
-					through the steps that are required to run a Scansite feature using
-					the example of scanning a protein (VAV_HUMAN) from a public protein
-					database (SwissProt) for mammalian motifs with the highest possible
-					stringency.</p>
-				<ol>
-					<li>First of all, decide what you want to do and take a look at
-						the instructions provided below. In the case of this example, the <a
-						href="#svc_scanProtAcc">proteinScan</a>-feature is what we want.
-					</li>
-					<li>The instructions for how to prepare a service-URI contain a
-						couple of highlighted hyperlinks that refer to definitions above.
-						These <i>variable</i> parts of the URI have to be defined in the next
-						steps. Here, this includes <a href='#cmd_p'>[P]</a>, <a
-						href='#cmd_ds'>[DS]</a>, <a href='#cmd_mc'>[MC]</a>, <a
-						href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>, and <a
-						href='#cmd_st'>[ST]</a>.
-					</li>
-					<li>Each of the links you find in service-definitions have
-						different meanings: Some allow you to enter whatever you want and
-						they will still work, others allow only input from a specific set of
-						options which you usually can obtain by using one of the <a
-						href="#sec_basicFunctions">basic</a> webservice functions. <br />
-						Illustrating this, [P] means that you have to enter a protein
-						accession value that exists in Scansite3's database, and [DS]
-						requires a valid Scansite3 dataSource-definition. But how do you know
-						which proteins and dataSources are valid? This can be achieved by
-						using the <a href="#svc_datasources">dataSources</a>- and <a
-						href="#svc_proteinExists">proteinExists</a>-function for dataSources
-						and proteins, respectively. <br /> The dataSources-service at <span
-						class='uriInTxt'>../dataSources</span> returns an XML-file that looks
-						something like this: <div class="resturl"><pre>
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_usageExample'>3. Usage-Example</h3>
+			<p>In order to make it easier to understand how valid
+				Scansite3-webservice URIs are put together this section will walk
+				you through the steps that are required to run a Scansite feature
+				using the example of scanning a protein (VAV_HUMAN) from a public
+				protein database (SwissProt) for mammalian motifs with the highest
+				possible stringency.</p>
+			<ol>
+				<li>First of all, decide what you want to do and take a look at
+					the instructions provided below. In the case of this example, the <a
+					href="#svc_scanProtAcc">proteinScan</a>-feature is what we want.
+				</li>
+				<li>The instructions for how to prepare a service-URI contain a
+					couple of highlighted hyperlinks that refer to definitions above.
+					These <i>variable</i> parts of the URI have to be defined in the
+					next steps. Here, this includes <a href='#cmd_p'>[P]</a>, <a
+					href='#cmd_ds'>[DS]</a>, <a href='#cmd_mc'>[MC]</a>, <a
+					href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>, and <a
+					href='#cmd_st'>[ST]</a>.
+				</li>
+				<li>Each of the links you find in service-definitions have
+					different meanings: Some allow you to enter whatever you want and
+					they will still work, others allow only input from a specific set
+					of options which you usually can obtain by using one of the <a
+					href="#sec_basicFunctions">basic</a> webservice functions. <br />
+					Illustrating this, [P] means that you have to enter a protein
+					accession value that exists in Scansite3's database, and [DS]
+					requires a valid Scansite3 dataSource-definition. But how do you
+					know which proteins and dataSources are valid? This can be achieved
+					by using the <a href="#svc_datasources">dataSources</a>- and <a
+					href="#svc_proteinExists">proteinExists</a>-function for
+					dataSources and proteins, respectively. <br /> The
+					dataSources-service at <span class='uriInTxt'>../dataSources</span>
+					returns an XML-file that looks something like this:
+					<div class="resturl">
+						<pre>
 &lt;dataSources&gt;
     &lt;!-- ... --&gt;
     &lt;dataSource&gt;
@@ -440,64 +485,66 @@
     &lt;/dataSource&gt;
     &lt;!-- ... --&gt;
 &lt;/dataSources&gt;
-</pre></div> Knowing that the protein accession you are interested in is from
-						SwissProt, you can go to the next step and check if the accession is
-						available in Scansite3's mirror of SwissProt. For this, run the
-						proteinExists-service with the nickname that is defined for Swissprot
-						(<i>swissprot</i>), and the accession you are interested in (<i>VAV_HUMAN</i>)
-						by accessing <span class='uriInTxt'>../proteinExists/accession=vav_human/datasourceNickname=swissprot</span>
-						. You will receive a boolean result, containing the value <i>true</i>
-						if the protein exists, and <i>false</i> if it does not exist.
-						Luckily, the protein exists in Scansite3's mirror of Swissprot, and
-						you see: <pre>
+</pre>
+					</div> Knowing that the protein accession you are interested in is from
+					SwissProt, you can go to the next step and check if the accession
+					is available in Scansite3's mirror of SwissProt. For this, run the
+					proteinExists-service with the nickname that is defined for
+					Swissprot (<i>swissprot</i>), and the accession you are interested
+					in (<i>VAV_HUMAN</i>) by accessing <span class='uriInTxt'>../proteinExists/accession=vav_human/datasourceNickname=swissprot</span>
+					. You will receive a boolean result, containing the value <i>true</i>
+					if the protein exists, and <i>false</i> if it does not exist.
+					Luckily, the protein exists in Scansite3's mirror of Swissprot, and
+					you see: <pre>
 &lt;booleanResult&gt;
     &lt;isSuccess&gt;true&lt;/isSuccess&gt;
 &lt;/booleanResult&gt; 
 </pre> The motifClasses- (for [MC]), stringencyValues- ([ST]), and
-						motifDefinitions-services ([MS]) all work in a similar manner. Please
-						note that the question mark after [MS] indicates that this parameter
-						is optional. This means that if you want to look for all motifs of a
-						given motif class, just do not enter any value for[MS]. If you want
-						to check for a set of specific motifs, use the motif-nicknames (as
-						returned by the motifDefinitions-service) you are interested in,
-						separated by tildes (~), e.g. <span class='uriInTxt'>Lck_Kin~Shc_SH2~Cdc2_Kin</span>
-						. <br /> Following through with these instructions, we end up with
-						the following values for our wildcards:
-						<table style="margin-left: auto; margin-right: auto;">
-							<tr>
-								<th>WildCard</th>
-								<th style="text-align: center;">Value</th>
-							</tr>
-							<tr>
-								<td>[P]</td>
-								<td style="text-align: center;"><span class='uriInTxt'>VAV_HUMAN</span></td>
-							</tr>
-							<tr>
-								<td>[DS]</td>
-								<td style="text-align: center;"><span class='uriInTxt'>swissprot</span></td>
-							</tr>
-							<tr>
-								<td>[MC]</td>
-								<td style="text-align: center;"><span class='uriInTxt'>MAMMALIAN</span></td>
-							</tr>
-							<tr>
-								<td>[MS]?</td>
-								<td style="text-align: center;">(nothing, we want to look for
-									all mammalian motifs)</td>
-							</tr>
-							<tr>
-								<td>[ST]</td>
-								<td style="text-align: center;"><span class='uriInTxt'>High</span></td>
-							</tr>
-						</table>
-					</li>
-					<li>Having gathered all the information in the preceding step,
-						you are now ready to run the actual proteinScan-service. Putting
-						together this pieces of information we create the URI <span
-						class="uriInTxt">../proteinScan/accession=VAV_HUMAN/datasourceNickname=swissprot/motifClass=MAMMALIAN/motifNicknames=/stringencyValue=High</span>
-						.
-					</li>
-					<li>The result is an XML-file like this: <pre>
+					motifDefinitions-services ([MS]) all work in a similar manner.
+					Please note that the question mark after [MS] indicates that this
+					parameter is optional. This means that if you want to look for all
+					motifs of a given motif class, just do not enter any value for[MS].
+					If you want to check for a set of specific motifs, use the
+					motif-nicknames (as returned by the motifDefinitions-service) you
+					are interested in, separated by tildes (~), e.g. <span
+					class='uriInTxt'>Lck_Kin~Shc_SH2~Cdc2_Kin</span> . <br />
+					Following through with these instructions, we end up with the
+					following values for our wildcards:
+					<table style="margin-left: auto; margin-right: auto;">
+						<tr>
+							<th>WildCard</th>
+							<th style="text-align: center;">Value</th>
+						</tr>
+						<tr>
+							<td>[P]</td>
+							<td style="text-align: center;"><span class='uriInTxt'>VAV_HUMAN</span></td>
+						</tr>
+						<tr>
+							<td>[DS]</td>
+							<td style="text-align: center;"><span class='uriInTxt'>swissprot</span></td>
+						</tr>
+						<tr>
+							<td>[MC]</td>
+							<td style="text-align: center;"><span class='uriInTxt'>MAMMALIAN</span></td>
+						</tr>
+						<tr>
+							<td>[MS]?</td>
+							<td style="text-align: center;">(nothing, we want to look
+								for all mammalian motifs)</td>
+						</tr>
+						<tr>
+							<td>[ST]</td>
+							<td style="text-align: center;"><span class='uriInTxt'>High</span></td>
+						</tr>
+					</table>
+				</li>
+				<li>Having gathered all the information in the preceding step,
+					you are now ready to run the actual proteinScan-service. Putting
+					together this pieces of information we create the URI <span
+					class="uriInTxt">../proteinScan/accession=VAV_HUMAN/datasourceNickname=swissprot/motifClass=MAMMALIAN/motifNicknames=/stringencyValue=High</span>
+					.
+				</li>
+				<li>The result is an XML-file like this: <pre>
 &lt;proteinScanResult&gt;
     &lt;predictedSite&gt;
         &lt;motifName&gt;Casein Kinase 2&lt;/motifName&gt;
@@ -512,129 +559,137 @@
         MELWRQCTHWLIQCRV&lt;!-- ... --&gt;
     &lt;/proteinSequence&gt;
 &lt;/proteinScanResult&gt;
-</pre> It includes a list of all the predicted sites, along with the
-						protein sequence, the sites' positions, scores, sequences and
-						matching motifs.
-					</li>
-				</ol>
-				<p>The workflow-pattern described here can easily be applied to all
-					other Scansite3-features and hopefully helps you using this and other
-					Scansite3 webservices.</p>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
+</pre> It includes a list of all the predicted sites, along with the protein
+					sequence, the sites' positions, scores, sequences and matching
+					motifs.
+				</li>
+			</ol>
+			<p>The workflow-pattern described here can easily be applied to
+				all other Scansite3-features and hopefully helps you using this and
+				other Scansite3 webservices.</p>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 
-				<!-- ########################################################################################################## -->
-				<!-- ########################################################################################################## -->
-				<!-- #####################################  4. BASIC FUNCTIONS ################################################ -->
-				<!-- ########################################################################################################## -->
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_basicFunctions'>4. Basic functions</h3>
-				<ol>
-					<li id='svc_stringency'><b>Query valid stringency values:</b><br />
-						URL: <pre>
+			<!-- ########################################################################################################## -->
+			<!-- ########################################################################################################## -->
+			<!-- #####################################  4. BASIC FUNCTIONS ################################################ -->
+			<!-- ########################################################################################################## -->
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_basicFunctions'>4. Basic functions</h3>
+			<ol>
+				<li id='svc_stringency'><b>Query valid stringency values:</b><br />
+					URL: <pre>
 ../stringency
 </pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/stringency')">../stringency</a>
 </pre>
-						<div id="demoStringency"></div></li>
+					<div id="demoStringency"></div></li>
 
-					<li id='svc_datasources'><b>Query valid dataSources and their
-							nicknames:</b><br /> URL: <pre>
+				<li id='svc_datasources'><b>Query valid dataSources and
+						their nicknames:</b><br /> URL: <pre>
 ../datasources
 </pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/datasources')">../datasources</a>
 </pre>
-						<div id="demoDataSources"></div></li>
+					<div id="demoDataSources"></div></li>
 
-					<li id='svc_motifClasses'><b>Query valid motif classes:</b><br />
-						URL: <pre>
+				<li id='svc_motifClasses'><b>Query valid motif classes:</b><br />
+					URL: <pre>
 ../motifclasses
 </pre> Demonstrate: <pre>
 <a href="javascript:void(0);" onclick="loadResultList('/motifclasses')">../motifclasses</a>
 </pre>
-						<div id="demoMotifClasses"></div></li>
+					<div id="demoMotifClasses"></div></li>
 
-					<li id='svc_organismClasses'><b>Query valid organism classes:</b><br />
-						URL: <pre>
+				<li id='svc_organismClasses'><b>Query valid organism
+						classes:</b><br /> URL: <pre>
 ../organismclasses
 </pre> Demonstrate: <pre>
-<a href="javascript:void(0);" onclick="loadResultList('/organismclasses')">../organismclasses</a>
+<a href="javascript:void(0);"
+							onclick="loadResultList('/organismclasses')">../organismclasses</a>
 </pre>
-						<div id="demoOrganismClasses"></div></li>
+					<div id="demoOrganismClasses"></div></li>
 
-					<li id='svc_motifDefs'><b>Query valid motifs, their group,
-							classes and nicknames:</b><br /> URL: <pre>
+				<li id='svc_motifDefs'><b>Query valid motifs, their group,
+						classes and nicknames:</b><br /> URL: <pre>
 ../motifdefinitions/motifclass=<a href='#cmd_mc'>[MC]</a>
 </pre> Example: <pre>
-<a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=YEAST')">../motifdefinitions/motifclass=YEAST</a>
-<a href="javascript:void(0);" onclick="loadResultList('/motifdefinitions/motifclass=MAMMALIAN')">../motifdefinitions/motifclass=MAMMALIAN</a>
+<a href="javascript:void(0);"
+							onclick="loadResultList('/motifdefinitions/motifclass=YEAST')">../motifdefinitions/motifclass=YEAST</a>
+<a href="javascript:void(0);"
+							onclick="loadResultList('/motifdefinitions/motifclass=MAMMALIAN')">../motifdefinitions/motifclass=MAMMALIAN</a>
 </pre>
-						<div id="demoMotifDefinition"></div></li>
+					<div id="demoMotifDefinition"></div></li>
 
-					<li id='svc_proteinExists'><b>Check if a protein exists in
-							one of our database mirrors:</b><br /> URL: <pre>
-../proteinexists/identifier=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
+				<li id='svc_proteinExists'><b>Check if a protein exists in
+						one of our database mirrors:</b><br /> URL: <pre>
+../proteinexists/identifier=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a
+							href='#cmd_ds'>[DS]</a>
 </pre> Example: <pre>
-<a href="javascript:void(0);" onclick="loadResultList('/proteinexists/identifier=vav_mouse/dsshortname=swissprot')">../proteinexists/identifier=vav_mouse/dsshortname=swissprot</a>
+<a href="javascript:void(0);"
+							onclick="loadResultList('/proteinexists/identifier=vav_mouse/dsshortname=swissprot')">../proteinexists/identifier=vav_mouse/dsshortname=swissprot</a>
 </pre>
-						<div id="demoProteinExists"></div></li>
-				</ol>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
+					<div id="demoProteinExists"></div></li>
+			</ol>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_scansiteFunctions'>5. Scansite functions</h3>
-				Please note that in the following definitions line breaks are used to
-				format long URIs in a prettier way. Line breaks are indicated using a
-				backslash ('\'). Wherever there is a backslash, just imagine there is
-				no whitespace at all and the URI is just continued on the same line.
-				<ol>
-					<li id='svc_scanProtAcc'><b>Scan a protein for motifs using a
-							protein identifier:</b><br /> URL: <!--/proteinScan/identifier={identifier: \S+}/dsshortname={dsshortname: [A-Za-z]+}
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_scansiteFunctions'>5. Scansite functions</h3>
+			Please note that in the following definitions line breaks are used to
+			format long URIs in a prettier way. Line breaks are indicated using a
+			backslash ('\'). Wherever there is a backslash, just imagine there is
+			no whitespace at all and the URI is just continued on the same line.
+			<ol>
+				<li id='svc_scanProtAcc'><b>Scan a protein for motifs using
+						a protein identifier:</b><br /> URL: <!--/proteinScan/identifier={identifier: \S+}/dsshortname={dsshortname: [A-Za-z]+}
 			        /motifclass={motifclass: [A-Za-z]+}/motifshortnames={motifshortnames: [\S~]*}
 			        /stringency={stringency: [A-Za-z]+}/referenceproteome={referenceproteome: [A-Za-z]+}")-->
 
-						<!--../proteinscan--> <!--/identifier=<a href='#cmd_p'>[P]</a> \--> <!--/dsshortname=<a href='#cmd_ds'>[DS]</a> \-->
-						<!--/motifclass=<a href='#cmd_mc'>[MC]</a> \--> <!--/motifshortnames=<a href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a> \-->
-						<!--/stringency=<a href='#cmd_st'>[ST]</a> \--> <!--/referenceproteome=[Vertebrata | Yeast]</a>-->
+					<!--../proteinscan--> <!--/identifier=<a href='#cmd_p'>[P]</a> \-->
+					<!--/dsshortname=<a href='#cmd_ds'>[DS]</a> \--> <!--/motifclass=<a href='#cmd_mc'>[MC]</a> \-->
+					<!--/motifshortnames=<a href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a> \-->
+					<!--/stringency=<a href='#cmd_st'>[ST]</a> \--> <!--/referenceproteome=[Vertebrata | Yeast]</a>-->
 
-						<pre>
-../proteinscan/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>/motifclass=<a href='#cmd_mc'>[MC]</a>/motifshortnames=<a
-								href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>/stringency=<a
-								href='#cmd_st'>[ST]</a>/referenceproteome=[Vertebrata | Yeast]
+					<pre>
+../proteinscan/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a
+							href='#cmd_ds'>[DS]</a><a href='#cmd_qmark'>?</a>/motifclass=<a
+							href='#cmd_mc'>[MC]</a><a href='#cmd_qmark'>?</a>/motifshortnames=<a
+							href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a>/stringency=<a
+							href='#cmd_st'>[ST]</a><a href='#cmd_qmark'>?</a>/referenceproteome=[Vertebrata | Yeast]<a
+							href='#cmd_qmark'>?</a>
 </pre> Optional parameters:
-						<ul>
-							<li>motifshortnames</li>
-							<li>referenceproteome</li>
-						</ul> <br /> Examples: <pre>
+					<ul>
+						<li>motifshortnames</li>
+						<li>referenceproteome</li>
+					</ul> <br /> Examples: <pre>
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=YEAST/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=YEAST/motifshortnames=/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High
 - ../proteinscan/identifier=vav_human/dsshortname=swissprot/motifclass=MAMMALIAN/motifshortnames=Lck_Kin~Shc_SH2/stringency=High/referenceproteome=Vertebrata
 </pre></li>
 
-					<li id='svc_scanProtSeq'><b>Scan a protein for motifs using a
-							protein sequence:</b><br /> URL: <!--../proteinscan--> <!--/identifier=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a> \-->
-						<!--/sequence=<a href='#cmd_seq'>[SEQ]</a> \--> <!--/motifclass=<a href='#cmd_mc'>[MC]</a> \-->
-						<!--/motifshortnames=<a href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a> \-->
-						<!--/stringencyValue=<a href='#cmd_st'>[ST]</a> \--> <!--/referenceproteome=[Vertebrata | Yeast]</a>-->
-						<pre>
+				<li id='svc_scanProtSeq'><b>Scan a protein for motifs using
+						a protein sequence:</b><br /> URL: <!--../proteinscan--> <!--/identifier=<a href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a> \-->
+					<!--/sequence=<a href='#cmd_seq'>[SEQ]</a> \--> <!--/motifclass=<a href='#cmd_mc'>[MC]</a> \-->
+					<!--/motifshortnames=<a href='#cmd_ms'>[MS]</a><a href='#cmd_qmark'>?</a> \-->
+					<!--/stringencyValue=<a href='#cmd_st'>[ST]</a> \--> <!--/referenceproteome=[Vertebrata | Yeast]</a>-->
+					<pre>
 ../proteinscan/identifier=<a href='#cmd_any'>[ANY]</a><a
-								href='#cmd_qmark'>?</a>/sequence=<a href='#cmd_seq'>[SEQ]</a>/motifclass=<a
-								href='#cmd_mc'>[MC]</a>/motifshortnames=<a href='#cmd_ms'>[MS]</a><a
-								href='#cmd_qmark'>?</a>/stringencyValue=<a href='#cmd_st'>[ST]</a>/referenceproteome=[Vertebrata | Yeast]
+							href='#cmd_qmark'>?</a>/sequence=<a href='#cmd_seq'>[SEQ]</a>/motifclass=<a
+							href='#cmd_mc'>[MC]</a>/motifshortnames=<a href='#cmd_ms'>[MS]</a><a
+							href='#cmd_qmark'>?</a>/stringencyValue=<a href='#cmd_st'>[ST]</a><a href='#cmd_qmark'>?</a>/referenceproteome=[Vertebrata | Yeast]<a href='#cmd_qmark'>?</a>
 </pre> Optional parameters:
-						<ul>
-							<li>motifshortnames</li>
-							<li>referenceproteome</li>
-						</ul>
-						<br /> Examples: <pre>
+					<ul>
+						<li>motifshortnames</li>
+						<li>referenceproteome</li>
+					</ul> <br /> Examples: <pre>
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=YEAST/stringency=High
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=YEAST/motifshortnames=/stringency=High
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low
 - ../proteinscan/identifier=MY_PROTEIN/sequence=RDGVLLCQLLNNLLPHAINLREVNLRPQMSQFLCLKNIRTFLSTCCEKFGLKRSELFEAFDLFDVQDFGKVIYTLSALSWTPIAQNRGIMPFPTEEESVGDEDIYSGLSDQIDDTVEEDEDLYDCVENEEAEGDEIYEDLMRSEPVSMPPKMTEYDKRCCCLREIQQTE/motifclass=MAMMALIAN/motifshortnames=Lck_Kin/stringency=Low/referenceproteome=Vertebrata
 </pre></li>
 
-					<li id='svc_searchDb'><b>Search a sequence database for a
-							motif:</b><br /> URL: <!--
+				<li id='svc_searchDb'><b>Search a sequence database for a
+						motif:</b><br /> URL: <!--
 			        /databasesearch
 			        /motifshortname=motifshortname: \S+}
 			        /dsshortname={dsshortname: [A-Za-z]+}
@@ -649,33 +704,33 @@
 			        {sequencerestriction: (/sequencerestriction=[\w\s]*)?}
 			        --> <pre>
 ../databasesearch/motifshortname=<a href='#cmd_m'>[M]</a>/dsshortname=<a
-								href='#cmd_ds'>[DS]</a>/organismclass=<a href='#cmd_oc'>[OC]</a>/speciesrestriction=<a
-								href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>/numberofphosphorylations=<a
-								href='#cmd_np'>[NP]</a>/molweightfrom=<a href='#cmd_num'>[NUM]</a><a
-								href='#cmd_qmark'>?</a>/molweightto=<a href='#cmd_num'>[NUM]</a><a
-								href='#cmd_qmark'>?</a>/isoelectricpointfrom=<a href='#cmd_dec'>[DEC]</a><a
-								href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a
-								href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
-								href='#cmd_qmark'>?</a>/sequencerestriction=<a href='#cmd_any'>[ANY]</a><a
-								href='#cmd_qmark'>?</a>
+							href='#cmd_ds'>[DS]</a>/organismclass=<a href='#cmd_oc'>[OC]</a>/speciesrestriction=<a
+							href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>/numberofphosphorylations=<a
+							href='#cmd_np'>[NP]</a>/molweightfrom=<a href='#cmd_num'>[NUM]</a><a
+							href='#cmd_qmark'>?</a>/molweightto=<a href='#cmd_num'>[NUM]</a><a
+							href='#cmd_qmark'>?</a>/isoelectricpointfrom=<a href='#cmd_dec'>[DEC]</a><a
+							href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a
+							href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
+							href='#cmd_qmark'>?</a>/sequencerestriction=<a href='#cmd_any'>[ANY]</a><a
+							href='#cmd_qmark'>?</a>
 </pre> Optional parameters:
-						<ul>
-							<li>speciesrestriction</li>
-							<li>numberofphosphorylations</li>
-							<li>molweightfrom</li>
-							<li>molweightto</li>
-							<li>isoelectricpointfrom</li>
-							<li>isoelectricpointto</li>
-							<li>keywordrestriction</li>
-							<li>sequencerestriction</li>
-						</ul> <font color="red">Please use at least the species restriction to reduce runtime!</font><br/>
-                        Examples : <pre>
+					<ul>
+						<li>speciesrestriction</li>
+						<li>numberofphosphorylations</li>
+						<li>molweightfrom</li>
+						<li>molweightto</li>
+						<li>isoelectricpointfrom</li>
+						<li>isoelectricpointto</li>
+						<li>keywordrestriction</li>
+						<li>sequencerestriction</li>
+					</ul> <font color="red">Please use at least the species
+						restriction to reduce runtime!</font><br /> Examples : <pre>
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=rattus/numberofphosphorylations=1/molweightfrom=5000/molweightto=20000/isoelectricpointfrom=4/keywordrestriction=cell/sequencerestriction=PPP
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/numberofphosphorylations=0
 </pre></li>
 
-					<li id='svc_seqMatch'><b>Search a protein database for a
-							sequence pattern:</b><br /> URL: <!--
+				<li id='svc_seqMatch'><b>Search a protein database for a
+						sequence pattern:</b><br /> URL: <!--
 			        /sequencematch
 			        /sequencematchregex={sequencematchregex}
 			        /dsshortname={dsshortname: [A-Za-z]+}
@@ -689,20 +744,20 @@
 			        {keywordrestriction: (/keywordrestriction=[\s\w]*)?}
 			        --> <pre>
 ../sequencematch/sequencematchregex=<a href='#cmd_any'>[ANY]</a>/dsshortname=<a
-	href='#cmd_ds'>[DS]</a>/organismclass=<a href='#cmd_oc'>[OC]</a>/speciesrestriction=<a
-	href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>/numberofphosphorylations=<a
-	href='#cmd_np'>[NP]</a>/molweightfrom=<a href='#cmd_num'>[NUM]</a><a
-	href='#cmd_qmark'>?</a>/molweightto=<a href='#cmd_num'>[NUM]</a><a
-	href='#cmd_qmark'>?</a>/isoelectricpointfrom=<a href='#cmd_dec'>[DEC]</a><a
-	href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a
-	href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
-	href='#cmd_qmark'>?</a>
+							href='#cmd_ds'>[DS]</a>/organismclass=<a href='#cmd_oc'>[OC]</a>/speciesrestriction=<a
+							href='#cmd_any'>[ANY]</a><a href='#cmd_qmark'>?</a>/numberofphosphorylations=<a
+							href='#cmd_np'>[NP]</a>/molweightfrom=<a href='#cmd_num'>[NUM]</a><a
+							href='#cmd_qmark'>?</a>/molweightto=<a href='#cmd_num'>[NUM]</a><a
+							href='#cmd_qmark'>?</a>/isoelectricpointfrom=<a href='#cmd_dec'>[DEC]</a><a
+							href='#cmd_qmark'>?</a>/isoelectricpointto=<a href='#cmd_dec'>[DEC]</a><a
+							href='#cmd_qmark'>?</a>/keywordrestriction=<a href='#cmd_any'>[ANY]</a><a
+							href='#cmd_qmark'>?</a>
 </pre> Examples: <pre>
 - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/keywordrestriction=cell
 - ../sequencematch/sequencematchregex=A+VCA/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=human/numberofphosphorylations=0/molweightfrom=2000/molweightto=9000/isoelectricpointfrom=2.2/isoelectricpointto=6
 </pre></li>
-					<li id="svc_orthScan"><b>Scan a protein for evolutionary
-							conserved phosphorylation sites</b><br /> URL: <!--
+				<li id="svc_orthScan"><b>Scan a protein for evolutionary
+						conserved phosphorylation sites</b><br /> URL: <!--
 			        /scanorthologs
 			        /identifier={identifier: \S+}
 			        /dsshortname={dsshortname: [A-Za-z]+}
@@ -714,77 +769,80 @@
 			        --> <pre>
 <!-- - .. some example using the sequence pattern -->
 - ../scanorthologs/identifier=<a href='#cmd_p'>[P]</a>/dsshortname=<a
-	href='#cmd_ds'>[DS]</a>/orthologydsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a
-	href='#cmd_st'>[ST]</a>motifgroup=[motifgroup short name]/siteposition=[<a
-	href='#cmd_num'>[NUM]</a>
-</pre> <!--Parameter choice (either one or the other):--> <!--<ul>-->
-						<!--<li>sequencepattern</li>--> <!--<li>motifgroups and siteposition</li>-->
-						<!--</ul>--> Example: <pre>
+							href='#cmd_ds'>[DS]</a>/orthologydsshortname=<a href='#cmd_ds'>[DS]</a>/alignmentradius=[10|20|40|80]/stringency=<a
+							href='#cmd_st'>[ST]</a>motifgroup=[motifgroup short name]/siteposition=[<a
+							href='#cmd_num'>[NUM]</a>
+</pre> <!--Parameter choice (either one or the other):--> <!--<ul>--> <!--<li>sequencepattern</li>-->
+					<!--<li>motifgroups and siteposition</li>--> <!--</ul>--> Example:
+					<pre>
 - ../scanorthologs/identifier=BRCA2_HUMAN/dsshortname=swissprot/orthologydsshortname=swissprotorthology/alignmentradius=40/stringency=High/motifgroup=Acid_ST_kin/siteposition=306
 </pre></li>
-					<li id="svc_localizationPrediction"><b>Predict cellular
-							localization of a protein</b><br /> URL: <!-- /predictlocation
+				<li id="svc_localizationPrediction"><b>Predict cellular
+						localization of a protein</b><br /> URL: <!-- /predictlocation
 			        /localizationdsshortname={localizationdsshortname: [A-Za-z]+}
 			        /identifier={identifier: \\S+}
 			        /dsshortname={dsshortname: [A-Za-z]+}
 			        --> <pre>
 ../predictlocation/localizationdsshortname=<a href='#cmd_ds'>[DS]</a>/identifier=<a
-								href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
+							href='#cmd_p'>[P]</a>/dsshortname=<a href='#cmd_ds'>[DS]</a>
 </pre> Example: <pre>
 ../predictlocation/localizationdsshortname=loctree/identifier=BRCA2_HUMAN/dsshortname=swissprot
 </pre></li>
 
-				</ol>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
+			</ol>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 
-				<!-- ########################################################################################################## -->
-				<h3 id='sec_errors'>6. Errors</h3>
-				<p>If you do not get the expected result there are usually two ways
-					this may be displayed to you:</p>
-				<ul>
-					<li><b>404 Error Page: </b> This happens if the URI you entered
-						does not match the expected pattern. Make sure that your URI conforms
-						with one the patterns described above.</li>
-					<li><b>XML-Document with error-tag: </b> You will be displayed a
-						document like this if something went wrong when processing your
-						query-String. Usually a message is enclosed in the error-tag that
-						describes the problem (for example, invalid input parameters).</li>
-				</ul>
-				<p>
-					If you are sure you did everything right and your query still does not
-					work, please let us know! Just email <a
-						href='mailto:scansite.mit.edu@gmail.com'>us</a>. Please include what
-					you wanted to do, what URI you used, and what happened.
-				</p>
-				<a href="#top" class='goToTopLink'>[Go to top]</a>
-			</div>
-			<div
-				style="clear: both; background-image: url(img/background.png); height: 27px; width: 100%; border-top: 1px solid #C0C0C0; border-bottom: 1px solid #C0C0C0;"></div>
-			<footer id="majorfooter">
-				<ul>
-					<li><a id="mit" href="http://www.mit.edu/" target="_blank"></a></li>
-					<li><a id="ki" href="https://ki.mit.edu/" target="_blank"></a></li>
-					<li><a id="fhh"
-						href="https://www.fh-ooe.at/en/hagenberg-campus/" target="_blank"></a></li>
-					<li><a id="mps" href="http://www.marshallplan.at/"
-						target="_blank"></a></li>
-					<li><a id="stjude" href="https://www.stjude.org/"
-						target="_blank"></a></li>
-					<li><a id="mgri" href="https://www.merck.com/" target="_blank"></a></li>
-					<li><a id="bidmc" href="https://www.bidmc.org/" target="_blank"></a></li>
-				</ul>
-				<p style="clear: both;">
-					<a href="https://scansite4.mit.edu/4.0/#about">About</a> - <a href="https://scansite4.mit.edu/4.0/#faq">FAQ</a> - <a href="https://scansite4.mit.edu/webservice/">Web Service</a> - <a
-						href="https://scansite4.mit.edu/4.0/#cite">Citing Scansite</a> - <a href="https://scansite4.mit.edu/4.0/#feedback">Send
-						Feedback</a> - <a href="https://scansite4.mit.edu/4.0/#admin">Administrator
-						and Collaborator Area</a>
-				</p>
-				<p>
-					&copy; 2018 - Scansite 4.00.016 - <a target="_blank"
-						href="https://yaffelab.mit.edu/">Michael B. Yaffe Laboratory</a> -
-					Koch Institute, MIT
-				</p>
-			</footer>
+			<!-- ########################################################################################################## -->
+			<h3 id='sec_errors'>6. Errors</h3>
+			<p>If you do not get the expected result there are usually two
+				ways this may be displayed to you:</p>
+			<ul>
+				<li><b>404 Error Page: </b> This happens if the URI you entered
+					does not match the expected pattern. Make sure that your URI
+					conforms with one the patterns described above.</li>
+				<li><b>XML-Document with error-tag: </b> You will be displayed
+					a document like this if something went wrong when processing your
+					query-String. Usually a message is enclosed in the error-tag that
+					describes the problem (for example, invalid input parameters).</li>
+			</ul>
+			<p>
+				If you are sure you did everything right and your query still does
+				not work, please let us know! Just email <a
+					href='mailto:scansite.mit.edu@gmail.com'>us</a>. Please include
+				what you wanted to do, what URI you used, and what happened.
+			</p>
+			<a href="#top" class='goToTopLink'>[Go to top]</a>
 		</div>
-	</body>
+		<div
+			style="clear: both; background-image: url(img/background.png); height: 27px; width: 100%; border-top: 1px solid #C0C0C0; border-bottom: 1px solid #C0C0C0;"></div>
+		<footer id="majorfooter">
+			<ul>
+				<li><a id="mit" href="http://www.mit.edu/" target="_blank"></a></li>
+				<li><a id="ki" href="https://ki.mit.edu/" target="_blank"></a></li>
+				<li><a id="fhh"
+					href="https://www.fh-ooe.at/en/hagenberg-campus/" target="_blank"></a></li>
+				<li><a id="mps" href="http://www.marshallplan.at/"
+					target="_blank"></a></li>
+				<li><a id="stjude" href="https://www.stjude.org/"
+					target="_blank"></a></li>
+				<li><a id="mgri" href="https://www.merck.com/" target="_blank"></a></li>
+				<li><a id="bidmc" href="https://www.bidmc.org/" target="_blank"></a></li>
+			</ul>
+			<p style="clear: both;">
+				<a href="https://scansite4.mit.edu/4.0/#about">About</a> - <a
+					href="https://scansite4.mit.edu/4.0/#faq">FAQ</a> - <a
+					href="https://scansite4.mit.edu/webservice/">Web Service</a> - <a
+					href="https://scansite4.mit.edu/4.0/#cite">Citing Scansite</a> - <a
+					href="https://scansite4.mit.edu/4.0/#feedback">Send Feedback</a> -
+				<a href="https://scansite4.mit.edu/4.0/#admin">Administrator and
+					Collaborator Area</a>
+			</p>
+			<p>
+				&copy; 2018 - Scansite 4.00.016 - <a target="_blank"
+					href="https://yaffelab.mit.edu/">Michael B. Yaffe Laboratory</a> -
+				Koch Institute, MIT
+			</p>
+		</footer>
+	</div>
+</body>
 </html>

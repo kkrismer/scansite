@@ -14,50 +14,74 @@ import javax.ws.rs.core.MediaType;
 import static edu.mit.scansite.webservice.proteinscan.ProteinScanUtils.REFERENCE_VERTEBRATA;
 import static edu.mit.scansite.webservice.proteinscan.ProteinScanUtils.processOptionalParameter;
 
-@Path("/proteinscan/identifier={identifier}/sequence={sequence: [A-Za-z]+}/motifclass={motifclass: [A-Za-z]+}{motifshortnames: (/motifshortnames=[\\S~]*)?}/stringency={stringency: [A-Za-z]+}{referenceproteome:(/referenceproteome=[A-Za-z]+)?}")
+@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}/sequence={sequence: [A-Za-z]+}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_.,-]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
 public class ProteinSequenceScanService extends ProteinScanWebService {
-  /**
-   * @param proteinIdentifier A  name for the otherservices.
-   * @param proteinSequence A otherservices sequence.
-   * @param motifShortNames A list of existing motif-nicknames. These motifs will be used to scan the given otherservices.
-   * @param stringency A stringency value.
-   * @return A otherservices scan result containing the results of the scan.
-   */
-  @GET
-  @Produces( { MediaType.APPLICATION_XML })
-  public static ProteinScanResult doProteinScan(
-      @DefaultValue("USER_PROTEIN") @PathParam("identifier") String proteinIdentifier,
-      @PathParam("sequence") String proteinSequence,
-      @DefaultValue("") @PathParam("motifshortnames") String motifShortNames,
-      @PathParam("motifclass") String motifClass,
-      @PathParam("stringency") String stringency,
-      @DefaultValue(REFERENCE_VERTEBRATA) @PathParam("referenceproteome") String referenceProteome) {
+	/**
+	 * @param proteinIdentifier
+	 *            A name for the otherservices.
+	 * @param proteinSequence
+	 *            A otherservices sequence.
+	 * @param motifShortNames
+	 *            A list of existing motif-nicknames. These motifs will be used to
+	 *            scan the given otherservices.
+	 * @param stringency
+	 *            A stringency value.
+	 * @return A otherservices scan result containing the results of the scan.
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_XML })
+	public static ProteinScanResult doProteinScan(
+			@DefaultValue("user_protein") @PathParam("identifier") String proteinIdentifier,
+			@PathParam("sequence") String proteinSequence,
+			@DefaultValue("") @PathParam("motifshortnames") String motifShortNames,
+			@DefaultValue("MAMMALIAN") @PathParam("motifclass") String motifClass,
+			@DefaultValue("High") @PathParam("stringency") String stringency,
+			@DefaultValue(REFERENCE_VERTEBRATA) @PathParam("referenceproteome") String referenceProteome) {
 
-      //By making the value optional the identifier in the URL is also part of the value
-      motifShortNames = processOptionalParameter(motifShortNames);
-      referenceProteome = processOptionalParameter(referenceProteome);
+		// By making the value optional the identifier in the URL is also part of the
+		// value
+		motifShortNames = processOptionalParameter(motifShortNames);
+		motifClass = processOptionalParameter(motifClass);
+		stringency = processOptionalParameter(stringency);
+		referenceProteome = processOptionalParameter(referenceProteome);
 
-      DataSource dataSource = null;
-      try {
-          dataSource = ProteinScanUtils.getLocalizationDataSource(TXT_TRY_LATER);
-      } catch (DataAccessException e) {
-          e.printStackTrace();
-      }
+		// @DefaultValue doesn't seem to work
+		if (proteinIdentifier == null || proteinIdentifier.isEmpty()) {
+			proteinIdentifier = "user_protein";
+		}
+		if (motifClass == null || motifClass.isEmpty()) {
+			motifClass = "MAMMALIAN";
+		}
+		if (stringency == null || stringency.isEmpty()) {
+			stringency = "High";
+		}
+		if (referenceProteome == null || referenceProteome.isEmpty()) {
+			referenceProteome = REFERENCE_VERTEBRATA;
+		}
 
-      Formatter formatter = new Formatter();
-      Validator validator = new Validator();
-      if (proteinSequence == null || proteinSequence.isEmpty()) {
-          throw new ScansiteWebServiceException("No otherservices sequence is given!");
-      } else {
-          proteinSequence = formatter.formatSequence(proteinSequence);
-          if (!validator.validateProteinSequence(proteinSequence)) {
-              throw new ScansiteWebServiceException("Given otherservices sequence is invalid!");
-          }
-      }
+		DataSource localizationDataSource = null;
+		try {
+			localizationDataSource = ProteinScanUtils.getLocalizationDataSource(TXT_TRY_LATER);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			localizationDataSource = null;
+		}
 
-      LightWeightProtein protein = new LightWeightProtein(proteinIdentifier, proteinSequence);
-      referenceProteome = ProteinScanUtils.checkReferenceProteome(referenceProteome);
-      String dataSourceShortName = "";
-      return doProteinScan(protein, referenceProteome, dataSourceShortName, dataSource, motifShortNames, motifClass, stringency);
-  }
+		Formatter formatter = new Formatter();
+		Validator validator = new Validator();
+		if (proteinSequence == null || proteinSequence.isEmpty()) {
+			throw new ScansiteWebServiceException("No otherservices sequence is given!");
+		} else {
+			proteinSequence = formatter.formatSequence(proteinSequence);
+			if (!validator.validateProteinSequence(proteinSequence)) {
+				throw new ScansiteWebServiceException("Given otherservices sequence is invalid!");
+			}
+		}
+
+		LightWeightProtein protein = new LightWeightProtein(proteinIdentifier, proteinSequence);
+		referenceProteome = ProteinScanUtils.checkReferenceProteome(referenceProteome);
+		String dataSourceShortName = "";
+		return doProteinScan(protein, referenceProteome, dataSourceShortName, localizationDataSource, motifShortNames,
+				motifClass, stringency);
+	}
 }

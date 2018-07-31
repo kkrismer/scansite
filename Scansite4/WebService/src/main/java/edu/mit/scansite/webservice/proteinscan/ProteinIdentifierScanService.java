@@ -15,8 +15,11 @@ import static edu.mit.scansite.webservice.proteinscan.ProteinScanUtils.*;
  * @author Thomas Bernwinkler
  * @author Konstantin Krismer
  */
+//@Path("/proteinscan/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/motifclass={motifclass: [A-Za-z]+}{motifshortnames: (/motifshortnames=[\\S~]*)?}/stringency={stringency: [A-Za-z]+}{referenceproteome:(/referenceproteome=[A-Za-z]+)?}")
 
-@Path("/proteinscan/identifier={identifier: \\S+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
+//@Path("/proteinscan/identifier={identifier: \\S+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
+//@Path("/proteinscan/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/motifclass={motifclass: [A-Za-z]+}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency:(/stringency=[A-Za-z]+)?}{referenceproteome:(/referenceproteome=[A-Za-z]+)?}")
+@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_.,-]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
 public class ProteinIdentifierScanService extends ProteinScanWebService {
 	/**
 	 * @param proteinIdentifier
@@ -47,6 +50,20 @@ public class ProteinIdentifierScanService extends ProteinScanWebService {
 		motifClass = processOptionalParameter(motifClass);
 		stringency = processOptionalParameter(stringency);
 		referenceProteome = processOptionalParameter(referenceProteome);
+		
+		// @DefaultValue doesn't seem to work
+		if(dataSourceShortName == null || dataSourceShortName.isEmpty()) {
+			dataSourceShortName = "swissprot";
+		}
+		if(motifClass == null || motifClass.isEmpty()) {
+			motifClass = "MAMMALIAN";
+		}
+		if(stringency == null || stringency.isEmpty()) {
+			stringency = "High";
+		}
+		if(referenceProteome == null || referenceProteome.isEmpty()) {
+			referenceProteome = REFERENCE_VERTEBRATA;
+		}
 
 		DataSource localizationDataSource = null;
 		try {

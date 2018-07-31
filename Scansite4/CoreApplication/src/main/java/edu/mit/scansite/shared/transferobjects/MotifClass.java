@@ -38,5 +38,4 @@ public enum MotifClass implements IsSerializable {
     }
     return OTHER;
   }
-  
 }
