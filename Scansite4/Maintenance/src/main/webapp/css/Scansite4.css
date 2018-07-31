@@ -7,6 +7,9 @@ body {
     font-family: Arial Unicode MS, Arial, sans-serif;
     background-color: #F0F0F0 !important;
     font-size: 150% !important;
+	margin: 0;
+	border: 0;
+	padding: 0;
 }
 
 /* avoid font boosting in Android Chrome */

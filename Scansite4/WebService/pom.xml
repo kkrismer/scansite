@@ -5,7 +5,7 @@
 	<artifactId>WebService</artifactId>
 	<packaging>war</packaging>
 	<name>WebService</name>
-	<url>http://scansite4.mit.edu</url>
+	<url>https://scansite4.mit.edu</url>
 	<description>RESTful Web Service</description>
 
 	<parent>
