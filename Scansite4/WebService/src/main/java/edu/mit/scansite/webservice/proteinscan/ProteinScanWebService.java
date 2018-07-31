@@ -71,7 +71,7 @@ public class ProteinScanWebService extends WebService {
             if (res.isSuccess()) {
                 ProteinScanResult result = new ProteinScanResult();
                 result.setProteinName(res.getResults().getProtein().getIdentifier());
-                result.setProteinSequence(res.getResults().getProtein().getSequence());
+                result.setProteinSequence(res.getResults().getProtein().getSequence().replaceAll("\\<.*?\\>", ""));
                 if (res.getResults().getHits() == null || res.getResults().getHits().isEmpty()) {
                     result.setPredictedSite(new MotifSite[]{});
                 } else {
@@ -105,5 +105,4 @@ public class ProteinScanWebService extends WebService {
         }
         return null;
     }
-
 }

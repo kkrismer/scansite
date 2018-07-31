@@ -131,7 +131,7 @@ public class DatabaseSearchWebService {
                 int i = 0;
                 for (DatabaseSearchScanResultSite site : result.getDbSearchSites()) {
                     sites[i++] = new MotifSiteDbSearch(site.getScore(), site.getSite().getPercentile(), site.getSite().getMotif().getShortName(), site.getSite().getMotif().getShortName(),
-                            site.getSite().getSite(), site.getSite().getSiteSequence(),
+                            site.getSite().getSite(), site.getSite().getSiteSequence().replaceAll("\\<.*?\\>", ""),
                             site.getProtein().getIdentifier());
                 }
             } else {
