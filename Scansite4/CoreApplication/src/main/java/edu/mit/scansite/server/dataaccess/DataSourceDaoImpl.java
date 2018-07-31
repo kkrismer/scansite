@@ -1,12 +1,15 @@
 package edu.mit.scansite.server.dataaccess;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceAddCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceDeleteCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceEntryCountGetCommand;
-import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceEntryCountsGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceGetAllCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.datasource.DataSourceUpdateCommand;
@@ -234,9 +237,9 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 			for (DataSource dataSource : dataSources) {
 				int count = TableSizeInfo.getCount(DataUtils.getTableName(dataSource, cc));
 				if (count == 0) {
-				    DataSourceEntryCountGetCommand sizeCommand = new DataSourceEntryCountGetCommand(dbAccessConfig,
-                            dbConstantsConfig, dataSource);
-				    count = sizeCommand.execute();
+					DataSourceEntryCountGetCommand sizeCommand = new DataSourceEntryCountGetCommand(dbAccessConfig,
+							dbConstantsConfig, dataSource);
+					count = sizeCommand.execute();
 					isInitialized = false;
 				}
 				sizes.put(dataSource, count);

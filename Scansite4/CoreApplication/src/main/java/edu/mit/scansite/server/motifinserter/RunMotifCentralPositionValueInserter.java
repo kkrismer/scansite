@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.commands.motif.MotifGetCommand;
 import edu.mit.scansite.server.dataaccess.commands.motifrealcentralvalues.MotifValuesAddCommand;
@@ -18,96 +15,93 @@ import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.transferobjects.Motif;
 
 /**
- * Requires only the path of all the relevant motif files are in (PSSMs with central position values != 21)
+ * Requires only the path of all the relevant motif files are in (PSSMs with
+ * central position values != 21)
  * 
  * @author Thomas Bernwinkler
  */
 public class RunMotifCentralPositionValueInserter {
-    private static final Logger logger = LoggerFactory
-            .getLogger(RunMotifCentralPositionValueInserter.class);
+	public static void main(String[] args) {
+		String path = args[0];
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
 
-    public static void main(String[] args) {
-        String path = args[0];
-        if (!path.endsWith("/")) {
-            path += "/";
-        }
+		File folder = new File(path);
+		File[] files = folder.listFiles();
 
-        File folder = new File(path);
-        File[] files = folder.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isFile()) {
+				System.out.println("Processing file " + files[i].getName());
+				handleMotif(files[i]);
+			}
+		}
+	}
 
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {
-                System.out.println("Processing file " + files[i].getName());
-                handleMotif(files[i]);
-            }
-        }
-    }
+	private static void handleMotif(File input) {
+		String fileEnding = ".txt";
+		int len = fileEnding.length();
+		String motifShortName = input.getName().substring(0, input.getName().length() - len);
 
-    private static void handleMotif(File input) {
-        String fileEnding = ".txt";
-        int len = fileEnding.length();
-        String motifShortName = input.getName().substring(0, input.getName().length()-len);
+		// parse file and save to Double[]
+		List<String> content = readLines(input);
+		String[] columnLabels = content.get(0).split("\t");
 
-        // parse file and save to Double[]
-        List<String> content = readLines(input);
-        String[] columnLabels = content.get(0).split("\t");
+		int sColumnIdx = 0;
+		int tColumnIdx = 0;
+		int yColumnIdx = 0;
 
-        int sColumnIdx = 0;
-        int tColumnIdx = 0;
-        int yColumnIdx = 0;
+		for (int i = 0; i < columnLabels.length; i++) {
+			if (columnLabels[i].equals("S")) {
+				sColumnIdx = i;
+			} else if (columnLabels[i].equals("T")) {
+				tColumnIdx = i;
+			} else if (columnLabels[i].equals("Y")) {
+				yColumnIdx = i;
+			}
+		}
 
-        for (int i = 0; i < columnLabels.length; i++) {
-            if (columnLabels[i].equals("S")) {
-                sColumnIdx = i;
-            } else if (columnLabels[i].equals("T")) {
-                tColumnIdx = i;
-            } else if (columnLabels[i].equals("Y")) {
-                yColumnIdx = i;
-            }
-        }
+		int lineNo = 8; // zero based + heading + {-7;0}
+		double sColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[sColumnIdx]);
+		double tColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[tColumnIdx]);
+		double yColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[yColumnIdx]);
 
-        int lineNo = 8; // zero based + heading + {-7;0}
-        double sColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[sColumnIdx]);
-        double tColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[tColumnIdx]);
-        double yColumnValue = Double.valueOf((content.get(lineNo).split("\t"))[yColumnIdx]);
+		Double[] values = { sColumnValue, tColumnValue, yColumnValue };
 
-        Double[] values = {sColumnValue, tColumnValue, yColumnValue};
+		try {
+			MotifGetCommand motifGetCommand = new MotifGetCommand(ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), motifShortName);
+			Motif m = motifGetCommand.execute();
 
-        try {
-            MotifGetCommand motifGetCommand = new MotifGetCommand(ServiceLocator.getDbAccessProperties(),
-                    ServiceLocator.getDbConstantsProperties(), motifShortName);
-            Motif m = motifGetCommand.execute();
+			MotifValuesAddCommand cmd = new MotifValuesAddCommand(ServiceLocator.getDbAccessProperties(),
+					ServiceLocator.getDbConstantsProperties(), values, m.getId());
 
-            MotifValuesAddCommand cmd = new MotifValuesAddCommand(ServiceLocator.getDbAccessProperties(),
-                    ServiceLocator.getDbConstantsProperties(), values, m.getId());
+			cmd.execute();
 
-            cmd.execute();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
 
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-    }
+	private static List<String> readLines(File file) {
+		List<String> content = new ArrayList<>();
+		String fileName = file.getAbsolutePath();
+		String line;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-    private static List<String> readLines(File file) {
-        List<String> content = new ArrayList<>();
-        String fileName = file.getAbsolutePath();
-        String line;
-        try {
-            FileReader fileReader = new FileReader(fileName);
-            BufferedReader bufferedReader =
-                    new BufferedReader(fileReader);
+			while ((line = bufferedReader.readLine()) != null) {
+				content.add(line);
+			}
 
-            while((line = bufferedReader.readLine()) != null) {
-                content.add(line);
-            }
-
-            bufferedReader.close();
-        } catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + file.getName() + "'");
-        } catch(IOException ex) {
-            System.out.println( "Error reading file '" + file.getName() + "'");
-            ex.printStackTrace();
-        }
-        return content;
-    }
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + file.getName() + "'");
+		} catch (IOException ex) {
+			System.out.println("Error reading file '" + file.getName() + "'");
+			ex.printStackTrace();
+		}
+		return content;
+	}
 }

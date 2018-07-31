@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import edu.mit.scansite.server.dataaccess.DataUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
 import edu.mit.scansite.shared.DataAccessException;
@@ -21,7 +18,6 @@ import edu.mit.scansite.shared.transferobjects.DataSource;
  * @author Thomas Bernwinkler
  */
 public class DataSourceEntryCountsGetCommand extends DbQueryCommand<Map<DataSource, Integer>> {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private List<DataSource> dataSources = null;
 
 	public DataSourceEntryCountsGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig,
@@ -76,6 +72,5 @@ public class DataSourceEntryCountsGetCommand extends DbQueryCommand<Map<DataSour
 		sql.append(CommandConstants.RPAR);
 		return sql.toString();
 	}
-
 
 }
