@@ -2,44 +2,36 @@
 
 <html lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta name="description"
-	content="Scansite Web Service: programmatic access to Scansite functionality" />
-<meta name="keywords"
-	content="restful,webservice,kinases,yaffe,protein,phosphorylation" />
-<meta name="author"
-	content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler" />
-<link type="text/css" rel="stylesheet" href="Scansite4.css">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="description"
+          content="Scansite Web Service: programmatic access to Scansite functionality">
+    <meta name="keywords"
+          content="restful,webservice,kinases,yaffe,protein,phosphorylation">
+    <meta name="author"
+          content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler">
+          
+	<link type="text/css" rel="stylesheet" href="Scansite4.css">
+	
+	<!-- for FF, Chrome, Opera -->
+	<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+	
+	<!-- for IE -->
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59773400-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-59773400-1');
+	</script>
 
-
-<!-- for FF, Chrome, Opera -->
-<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
-<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
-
-<!-- for IE -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-
-
-<title>Scansite 4 Web Service</title>
-<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push([ '_setAccount', 'UA-32141370-1' ]);
-	_gaq.push([ '_trackPageview' ]);
-
-	(function() {
-		var ga = document.createElement('script');
-		ga.type = 'text/javascript';
-		ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl'
-				: 'http://www')
-				+ '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(ga, s);
-	})();
-</script>
-
-<script type="text/javascript">
+	<script>
 	function errorCallback() {
 		console.log("Error! Could not run REST call");
 	}
@@ -219,7 +211,9 @@
 		req.open("GET", targetUrl, true);
 		req.send(null);
 	}
-</script>
+	</script>
+	
+	<title>Scansite 4 Web Service</title>
 </head>
 <body>
 	<div id="wrapper">
@@ -723,8 +717,8 @@
 						<li>isoelectricpointto</li>
 						<li>keywordrestriction</li>
 						<li>sequencerestriction</li>
-					</ul> <font color="red">Please use at least the species
-						restriction to reduce runtime!</font><br /> Examples : <pre>
+					</ul> <span style="color: red">Please use at least the species
+						restriction to reduce runtime!</span><br /> Examples : <pre>
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/speciesrestriction=rattus/numberofphosphorylations=1/molweightfrom=5000/molweightto=20000/isoelectricpointfrom=4/keywordrestriction=cell/sequencerestriction=PPP
  - ../databasesearch/motifshortname=Shc_SH2/dsshortname=swissprot/organismclass=Mammals/numberofphosphorylations=0
 </pre></li>

@@ -2,13 +2,14 @@
 
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="description"
-          content="Scansite Web Service: programmatic access to Scansite functionality"/>
+          content="Scansite Web Service: programmatic access to Scansite functionality">
     <meta name="keywords"
-          content="restful,webservice,kinases,yaffe,protein,phosphorylation"/>
+          content="restful,webservice,kinases,yaffe,protein,phosphorylation">
     <meta name="author"
-          content="Thomas Bernwinkler"/>
+          content="Thomas Bernwinkler, Konstantin Krismer">
+          
     <link type="text/css" rel="stylesheet" href="css/Scansite4.css">
     <link type="text/css" rel="stylesheet" href="css/bulksearch.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -19,10 +20,17 @@
 
     <!-- for IE -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-
-    <title>Scansite 4 - Bulk Search</title>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59773400-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-59773400-1');
+	</script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
@@ -31,6 +39,8 @@
             $("#footer").load("html/footer.html");
         });
     </script>
+
+    <title>Scansite 4 - Bulk Search</title>
 </head>
 <body>
 <div class="wrapper">
@@ -46,7 +56,7 @@
 
         <!-- ########################################################################################################## -->
         <h3 id='sec_intro'>Overview</h3>
-        <p class="overview" align="justify">
+        <p class="overview" style="text-align: justify">
             Welcome to the Scansite 4 bulk search! This brand new feature gives you the opportunity to lift the use of
             Scansite to an entirely different level.
             The new feature becomes particularly handy, if you have multiple proteins, protein sequences or maybe even
@@ -63,8 +73,8 @@
                 <div class="card">
                     <img class="card-img-top center" src="img/pencil.png" alt="Manual Input">
                     <div class="card-body">
-                        <h5 class="card-title" align="center">Direct Manual Input</h5>
-                        <p class="card-text" align="justify">The good old way of entering data manually is still
+                        <h5 class="card-title" style="text-align: center">Direct Manual Input</h5>
+                        <p class="card-text" style="text-align: justify">The good old way of entering data manually is still
                             possible. Now it is
                             even extended. Within the bulk search you can enter multiple protein names or protein
                             sequences once to analyze <strong>all</strong> of them.</p>
@@ -76,13 +86,12 @@
                 <div class="card">
                     <img class="card-img-top center" src="img/textfile.png" alt="Input File">
                     <div class="card-body">
-                        <h5 class="card-title" align="center">File Input</h5>
-                        <p class="card-text" align="justify">Next to entering data manually, you might want to create a
+                        <h5 class="card-title" style="text-align: center">File Input</h5>
+                        <p class="card-text" style="text-align: justify">Next to entering data manually, you might want to create a
                             file in advance.
                             This way you can prepare all the information at any place, even offline. To run the search
                             you can simple upload a text file, which fulfills our <a href="/search/formats.html">input
                                 file criteria</a>.</p>
-
                     </div>
                 </div>
             </div>
@@ -96,9 +105,7 @@
             <a href="/search/databasesearch.html" class="btn btn-primary overview-button">Search a Seq. Database for Motifs</a>
             <a href="/search/formats.html" class="btn btn-primary overview-button">Allowed Input File Formats</a>
         </div>
-
     </div>
-
     <div id="footer"></div>
 </div>
 </body>

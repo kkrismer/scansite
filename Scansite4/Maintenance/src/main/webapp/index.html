@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="description"
-          content="Scansite Web Service: programmatic access to Scansite functionality" />
+          content="Scansite Web Service: programmatic access to Scansite functionality">
     <meta name="keywords"
-          content="restful,webservice,kinases,yaffe,protein,phosphorylation" />
+          content="restful,webservice,kinases,yaffe,protein,phosphorylation">
     <meta name="author"
-          content="Thomas Bernwinkler" />
+          content="Thomas Bernwinkler, Konstantin Krismer">
+          
     <link type="text/css" rel="stylesheet" href="css/Scansite4.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -17,10 +18,17 @@
 
     <!-- for IE -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" >
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-
-    <title>Scansite 4 - Maintenance</title>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59773400-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-59773400-1');
+	</script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
@@ -29,11 +37,12 @@
             $("#footer").load("html/footer.html");
         });
     </script>
+
+    <title>Scansite 4 - Maintenance</title>
 </head>
 <body>
 <div class="wrapper">
     <div id="header"></div>
-
     <div id="breadcrumbs">
         <div>You are here: <span><a href="http://scansite4.mit.edu/4.0/">Scansite 4</a> ›
 				<a href="http://scansite4.mit.edu/maintenance/">Maintenance</a></span></div>
@@ -41,7 +50,6 @@
     <div id="content">
         <h2>Scansite 4 Maintenance</h2>
         <br/>
-
         <div class="container maintenance">
             <div class="jumbotron">
                 <h2>Temporarily Out Of Service</h2>
@@ -52,11 +60,7 @@
                 </ul>
             </div>
         </div>
-
-
-
     </div>
-
     <div id="footer"></div>
 </div>
 </body>
