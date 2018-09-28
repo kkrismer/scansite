@@ -69,7 +69,7 @@ public class MotifFileReader {
                 String values[] = line.split(LINE_SPLIT_REGEX);
                 if (values.length != aaMap.size()) {
                     throw new ScansiteFileFormatException(
-                            "Number of entries per line inconsistent!");
+                            "Number of entries per line inconsistent");
                 }
 
                 for (int i = 0; i < values.length; ++i) {
@@ -80,7 +80,7 @@ public class MotifFileReader {
                         // file
                     } catch (Exception e) {
                         throw new ScansiteFileFormatException("Value in line "
-                                + lineNr + " can not be parsed as a number!", e);
+                                + lineNr + " can not be parsed as a number", e);
                     }
                     m.setValue(aaMap.get(i), lineNr, value); // apply value to
                     // matrix
@@ -241,7 +241,7 @@ public class MotifFileReader {
                     }
                 } else {
                     throw new ScansiteFileFormatException(
-                            aas[i] + " is not an amino acid that can be used to define a motif-matrix!");
+                            aas[i] + " is not an amino acid that can be used to define a motif-matrix");
                 }
             }
         }
@@ -257,7 +257,7 @@ public class MotifFileReader {
         ArrayList<AminoAcid> fixedCenters = m.getFixedCenters();
         if (fixedCenters.isEmpty()) {
             throw new ScansiteFileFormatException("At least one fixed center (AA with central value "
-                    + ScansiteConstants.FIXED_SITE_SCORE + ") has to be defined (usually S, T or Y)!");
+                    + ScansiteConstants.FIXED_SITE_SCORE + ") has to be defined (usually S, T or Y)");
         }
     }
 
