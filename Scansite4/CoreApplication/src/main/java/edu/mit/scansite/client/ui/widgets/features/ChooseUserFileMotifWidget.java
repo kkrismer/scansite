@@ -110,7 +110,7 @@ public class ChooseUserFileMotifWidget extends ChooseMotifWidget implements
 					String fileName = Utils.getXmlNodeValue(doc, TAG_FILENAME);
 					prepareMotifDisplayWidget(fileName);
 				} else { // an error has occurred
-					showErrorMessage("Upload has failed!");
+					showErrorMessage("Upload has failed: " + error);
 				}
 			} else { // an exception has been thrown?
 				showErrorMessage("Upload has failed!");

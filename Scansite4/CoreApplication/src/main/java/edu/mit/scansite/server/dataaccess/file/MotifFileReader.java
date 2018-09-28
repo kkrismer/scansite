@@ -106,10 +106,10 @@ public class MotifFileReader {
                     + fileName, e);
         }
         if (lineNr < ScansiteConstants.WINDOW_SIZE) {
-            throw new ScansiteFileFormatException("A whole window ("
+            throw new ScansiteFileFormatException("A complete window with "
                     + ScansiteConstants.WINDOW_SIZE
-                    + ") has to be defined!\n You just defined " + lineNr
-                    + " positions.");
+                    + " positions has to be defined - uploaded file only contained " + lineNr
+                    + " positions");
         }
     }
 
