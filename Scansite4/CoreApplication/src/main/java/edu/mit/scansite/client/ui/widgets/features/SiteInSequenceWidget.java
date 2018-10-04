@@ -254,8 +254,8 @@ public class SiteInSequenceWidget extends ScansiteWidget {
 		}
 
 		if (site != null) {
-			Anchor blastAnchor = new Anchor("BLAST this site!", false,
-					URIs.getDirectBlastLink(site.getSiteSequence()), "_blank");
+			Anchor blastAnchor = new Anchor("Run Protein BLAST on this site sequence", false,
+					URIs.getDirectBlastLink(site.getSiteSequence().replaceAll("\\<.*?\\>", "")), "_blank");
 			blastAnchor.addStyleName("blastLink");
 			mainPanel.add(blastAnchor);
 		}

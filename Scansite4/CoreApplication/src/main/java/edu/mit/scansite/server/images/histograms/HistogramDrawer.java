@@ -78,7 +78,7 @@ public class HistogramDrawer extends Painter {
     }
     drawAdditionalInfo("Protein: ", site.getProtein().getIdentifier());
     drawAdditionalInfo("Site: ", site.getSite());
-    drawAdditionalInfo("Sequence: ", site.getSiteSequence());
+    drawAdditionalInfo("Sequence: ", site.getSiteSequence().replaceAll("\\<.*?\\>", ""));
     double zScore = calculateZScore(site.getScore());
     drawAdditionalInfo("Robust Z-Score Estimate: ", String.format("%.4f", Math.round(zScore * 10000.0) / 10000.0)); 
     drawScoreComment("Your sequence scores in the best " + String.format("%.3f", Math.round(site.getPercentile() * 100000.0) / 1000.0)
@@ -98,10 +98,10 @@ public class HistogramDrawer extends Painter {
     drawAdditionalInfo("Protein: ", site.getProtein().getIdentifier());
     if (site.isMultiple()) {
       for (int i = 0; i < site.getSites().size(); ++i) {
-        drawAdditionalInfo("Sequence " + (i+1) +": ", site.getSites().get(i).getSiteSequence() + " (" + site.getSites().get(i).getSite() + ")");
+        drawAdditionalInfo("Sequence " + (i+1) +": ", site.getSites().get(i).getSiteSequence().replaceAll("\\<.*?\\>", "") + " (" + site.getSites().get(i).getSite() + ")");
       }
     } else {
-      drawAdditionalInfo("Sequence: ", site.getSite().getSiteSequence() + " (" + site.getSite().getSite() + ")");
+      drawAdditionalInfo("Sequence: ", site.getSite().getSiteSequence().replaceAll("\\<.*?\\>", "") + " (" + site.getSite().getSite() + ")");
     }
     return bImg;
   }

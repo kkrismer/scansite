@@ -135,7 +135,7 @@ public class OrthologScanFeature {
 					sites.addAll(checkSite(queryProtein, phosphoSiteFinder, phosphoSite, publicOnly));
 				}
 				if (sites.size() > 0) {
-					targetSequence = sites.get(0).getSiteSequence().toUpperCase();
+					targetSequence = sites.get(0).getSiteSequence().replaceAll("\\<.*?\\>", "").toUpperCase();
 					return true;
 				} else {
 					return false;

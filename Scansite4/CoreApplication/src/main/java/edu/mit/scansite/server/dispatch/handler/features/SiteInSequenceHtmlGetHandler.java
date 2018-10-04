@@ -73,7 +73,7 @@ public class SiteInSequenceHtmlGetHandler implements
 		}
 		html.appendHtmlConstant("</pre>\n</td>\n</tr>\n</table>\n");
 		html.appendHtmlConstant("<a href=\"")
-				.appendEscaped(URIs.getDirectBlastLink(site.getSiteSequence()))
+				.appendEscaped(URIs.getDirectBlastLink(site.getSiteSequence().replaceAll("\\<.*?\\>", "")))
 				.appendHtmlConstant(
 						"\" target=\"_blank\">Run Protein BLAST on this site sequence</a>");
 		return new SiteInSequenceHtmlGetResult(html.toSafeHtml(),
