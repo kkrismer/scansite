@@ -11,7 +11,7 @@ import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import edu.mit.scansite.shared.transferobjects.Taxon;
 
 /**
- * A datastructure for representing, painting and editing histograms on the
+ * A data structure for representing, painting and editing histograms on the
  * serverside.
  * 
  * @author tobieh
@@ -58,7 +58,7 @@ public class ServerHistogram extends Histogram {
 	public BufferedImage getDbSearchReferenceHistogramPlot(
 			String histogramBasePath, DatabaseSearchScanResultSite site) {
 		if (histogramBasePath != null) {
-			ImageInOut imgIO = new ImageInOut();
+		    ImageInOut imgIO = new ImageInOut();
 			plot = imgIO.getImage(histogramBasePath);
 			HistogramDrawer painter = new HistogramDrawer(this);
 			plot = painter.getReferenceHistogramPlot(site);
