@@ -1,6 +1,5 @@
 package edu.mit.scansite.server.dispatch;
 
-import net.customware.gwt.dispatch.server.guice.ActionHandlerModule;
 import edu.mit.scansite.server.dispatch.handler.datasource.DataSourceSizesRetrieverHandler;
 import edu.mit.scansite.server.dispatch.handler.datasource.DataSourcesRetrieverHandler;
 import edu.mit.scansite.server.dispatch.handler.datasourcetype.DataSourceTypesRetrieverHandler;
@@ -23,8 +22,6 @@ import edu.mit.scansite.server.dispatch.handler.features.ShowMotifsForExpectedSi
 import edu.mit.scansite.server.dispatch.handler.features.ShowSequenceMatchesHtmlGetHandler;
 import edu.mit.scansite.server.dispatch.handler.features.SiteInSequenceHtmlGetHandler;
 import edu.mit.scansite.server.dispatch.handler.features.UtilitiesMwAndPiHandler;
-import edu.mit.scansite.server.dispatch.handler.history.RetrieveHistoryStateHandler;
-import edu.mit.scansite.server.dispatch.handler.history.StoreHistoryStateHandler;
 import edu.mit.scansite.server.dispatch.handler.identifiertype.IdentifierTypeRetrieverHandler;
 import edu.mit.scansite.server.dispatch.handler.motif.HistogramCreateHandler;
 import edu.mit.scansite.server.dispatch.handler.motif.HistogramRetrieverHandler;
@@ -74,8 +71,6 @@ import edu.mit.scansite.shared.dispatch.features.ShowMotifsForExpectedSiteGetAct
 import edu.mit.scansite.shared.dispatch.features.ShowSequenceMatchesHtmlGetAction;
 import edu.mit.scansite.shared.dispatch.features.SiteInSequenceHtmlGetAction;
 import edu.mit.scansite.shared.dispatch.features.UtilitiesMwAndPiAction;
-import edu.mit.scansite.shared.dispatch.history.RetrieveHistoryStateAction;
-import edu.mit.scansite.shared.dispatch.history.StoreHistoryStateAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramCreateAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramRetrieverAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramUpdateAction;
@@ -101,6 +96,7 @@ import edu.mit.scansite.shared.dispatch.user.UserDeleteAction;
 import edu.mit.scansite.shared.dispatch.user.UserPrivilegesAction;
 import edu.mit.scansite.shared.dispatch.user.UserRetrieverAction;
 import edu.mit.scansite.shared.dispatch.user.UserUpdateAction;
+import net.customware.gwt.dispatch.server.guice.ActionHandlerModule;
 
 /**
  * @author tobieh
@@ -190,11 +186,5 @@ public class ActionsModule extends ActionHandlerModule {
 				PredictMotifsLocalizationHandler.class);
 		bindHandler(PredictLocalizationMotifProteinPairAction.class,
 				PredictLocalizationMotifProteinPairHandler.class);
-
-		// // history related servlet definitions
-		bindHandler(StoreHistoryStateAction.class,
-				StoreHistoryStateHandler.class);
-		bindHandler(RetrieveHistoryStateAction.class,
-				RetrieveHistoryStateHandler.class);
 	}
 }
