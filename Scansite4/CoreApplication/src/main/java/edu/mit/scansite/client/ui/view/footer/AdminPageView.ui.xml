@@ -7,7 +7,7 @@
 		Welcome back, <g:Label ui:field="nameLabel" styleName="inline"></g:Label>! Your access level is <g:Label ui:field="levelLabel" styleName="inline"></g:Label>.
 		<g:SubmitButton ui:field="logoutButton" text="Logout" />
 		<br /><br />
-		<ul class="home featurenav">
+		<ul id="adminMainNav" class="home featurenav" style="display: none">
 			<li>
 				<a href="#motifMgmt">
 					Manage Motifs
@@ -27,6 +27,9 @@
 				<a href="#userMgmt">Manage Users</a>
 			</li>
 		</ul>
+		<p id="collaboratorNote" style="display: none">As a collaborator you have access to non-public motifs. If you want to add a non-public motif, 
+		please e-mail the motif text file to <a href="mailto:krismer@mit.edu">krismer@mit.edu</a>. Please make sure that the file does not 
+		violate the rules described in the <a href="#faq">FAQ section on user-defined motifs</a>.</p>
 		<div style="clear: both;"></div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

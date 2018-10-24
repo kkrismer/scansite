@@ -72,12 +72,12 @@
 				<h3>Administration Area</h3>
 				<g:Hyperlink ui:field="adminButton" text="Hub"
 					targetHistoryToken="{ADMIN.getId}" />
-				<ul>
-					<li id="motifMgmtLink">
+				<ul id="adminSubnav" style="display: none;">
+					<li id="motifMgmtLink" style="display: none;">
 						<g:Hyperlink ui:field="adminMotifButton" text="Manage Motifs"
 							targetHistoryToken="{ADMIN_MOTIF.getId}" />
 					</li>
-					<li id="motifGroupMgmtLink">
+					<li id="motifGroupMgmtLink" style="display: none;">
 						<g:Hyperlink ui:field="adminMotifGroupButton" text="Manage Motif Groups"
 							targetHistoryToken="{ADMIN_MOTIF_GROUP.getId}" />
 					</li>

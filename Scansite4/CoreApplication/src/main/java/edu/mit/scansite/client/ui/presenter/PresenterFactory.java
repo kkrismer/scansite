@@ -333,12 +333,16 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_NEWS
 				.getId())) {
 			if (user != null) {
-				view = new NewsMgmtPageViewImpl(user);
-				NewsMgmtPageView newsMgmtPageView = (NewsMgmtPageView) view;
-				presenter = new NewsMgmtPagePresenter(newsMgmtPageView);
-				newsMgmtPageView
-						.setPresenter((NewsMgmtPagePresenter) presenter);
-
+				if(user.isAdmin() || user.isSuperAdmin()) {
+					view = new NewsMgmtPageViewImpl(user);
+					NewsMgmtPageView newsMgmtPageView = (NewsMgmtPageView) view;
+					presenter = new NewsMgmtPagePresenter(newsMgmtPageView);
+					newsMgmtPageView
+							.setPresenter((NewsMgmtPagePresenter) presenter);
+				} else {
+					view = new NotFoundPageView();
+					presenter = new NotFoundPagePresenter((NotFoundPageView) view);
+				}
 			} else {
 				view = new AdminLoginPageView();
 				presenter = new AdminLoginPagePresenter(
@@ -347,11 +351,16 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_USER
 				.getId())) {
 			if (user != null) {
-				view = new UserMgmtPageViewImpl(user);
-				UserMgmtPageView userMgmtPageView = (UserMgmtPageView) view;
-				presenter = new UserMgmtPagePresenter(userMgmtPageView);
-				userMgmtPageView
-						.setPresenter((UserMgmtPagePresenter) presenter);
+				if(user.isSuperAdmin()) {
+					view = new UserMgmtPageViewImpl(user);
+					UserMgmtPageView userMgmtPageView = (UserMgmtPageView) view;
+					presenter = new UserMgmtPagePresenter(userMgmtPageView);
+					userMgmtPageView
+							.setPresenter((UserMgmtPagePresenter) presenter);
+				} else {
+					view = new NotFoundPageView();
+					presenter = new NotFoundPagePresenter((NotFoundPageView) view);
+				}
 
 			} else {
 				view = new AdminLoginPageView();
@@ -362,13 +371,17 @@ public class PresenterFactory {
 				.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_MOTIF_GROUP
 						.getId())) {
 			if (user != null) {
-				view = new MotifGroupMgmtPageViewImpl(user);
-				MotifGroupMgmtPageView motifGroupMgmtPageView = (MotifGroupMgmtPageView) view;
-				presenter = new MotifGroupMgmtPagePresenter(
-						motifGroupMgmtPageView);
-				motifGroupMgmtPageView
-						.setPresenter((MotifGroupMgmtPagePresenter) presenter);
-
+				if(user.isAdmin() || user.isSuperAdmin()) {
+					view = new MotifGroupMgmtPageViewImpl(user);
+					MotifGroupMgmtPageView motifGroupMgmtPageView = (MotifGroupMgmtPageView) view;
+					presenter = new MotifGroupMgmtPagePresenter(
+							motifGroupMgmtPageView);
+					motifGroupMgmtPageView
+							.setPresenter((MotifGroupMgmtPagePresenter) presenter);
+				} else {
+					view = new NotFoundPageView();
+					presenter = new NotFoundPagePresenter((NotFoundPageView) view);
+				}
 			} else {
 				view = new AdminLoginPageView();
 				presenter = new AdminLoginPagePresenter(
@@ -377,12 +390,16 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_MOTIF
 				.getId())) {
 			if (user != null) {
-				view = new MotifMgmtPageViewImpl(user);
-				MotifMgmtPageView motifMgmtPageView = (MotifMgmtPageView) view;
-				presenter = new MotifMgmtPagePresenter(motifMgmtPageView, user);
-				motifMgmtPageView
-						.setPresenter((MotifMgmtPagePresenter) presenter);
-
+				if(user.isAdmin() || user.isSuperAdmin()) {
+					view = new MotifMgmtPageViewImpl(user);
+					MotifMgmtPageView motifMgmtPageView = (MotifMgmtPageView) view;
+					presenter = new MotifMgmtPagePresenter(motifMgmtPageView, user);
+					motifMgmtPageView
+							.setPresenter((MotifMgmtPagePresenter) presenter);
+				} else {
+					view = new NotFoundPageView();
+					presenter = new NotFoundPagePresenter((NotFoundPageView) view);
+				}
 			} else {
 				view = new AdminLoginPageView();
 				presenter = new AdminLoginPagePresenter(

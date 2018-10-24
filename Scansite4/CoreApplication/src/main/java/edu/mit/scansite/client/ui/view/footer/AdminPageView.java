@@ -5,6 +5,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,17 +40,38 @@ public class AdminPageView extends PageView {
 
 	public AdminPageView(User user) {
 		initWidget(uiBinder.createAndBindUi(this));
-		nameLabel.setText(user.getFirstName() + " " + user.getLastName());
-		if(user.isSuperAdmin()) {
-			levelLabel.setText("Level 3 - Super Administrator");
-			levelLabel.addStyleName("red");
-		} else if(user.isAdmin()) {
-			levelLabel.setText("Level 2 - Administrator");
-			levelLabel.addStyleName("orange");
-		} else {
-			levelLabel.setText("Level 1 - Collaborator");
-			levelLabel.addStyleName("green");
-		}
+		
+		runCommandOnLoad(new Command() {
+			@Override
+			public void execute() {
+				if(user != null) {
+					nameLabel.setText(user.getFirstName() + " " + user.getLastName());
+					if(user.isSuperAdmin()) {
+						DOM.getElementById("adminMainNav").setAttribute("style",
+								"display: block;");
+						DOM.getElementById("collaboratorNote").setAttribute("style",
+								"display: none;");
+						levelLabel.setText("Level 3 - Super Administrator");
+						levelLabel.addStyleName("red");
+					} else if(user.isAdmin()) {
+						DOM.getElementById("adminMainNav").setAttribute("style",
+								"display: block;");
+						DOM.getElementById("collaboratorNote").setAttribute("style",
+								"display: none;");
+						levelLabel.setText("Level 2 - Administrator");
+						levelLabel.addStyleName("orange");
+					} else {
+						DOM.getElementById("adminMainNav").setAttribute("style",
+								"display: none;");
+						DOM.getElementById("collaboratorNote").setAttribute("style",
+								"display: block;");
+						levelLabel.setText("Level 1 - Collaborator");
+						levelLabel.addStyleName("green");
+					}
+				}
+			}
+		});
+		
 	}
 
 	@UiHandler("logoutButton")

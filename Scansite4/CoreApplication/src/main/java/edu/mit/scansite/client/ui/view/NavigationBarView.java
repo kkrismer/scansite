@@ -26,20 +26,33 @@ public class NavigationBarView extends Composite implements View {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void showAdminArea(User user) { // TODO admin vs superadmin
+	public void showAdminArea(User user) {
 		if (user != null) {
 			DOM.getElementById("adminLink").setAttribute("style",
 					"display: block;");
+			
 			if (user.isAdmin() || user.isSuperAdmin()) {
+				DOM.getElementById("adminSubnav").setAttribute("style",
+						"display: block;");
+				DOM.getElementById("motifMgmtLink").setAttribute("style",
+						"display: block;");
+				DOM.getElementById("motifGroupMgmtLink").setAttribute("style",
+						"display: block;");
 				DOM.getElementById("newsMgmtLink").setAttribute("style",
 						"display: block;");
-			}
-			if (user.isSuperAdmin()) {
-				DOM.getElementById("userMgmtLink").setAttribute("style",
-						"display: block;");
+				if (user.isSuperAdmin()) {
+					DOM.getElementById("userMgmtLink").setAttribute("style",
+							"display: block;");
+				}
 			}
 		} else {
 			DOM.getElementById("adminLink").setAttribute("style",
+					"display: none;");
+			DOM.getElementById("adminSubnav").setAttribute("style",
+					"display: none;");
+			DOM.getElementById("motifMgmtLink").setAttribute("style",
+					"display: none;");
+			DOM.getElementById("motifGroupMgmtLink").setAttribute("style",
 					"display: none;");
 			DOM.getElementById("newsMgmtLink").setAttribute("style",
 					"display: none;");
