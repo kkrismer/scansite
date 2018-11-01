@@ -22,6 +22,8 @@ import edu.mit.scansite.server.dispatch.handler.features.ShowMotifsForExpectedSi
 import edu.mit.scansite.server.dispatch.handler.features.ShowSequenceMatchesHtmlGetHandler;
 import edu.mit.scansite.server.dispatch.handler.features.SiteInSequenceHtmlGetHandler;
 import edu.mit.scansite.server.dispatch.handler.features.UtilitiesMwAndPiHandler;
+import edu.mit.scansite.server.dispatch.handler.history.RetrieveHistoryStateHandler;
+import edu.mit.scansite.server.dispatch.handler.history.StoreHistoryStateHandler;
 import edu.mit.scansite.server.dispatch.handler.identifiertype.IdentifierTypeRetrieverHandler;
 import edu.mit.scansite.server.dispatch.handler.motif.HistogramCreateHandler;
 import edu.mit.scansite.server.dispatch.handler.motif.HistogramRetrieverHandler;
@@ -71,6 +73,8 @@ import edu.mit.scansite.shared.dispatch.features.ShowMotifsForExpectedSiteGetAct
 import edu.mit.scansite.shared.dispatch.features.ShowSequenceMatchesHtmlGetAction;
 import edu.mit.scansite.shared.dispatch.features.SiteInSequenceHtmlGetAction;
 import edu.mit.scansite.shared.dispatch.features.UtilitiesMwAndPiAction;
+import edu.mit.scansite.shared.dispatch.history.RetrieveHistoryStateAction;
+import edu.mit.scansite.shared.dispatch.history.StoreHistoryStateAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramCreateAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramRetrieverAction;
 import edu.mit.scansite.shared.dispatch.motif.HistogramUpdateAction;
@@ -123,68 +127,50 @@ public class ActionsModule extends ActionHandlerModule {
 		bindHandler(MotifGroupAddAction.class, MotifGroupAddHandler.class);
 		bindHandler(MotifGroupUpdateAction.class, MotifGroupUpdateHandler.class);
 		bindHandler(MotifGroupDeleteAction.class, MotifGroupDeleteHandler.class);
-		bindHandler(MotifGroupRetrieverAction.class,
-				MotifGroupRetrieverHandler.class);
-		bindHandler(LightWeightMotifGroupRetrieverAction.class,
-				LightWeightMotifGroupRetrieverHandler.class);
+		bindHandler(MotifGroupRetrieverAction.class, MotifGroupRetrieverHandler.class);
+		bindHandler(LightWeightMotifGroupRetrieverAction.class, LightWeightMotifGroupRetrieverHandler.class);
 
 		// motif and histogram related servlet definitions
-		bindHandler(LightWeightMotifRetrieverAction.class,
-				LightWeightMotifRetrieverHandler.class);
+		bindHandler(LightWeightMotifRetrieverAction.class, LightWeightMotifRetrieverHandler.class);
 		bindHandler(MotifAddAction.class, MotifAddHandler.class);
 		bindHandler(MotifDeleteAction.class, MotifDeleteHandler.class);
 		bindHandler(MotifRetrieverAction.class, MotifRetrieverHandler.class);
 		bindHandler(MotifUpdateAction.class, MotifUpdateHandler.class);
 		bindHandler(HistogramCreateAction.class, HistogramCreateHandler.class);
 		bindHandler(HistogramUpdateAction.class, HistogramUpdateHandler.class);
-		bindHandler(HistogramRetrieverAction.class,
-				HistogramRetrieverHandler.class);
-		bindHandler(MotifNumbersRetrieverAction.class,
-				MotifNumbersRetrieverHandler.class);
+		bindHandler(HistogramRetrieverAction.class, HistogramRetrieverHandler.class);
+		bindHandler(MotifNumbersRetrieverAction.class, MotifNumbersRetrieverHandler.class);
 		bindHandler(MotifGetAction.class, MotifGetHandler.class);
 
 		// data source related servlet definitions
-		bindHandler(DataSourcesRetrieverAction.class,
-				DataSourcesRetrieverHandler.class);
-		bindHandler(DataSourceSizesRetrieverAction.class,
-				DataSourceSizesRetrieverHandler.class);
-		bindHandler(DataSourceTypesRetrieverAction.class,
-				DataSourceTypesRetrieverHandler.class);
+		bindHandler(DataSourcesRetrieverAction.class, DataSourcesRetrieverHandler.class);
+		bindHandler(DataSourceSizesRetrieverAction.class, DataSourceSizesRetrieverHandler.class);
+		bindHandler(DataSourceTypesRetrieverAction.class, DataSourceTypesRetrieverHandler.class);
 
 		// feature related servlet definitions
 		bindHandler(ProteinCheckAction.class, ProteinCheckHandler.class);
-		bindHandler(ProteinCheckOracleAction.class,
-				ProteinCheckOracleHandler.class);
-		bindHandler(GetNewProteinPlotAction.class,
-				GetNewProteinPlotHandler.class);
+		bindHandler(ProteinCheckOracleAction.class, ProteinCheckOracleHandler.class);
+		bindHandler(GetNewProteinPlotAction.class, GetNewProteinPlotHandler.class);
 		bindHandler(ProteinScanAction.class, ProteinScanHandler.class);
 		bindHandler(SequenceMatchAction.class, SequenceMatchHandler.class);
-		bindHandler(OrthologScanSequencePatternAction.class,
-				OrthologScanSequencePatternHandler.class);
-		bindHandler(OrthologScanMotifAction.class,
-				OrthologScanMotifHandler.class);
+		bindHandler(OrthologScanSequencePatternAction.class, OrthologScanSequencePatternHandler.class);
+		bindHandler(OrthologScanMotifAction.class, OrthologScanMotifHandler.class);
 		bindHandler(DatabaseScanAction.class, DatabaseScanHandler.class);
-		bindHandler(DbSearchHistogramRetrieverAction.class,
-				DbSearchHistogramRetrieverHandler.class);
+		bindHandler(DbSearchHistogramRetrieverAction.class, DbSearchHistogramRetrieverHandler.class);
 		bindHandler(UtilitiesMwAndPiAction.class, UtilitiesMwAndPiHandler.class);
-		bindHandler(SiteInSequenceHtmlGetAction.class,
-				SiteInSequenceHtmlGetHandler.class);
-		bindHandler(ShowSequenceMatchesHtmlGetAction.class,
-				ShowSequenceMatchesHtmlGetHandler.class);
-		bindHandler(ShowMotifsForExpectedSiteGetAction.class,
-				ShowMotifsForExpectedSiteGetHandler.class);
+		bindHandler(SiteInSequenceHtmlGetAction.class, SiteInSequenceHtmlGetHandler.class);
+		bindHandler(ShowSequenceMatchesHtmlGetAction.class, ShowSequenceMatchesHtmlGetHandler.class);
+		bindHandler(ShowMotifsForExpectedSiteGetAction.class, ShowMotifsForExpectedSiteGetHandler.class);
 		bindHandler(ProteinRetrieverAction.class, ProteinRetrieverHandler.class);
-		bindHandler(DomainPositionsGetAction.class,
-				DomainPositionsGetHandler.class);
-		bindHandler(IdentifierTypeRetrieverAction.class,
-				IdentifierTypeRetrieverHandler.class);
-		bindHandler(OrthologyCheckOracleAction.class,
-				OrthologyCheckOracleHandler.class);
-		bindHandler(PredictProteinsLocalizationAction.class,
-				PredictProteinsLocalizationHandler.class);
-		bindHandler(PredictMotifsLocalizationAction.class,
-				PredictMotifsLocalizationHandler.class);
-		bindHandler(PredictLocalizationMotifProteinPairAction.class,
-				PredictLocalizationMotifProteinPairHandler.class);
+		bindHandler(DomainPositionsGetAction.class, DomainPositionsGetHandler.class);
+		bindHandler(IdentifierTypeRetrieverAction.class, IdentifierTypeRetrieverHandler.class);
+		bindHandler(OrthologyCheckOracleAction.class, OrthologyCheckOracleHandler.class);
+		bindHandler(PredictProteinsLocalizationAction.class, PredictProteinsLocalizationHandler.class);
+		bindHandler(PredictMotifsLocalizationAction.class, PredictMotifsLocalizationHandler.class);
+		bindHandler(PredictLocalizationMotifProteinPairAction.class, PredictLocalizationMotifProteinPairHandler.class);
+
+		// history related servlet definitions
+		bindHandler(StoreHistoryStateAction.class, StoreHistoryStateHandler.class);
+		bindHandler(RetrieveHistoryStateAction.class, RetrieveHistoryStateHandler.class);
 	}
 }
