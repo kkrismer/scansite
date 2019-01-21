@@ -96,7 +96,7 @@ public class SequenceMatchFeature {
 		result.setSequencePatterns(sequencePatterns);
 		result.setCompatibleOrthologyDataSources(factory.getIdentifierDao()
 				.getCompatibleOrthologyDataSourcesForIdentifierType(dataSource.getIdentifierType()));
-		ArrayList<ProteinSequenceMatch> matches = new ArrayList<ProteinSequenceMatch>();
+		List<ProteinSequenceMatch> matches = new ArrayList<ProteinSequenceMatch>();
 		ProteinSequenceMatch match = null;
 		int totalNrOfMatches = 0;
 		PhosphoSitesFeature phosphoSiteFinder = new PhosphoSitesFeature();
@@ -140,16 +140,6 @@ public class SequenceMatchFeature {
 			}
 		}
 
-		if (matches.size() > ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER) {
-			ArrayList<ProteinSequenceMatch> tempMatches = new ArrayList<ProteinSequenceMatch>(
-					ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER);
-			for (int i = 0; i < ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER && i < matches.size(); ++i) {
-				tempMatches.add(matches.get(i));
-			}
-			matches = tempMatches;
-			result.setMoreMatchesThanMaxAllowed(true);
-		}
-
 		if (doCreateFiles) {
 			SequenceMatchResultFileWriter writer = new SequenceMatchResultFileWriter(sequencePatterns);
 			try {
@@ -157,6 +147,16 @@ public class SequenceMatchFeature {
 			} catch (Exception e) {
 				logger.error("Error writing result file for sequence match feature: " + e.toString());
 			}
+		}
+
+		if (matches.size() > ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER) {
+			List<ProteinSequenceMatch> tempMatches = new ArrayList<ProteinSequenceMatch>(
+					ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER);
+			for (int i = 0; i < ScansiteConstants.SEQUENCE_MATCH_MAX_RESULTS_BROWSER && i < matches.size(); ++i) {
+				tempMatches.add(matches.get(i));
+			}
+			matches = tempMatches;
+			result.setMoreMatchesThanMaxAllowed(true);
 		}
 
 		result.setSequencePatternMatchCount(totalNrOfMatches);

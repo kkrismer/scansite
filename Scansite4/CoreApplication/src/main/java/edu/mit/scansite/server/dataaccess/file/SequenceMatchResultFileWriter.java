@@ -9,6 +9,7 @@ import edu.mit.scansite.shared.transferobjects.SequencePattern;
 
 /**
  * @author Tobieh
+ * @author Konstantin Krismer
  */
 public class SequenceMatchResultFileWriter extends
 		ResultFileWriter<ProteinSequenceMatch> {
@@ -28,10 +29,10 @@ public class SequenceMatchResultFileWriter extends
 		try {
 			DirectoryManagement.prepareDirectory(currentFilePath, true);
 			writer = new BufferedWriter(new FileWriter(currentFilePath));
-			writer.write("PROTEIN_ACCESSION");
+			writer.write("protein_accession");
 			writer.write(SEPARATOR);
 			for (SequencePattern pattern : sequencePatterns) {
-				writer.write("OCCURENCES_" + pattern.getRegEx());
+				writer.write("occurrences_" + pattern.getRegEx());
 				writer.write(SEPARATOR);
 			}
 			writer.newLine();
