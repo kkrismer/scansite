@@ -36,7 +36,7 @@ public class RunMotifInserter {
 			+ "- the (relative) path to the directory of your motifs.xml and "
 			+ " motif-files (all in one folder) as a first argument, and \n"
 			+ "- a valid user's email address as a second argument\n"
-			+ "Example: \n java -Djava.awt.headless=true -Xmx1024m -Xms1024m -jar RunMotifInserter.jar motifsMammals/ krismer@mit.edu\n";
+			+ "Example: \n java -Djava.awt.headless=true -Xmx1024m -Xms1024m -jar RunMotifInserter.jar motifsMammals/ scansite@mit.edu\n";
 
 	public static void main(String[] args) {
 		if (args.length != 2) {

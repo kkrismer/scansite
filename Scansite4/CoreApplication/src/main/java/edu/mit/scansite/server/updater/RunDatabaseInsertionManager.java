@@ -86,7 +86,7 @@ public class RunDatabaseInsertionManager {
 
         String exampleCall = "Parameter arguments should be given like:" +
                 " -moma misc/motifs/motifsMammals/ -moye misc/motifs/motifsYeast/" +
-                " -mail tbernwin@mit.edu -evid misc/siteEvidence/evidence.txt" +
+                " -mail scansite@mit.edu -evid misc/siteEvidence/evidence.txt" +
                 " -msql misc/database/scansiteDb.sql -momo misc/motifs/motifsPTM" +
                 " -orig misc/motifs/originalPSSMvalues";
 
