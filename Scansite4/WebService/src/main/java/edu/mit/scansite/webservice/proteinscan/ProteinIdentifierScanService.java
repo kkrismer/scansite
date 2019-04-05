@@ -19,7 +19,7 @@ import static edu.mit.scansite.webservice.proteinscan.ProteinScanUtils.*;
 
 //@Path("/proteinscan/identifier={identifier: \\S+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
 //@Path("/proteinscan/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/motifclass={motifclass: [A-Za-z]+}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency:(/stringency=[A-Za-z]+)?}{referenceproteome:(/referenceproteome=[A-Za-z]+)?}")
-@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_.,-]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
+@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_.,-~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
 public class ProteinIdentifierScanService extends ProteinScanWebService {
 	/**
 	 * @param proteinIdentifier
