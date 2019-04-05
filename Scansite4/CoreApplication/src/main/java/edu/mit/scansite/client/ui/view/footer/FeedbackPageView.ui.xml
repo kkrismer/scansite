@@ -7,8 +7,8 @@
 		<wg:MessageDisplayWidget
 			ui:field="messageDisplayWidget" />
 		<p>Please help us improve Scansite by telling us what you think
-			about
-			this site.</p>
+			about this site.
+		</p>
 		Let us know about
 		<ul>
 			<li>bugs you discovered,</li>
@@ -18,24 +18,16 @@
 		</ul>
 		<p>
 			We are also eager to learn about things you preferred in Scansite 3
-			and Scansite 2
-			or things you wish were different in the current
-			version.
+			and Scansite 2 or things you wish were different in the current version.
 		</p>
 		<p>
 			Of course, we are also always happy to hear what you like
-			about the
-			new version, or about Scansite in general.
+			about the new version, or about Scansite in general.
 		</p>
 		<p>
 			Open an issue on
-			<a href="https://github.com/kkrismer/scansite4/issues"
-				target="_blank">Github</a>
-			or write
-			directly to the developers
-			<a href="mailto:tbernwin@mit.edu">Thomas</a>
-			and
-			<a href="mailto:krismer@mit.edu">Konstantin</a>.
+			<a href="https://github.com/kkrismer/scansite4/issues" target="_blank">Github</a>
+			or write directly to the <a href="mailto:scansite@mit.edu">developers</a>.
 		</p>
 	</g:HTMLPanel>
 </ui:UiBinder> 

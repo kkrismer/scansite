@@ -28,7 +28,7 @@
 			</li>
 		</ul>
 		<p id="collaboratorNote" style="display: none">As a collaborator you have access to non-public motifs. If you want to add a non-public motif, 
-		please e-mail the motif text file to <a href="mailto:krismer@mit.edu">krismer@mit.edu</a>. Please make sure that the file does not 
+		please e-mail the motif text file to <a href="mailto:scansite@mit.edu">scansite@mit.edu</a>. Please make sure that the file does not
 		violate the rules described in the <a href="#faq">FAQ section on user-defined motifs</a>.</p>
 		<div style="clear: both;"></div>
 	</g:HTMLPanel>

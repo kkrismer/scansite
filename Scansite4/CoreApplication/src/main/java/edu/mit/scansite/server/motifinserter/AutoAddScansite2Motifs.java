@@ -37,7 +37,7 @@ public class AutoAddScansite2Motifs {
 			+ "Please enter the (relative) path to the directory of your motifs.txt and \n"
 			+ " motif-files (all in one folder) as a first argument, and a valid user's \n"
 			+ " email address as a second argument!\n"
-			+ "Example: \n java -Djava.awt.headless=true -Xmx1024m -Xms1024m -jar autoMotifAdder.jar motifsMammals/ tobieh@mit.edu\n";
+			+ "Example: \n java -Djava.awt.headless=true -Xmx1024m -Xms1024m -jar autoMotifAdder.jar motifsMammals/ scansite@mit.edu\n";
 
 	private static final String KEY_MOTIF_CLASS = "[MOTIF_CLASS]";
 	private static final String KEY_GROUP_SHORT = "[GROUP_SHORT]";
