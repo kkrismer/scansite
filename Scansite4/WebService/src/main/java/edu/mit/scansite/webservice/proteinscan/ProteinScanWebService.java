@@ -7,6 +7,7 @@ import edu.mit.scansite.webservice.WebService;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
 import edu.mit.scansite.webservice.transferobjects.MotifSite;
 import edu.mit.scansite.webservice.transferobjects.ProteinScanResult;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,14 +30,14 @@ public class ProteinScanWebService extends WebService {
 		// check motif input
 		MotifClass mc = MotifClass.getDbValue(motifClass.toUpperCase());
 		
-		if (dataSourceShortName == null || dataSourceShortName.isEmpty()) {
+		if (StringUtils.isBlank(dataSourceShortName)) {
 			dataSourceShortName = "swissprot";
 		}
 
 		// If explicitly motifs picked: use them -- else motif class
 		String[] motifShortNames;
 		Set<String> motifShortNamesSet = null;
-		if (inputMotifShortNames != null && !inputMotifShortNames.isEmpty()) {
+		if (StringUtils.isNotBlank(inputMotifShortNames)) {
 			motifShortNames = inputMotifShortNames.split(MOTIF_SEPARATOR);
 			if (motifShortNames.length > 0) {
 				motifShortNamesSet = new HashSet<>();
