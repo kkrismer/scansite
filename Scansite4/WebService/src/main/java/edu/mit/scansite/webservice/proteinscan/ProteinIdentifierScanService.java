@@ -4,6 +4,9 @@ import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.webservice.transferobjects.ProteinScanResult;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,8 +22,11 @@ import static edu.mit.scansite.webservice.proteinscan.ProteinScanUtils.*;
 
 //@Path("/proteinscan/identifier={identifier: \\S+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
 //@Path("/proteinscan/identifier={identifier: \\S+}/dsshortname={dsshortname: [A-Za-z]+}/motifclass={motifclass: [A-Za-z]+}{motifshortnames: (/motifshortnames=[\\S~]*)?}{stringency:(/stringency=[A-Za-z]+)?}{referenceproteome:(/referenceproteome=[A-Za-z]+)?}")
-@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}{dsshortname: (/dsshortname=[A-Za-z]+)?}{motifclass: (/motifclass=[A-Za-z]+)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_.,-~]*)?}{stringency: (/stringency=[A-Za-z]+)?}{referenceproteome: (/referenceproteome=[A-Za-z]+)?}")
+@Path("/proteinscan/identifier={identifier: [a-zA-Z0-9_.-]+}{dsshortname: (/dsshortname=[A-Za-z]*)?}{motifclass: (/motifclass=[A-Za-z]*)?}{motifshortnames: (/motifshortnames=[a-zA-Z0-9_,~.-]*)?}{stringency: (/stringency=[A-Za-z]*)?}{referenceproteome: (/referenceproteome=[A-Za-z]*)?}")
 public class ProteinIdentifierScanService extends ProteinScanWebService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ProteinIdentifierScanService.class);
+
 	/**
 	 * @param proteinIdentifier
 	 *            The protein identifier that is used by the data source
@@ -52,24 +58,16 @@ public class ProteinIdentifierScanService extends ProteinScanWebService {
 		referenceProteome = processOptionalParameter(referenceProteome);
 		
 		// @DefaultValue doesn't seem to work
-		if(dataSourceShortName == null || dataSourceShortName.isEmpty()) {
-			dataSourceShortName = "swissprot";
-		}
-		if(motifClass == null || motifClass.isEmpty()) {
-			motifClass = "MAMMALIAN";
-		}
-		if(stringency == null || stringency.isEmpty()) {
-			stringency = "High";
-		}
-		if(referenceProteome == null || referenceProteome.isEmpty()) {
-			referenceProteome = REFERENCE_VERTEBRATA;
-		}
+		dataSourceShortName = assignDefaultIfBlank(dataSourceShortName, "swissprot");
+		motifClass = assignDefaultIfBlank(motifClass, "MAMMALIAN");
+		stringency = assignDefaultIfBlank(stringency, "High");
+		referenceProteome = assignDefaultIfBlank(referenceProteome, REFERENCE_VERTEBRATA);
 
-		DataSource localizationDataSource = null;
+		DataSource localizationDataSource;
 		try {
 			localizationDataSource = ProteinScanUtils.getLocalizationDataSource(TXT_TRY_LATER);
 		} catch (DataAccessException e) {
-			e.printStackTrace();
+			logger.error("Could not retrieve localization data source!", e);
 			localizationDataSource = null;
 		}
 
@@ -78,5 +76,9 @@ public class ProteinIdentifierScanService extends ProteinScanWebService {
 		referenceProteome = ProteinScanUtils.checkReferenceProteome(referenceProteome);
 		return doProteinScan(protein, referenceProteome, dataSourceShortName, localizationDataSource, motifShortNames,
 				motifClass, stringency);
+	}
+
+	private static String assignDefaultIfBlank(final String value, final String fallback) {
+		return (StringUtils.isBlank(value) ? fallback : value);
 	}
 }
