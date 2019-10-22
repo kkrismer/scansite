@@ -539,27 +539,28 @@ table.no-style,table.no-style td {
 /***************************************************/
 /** FOOTER *****************************************/
 /***************************************************/
-footer#majorfooter {
+#majorfooter {
 	width: 100%;
 	text-align: center;
 	font-size: 0.9em;
 	color: #808080;
 }
 
-footer#majorfooter ul {
+#majorfooter ul {
 	margin: 3px auto;
 	padding: 0;
 	width: 642px;
 	list-style-type: none;
+	border: 3px solid transparent;
 }
 
-footer#majorfooter li {
+#majorfooter li {
 	margin: 0;
 	padding: 0;
 	float: left;
 }
 
-footer#majorfooter ul a:link,footer#majorfooter ul a:visited,footer#majorfooter ul a:active
+#majorfooter ul a:link,#majorfooter ul a:visited,#majorfooter ul a:active
 	{
 	display: block;
 	margin: 2px;
@@ -570,18 +571,18 @@ footer#majorfooter ul a:link,footer#majorfooter ul a:visited,footer#majorfooter 
 	height: 40px;
 }
 
-footer#majorfooter ul a:hover {
+#majorfooter ul a:hover {
 	margin: 2px;
 	padding: 5px;
 }
 
-footer#majorfooter p a:link,footer#majorfooter p a:visited,footer#majorfooter p a:active
+#majorfooter p a:link,#majorfooter p a:visited,#majorfooter p a:active
 	{
 	color: #808080;
 	text-decoration: underline;
 }
 
-footer#majorfooter p a:hover {
+#majorfooter p a:hover {
 	color: #c38816;
 }
 

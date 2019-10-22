@@ -2,36 +2,39 @@
 
 <html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="description"
-          content="Scansite Web Service: programmatic access to Scansite functionality">
-    <meta name="keywords"
-          content="restful,webservice,kinases,yaffe,protein,phosphorylation">
-    <meta name="author"
-          content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler">
-          
-	<link type="text/css" rel="stylesheet" href="Scansite4.css">
-	
-	<!-- for FF, Chrome, Opera -->
-	<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
-	<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
-	
-	<!-- for IE -->
-	<link rel="icon" type="image/x-icon" href="/favicon.ico">
-	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-	
-	
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59773400-1"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'UA-59773400-1');
-	</script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="description"
+	content="Scansite Web Service: programmatic access to Scansite functionality">
+<meta name="keywords"
+	content="restful,webservice,kinases,yaffe,protein,phosphorylation">
+<meta name="author"
+	content="Tobias Ehrenberger, Konstantin Krismer, Thomas Bernwinkler">
 
-	<script>
+<link type="text/css" rel="stylesheet" href="Scansite4.css">
+
+<!-- for FF, Chrome, Opera -->
+<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+<!-- for IE -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+	src="https://www.googletagmanager.com/gtag/js?id=UA-59773400-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-59773400-1');
+</script>
+
+<script>
 	function errorCallback() {
 		console.log("Error! Could not run REST call");
 	}
@@ -211,9 +214,9 @@
 		req.open("GET", targetUrl, true);
 		req.send(null);
 	}
-	</script>
-	
-	<title>Scansite 4 Web Service</title>
+</script>
+
+<title>Scansite 4 Web Service</title>
 </head>
 <body>
 	<div id="wrapper">
@@ -670,7 +673,9 @@
 ../proteinscan/identifier=<a href='#cmd_any'>[ANY]</a><a
 							href='#cmd_qmark'>?</a>/sequence=<a href='#cmd_seq'>[SEQ]</a>/motifclass=<a
 							href='#cmd_mc'>[MC]</a>/motifshortnames=<a href='#cmd_ms'>[MS]</a><a
-							href='#cmd_qmark'>?</a>/stringencyValue=<a href='#cmd_st'>[ST]</a><a href='#cmd_qmark'>?</a>/referenceproteome=[Vertebrata | Yeast]<a href='#cmd_qmark'>?</a>
+							href='#cmd_qmark'>?</a>/stringencyValue=<a href='#cmd_st'>[ST]</a><a
+							href='#cmd_qmark'>?</a>/referenceproteome=[Vertebrata | Yeast]<a
+							href='#cmd_qmark'>?</a>
 </pre> Optional parameters:
 					<ul>
 						<li>motifshortnames</li>
@@ -802,8 +807,8 @@
 			<p>
 				If you are sure you did everything right and your query still does
 				not work, please let us know! Just email <a
-					href='mailto:scansite@mit.edu'>us</a>. Please include
-				what you wanted to do, what URI you used, and what happened.
+					href='mailto:scansite@mit.edu'>us</a>. Please include what you
+				wanted to do, what URI you used, and what happened.
 			</p>
 			<a href="#top" class='goToTopLink'>[Go to top]</a>
 		</div>
@@ -822,7 +827,8 @@
 				<li><a id="mgri" href="https://www.merck.com/" target="_blank"></a></li>
 				<li><a id="bidmc" href="https://www.bidmc.org/" target="_blank"></a></li>
 			</ul>
-			<p style="clear: both;">
+			<p style="clear: both;"></p>
+			<p style="padding-top: 10px">
 				<a href="https://scansite4.mit.edu/4.0/#about">About</a> - <a
 					href="https://scansite4.mit.edu/4.0/#faq">FAQ</a> - <a
 					href="https://scansite4.mit.edu/webservice/">Web Service</a> - <a
@@ -832,7 +838,7 @@
 					Collaborator Area</a>
 			</p>
 			<p>
-				&copy; 2018 - Scansite 4.00.019 - <a target="_blank"
+				&copy; 2019 - Scansite 4.00.020 - <a target="_blank"
 					href="https://yaffelab.mit.edu/">Michael B. Yaffe Laboratory</a> -
 				Koch Institute, MIT
 			</p>
