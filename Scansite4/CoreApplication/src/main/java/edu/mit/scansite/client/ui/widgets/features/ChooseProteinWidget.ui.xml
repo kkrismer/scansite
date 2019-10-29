@@ -25,18 +25,18 @@
 						<span id="wait" class="waitImage" style="visibility: hidden;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 						<ol class="sub" style="margin-left: 272px;">
 							<li>
-								<a target="_blank" href="http://www.uniprot.org/">Search for SWISS-PROT / TrEMBL
+								<a target="_blank" href="https://www.uniprot.org/">Search for SWISS-PROT / TrEMBL
 									proteins</a>
 							</li>
 							<li>
-								<a target="_blank" href="http://www.ncbi.nlm.nih.gov/protein/">Search for NCBI Protein / GenPept
+								<a target="_blank" href="https://www.ncbi.nlm.nih.gov/protein/">Search for NCBI Protein / GenPept
 									proteins</a>
 							</li>
 							<li>
-								<a target="_blank" href="http://www.ensembl.org/index.html">Search for Ensembl proteins</a>
+								<a target="_blank" href="https://www.ensembl.org/">Search for Ensembl proteins</a>
 							</li>
 							<li>
-								<a target="_blank" href="http://www.yeastgenome.org/">Search for Yeast / SGD proteins</a>
+								<a target="_blank" href="https://www.yeastgenome.org/">Search for Yeast / SGD proteins</a>
 							</li>
 						</ol>
 					</li>

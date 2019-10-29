@@ -68,14 +68,14 @@
 			subcellular colocalization.</p>
 		<ul class="home data">
 			<li>
-				<a class="uniprot" href="http://www.uniprot.org/" target="_blank">
+				<a class="uniprot" href="https://www.uniprot.org/" target="_blank">
 					UniProtKB
 					<br />
 					<span style="text-style: italic; font-size: smaller">Protein / Orthology</span>
 				</a>
 			</li>
 			<li>
-				<a class="ncbi" href="http://www.ncbi.nlm.nih.gov/protein/"
+				<a class="ncbi" href="https://www.ncbi.nlm.nih.gov/protein/"
 					target="_blank">
 					NCBI Protein - GenPept/RefSeq
 					<br />
@@ -83,21 +83,21 @@
 				</a>
 			</li>
 			<li>
-				<a class="embl" href="http://www.ensembl.org/" target="_blank">
+				<a class="embl" href="https://www.ensembl.org/" target="_blank">
 					Ensembl Human and Mouse
 					<br />
 					<span style="text-style: italic; font-size: smaller">Protein</span>
 				</a>
 			</li>
 			<li>
-				<a class="sgd" href="http://www.yeastgenome.org/" target="_blank">
+				<a class="sgd" href="https://www.yeastgenome.org/" target="_blank">
 					Yeast - SGD
 					<br />
 					<span style="text-style: italic; font-size: smaller">Protein</span>
 				</a>
 			</li>
 			<li>
-				<a class="ncbi" href="http://www.ncbi.nlm.nih.gov/homologene/"
+				<a class="ncbi" href="https://www.ncbi.nlm.nih.gov/homologene/"
 					target="_blank">
 					NCBI HomoloGene
 					<br />

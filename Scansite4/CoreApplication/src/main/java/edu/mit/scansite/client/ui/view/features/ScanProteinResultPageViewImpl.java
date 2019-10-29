@@ -234,7 +234,7 @@ public class ScanProteinResultPageViewImpl extends ScanProteinResultPageView {
 
             for (DomainPosition domainPosition : domainPositions) {
                 domainDataTable += "</tr><tr><td>" + domainPosition.getName() + "</td>";
-                domainDataTable += "<td><a target=\"_blank\" href=\"http://www.ebi.ac.uk/interpro/entry/"
+                domainDataTable += "<td><a target=\"_blank\" href=\"https://www.ebi.ac.uk/interpro/entry/"
                         + domainPosition.getIPRCode() + "\">"
                         + domainPosition.getIPRCode() + "</a></td>";
                 domainDataTable += "<td>" + domainPosition.getAlternativeName() + "</td>";

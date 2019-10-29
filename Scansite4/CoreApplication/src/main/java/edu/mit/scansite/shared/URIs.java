@@ -11,26 +11,26 @@ import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
  * @author Konstantin Krismer
  */
 public class URIs {
-	public static final String BLAST_DIRECT = "http://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastp&PAGE_TYPE=BlastSearch&QUERY=";
+	public static final String BLAST_DIRECT = "https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastp&PAGE_TYPE=BlastSearch&QUERY=";
 
-	public static final String GENEINFO_GENECARD = "http://www.genecards.org/";
-	public static final String GENEINFO_GENECARD_KEYWORD = "http://www.genecards.org/index.php?path=/Search/keyword/";
-	public static final String GENEINFO_GENECARD_DIRECT = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=";
+	public static final String GENEINFO_GENECARD = "https://www.genecards.org/";
+	public static final String GENEINFO_GENECARD_KEYWORD = "https://www.genecards.org/Search/Keyword?queryString=";
+	public static final String GENEINFO_GENECARD_DIRECT = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=";
 
-	public static final String PFAM_DOMAIN_DIRECT = "http://pfam.sanger.ac.uk/family/";
-	public static final String PFAM_PROTEIN_DIRECT = "http://pfam.sanger.ac.uk/protein/";
+	public static final String PFAM_DOMAIN_DIRECT = "https://pfam.xfam.org/family/";
+	public static final String PFAM_PROTEIN_DIRECT = "https://pfam.xfam.org/protein/";
 
-	public static final String PHOSPHOSITE = "http://www.phosphosite.org/";
-	public static final String PHOSPHOSITE_DIRECT_PROTEIN_URL = "http://www.phosphosite.org/uniprotAccAction.do?id=";
+	public static final String PHOSPHOSITE = "https://www.phosphosite.org/";
+	public static final String PHOSPHOSITE_DIRECT_PROTEIN_URL = "https://www.phosphosite.org/uniprotAccAction.do?id=";
 
-	public static final String UNIPROT = "http://www.uniprot.org/";
-	private static final String UNIPROT_DIRECT = "http://www.uniprot.org/uniprot/";
-	public static final String ENSEMBL = "http://www.ensembl.org/";
-	private static final String ENSEMBL_DIRECT = "http://ensembl.org/Multi/Search/Results?species=all;idx=;q=";
-	public static final String YEAST_SGD = "http://www.yeastgenome.org/";
-	private static final String YEAST_SGD_DIRECT = "http://www.yeastgenome.org/cgi-bin/locus.fpl?locus=";
-	public static final String NCBI_PROTEIN = "http://www.ncbi.nlm.nih.gov/protein/";
-	private static final String NCBI_PROTEIN_DIRECT = "http://www.ncbi.nlm.nih.gov/protein/";
+	public static final String UNIPROT = "https://www.uniprot.org/";
+	private static final String UNIPROT_DIRECT = "https://www.uniprot.org/uniprot/";
+	public static final String ENSEMBL = "https://www.ensembl.org/";
+	private static final String ENSEMBL_DIRECT = "https://ensembl.org/Multi/Search/Results?q=";
+	public static final String YEAST_SGD = "https://www.yeastgenome.org/";
+	private static final String YEAST_SGD_DIRECT = "https://www.yeastgenome.org/locus/";
+	public static final String NCBI_PROTEIN = "https://www.ncbi.nlm.nih.gov/protein/";
+	private static final String NCBI_PROTEIN_DIRECT = "https://www.ncbi.nlm.nih.gov/protein/";
 
 	public static String directUniprotLink(String id) {
 		return UNIPROT_DIRECT + id;

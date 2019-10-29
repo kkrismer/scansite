@@ -38,9 +38,9 @@ public class RunEvidenceInserter {
 			+ "  The GENERIC_LINK has to contain two entries " + EvidenceResource.URI_REPLACEMENT_ACCESSION + " and "
 			+ EvidenceResource.URI_REPLACEMENT_SITE + " that will be replaced\n"
 			+ "  by the program with the protein's site and accession, respectively.\n" + "  Example line:\n"
-			+ "RB_RAT\\tT245\\tPhosphosite\\thttp://www.phosphosite.org/uniprotAccSiteAction.do?id="
+			+ "RB_RAT\\tT245\\tPhosphosite\\thttps://www.phosphosite.org/uniprotAccSiteAction.do?id="
 			+ EvidenceResource.URI_REPLACEMENT_ACCESSION + "&site=" + EvidenceResource.URI_REPLACEMENT_SITE + "\n"
-			+ "  \n" + "  Also, please make sure that a cfg/ directory with the Scansite3-relevant\n"
+			+ "  \n" + "  Also, please make sure that a cfg/ directory with the Scansite4-relevant\n"
 			+ "  configuration files is in your current working directory.\n\n" + "  Example usage:\n"
 			+ "  java -Djava.awt.headless=true -jar thisProgram.jar evidenceData.tsv\n" + "\n";
 

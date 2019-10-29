@@ -107,10 +107,10 @@
             <li>
                 To show domains recognized in your sequence, check the box labeled
                 "Show predicted domains". Otherwise, uncheck it. Scansite uses
-                <a href="http://www.ebi.ac.uk/Tools/pfa/iprscan/" target="_blank">InterProScan</a>
+                <a href="https://www.ebi.ac.uk/interpro/search/sequence/" target="_blank">InterProScan</a>
                 to find a sequence's PFAM-domains. For this reason, the domain positions
                 that are showed on the results page may differ slightly from domains
-                the <a href="http://pfam.sanger.ac.uk/" target="_blank">PFAM web page</a> returns.
+                the <a href="http://pfam.xfam.org/" target="_blank">PFAM web page</a> returns.
             </li>
             <li>If you do not want to have your result sites compared to the default reference
                 proteome (Vertebrates from Swissprot) you can check "Use Non-Standard Reference Proteome".
@@ -211,7 +211,7 @@
                     GeneCard-column takes
                     you to that
                     entry on the
-                    <a href="http://www.genecards.org/" target="_blank">Gene Card website</a>
+                    <a href="https://www.genecards.org/" target="_blank">Gene Card website</a>
                     .
                     The links in the sequence-column displays the full protein
                     sequence
@@ -221,7 +221,7 @@
                     displays a link to
                     phosphosite if the
                     protein's site (e.g. T238) has an entry in
-                    <a href="http://www.phosphosite.org/" target="_blank">PhosphositePlus</a>
+                    <a href="https://www.phosphosite.org/" target="_blank">PhosphositePlus</a>
                     . Please note that
                     this reference is not motif specific, i.e. a
                     Phosphosite-site that
