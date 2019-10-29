@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>CoreApplication</artifactId>
@@ -150,18 +150,18 @@
         <repository>
             <id>mvn-public</id>
             <name>MVNRepository</name>
-            <url>http://mvnrepository.com</url>
+            <url>https://mvnrepository.com/</url>
             <layout>default</layout>
         </repository>
         <repository>
             <id>maven-central</id>
             <name>Maven Central Repo</name>
-            <url>http://repo.maven.apache.org/maven2/</url>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
         <repository>
             <id>maven-central2</id>
             <name>Maven Central Repo</name>
-            <url>http://repo1.maven.org/maven2/</url>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
 
@@ -169,7 +169,7 @@
         <pluginRepository>
             <id>maven-central</id>
             <name>Maven Central Plugins</name>
-            <url>http://repo.maven.apache.org/maven2/</url>
+            <url>https://repo.maven.apache.org/maven2/</url>
             <layout>default</layout>
         </pluginRepository>
     </pluginRepositories>
