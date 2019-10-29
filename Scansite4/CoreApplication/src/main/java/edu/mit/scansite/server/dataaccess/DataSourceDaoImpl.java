@@ -230,7 +230,7 @@ public class DataSourceDaoImpl extends DaoImpl implements DataSourceDao {
 	public Map<DataSource, Integer> getDataSourceSizes() throws DataAccessException {
 
 		try {
-			List<DataSource> dataSources = getAll(true);
+			List<DataSource> dataSources = getAll(false);
 			Map<DataSource, Integer> sizes = new HashMap<>();
 			boolean isInitialized = true;
 			CommandConstants cc = CommandConstants.instance(dbConstantsConfig);

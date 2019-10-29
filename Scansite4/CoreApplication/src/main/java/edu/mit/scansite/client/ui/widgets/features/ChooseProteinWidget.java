@@ -86,8 +86,8 @@ public class ChooseProteinWidget extends ScansiteWidget implements
 	@UiField
 	TextArea proteinSequence;
 
-	public @UiConstructor ChooseProteinWidget(final boolean initDataSources) {
-		dataSourceWidget = new DataSourceWidget(initDataSources);
+	public @UiConstructor ChooseProteinWidget(final boolean initDataSources, final boolean primaryDataSourcesOnly) {
+		dataSourceWidget = new DataSourceWidget(initDataSources, primaryDataSourcesOnly);
 		identifier.setAccessKey('/');
 		identifier
 				.setLimit(ScansiteConstants.MAX_SUGGESTIONS_PROTEIN_ACCESSIONS);

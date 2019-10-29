@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:w="urn:import:edu.mit.scansite.client.ui.widgets.features"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:w="urn:import:edu.mit.scansite.client.ui.widgets.features"
 	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Calculate molecular weight and isoelectric point</h2>
@@ -12,8 +13,9 @@
 		<fieldset>
 			<legend>Calculate Molecular Weight and Isoelectric Point</legend>
 			<ol>
-				<w:ChooseProteinWidget ui:field="chooseProteinWidget"
-					initDataSources="true" />
+				<w:ChooseProteinWidget
+					ui:field="chooseProteinWidget" initDataSources="true"
+					primaryDataSourcesOnly="false" />
 				<li>
 					<label for="{maxSites.getElement.getId}">
 						Maximum Number of Phophorylation Sites for which
@@ -24,7 +26,8 @@
 				</li>
 				<li>
 					<g:SubmitButton ui:field="submitButton">Submit</g:SubmitButton>
-					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+					<wg:MessageDisplayWidget
+						ui:field="messageDisplayWidget" />
 				</li>
 			</ol>
 		</fieldset>

@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wf="urn:import:edu.mit.scansite.client.ui.widgets.features"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:wf="urn:import:edu.mit.scansite.client.ui.widgets.features"
 	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Search a Sequence Database for Motifs</h2>
@@ -9,25 +10,31 @@
 			<ol>
 				<li>
 					<label>Choose search method</label>
-					<g:RadioButton ui:field="searchMethodDatabaseMotifRadioButton"
+					<g:RadioButton
+						ui:field="searchMethodDatabaseMotifRadioButton"
 						ui:name="searchMethod" checked="true">Database motif</g:RadioButton>
-					<g:RadioButton ui:field="searchMethodDatabaseMotifsRadioButton"
+					<g:RadioButton
+						ui:field="searchMethodDatabaseMotifsRadioButton"
 						ui:name="searchMethod">Multiple database motifs</g:RadioButton>
-					<g:RadioButton ui:field="searchMethodUserDefinedMotifsRadioButton"
+					<g:RadioButton
+						ui:field="searchMethodUserDefinedMotifsRadioButton"
 						ui:name="searchMethod">User defined motifs</g:RadioButton>
-					<g:RadioButton ui:field="searchMethodQuickMotifsRadioButton"
+					<g:RadioButton
+						ui:field="searchMethodQuickMotifsRadioButton"
 						ui:name="searchMethod">Quick motif</g:RadioButton>
 				</li>
 				<li id="scanDbDbMotif">
 					<wf:ChooseSelectedMotifsWidget
-						ui:field="chooseSelectedMotifWidget" allowMultipleSelection="false"
-						showGroups="false" legend="Database motif"
+						ui:field="chooseSelectedMotifWidget"
+						allowMultipleSelection="false" showGroups="false"
+						legend="Database motif"
 						motifClassWidgetRadioButtonGroupName="chooseSelectedMotifWidgetRadioButtonGroupName" />
 				</li>
 				<li id="scanDbDbMotifs" style="display: none;">
 					<wf:ChooseSelectedMotifsWidget
-						ui:field="chooseSelectedMotifsWidget" allowMultipleSelection="true"
-						showGroups="false" legend="Multiple database motifs"
+						ui:field="chooseSelectedMotifsWidget"
+						allowMultipleSelection="true" showGroups="false"
+						legend="Multiple database motifs"
 						motifClassWidgetRadioButtonGroupName="chooseSelectedMotifsWidgetRadioButtonGroupName" />
 				</li>
 				<li id="scanDbUploadMotif" style="display: none;">
@@ -35,15 +42,17 @@
 						ui:field="chooseUserFileMotifWidget" />
 				</li>
 				<li id="scanDbQuickMotif" style="display: none;">
-					<wf:ChooseQuickMotifWidget ui:field="chooseQuickMotifWidget" />
+					<wf:ChooseQuickMotifWidget
+						ui:field="chooseQuickMotifWidget" />
 				</li>
 				<li>
-					<wf:DataSourceWidget ui:field="dataSourceWidget"
-						initDataSources="true" />
+					<wf:DataSourceWidget
+						ui:field="dataSourceWidget" initDataSources="true"
+						primaryDataSourcesOnly="true" />
 				</li>
 				<li>
-					<wf:DbRestrictionWidget ui:field="dbRestrictionWidget"
-						showSequenceRegExField="true" />
+					<wf:DbRestrictionWidget
+						ui:field="dbRestrictionWidget" showSequenceRegExField="true" />
 				</li>
 				<li>
 					<label for="outputListSizeListBoxId">
@@ -60,14 +69,16 @@
 				</li>
 				<li>
 					<label
-							for="{previouslyMappedSitesOnlyCheckBox.getElement.getFirstChildElement.getId}">Show only previously mapped sites
+						for="{previouslyMappedSitesOnlyCheckBox.getElement.getFirstChildElement.getId}">Show only previously mapped sites
 					</label>
-					<g:CheckBox ui:field="previouslyMappedSitesOnlyCheckBox" enabled="true" />
+					<g:CheckBox ui:field="previouslyMappedSitesOnlyCheckBox"
+						enabled="true" />
 				</li>
 				<li>
 					<g:SubmitButton ui:field="submitButton">Submit</g:SubmitButton>
 					<span id="waitScan" class="waitImage" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+					<wg:MessageDisplayWidget
+						ui:field="messageDisplayWidget" />
 				</li>
 			</ol>
 		</fieldset>

@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wf="urn:import:edu.mit.scansite.client.ui.widgets.features"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:wf="urn:import:edu.mit.scansite.client.ui.widgets.features"
 	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general"
 	xmlns:wm="urn:import:edu.mit.scansite.client.ui.widgets.motifs">
 	<g:HTMLPanel>
@@ -9,8 +10,10 @@
 			<legend>Predict cellular localization of a protein</legend>
 			<ol>
 				<li>
-					<wf:DataSourceWidget ui:field="localizationDataSourceWidget"
-						initDataSources="true" dataSourceTypeShortName="localization" />
+					<wf:DataSourceWidget
+						ui:field="localizationDataSourceWidget" initDataSources="true"
+						primaryDataSourcesOnly="false"
+						dataSourceTypeShortName="localization" />
 				</li>
 				<li>
 					<label>Choose scope</label>
@@ -23,8 +26,9 @@
 					<fieldset>
 						<legend>Proteins</legend>
 						<ol>
-							<wf:ChooseProteinWidget ui:field="chooseProteinWidget"
-								initDataSources="false" enableSequenceInput="false" />
+							<wf:ChooseProteinWidget
+								ui:field="chooseProteinWidget" initDataSources="false"
+								primaryDataSourcesOnly="false" enableSequenceInput="false" />
 						</ol>
 					</fieldset>
 				</li>
@@ -33,7 +37,8 @@
 						<legend>Motifs</legend>
 						<ol>
 							<li>
-								<wm:MotifClassWidget ui:field="motifClassWidget"
+								<wm:MotifClassWidget
+									ui:field="motifClassWidget"
 									radioButtonGroupName="locMotifsWidgetRadioButton" />
 							</li>
 						</ol>
@@ -42,7 +47,8 @@
 				<li>
 					<g:SubmitButton ui:field="submitButton">Submit</g:SubmitButton>
 					<span id="waitScan" class="waitImage" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+					<wg:MessageDisplayWidget
+						ui:field="messageDisplayWidget" />
 				</li>
 			</ol>
 		</fieldset>

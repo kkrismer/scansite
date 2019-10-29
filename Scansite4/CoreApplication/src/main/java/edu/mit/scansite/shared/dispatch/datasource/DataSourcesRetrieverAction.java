@@ -19,13 +19,13 @@ public class DataSourcesRetrieverAction implements
   }
 
   public DataSourcesRetrieverAction(boolean primaryDataSourcesOnly) {
-    this.primaryDataSourcesOnly = primaryDataSourcesOnly;
+    this.setPrimaryDataSourcesOnly(primaryDataSourcesOnly);
   }
 
   public DataSourcesRetrieverAction(DataSourceType type,
       boolean primaryDataSourcesOnly) {
     this.setType(type);
-    this.primaryDataSourcesOnly = primaryDataSourcesOnly;
+    this.setPrimaryDataSourcesOnly(primaryDataSourcesOnly);
   }
 
   public boolean isPrimaryDataSourcesOnly() {

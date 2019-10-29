@@ -59,6 +59,7 @@ public class DataSourceWidget extends ScansiteWidget implements
 	private Map<String, DataSourceType> dataSourceTypes = new HashMap<>();
 	private DataSource dataSource;
 	private String dataSourceTypeShortName = "proteins";
+	private final boolean primaryDataSourcesOnly;
 
 	@UiField
 	LabelElement dataSourceLabel;
@@ -66,21 +67,22 @@ public class DataSourceWidget extends ScansiteWidget implements
 	@UiField
 	ListBox dataSourceListBox;
 
-	public @UiConstructor DataSourceWidget(final boolean initDataSources) {
+	public @UiConstructor DataSourceWidget(final boolean initDataSources, final boolean primaryDataSourcesOnly) {
+		this.primaryDataSourcesOnly = primaryDataSourcesOnly;
 		initWidget(uiBinder.createAndBindUi(this));
 		runCommandOnLoad(new Command() {
 			@Override
 			public void execute() {
 				dataSourceListBox.getElement().setId("dataSourceListBoxId");
 				if (initDataSources) {
-					initMappings(true);
+					initMappings(true, primaryDataSourcesOnly);
 				}
 				setDataSourceLabel();
 			}
 		});
 	}
 
-	private void initMappings(final boolean retrieveDataSources) {
+	private void initMappings(final boolean retrieveDataSources, final boolean primaryDataSourcesOnly) {
 		dataSourceListBox.setEnabled(false);
 		dispatch.execute(new DataSourceTypesRetrieverAction(),
 				new AsyncCallback<DataSourceTypesRetrieverResult>() {
@@ -108,7 +110,7 @@ public class DataSourceWidget extends ScansiteWidget implements
 							dispatch.execute(
 									new DataSourcesRetrieverAction(
 											dataSourceTypes
-													.get(dataSourceTypeShortName)),
+													.get(dataSourceTypeShortName), primaryDataSourcesOnly),
 									new AsyncCallback<DataSourcesRetrieverResult>() {
 										@Override
 										public void onFailure(Throwable caught) {
@@ -239,7 +241,7 @@ public class DataSourceWidget extends ScansiteWidget implements
 	public void setDataSourceTypeShortName(String dataSourceTypeShortName) {
 		this.dataSourceTypeShortName = dataSourceTypeShortName;
 		setDataSourceLabel();
-		initMappings(true);
+		initMappings(true, this.primaryDataSourcesOnly);
 	}
 
 	@Override

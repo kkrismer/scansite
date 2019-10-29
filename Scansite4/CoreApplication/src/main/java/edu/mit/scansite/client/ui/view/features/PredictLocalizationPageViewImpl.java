@@ -77,7 +77,7 @@ public class PredictLocalizationPageViewImpl extends
 	}
 
 	private void initDataSources() {
-		dispatch.execute(new DataSourcesRetrieverAction(),
+		dispatch.execute(new DataSourcesRetrieverAction(false),
 				new AsyncCallback<DataSourcesRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {

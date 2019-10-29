@@ -123,7 +123,7 @@ public class MotifMgmtPagePresenter extends Presenter implements
 	}
 
 	private void retrieveDataSources() {
-		dispatch.execute(new DataSourcesRetrieverAction(),
+		dispatch.execute(new DataSourcesRetrieverAction(false),
 				new AsyncCallback<DataSourcesRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {
