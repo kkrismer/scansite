@@ -12,6 +12,7 @@ public class LightWeightMotifRetrieverAction implements
 
 	private String userSessionId = "";
 	private MotifClass motifClass = MotifClass.MAMMALIAN;
+	private boolean onlyUserMotifs = false;
 
 	public LightWeightMotifRetrieverAction() {
 	}
@@ -20,6 +21,13 @@ public class LightWeightMotifRetrieverAction implements
 			String userSessionId) {
 		this.userSessionId = userSessionId;
 		this.motifClass = motifClass;
+	}
+
+	public LightWeightMotifRetrieverAction(MotifClass motifClass,
+			String userSessionId, boolean onlyUserMotifs) {
+		this.userSessionId = userSessionId;
+		this.motifClass = motifClass;
+		this.onlyUserMotifs = onlyUserMotifs;
 	}
 
 	public MotifClass getMotifClass() {
@@ -36,5 +44,13 @@ public class LightWeightMotifRetrieverAction implements
 
 	public void setUserSessionId(String userSessionId) {
 		this.userSessionId = userSessionId;
+	}
+
+	public boolean getOnlyUserMotifs() {
+		return onlyUserMotifs;
+	}
+
+	public void setOnlyUserMotifs(boolean onlyUserMotifs) {
+		this.onlyUserMotifs = onlyUserMotifs;
 	}
 }

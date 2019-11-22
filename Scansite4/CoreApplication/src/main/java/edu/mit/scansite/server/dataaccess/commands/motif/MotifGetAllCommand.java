@@ -28,21 +28,24 @@ public class MotifGetAllCommand extends DbQueryCommand<List<Motif>> {
 	private Set<String> motifNicks;
 	private MotifClass motifClass = MotifClass.MAMMALIAN;
 	private User user = null;
+	private boolean onlyUserMotifs = false;
 
 	public MotifGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, Set<String> motifNicks,
-			MotifClass motifClass, User user) {
+			MotifClass motifClass, User user, boolean onlyUserMotifs) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.motifNicks = motifNicks;
 		this.user = user;
 		this.motifClass = motifClass;
+		this.onlyUserMotifs = onlyUserMotifs;
 	}
 
 	public MotifGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int groupId,
-			MotifClass motifClass, User user) {
+			MotifClass motifClass, User user, boolean onlyUserMotifs) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.groupId = groupId;
 		this.user = user;
 		this.motifClass = motifClass;
+		this.onlyUserMotifs = onlyUserMotifs;
 	}
 
 	@Override
@@ -120,8 +123,14 @@ public class MotifGetAllCommand extends DbQueryCommand<List<Motif>> {
 			// collaborators and advanced users only see public motifs and their own motifs
 			sql.append(CommandConstants.AND).append(" ( ");
 			sql.append(c.getcMotifsIsPublic()).append(CommandConstants.EQ).append(1).append(CommandConstants.OR);
-			sql.append(c.getcUsersEmail()).append(CommandConstants.EQ).append(CommandConstants.enquote(user.getEmail()));
+			sql.append(c.getcUsersEmail()).append(CommandConstants.EQ)
+					.append(CommandConstants.enquote(user.getEmail()));
 			sql.append(" ) ");
+		}
+		if (onlyUserMotifs) {
+			String email = user == null ? "" : user.getEmail();
+			sql.append(CommandConstants.AND).append(c.getcUsersEmail()).append(CommandConstants.EQ)
+					.append(CommandConstants.enquote(email));
 		}
 		if (groupId != null) {
 			sql.append(CommandConstants.AND).append(c.getcMotifGroupsId()).append(CommandConstants.EQ).append(groupId);

@@ -84,7 +84,8 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 	}
 
 	private void retrieveMotifs(MotifClass motifClass) {
-		dispatch.execute(new LightWeightMotifRetrieverAction(motifClass, user == null ? "" : user.getSessionId()),
+		boolean isAdmin = user == null ? false : user.isAdmin();
+		dispatch.execute(new LightWeightMotifRetrieverAction(motifClass, user == null ? "" : user.getSessionId(), !isAdmin),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR,

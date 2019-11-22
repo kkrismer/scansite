@@ -45,7 +45,7 @@ public class LightWeightMotifRetrieverHandler
 			throws DispatchException {
 		try {
 			List<Motif> motifs = ServiceLocator.getDaoFactory().getMotifDao().getAll(action.getMotifClass(),
-					loginHandler.getUserBySessionId(action.getUserSessionId()));
+					loginHandler.getUserBySessionId(action.getUserSessionId()), action.getOnlyUserMotifs());
 			List<LightWeightMotif> lightWeightMotifs = new LinkedList<LightWeightMotif>();
 			for (Motif motif : motifs) {
 				lightWeightMotifs

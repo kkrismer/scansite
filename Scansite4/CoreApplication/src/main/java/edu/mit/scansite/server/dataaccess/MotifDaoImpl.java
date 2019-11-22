@@ -90,7 +90,31 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 */
 	@Override
 	public List<Motif> getAll(MotifClass motifClass, User user) throws DataAccessException {
-		return getAll(null, motifClass, user);
+		return getAll(null, motifClass, user, false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.MotifDao#getAll(edu.mit.scansite.shared
+	 * .transferobjects.MotifClass, boolean)
+	 */
+	@Override
+	public List<Motif> getAll(MotifClass motifClass, User user, boolean onlyUserMotifs) throws DataAccessException {
+		return getAll(null, motifClass, user, onlyUserMotifs);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.mit.scansite.server.dataaccess.MotifDao#getAll(edu.mit.scansite.shared
+	 * .transferobjects.MotifClass, boolean)
+	 */
+	@Override
+	public List<Motif> getAll(Set<String> motifNicks, MotifClass motifClass, User user) throws DataAccessException {
+		return getAll(motifNicks, motifClass, user, false);
 	}
 
 	/*
@@ -100,14 +124,14 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 * edu.mit.scansite.shared.transferobjects.MotifClass, boolean)
 	 */
 	@Override
-	public List<Motif> getAll(Set<String> motifNicks, MotifClass motifClass, User user)
+	public List<Motif> getAll(Set<String> motifNicks, MotifClass motifClass, User user, boolean onlyUserMotifs)
 			throws DataAccessException {
 		if (motifClass == null) {
 			motifClass = MotifClass.MAMMALIAN;
 		}
 		try {
 			MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig, dbConstantsConfig, motifNicks, motifClass,
-					user);
+					user, onlyUserMotifs);
 
 			List<Motif> motifs = cmd.execute();
 			List<LightWeightMotifGroup> groups = ServiceLocator.getDaoFactory().getGroupsDao().getAllLightWeight();
@@ -177,7 +201,7 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	public List<Motif> getByGroup(LightWeightMotifGroup group, MotifClass motifClass, User user)
 			throws DataAccessException {
 		MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig, dbConstantsConfig, group.getId(), motifClass,
-				user);
+				user, false);
 		try {
 			List<Motif> motifs = cmd.execute();
 
