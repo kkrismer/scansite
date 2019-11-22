@@ -40,21 +40,18 @@ public class MotifLocalizationGetAllCommand extends DbQueryCommand<Map<Motif, Li
 		Map<String, List<Motif>> lookUp = new HashMap<String, List<Motif>>();
 		for (Motif motif : motifs) {
 			Identifier identifier;
-			try {
-				identifier = extractCompatibleIdentifier(localizationDataSource, motif);
+			identifier = extractCompatibleIdentifier(localizationDataSource, motif);
+			if (identifier != null) {
 				if (!lookUp.containsKey(identifier.getValue())) {
 					lookUp.put(identifier.getValue(), new LinkedList<Motif>());
 				}
 				lookUp.get(identifier.getValue()).add(motif);
-			} catch (DataAccessException e) {
-				logger.error(e.getMessage(), e);
 			}
 		}
 		return lookUp;
 	}
 
-	private Identifier extractCompatibleIdentifier(DataSource localizationDataSource, Motif motif)
-			throws DataAccessException {
+	private Identifier extractCompatibleIdentifier(DataSource localizationDataSource, Motif motif) {
 		if (motif.getId() > 0 && motif.getIdentifiers() != null && !motif.getIdentifiers().isEmpty()) {
 			for (Identifier identifier : motif.getIdentifiers()) {
 				if (identifier.getType().getId() == localizationDataSource.getIdentifierType().getId()) {
@@ -62,7 +59,7 @@ public class MotifLocalizationGetAllCommand extends DbQueryCommand<Map<Motif, Li
 				}
 			}
 		}
-		throw new DataAccessException("no localization information: incompatible motif identifiers");
+		return null;
 	}
 
 	@Override
