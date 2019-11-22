@@ -48,7 +48,7 @@ public class OrthologScanMotifHandler implements ActionHandler<OrthologScanMotif
 				// specified
 				return feature.scanOrthologsByMotifGroup(action.getSitePosition(), action.getMotifGroup(),
 						action.getOrthologyDataSource(), action.getProtein(), action.getStringency(),
-						action.getAlignmentRadius(), !loginHandler.isSessionValidLogin(action.getUserSessionId()));
+						action.getAlignmentRadius(), loginHandler.getUserBySessionId(action.getUserSessionId()));
 			} else {
 				// protein scan form: orthology data source not specified,
 				// identifier
@@ -60,7 +60,7 @@ public class OrthologScanMotifHandler implements ActionHandler<OrthologScanMotif
 					// compatible orthology data source available
 					return feature.scanOrthologsByMotifGroup(action.getSitePosition(), action.getMotifGroup(),
 							orthologyDataSources.get(0), action.getProtein(), action.getStringency(),
-							action.getAlignmentRadius(), !loginHandler.isSessionValidLogin(action.getUserSessionId()));
+							action.getAlignmentRadius(), loginHandler.getUserBySessionId(action.getUserSessionId()));
 				} else {
 					// no compatible orthology data source available, choose
 					// first data

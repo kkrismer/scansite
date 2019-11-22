@@ -20,6 +20,7 @@ import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.shared.transferobjects.Localization;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Konstantin Krismer
@@ -56,7 +57,7 @@ public class PredictLocalizationFeature {
 	}
 
 	public PredictLocalizationResult doPredictMotifsLocalization(DataSource localizationDataSource,
-			MotifClass motifClass) throws DataAccessException {
+			MotifClass motifClass, User user) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 		LocalizationDao dao = factory.getLocalizationDao();
 		MotifDao motifDao = factory.getMotifDao();
@@ -66,7 +67,7 @@ public class PredictLocalizationFeature {
 		result.setMotifClass(motifClass);
 		try {
 			result.setTotalProteinLocalizations(dao.getLocalizationCount(localizationDataSource));
-			List<Motif> motifs = motifDao.getAll(motifClass, true);
+			List<Motif> motifs = motifDao.getAll(motifClass, user);
 			Map<Motif, LightWeightLocalization> localizations = dao
 					.retrieveLocalizationsForMotifs(localizationDataSource, motifs);
 			if (localizations == null) {

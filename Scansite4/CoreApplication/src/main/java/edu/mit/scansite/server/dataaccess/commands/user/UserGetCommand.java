@@ -7,6 +7,7 @@ import java.util.Properties;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.User;
+import edu.mit.scansite.shared.transferobjects.User.UserGroup;
 
 /**
  * @author Tobieh
@@ -22,9 +23,8 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	private String cEmail;
 	private String cFirstName;
 	private String cLastName;
-	private String cIsAdmin;
-	private String cIsSuperAdmin;
 	private String cPassword;
+	private String cUserGroup;
 
 	public UserGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String email, String password) {
 		super(dbAccessConfig, dbConstantsConfig);
@@ -36,8 +36,7 @@ public class UserGetCommand extends DbQueryCommand<User> {
 		cFirstName = c.getcUsersFirstName();
 		cLastName = c.getcUsersLastName();
 		cPassword = c.getcUsersPassword();
-		cIsAdmin = c.getcUsersIsAdmin();
-		cIsSuperAdmin = c.getcUsersIsSuperAdmin();
+		cUserGroup = c.getcUsersUserGroup();
 	}
 
 	public UserGetCommand(Properties dbAccessConfig, Properties dbConstantsConfig, String email) {
@@ -51,7 +50,7 @@ public class UserGetCommand extends DbQueryCommand<User> {
 		try {
 			if (result.next()) {
 				user = new User(result.getString(cEmail), result.getString(cFirstName), result.getString(cLastName), "",
-						result.getBoolean(cIsAdmin), result.getBoolean(cIsSuperAdmin));
+						UserGroup.valueOf(result.getString(cUserGroup)));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -64,8 +63,8 @@ public class UserGetCommand extends DbQueryCommand<User> {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName).append(c.COMMA).append(cLastName)
-				.append(c.COMMA).append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin).append(c.FROM).append(tUsers)
-				.append(c.WHERE).append(cEmail).append(" LIKE \"").append(email).append('\"');
+				.append(c.COMMA).append(cUserGroup).append(c.FROM).append(tUsers).append(c.WHERE).append(cEmail)
+				.append(" LIKE \"").append(email).append('\"');
 		if (withPassword) {
 			sql.append(c.AND).append(" PASSWORD(\"").append(password).append("\")").append(c.LIKE).append(cPassword);
 		}

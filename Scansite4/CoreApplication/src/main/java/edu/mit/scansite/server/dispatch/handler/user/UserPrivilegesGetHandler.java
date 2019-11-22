@@ -31,7 +31,7 @@ public class UserPrivilegesGetHandler implements ActionHandler<UserPrivilegesAct
 		try {
 			User user = ServiceLocator.getDaoFactory().getUserDao().get(action.getUserEmail());
 			if (user != null) {
-				return new UserPrivilegesResult(user.isAdmin(), user.isSuperAdmin());
+				return new UserPrivilegesResult(user.isCollaborator(), user.isAdmin());
 			} else {
 				return new UserPrivilegesResult(false, false);
 			}

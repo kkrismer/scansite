@@ -207,7 +207,7 @@ public class ChooseSelectedMotifsWidget extends ChooseMotifWidget implements
 		motifsListBox.clear();
 		showSymbol(ImagePaths.getStaticImagePath(ImagePaths.WAIT_SMALL));
 		dispatch.execute(new LightWeightMotifRetrieverAction(motifClass,
-				user != null ? user.getSessionId() : ""),
+				user == null ? "" : user.getSessionId()),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -248,7 +248,7 @@ public class ChooseSelectedMotifsWidget extends ChooseMotifWidget implements
 		motifGroupsListBox.clear();
 		showSymbol(ImagePaths.getStaticImagePath(ImagePaths.WAIT_SMALL));
 		dispatch.execute(new MotifGroupRetrieverAction(motifClass,
-				user != null ? user.getSessionId() : ""),
+				user == null ? "" : user.getSessionId()),
 				new AsyncCallback<MotifGroupRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {

@@ -105,7 +105,7 @@ public class NewsMgmtPageViewImpl extends NewsMgmtPageView {
 	}
 
 	private void applyUserPrivileges() {
-		if (user == null || (!user.isAdmin() && !user.isSuperAdmin())) {
+		if (user == null || (!user.isCollaborator() && !user.isAdmin())) {
 			History.newItem(NavigationEvent.PageId.ADMIN.getId(), true);
 		}
 	}

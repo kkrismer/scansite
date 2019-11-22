@@ -54,7 +54,7 @@ public class ScanDatabasePagePresenter extends Presenter implements
 
 		DatabaseScanAction action = new DatabaseScanAction(motifSelection,
 				dataSource, restrictionProperties, outputListSize, previouslyMappedSitesOnly,
-				user != null ? user.getSessionId() : "");
+				user == null ? "" : user.getSessionId());
 		dispatch.execute(action, new AsyncCallback<DatabaseScanResult>() {
 			@Override
 			public void onFailure(Throwable caught) {

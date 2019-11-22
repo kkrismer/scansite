@@ -1,17 +1,24 @@
 package edu.mit.scansite.webservice.proteinscan;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+
 import edu.mit.scansite.server.features.ProteinScanFeature;
 import edu.mit.scansite.shared.DataAccessException;
-import edu.mit.scansite.shared.transferobjects.*;
+import edu.mit.scansite.shared.transferobjects.DataSource;
+import edu.mit.scansite.shared.transferobjects.HistogramStringency;
+import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
+import edu.mit.scansite.shared.transferobjects.MotifClass;
+import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.ScanResultSite;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.webservice.WebService;
 import edu.mit.scansite.webservice.exception.ScansiteWebServiceException;
 import edu.mit.scansite.webservice.transferobjects.MotifSite;
 import edu.mit.scansite.webservice.transferobjects.ProteinScanResult;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Tobieh
@@ -29,7 +36,7 @@ public class ProteinScanWebService extends WebService {
 
 		// check motif input
 		MotifClass mc = MotifClass.getDbValue(motifClass.toUpperCase());
-		
+
 		if (StringUtils.isBlank(dataSourceShortName)) {
 			dataSourceShortName = "swissprot";
 		}
@@ -58,7 +65,7 @@ public class ProteinScanWebService extends WebService {
 		motifSelection.setMotifClass(mc);
 		final boolean showDomains = false;
 		final boolean doCreateFiles = false;
-		final boolean publicOnly = true;
+		final User user = null;
 		final String realPath = null; // only necessary if doCreateFiles or if showDomains
 
 		try {
@@ -66,7 +73,7 @@ public class ProteinScanWebService extends WebService {
 
 			edu.mit.scansite.shared.dispatch.features.ProteinScanResult res = feature.doProteinScan(protein,
 					motifSelection, stringency, showDomains, dataSourceShortName, referenceProteome,
-					localizationDataSource, doCreateFiles, publicOnly, realPath);
+					localizationDataSource, doCreateFiles, user, realPath);
 
 			if (res.isSuccess()) {
 				ProteinScanResult result = new ProteinScanResult();

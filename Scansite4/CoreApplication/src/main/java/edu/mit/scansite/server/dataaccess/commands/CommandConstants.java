@@ -41,9 +41,8 @@ public class CommandConstants {
 	private String cUsersFirstName;
 	private String cUsersLastName;
 	private String cUsersPassword;
-	private String cUsersIsAdmin;
-	private String cUsersIsSuperAdmin;
-
+	private String cUsersUserGroup;
+	
 	private String cNewsId;
 	private String cNewsTitle;
 	private String cNewsText;
@@ -240,8 +239,7 @@ public class CommandConstants {
 		cUsersFirstName = cfgReader.get("T_users_C_firstName");
 		cUsersLastName = cfgReader.get("T_users_C_lastName");
 		cUsersPassword = cfgReader.get("T_users_C_password");
-		cUsersIsAdmin = cfgReader.get("T_users_C_isAdmin");
-		cUsersIsSuperAdmin = cfgReader.get("T_users_C_isSuperAdmin");
+		cUsersUserGroup = cfgReader.get("T_users_C_userGroup");
 
 		// Columns in T_news
 		cNewsId = cfgReader.get("T_news_C_id");
@@ -529,12 +527,8 @@ public class CommandConstants {
 		return cUsersLastName;
 	}
 
-	public String getcUsersIsAdmin() {
-		return cUsersIsAdmin;
-	}
-
-	public String getcUsersIsSuperAdmin() {
-		return cUsersIsSuperAdmin;
+	public String getcUsersUserGroup() {
+		return cUsersUserGroup;
 	}
 
 	public String getcUsersPassword() {

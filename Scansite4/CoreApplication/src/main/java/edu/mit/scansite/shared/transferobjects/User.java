@@ -14,27 +14,27 @@ import edu.mit.scansite.shared.util.Formatter;
  */
 public class User implements IsSerializable, Comparable<User> {
 
+	public enum UserGroup {
+		ADMIN, COLLABORATOR, ADVANCEDUSER;
+	}
+
 	private Formatter formatter = new Formatter();
 
 	private String email = "";
 	private String firstName = "";
 	private String lastName = "";
 	private String password = "";
-	private boolean isAdmin = false;
-	private boolean isSuperAdmin = false;
+	private UserGroup userGroup = UserGroup.ADVANCEDUSER;
 
 	public User() {
 	}
 
-	public User(String email, String firstName, String lastName,
-			String password, boolean isAdmin, boolean isSuperAdmin) {
-
-		setEmail(email);
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-		this.setAdmin(isAdmin);
-		this.setSuperAdmin(isSuperAdmin);
+	public User(String email, String firstName, String lastName, String password, UserGroup userGroup) {
+		this.setEmail(email);
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+		this.setPassword(password);
+		this.setUserGroup(userGroup);
 	}
 
 	public String getEmail() {
@@ -69,6 +69,14 @@ public class User implements IsSerializable, Comparable<User> {
 		this.password = password.trim();
 	}
 
+	public UserGroup getUserGroup() {
+		return this.userGroup;
+	}
+
+	public void setUserGroup(UserGroup userGroup) {
+		this.userGroup = userGroup;
+	}
+
 	public String getSessionId() {
 		String id = email + "scansiteSalt";
 		MessageDigest m;
@@ -81,6 +89,18 @@ public class User implements IsSerializable, Comparable<User> {
 		return id;
 	}
 
+	public boolean isAdmin() {
+		return this.userGroup == UserGroup.ADMIN;
+	}
+
+	public boolean isCollaborator() {
+		return this.userGroup == UserGroup.COLLABORATOR;
+	}
+
+	public boolean isAdvancedUser() {
+		return this.userGroup == UserGroup.ADVANCEDUSER;
+	}
+
 	@Override
 	public int compareTo(User o) {
 		String i = this.firstName;
@@ -90,8 +110,7 @@ public class User implements IsSerializable, Comparable<User> {
 		String u = o.getFirstName();
 		if (i != null && u != null) {
 			int compareFirstName = i.compareToIgnoreCase(u);
-			if (compareFirstName == 0 && this.lastName != null
-					&& o.lastName != null) {
+			if (compareFirstName == 0 && this.lastName != null && o.lastName != null) {
 				return this.lastName.compareToIgnoreCase(o.lastName);
 			} else {
 				return compareFirstName;
@@ -112,35 +131,15 @@ public class User implements IsSerializable, Comparable<User> {
 		return firstName + " " + lastName;
 	}
 
-	public boolean isSuperAdmin() {
-		return isSuperAdmin;
-	}
-
-	public void setSuperAdmin(boolean isSuperAdmin) {
-		this.isSuperAdmin = isSuperAdmin;
-	}
-
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((email == null) ? 0 : email.toLowerCase().hashCode());
-		result = prime
-				* result
-				+ ((firstName == null) ? 0 : firstName.toLowerCase().hashCode());
-		result = prime * result + (isAdmin ? 1231 : 1237);
-		result = prime * result + (isSuperAdmin ? 1231 : 1237);
-		result = prime * result
-				+ ((lastName == null) ? 0 : lastName.toLowerCase().hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((userGroup == null) ? 0 : userGroup.hashCode());
 		return result;
 	}
 
@@ -156,21 +155,24 @@ public class User implements IsSerializable, Comparable<User> {
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		} else if (!email.equalsIgnoreCase(other.email))
+		} else if (!email.equals(other.email))
 			return false;
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
-		} else if (!firstName.equalsIgnoreCase(other.firstName))
-			return false;
-		if (isAdmin != other.isAdmin)
-			return false;
-		if (isSuperAdmin != other.isSuperAdmin)
+		} else if (!firstName.equals(other.firstName))
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
-		} else if (!lastName.equalsIgnoreCase(other.lastName))
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (userGroup != other.userGroup)
 			return false;
 		return true;
 	}

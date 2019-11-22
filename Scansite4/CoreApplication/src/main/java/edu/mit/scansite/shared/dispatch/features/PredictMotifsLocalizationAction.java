@@ -7,20 +7,21 @@ import edu.mit.scansite.shared.transferobjects.MotifClass;
 /**
  * @author Konstantin Krismer
  */
-public class PredictMotifsLocalizationAction implements
-		Action<PredictLocalizationResult> {
+public class PredictMotifsLocalizationAction implements Action<PredictLocalizationResult> {
 
+	private String userSessionId = "";
 	private DataSource localizationDataSource;
 	private MotifClass motifClass;
 
 	public PredictMotifsLocalizationAction() {
 	}
 
-	public PredictMotifsLocalizationAction(DataSource localizationDataSource,
-			MotifClass motifClass) {
+	public PredictMotifsLocalizationAction(DataSource localizationDataSource, MotifClass motifClass,
+			String userSessionId) {
 		super();
 		this.localizationDataSource = localizationDataSource;
 		this.motifClass = motifClass;
+		this.userSessionId = userSessionId;
 	}
 
 	public DataSource getLocalizationDataSource() {
@@ -37,5 +38,13 @@ public class PredictMotifsLocalizationAction implements
 
 	public void setMotifClass(MotifClass motifClass) {
 		this.motifClass = motifClass;
+	}
+
+	public String getUserSessionId() {
+		return userSessionId;
+	}
+
+	public void setUserSessionId(String userSessionId) {
+		this.userSessionId = userSessionId;
 	}
 }

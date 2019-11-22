@@ -27,7 +27,14 @@
 				<a href="#userMgmt">Manage Users</a>
 			</li>
 		</ul>
-		<p id="collaboratorNote" style="display: none">As a collaborator you have access to non-public motifs. If you want to add a non-public motif, 
+		<ul id="collaboratorMainNav" class="home featurenav" style="display: none">
+			<li>
+				<a href="#motifMgmt">
+					Manage Motifs
+				</a>
+			</li>
+		</ul>
+		<p id="advancedUserNote" style="display: none">As an advanced user you have access to non-public motifs. If you want to add a non-public motif, 
 		please e-mail the motif text file to <a href="mailto:scansite@mit.edu">scansite@mit.edu</a>. Please make sure that the file does not
 		violate the rules described in the <a href="#faq">FAQ section on user-defined motifs</a>.</p>
 		<div style="clear: both;"></div>

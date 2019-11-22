@@ -19,6 +19,7 @@ import edu.mit.scansite.shared.transferobjects.OrganismClass;
 import edu.mit.scansite.shared.transferobjects.Protein;
 import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import edu.mit.scansite.shared.transferobjects.Taxon;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.util.ScansiteAlgorithms;
 import edu.mit.scansite.shared.util.ScansiteScoring;
 
@@ -38,27 +39,24 @@ public class PhosphoSitesFeature {
 	private List<ServerHistogram> otherServerHistograms = new ArrayList<ServerHistogram>();
 
 	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
-			HistogramStringency stringency, boolean publicOnly) throws DataAccessException {
-		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, protein.getOrganismClass(),
-				publicOnly);
+			HistogramStringency stringency, User user) throws DataAccessException {
+		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, protein.getOrganismClass(), user);
 	}
 
 	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
-			HistogramStringency stringency, LightWeightMotifGroup motifGroup, boolean publicOnly)
-			throws DataAccessException {
+			HistogramStringency stringency, LightWeightMotifGroup motifGroup, User user) throws DataAccessException {
 		return checkPositionSpecificPhosphoSites(protein, position, stringency, motifGroup, protein.getOrganismClass(),
-				publicOnly);
+				user);
 	}
 
 	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
-			HistogramStringency stringency, OrganismClass motifOrganismClass, boolean publicOnly)
-			throws DataAccessException {
-		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, motifOrganismClass, publicOnly);
+			HistogramStringency stringency, OrganismClass motifOrganismClass, User user) throws DataAccessException {
+		return checkPositionSpecificPhosphoSites(protein, position, stringency, null, motifOrganismClass, user);
 	}
 
 	public List<ScanResultSite> checkPositionSpecificPhosphoSites(Protein protein, int position,
 			HistogramStringency stringency, LightWeightMotifGroup motifGroup, OrganismClass motifOrganismClass,
-			boolean publicOnly) throws DataAccessException {
+			User user) throws DataAccessException {
 		DaoFactory daoFac = ServiceLocator.getDaoFactory();
 		ScansiteAlgorithms alg = new ScansiteAlgorithms();
 		ScansiteScoring scoring = new ScansiteScoring();
@@ -77,9 +75,9 @@ public class PhosphoSitesFeature {
 			if (yeastServerHistograms.size() == 0) {
 				List<Motif> yeastMotifs;
 				if (motifGroup != null) {
-					yeastMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.YEAST, publicOnly);
+					yeastMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.YEAST, user);
 				} else {
-					yeastMotifs = daoFac.getMotifDao().getAll(MotifClass.YEAST, publicOnly);
+					yeastMotifs = daoFac.getMotifDao().getAll(MotifClass.YEAST, user);
 				}
 
 				yeastServerHistograms = histDao.getHistograms(yeastMotifs, ds, t.getId());
@@ -91,9 +89,9 @@ public class PhosphoSitesFeature {
 			if (mammalianServerHistograms.size() == 0) {
 				List<Motif> mammalianMotifs;
 				if (motifGroup != null) {
-					mammalianMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.MAMMALIAN, publicOnly);
+					mammalianMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.MAMMALIAN, user);
 				} else {
-					mammalianMotifs = daoFac.getMotifDao().getAll(MotifClass.MAMMALIAN, publicOnly);
+					mammalianMotifs = daoFac.getMotifDao().getAll(MotifClass.MAMMALIAN, user);
 				}
 
 				mammalianServerHistograms = histDao.getHistograms(mammalianMotifs, ds, t.getId());
@@ -105,9 +103,9 @@ public class PhosphoSitesFeature {
 			if (otherServerHistograms.size() == 0) {
 				List<Motif> otherMotifs;
 				if (motifGroup != null) {
-					otherMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.OTHER, publicOnly);
+					otherMotifs = daoFac.getMotifDao().getByGroup(motifGroup, MotifClass.OTHER, user);
 				} else {
-					otherMotifs = daoFac.getMotifDao().getAll(MotifClass.OTHER, publicOnly);
+					otherMotifs = daoFac.getMotifDao().getAll(MotifClass.OTHER, user);
 				}
 
 				otherServerHistograms = histDao.getHistograms(otherMotifs, ds, t.getId());

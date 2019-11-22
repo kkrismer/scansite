@@ -14,6 +14,8 @@ import edu.mit.scansite.shared.transferobjects.AminoAcid;
 import edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
+import edu.mit.scansite.shared.transferobjects.User;
+import edu.mit.scansite.shared.transferobjects.User.UserGroup;
 
 /**
  * @author Tobieh
@@ -25,21 +27,21 @@ public class MotifGetAllCommand extends DbQueryCommand<List<Motif>> {
 	private Integer groupId = null;
 	private Set<String> motifNicks;
 	private MotifClass motifClass = MotifClass.MAMMALIAN;
-	private boolean getOnlyPublic = true;
+	private User user = null;
 
 	public MotifGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, Set<String> motifNicks,
-			MotifClass motifClass, boolean getOnlyPublic) {
+			MotifClass motifClass, User user) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.motifNicks = motifNicks;
-		this.getOnlyPublic = getOnlyPublic;
+		this.user = user;
 		this.motifClass = motifClass;
 	}
 
 	public MotifGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig, int groupId,
-			MotifClass motifClass, boolean getOnlyPublic) {
+			MotifClass motifClass, User user) {
 		super(dbAccessConfig, dbConstantsConfig);
 		this.groupId = groupId;
-		this.getOnlyPublic = getOnlyPublic;
+		this.user = user;
 		this.motifClass = motifClass;
 	}
 
@@ -110,8 +112,16 @@ public class MotifGetAllCommand extends DbQueryCommand<List<Motif>> {
 				.append(c.getcMotifsId()).append(CommandConstants.RPAR).append(CommandConstants.WHERE)
 				.append(c.getcMotifsMotifClass()).append(CommandConstants.EQ)
 				.append(CommandConstants.enquote(motifClass.getDatabaseEntry()));
-		if (getOnlyPublic) {
+		if (user == null) {
 			sql.append(CommandConstants.AND).append(c.getcMotifsIsPublic()).append(CommandConstants.EQ).append(1);
+		} else if (user.getUserGroup() == UserGroup.ADMIN) {
+			// admins see all motifs
+		} else {
+			// collaborators and advanced users only see public motifs and their own motifs
+			sql.append(CommandConstants.AND).append(" ( ");
+			sql.append(c.getcMotifsIsPublic()).append(CommandConstants.EQ).append(1).append(CommandConstants.OR);
+			sql.append(c.getcUsersEmail()).append(CommandConstants.EQ).append(CommandConstants.enquote(user.getEmail()));
+			sql.append(" ) ");
 		}
 		if (groupId != null) {
 			sql.append(CommandConstants.AND).append(c.getcMotifGroupsId()).append(CommandConstants.EQ).append(groupId);

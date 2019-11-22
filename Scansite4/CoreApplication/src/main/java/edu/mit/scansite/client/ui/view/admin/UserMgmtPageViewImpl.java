@@ -23,6 +23,7 @@ import edu.mit.scansite.client.ui.event.NavigationEvent;
 import edu.mit.scansite.client.ui.widgets.admin.UserCell;
 import edu.mit.scansite.shared.Breadcrumbs;
 import edu.mit.scansite.shared.transferobjects.User;
+import edu.mit.scansite.shared.transferobjects.User.UserGroup;
 import edu.mit.scansite.shared.util.Formatter;
 import edu.mit.scansite.shared.util.Validator;
 
@@ -32,11 +33,9 @@ import edu.mit.scansite.shared.util.Validator;
  */
 public class UserMgmtPageViewImpl extends UserMgmtPageView {
 
-	private static UserMgmtPageViewImplUiBinder uiBinder = GWT
-			.create(UserMgmtPageViewImplUiBinder.class);
+	private static UserMgmtPageViewImplUiBinder uiBinder = GWT.create(UserMgmtPageViewImplUiBinder.class);
 
-	interface UserMgmtPageViewImplUiBinder extends
-			UiBinder<Widget, UserMgmtPageViewImpl> {
+	interface UserMgmtPageViewImplUiBinder extends UiBinder<Widget, UserMgmtPageViewImpl> {
 	}
 
 	private Presenter presenter;
@@ -65,13 +64,13 @@ public class UserMgmtPageViewImpl extends UserMgmtPageView {
 	PasswordTextBox repeatPasswordTextBox;
 
 	@UiField
+	RadioButton advancedUserRadioButton;
+
+	@UiField
 	RadioButton collaboratorRadioButton;
 
 	@UiField
 	RadioButton adminRadioButton;
-
-	@UiField
-	RadioButton superadminRadioButton;
 
 	@UiField
 	SubmitButton addButton;
@@ -97,48 +96,40 @@ public class UserMgmtPageViewImpl extends UserMgmtPageView {
 				firstNameTextBox.getElement().setId("firstNameTextBoxId");
 				lastNameTextBox.getElement().setId("lastNameTextBoxId");
 				passwordTextBox.getElement().setId("passwordTextBoxId");
-				repeatPasswordTextBox.getElement().setId(
-						"repeatPasswordTextBoxId");
+				repeatPasswordTextBox.getElement().setId("repeatPasswordTextBoxId");
 
 				final SingleSelectionModel<User> selectionModel = new SingleSelectionModel<User>();
 				usersCellList.setSelectionModel(selectionModel);
-				selectionModel
-						.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-							public void onSelectionChange(
-									SelectionChangeEvent event) {
-								emailTextBox.setValue(selectionModel
-										.getSelectedObject().getEmail());
-								firstNameTextBox.setValue(selectionModel
-										.getSelectedObject().getFirstName());
-								lastNameTextBox.setValue(selectionModel
-										.getSelectedObject().getLastName());
+				selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					public void onSelectionChange(SelectionChangeEvent event) {
+						emailTextBox.setValue(selectionModel.getSelectedObject().getEmail());
+						firstNameTextBox.setValue(selectionModel.getSelectedObject().getFirstName());
+						lastNameTextBox.setValue(selectionModel.getSelectedObject().getLastName());
 
-								passwordTextBox.setValue("");
-								repeatPasswordTextBox.setValue("");
+						passwordTextBox.setValue("");
+						repeatPasswordTextBox.setValue("");
 
-								if (selectionModel.getSelectedObject()
-										.isSuperAdmin()) {
-									superadminRadioButton.setValue(true);
-								} else if (selectionModel.getSelectedObject()
-										.isAdmin()) {
-									adminRadioButton.setValue(true);
-								} else {
-									collaboratorRadioButton.setValue(true);
-								}
+						if (selectionModel.getSelectedObject().isAdmin()) {
+							adminRadioButton.setValue(true);
+						} else if (selectionModel.getSelectedObject().isCollaborator()) {
+							collaboratorRadioButton.setValue(true);
+						} else {
+							advancedUserRadioButton.setValue(true);
+						}
 
-								legendLabel.setText("Edit user profile");
-								updateButton.setVisible(true);
-								deleteButton.setVisible(true);
-								addButton.setVisible(false);
-								hideMessage();
-							}
-						});
+						legendLabel.setText("Edit user profile");
+						updateButton.setVisible(true);
+						deleteButton.setVisible(true);
+						addButton.setVisible(false);
+						hideMessage();
+					}
+				});
 			}
 		});
 	}
 
 	private void applyUserPrivileges() {
-		if (user == null || (!user.isAdmin() && !user.isSuperAdmin())) {
+		if (user == null || (!user.isCollaborator() && !user.isAdmin())) {
 			History.newItem(NavigationEvent.PageId.ADMIN.getId(), true);
 		}
 	}
@@ -165,19 +156,24 @@ public class UserMgmtPageViewImpl extends UserMgmtPageView {
 	@UiHandler("addButton")
 	public void onAddButtonClick(ClickEvent event) {
 		if (validateInput()) {
-			if(isUniqueEmail(emailTextBox.getValue())) {
-				if(passwordTextBox.getValue().equals(repeatPasswordTextBox.getValue())) {
+			if (isUniqueEmail(emailTextBox.getValue())) {
+				if (passwordTextBox.getValue().equals(repeatPasswordTextBox.getValue())) {
 					hideMessage();
 
 					User user = new User();
-				    user.setEmail(emailTextBox.getValue().toLowerCase());
-				    user.setFirstName(firstNameTextBox.getValue());
-				    user.setLastName(lastNameTextBox.getValue());
-				    Formatter f = new Formatter();
-				    user.setPassword(f.formatPassword(passwordTextBox.getValue()));
-				    user.setAdmin(adminRadioButton.getValue());
-				    user.setSuperAdmin(superadminRadioButton.getValue());
-				    
+					user.setEmail(emailTextBox.getValue().toLowerCase());
+					user.setFirstName(firstNameTextBox.getValue());
+					user.setLastName(lastNameTextBox.getValue());
+					Formatter f = new Formatter();
+					user.setPassword(f.formatPassword(passwordTextBox.getValue()));
+					if (adminRadioButton.getValue()) {
+						user.setUserGroup(UserGroup.ADMIN);
+					} else if (collaboratorRadioButton.getValue()) {
+						user.setUserGroup(UserGroup.COLLABORATOR);
+					} else {
+						user.setUserGroup(UserGroup.ADVANCEDUSER);
+					}
+
 					presenter.onAddButtonClicked(user);
 				} else {
 					showWarningMessage("Passwords don't match");
@@ -193,25 +189,33 @@ public class UserMgmtPageViewImpl extends UserMgmtPageView {
 	@UiHandler("updateButton")
 	public void onUpdateButtonClick(ClickEvent event) {
 		if (validateInput()) {
-			if((!passwordTextBox.getValue().isEmpty() && passwordTextBox.getValue().equals(repeatPasswordTextBox.getValue())) || passwordTextBox.getValue().isEmpty()) {
-		
-			hideMessage();
+			if ((!passwordTextBox.getValue().isEmpty()
+					&& passwordTextBox.getValue().equals(repeatPasswordTextBox.getValue()))
+					|| passwordTextBox.getValue().isEmpty()) {
 
-			User user = new User();
-		    user.setEmail(emailTextBox.getValue().toLowerCase());
-		    user.setFirstName(firstNameTextBox.getValue());
-		    user.setLastName(lastNameTextBox.getValue());
-		    if(!passwordTextBox.getValue().isEmpty()) {
-			    Formatter f = new Formatter();
-			    user.setPassword(f.formatPassword(passwordTextBox.getValue()));
-		    }
-		    user.setAdmin(adminRadioButton.getValue());
-		    user.setSuperAdmin(superadminRadioButton.getValue());
+				hideMessage();
 
-			presenter.onUpdateButtonClicked(user);
+				User user = new User();
+				user.setEmail(emailTextBox.getValue().toLowerCase());
+				user.setFirstName(firstNameTextBox.getValue());
+				user.setLastName(lastNameTextBox.getValue());
+				if (!passwordTextBox.getValue().isEmpty()) {
+					Formatter f = new Formatter();
+					user.setPassword(f.formatPassword(passwordTextBox.getValue()));
+				}
+
+				if (adminRadioButton.getValue()) {
+					user.setUserGroup(UserGroup.ADMIN);
+				} else if (collaboratorRadioButton.getValue()) {
+					user.setUserGroup(UserGroup.COLLABORATOR);
+				} else {
+					user.setUserGroup(UserGroup.ADVANCEDUSER);
+				}
+
+				presenter.onUpdateButtonClicked(user);
 			} else {
 				showWarningMessage("Passwords don't match");
-		}
+			}
 		} else {
 			showWarningMessage("Input validation failed");
 		}

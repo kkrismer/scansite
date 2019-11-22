@@ -16,6 +16,7 @@ import edu.mit.scansite.shared.dispatch.features.PredictProteinsLocalizationActi
 import edu.mit.scansite.shared.transferobjects.DataSource;
 import edu.mit.scansite.shared.transferobjects.LightWeightProtein;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.transferobjects.states.PredictLocalizationPageState;
 
 /**
@@ -24,11 +25,13 @@ import edu.mit.scansite.shared.transferobjects.states.PredictLocalizationPageSta
 public class PredictLocalizationPagePresenter extends Presenter implements
 		PredictLocalizationPageView.Presenter {
 	private PredictLocalizationPageView view;
+	private final User user;
 
 	public PredictLocalizationPagePresenter(PredictLocalizationPageView view,
-			PredictLocalizationPageState state) {
+			PredictLocalizationPageState state, User user) {
 		this.view = view;
 		view.setState(state);
+		this.user = user;
 	}
 
 	@Override
@@ -90,7 +93,7 @@ public class PredictLocalizationPagePresenter extends Presenter implements
 				NavigationEvent.PageId.FEATURE_PREDICT_LOCALIZATION.getId());
 
 		PredictMotifsLocalizationAction action = new PredictMotifsLocalizationAction(
-				localizationDataSource, motifClass);
+				localizationDataSource, motifClass, user == null ? "" : user.getSessionId());
 		dispatch.execute(action,
 				new AsyncCallback<PredictLocalizationResult>() {
 					@Override

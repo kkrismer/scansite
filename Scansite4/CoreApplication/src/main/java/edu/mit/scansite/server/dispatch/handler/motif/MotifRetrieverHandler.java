@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
 import edu.mit.scansite.server.ServiceLocator;
+import edu.mit.scansite.server.dispatch.handler.user.LoginHandler;
 import edu.mit.scansite.shared.dispatch.motif.MotifRetrieverAction;
 import edu.mit.scansite.shared.dispatch.motif.MotifRetrieverResult;
 import edu.mit.scansite.shared.transferobjects.Motif;
@@ -20,6 +24,12 @@ import net.customware.gwt.dispatch.shared.DispatchException;
  */
 public class MotifRetrieverHandler implements ActionHandler<MotifRetrieverAction, MotifRetrieverResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final LoginHandler loginHandler;
+
+	@Inject
+	public MotifRetrieverHandler(final Provider<LoginHandler> loginHandler) {
+		this.loginHandler = loginHandler.get();
+	}
 
 	@Override
 	public Class<MotifRetrieverAction> getActionType() {
@@ -32,7 +42,7 @@ public class MotifRetrieverHandler implements ActionHandler<MotifRetrieverAction
 		try {
 			if (action.getMotifShortName() == null || action.getMotifShortName().isEmpty()) {
 				return new MotifRetrieverResult(new ArrayList<Motif>(ServiceLocator.getDaoFactory().getMotifDao()
-						.getAll(action.getMotifClass(), !action.isUserLoggedIn())));
+						.getAll(action.getMotifClass(), loginHandler.getUserBySessionId(action.getUserSessionId()))));
 			} else {
 				Motif m = ServiceLocator.getDaoFactory().getMotifDao().getByShortName(action.getMotifShortName());
 				ArrayList<Motif> ms = new ArrayList<Motif>();

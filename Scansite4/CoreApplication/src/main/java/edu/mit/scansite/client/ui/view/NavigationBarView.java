@@ -30,8 +30,7 @@ public class NavigationBarView extends Composite implements View {
 		if (user != null) {
 			DOM.getElementById("adminLink").setAttribute("style",
 					"display: block;");
-			
-			if (user.isAdmin() || user.isSuperAdmin()) {
+			if (user.isAdmin()) {
 				DOM.getElementById("adminSubnav").setAttribute("style",
 						"display: block;");
 				DOM.getElementById("motifMgmtLink").setAttribute("style",
@@ -40,10 +39,13 @@ public class NavigationBarView extends Composite implements View {
 						"display: block;");
 				DOM.getElementById("newsMgmtLink").setAttribute("style",
 						"display: block;");
-				if (user.isSuperAdmin()) {
-					DOM.getElementById("userMgmtLink").setAttribute("style",
-							"display: block;");
-				}
+				DOM.getElementById("userMgmtLink").setAttribute("style",
+						"display: block;");
+			} else if (user.isCollaborator()) {
+				DOM.getElementById("adminSubnav").setAttribute("style",
+						"display: block;");
+				DOM.getElementById("motifMgmtLink").setAttribute("style",
+						"display: block;");
 			}
 		} else {
 			DOM.getElementById("adminLink").setAttribute("style",

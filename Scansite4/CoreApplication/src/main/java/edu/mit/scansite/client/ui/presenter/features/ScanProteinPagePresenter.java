@@ -54,7 +54,7 @@ public class ScanProteinPagePresenter extends Presenter implements
 			ProteinScanAction action = new ProteinScanAction(protein,
 					motifSelection, stringency, showDomains, previouslyMappedSitesOnly,
 					histogramDataSource, histogramTaxon, localizationDataSource,
-                    user != null ? user.getSessionId() : "");
+					user == null ? "" : user.getSessionId());
 
 			dispatch.execute(action, new AsyncCallback<ProteinScanResult>() {
 				@Override

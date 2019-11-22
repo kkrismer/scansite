@@ -31,6 +31,7 @@ import edu.mit.scansite.shared.transferobjects.MotifSelection;
 import edu.mit.scansite.shared.transferobjects.Protein;
 import edu.mit.scansite.shared.transferobjects.RestrictionProperties;
 import edu.mit.scansite.shared.transferobjects.Taxon;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Tobieh
@@ -43,7 +44,7 @@ public class DatabaseScanFeature {
 	}
 
 	public DatabaseScanResult doDatabaseSearch(MotifSelection motifSelection, DataSource dataSource,
-			RestrictionProperties restrictionProperties, int outputListSize, boolean doCreateFiles, boolean publicOnly,
+			RestrictionProperties restrictionProperties, int outputListSize, boolean doCreateFiles, User user,
 			String realPath, boolean previouslyMappedSitesOnly) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 
@@ -60,7 +61,7 @@ public class DatabaseScanFeature {
 
 		if (nrOfProteinsRetrieved > 0) {
 			// get motifs from db
-			List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);
+			List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, user);
 			List<Double> motifScoreThresholds = scoreMotifs(motifs);
 
 			boolean isMultipleMotifs = motifs.size() > 1;

@@ -32,8 +32,7 @@ public class UserUpdateCommand extends DbUpdateCommand {
 			sql.append(c.getcUsersPassword()).append(c.EQ).append(" PASSWORD(\"").append(user.getPassword())
 					.append("\") ").append(c.COMMA);
 		}
-		sql.append(c.getcUsersIsAdmin()).append(c.EQ).append(user.isAdmin()).append(c.COMMA);
-		sql.append(c.getcUsersIsSuperAdmin()).append(c.EQ).append(user.isSuperAdmin());
+		sql.append(c.getcUsersUserGroup()).append(c.EQ).append(c.enquote(user.getUserGroup().toString()));
 		sql.append(c.WHERE).append(c.getcUsersEmail()).append(c.LIKE).append(c.enquote(user.getEmail()));
 		return sql.toString();
 	}

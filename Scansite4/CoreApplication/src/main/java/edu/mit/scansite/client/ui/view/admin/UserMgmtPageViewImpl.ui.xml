@@ -36,11 +36,10 @@
 				</li>
 				<li>
 					<label>User privileges</label>
-					<g:RadioButton ui:field="collaboratorRadioButton"
-						name="privilegesRadioButtons" value="true">None (collaborator)</g:RadioButton>
+					<g:RadioButton ui:field="advancedUserRadioButton"
+						name="privilegesRadioButtons" value="true">Advanced user (can use own private motifs)</g:RadioButton>
+					<g:RadioButton ui:field="collaboratorRadioButton" name="privilegesRadioButtons">Collaborator (can add own private motifs)</g:RadioButton>
 					<g:RadioButton ui:field="adminRadioButton" name="privilegesRadioButtons">Administrator</g:RadioButton>
-					<g:RadioButton ui:field="superadminRadioButton" name="privilegesRadioButtons">Super
-						Administrator</g:RadioButton>
 				</li>
 				<li>
 					<g:SubmitButton ui:field="addButton">Add</g:SubmitButton>

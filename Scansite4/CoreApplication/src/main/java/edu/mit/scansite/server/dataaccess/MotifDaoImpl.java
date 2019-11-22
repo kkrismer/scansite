@@ -26,6 +26,7 @@ import edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
 import edu.mit.scansite.shared.transferobjects.MotifSelection;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Tobieh
@@ -88,8 +89,8 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 * .transferobjects.MotifClass, boolean)
 	 */
 	@Override
-	public List<Motif> getAll(MotifClass motifClass, boolean publicOnly) throws DataAccessException {
-		return getAll(null, motifClass, publicOnly);
+	public List<Motif> getAll(MotifClass motifClass, User user) throws DataAccessException {
+		return getAll(null, motifClass, user);
 	}
 
 	/*
@@ -99,14 +100,14 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 * edu.mit.scansite.shared.transferobjects.MotifClass, boolean)
 	 */
 	@Override
-	public List<Motif> getAll(Set<String> motifNicks, MotifClass motifClass, boolean publicOnly)
+	public List<Motif> getAll(Set<String> motifNicks, MotifClass motifClass, User user)
 			throws DataAccessException {
 		if (motifClass == null) {
 			motifClass = MotifClass.MAMMALIAN;
 		}
 		try {
 			MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig, dbConstantsConfig, motifNicks, motifClass,
-					publicOnly);
+					user);
 
 			List<Motif> motifs = cmd.execute();
 			List<LightWeightMotifGroup> groups = ServiceLocator.getDaoFactory().getGroupsDao().getAllLightWeight();
@@ -137,13 +138,13 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 * .scansite.shared.transferobjects.MotifSelection, boolean)
 	 */
 	@Override
-	public List<Motif> getSelectedMotifs(MotifSelection motifSelection, boolean publicOnly) throws DataAccessException {
+	public List<Motif> getSelectedMotifs(MotifSelection motifSelection, User user) throws DataAccessException {
 		if (motifSelection.getUserMotif() != null) { // user motif
 			List<Motif> motifs = new LinkedList<>();
 			motifs.add(motifSelection.getUserMotif());
 			return motifs;
 		} else {
-			return getAll(motifSelection.getMotifShortNames(), motifSelection.getMotifClass(), publicOnly);
+			return getAll(motifSelection.getMotifShortNames(), motifSelection.getMotifClass(), user);
 		}
 	}
 
@@ -173,10 +174,10 @@ public class MotifDaoImpl extends DaoImpl implements MotifDao {
 	 * edu.mit.scansite.shared.transferobjects.MotifClass, boolean)
 	 */
 	@Override
-	public List<Motif> getByGroup(LightWeightMotifGroup group, MotifClass motifClass, boolean publicOnly)
+	public List<Motif> getByGroup(LightWeightMotifGroup group, MotifClass motifClass, User user)
 			throws DataAccessException {
 		MotifGetAllCommand cmd = new MotifGetAllCommand(dbAccessConfig, dbConstantsConfig, group.getId(), motifClass,
-				publicOnly);
+				user);
 		try {
 			List<Motif> motifs = cmd.execute();
 

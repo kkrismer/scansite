@@ -8,6 +8,7 @@ import java.util.Properties;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
 import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.transferobjects.User;
+import edu.mit.scansite.shared.transferobjects.User.UserGroup;
 
 /**
  * @author Tobieh
@@ -19,8 +20,7 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	private String cEmail;
 	private String cFirstName;
 	private String cLastName;
-	private String cIsAdmin;
-	private String cIsSuperAdmin;
+	private String cUserGroup;
 
 	public UserGetAllCommand(Properties dbAccessConfig, Properties dbConstantsConfig) {
 		super(dbAccessConfig, dbConstantsConfig);
@@ -28,8 +28,7 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 		cEmail = c.getcUsersEmail();
 		cFirstName = c.getcUsersFirstName();
 		cLastName = c.getcUsersLastName();
-		cIsAdmin = c.getcUsersIsAdmin();
-		cIsSuperAdmin = c.getcUsersIsSuperAdmin();
+		cUserGroup = c.getcUsersUserGroup();
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 		try {
 			while (result.next()) {
 				users.add(new User(result.getString(cEmail), result.getString(cFirstName), result.getString(cLastName),
-						"", result.getBoolean(cIsAdmin), result.getBoolean(cIsSuperAdmin)));
+						"", UserGroup.valueOf(result.getString(cUserGroup))));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage(), e);
@@ -51,7 +50,7 @@ public class UserGetAllCommand extends DbQueryCommand<ArrayList<User>> {
 	protected String doGetSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 		sql.append(c.SELECT).append(cEmail).append(c.COMMA).append(cFirstName).append(c.COMMA).append(cLastName)
-				.append(c.COMMA).append(cIsAdmin).append(c.COMMA).append(cIsSuperAdmin).append(c.FROM).append(tUsers)
+				.append(c.COMMA).append(cUserGroup).append(c.FROM).append(tUsers)
 				.append(c.ORDERBY).append(cFirstName).append(c.COMMA).append(cLastName);
 		return sql.toString();
 	}

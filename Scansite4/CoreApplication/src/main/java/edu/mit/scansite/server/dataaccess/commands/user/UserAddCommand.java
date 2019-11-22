@@ -29,12 +29,11 @@ public class UserAddCommand extends DbInsertCommand {
 		StringBuilder sql = new StringBuilder();
 		sql.append(c.INSERTINTO).append(c.gettUsers()).append(" ( ").append(c.getcUsersEmail()).append(c.COMMA)
 				.append(c.getcUsersFirstName()).append(c.COMMA).append(c.getcUsersLastName()).append(c.COMMA)
-				.append(c.getcUsersPassword()).append(c.COMMA).append(c.getcUsersIsAdmin()).append(c.COMMA)
-				.append(c.getcUsersIsSuperAdmin()).append(" ) ").append(c.VALUES).append(" ( \"")
-				.append(entry.getEmail()).append("\" ").append(c.COMMA).append("\" ").append(entry.getFirstName())
-				.append("\" ").append(c.COMMA).append("\" ").append(entry.getLastName()).append("\" ").append(c.COMMA)
-				.append("PASSWORD(\"").append(entry.getPassword()).append("\") ").append(c.COMMA)
-				.append(entry.isAdmin()).append(c.COMMA).append(entry.isSuperAdmin()).append(" ) ");
+				.append(c.getcUsersPassword()).append(c.COMMA).append(c.getcUsersUserGroup()).append(" ) ")
+				.append(c.VALUES).append(" ( \"").append(entry.getEmail()).append("\" ").append(c.COMMA).append("\" ")
+				.append(entry.getFirstName()).append("\" ").append(c.COMMA).append("\" ").append(entry.getLastName())
+				.append("\" ").append(c.COMMA).append("PASSWORD(\"").append(entry.getPassword()).append("\") ")
+				.append(c.COMMA).append(entry.isCollaborator()).append(c.COMMA).append(entry.isAdmin()).append(" ) ");
 		return sql.toString();
 	}
 

@@ -73,8 +73,7 @@ public class ProteinScanHandler implements ActionHandler<ProteinScanAction, Prot
 			ProteinScanResult result = feature.doProteinScan(protein, action.getMotifSelection(),
 					action.getStringency(), action.isShowDomains(), action.getHistogramDataSource(),
 					action.getHistogramTaxon(), action.getLocalizationDataSource(), true,
-					!loginHandler.isSessionValidLogin(action.getUserSessionId()),
-					contextProvider.get().getRealPath("/"));
+					loginHandler.getUserBySessionId(action.getUserSessionId()), contextProvider.get().getRealPath("/"));
 
 			// check if the sites are PhosphoSiteSites if swissprot is selected
 			if (accessions != null) {

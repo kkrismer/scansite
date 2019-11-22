@@ -45,8 +45,8 @@ public class DatabaseScanHandler implements ActionHandler<DatabaseScanAction, Da
 			DatabaseScanFeature feature = new DatabaseScanFeature();
 			DatabaseScanResult result = feature.doDatabaseSearch(action.getMotifSelection(), action.getDataSource(),
 					action.getRestrictionProperties(), action.getOutputListSize(), true,
-					!loginHandler.isSessionValidLogin(action.getUserSessionId()),
-					contextProvider.get().getRealPath("/"), action.isPreviouslyMappedSitesOnly());
+					loginHandler.getUserBySessionId(action.getUserSessionId()), contextProvider.get().getRealPath("/"),
+					action.isPreviouslyMappedSitesOnly());
 
 			// DaoFactory factory = ServiceLocator.getDaoFactory();
 			// check if the sites are PhosphoSiteSites if swissprot is selected

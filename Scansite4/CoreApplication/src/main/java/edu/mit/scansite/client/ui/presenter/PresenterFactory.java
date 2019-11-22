@@ -242,11 +242,11 @@ public class PresenterFactory {
 			PredictLocalizationPageView predictLocalizationPageView = (PredictLocalizationPageView) view;
 			if (state instanceof PredictLocalizationPageState) {
 				presenter = new PredictLocalizationPagePresenter(
-						predictLocalizationPageView,
-						(PredictLocalizationPageState) state);
+						predictLocalizationPageView, 
+						(PredictLocalizationPageState) state, user);
 			} else {
 				presenter = new PredictLocalizationPagePresenter(
-						predictLocalizationPageView, null);
+						predictLocalizationPageView, null, user);
 			}
 			predictLocalizationPageView
 					.setPresenter((PredictLocalizationPagePresenter) presenter);
@@ -333,7 +333,7 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_NEWS
 				.getId())) {
 			if (user != null) {
-				if(user.isAdmin() || user.isSuperAdmin()) {
+				if(user.isAdmin()) {
 					view = new NewsMgmtPageViewImpl(user);
 					NewsMgmtPageView newsMgmtPageView = (NewsMgmtPageView) view;
 					presenter = new NewsMgmtPagePresenter(newsMgmtPageView);
@@ -351,7 +351,7 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_USER
 				.getId())) {
 			if (user != null) {
-				if(user.isSuperAdmin()) {
+				if(user.isAdmin()) {
 					view = new UserMgmtPageViewImpl(user);
 					UserMgmtPageView userMgmtPageView = (UserMgmtPageView) view;
 					presenter = new UserMgmtPagePresenter(userMgmtPageView);
@@ -371,7 +371,7 @@ public class PresenterFactory {
 				.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_MOTIF_GROUP
 						.getId())) {
 			if (user != null) {
-				if(user.isAdmin() || user.isSuperAdmin()) {
+				if(user.isAdmin()) {
 					view = new MotifGroupMgmtPageViewImpl(user);
 					MotifGroupMgmtPageView motifGroupMgmtPageView = (MotifGroupMgmtPageView) view;
 					presenter = new MotifGroupMgmtPagePresenter(
@@ -390,7 +390,7 @@ public class PresenterFactory {
 		} else if (token.equalsIgnoreCase(NavigationEvent.PageId.ADMIN_MOTIF
 				.getId())) {
 			if (user != null) {
-				if(user.isAdmin() || user.isSuperAdmin()) {
+				if(user.isAdmin() || user.isCollaborator()) {
 					view = new MotifMgmtPageViewImpl(user);
 					MotifMgmtPageView motifMgmtPageView = (MotifMgmtPageView) view;
 					presenter = new MotifMgmtPagePresenter(motifMgmtPageView, user);

@@ -61,7 +61,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 				OrthologScanSequencePatternAction action = new OrthologScanSequencePatternAction(
 						sequencePatterns, orthologyDataSource, protein,
 						stringency, alignmentRadius,
-						user != null ? user.getSessionId() : "");
+						user == null ? "" : user.getSessionId());
 				dispatch.execute(action,
 						new AsyncCallback<OrthologScanSequencePatternResult>() {
 							@Override
@@ -120,8 +120,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 
 		OrthologScanMotifAction action = new OrthologScanMotifAction(
 				motifGroup, sitePosition, orthologyDataSource, protein,
-				stringency, alignmentRadius, user != null ? user.getSessionId()
-						: "");
+				stringency, alignmentRadius, user == null ? "" : user.getSessionId());
 		dispatch.execute(action, new AsyncCallback<OrthologScanMotifResult>() {
 			@Override
 			public void onFailure(Throwable caught) {

@@ -84,7 +84,7 @@ public class DatabaseScanResultSiteTable extends ScansiteWidget {
 							false, false,
 							ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[ScansiteConstants.HIST_DEFAULT_INDEX],
 							ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[ScansiteConstants.HIST_DEFAULT_INDEX],
-							result.getLocalizationDataSource(), user != null ? user.getSessionId() : ""); //todo: find a solution, i.e.:
+							result.getLocalizationDataSource(), user == null ? "" : user.getSessionId()); //todo: find a solution, i.e.:
 
 					final WaitPopup waitPopup = new WaitPopup();
 					waitPopup.center();

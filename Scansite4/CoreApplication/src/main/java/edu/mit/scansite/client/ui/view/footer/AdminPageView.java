@@ -46,26 +46,32 @@ public class AdminPageView extends PageView {
 			public void execute() {
 				if(user != null) {
 					nameLabel.setText(user.getFirstName() + " " + user.getLastName());
-					if(user.isSuperAdmin()) {
+					if(user.isAdmin()) {
 						DOM.getElementById("adminMainNav").setAttribute("style",
 								"display: block;");
-						DOM.getElementById("collaboratorNote").setAttribute("style",
+						DOM.getElementById("collaboratorMainNav").setAttribute("style",
 								"display: none;");
-						levelLabel.setText("Level 3 - Super Administrator");
-						levelLabel.addStyleName("red");
-					} else if(user.isAdmin()) {
+						DOM.getElementById("advancedUserNote").setAttribute("style",
+								"display: none;");
+						levelLabel.setText("Level 3 - Administrator");
+						levelLabel.addStyleName("green");
+					} else if(user.isCollaborator()) {
 						DOM.getElementById("adminMainNav").setAttribute("style",
-								"display: block;");
-						DOM.getElementById("collaboratorNote").setAttribute("style",
 								"display: none;");
-						levelLabel.setText("Level 2 - Administrator");
-						levelLabel.addStyleName("orange");
+						DOM.getElementById("collaboratorMainNav").setAttribute("style",
+								"display: block;");
+						DOM.getElementById("advancedUserNote").setAttribute("style",
+								"display: none;");
+						levelLabel.setText("Level 2 - Collaborator");
+						levelLabel.addStyleName("green");
 					} else {
 						DOM.getElementById("adminMainNav").setAttribute("style",
 								"display: none;");
-						DOM.getElementById("collaboratorNote").setAttribute("style",
+						DOM.getElementById("collaboratorMainNav").setAttribute("style",
+								"display: none;");
+						DOM.getElementById("advancedUserNote").setAttribute("style",
 								"display: block;");
-						levelLabel.setText("Level 1 - Collaborator");
+						levelLabel.setText("Level 1 - Advanced User");
 						levelLabel.addStyleName("green");
 					}
 				}

@@ -41,7 +41,7 @@ public class MotifDefinitionsService extends WebService {
         }
         try {
             DaoFactory factory = ServiceLocator.getDaoFactory();
-            List<Motif> dbMotifs = factory.getMotifDao().getAll(mc, true);
+            List<Motif> dbMotifs = factory.getMotifDao().getAll(mc, null);
             List<MotifGroup> dbGroups = factory.getGroupsDao().getAll();
             if (dbMotifs != null && dbGroups != null) {
                 MotifDefinition[] ms = new MotifDefinition[dbMotifs.size()];

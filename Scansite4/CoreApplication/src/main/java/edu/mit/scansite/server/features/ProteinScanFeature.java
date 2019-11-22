@@ -32,6 +32,7 @@ import edu.mit.scansite.shared.transferobjects.MotifSelection;
 import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import edu.mit.scansite.shared.transferobjects.ScanResults;
 import edu.mit.scansite.shared.transferobjects.Taxon;
+import edu.mit.scansite.shared.transferobjects.User;
 import edu.mit.scansite.shared.util.ScansiteAlgorithms;
 import edu.mit.scansite.shared.util.ScansiteScoring;
 
@@ -55,13 +56,13 @@ public class ProteinScanFeature {
 	 */
 	public ProteinScanResult doProteinScan(LightWeightProtein protein, MotifSelection motifSelection,
 			HistogramStringency stringency, boolean showDomains, String histogramDataSource, String histogramTaxon,
-			DataSource localizationDataSource, boolean doCreateFiles, boolean publicOnly, String realPath)
+			DataSource localizationDataSource, boolean doCreateFiles, User user, String realPath)
 			throws DataAccessException {
 
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 		ArrayList<DomainPosition> domainPositions = null;
 
-		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, publicOnly);
+		List<Motif> motifs = factory.getMotifDao().getSelectedMotifs(motifSelection, user);
 		Map<Motif, LightWeightLocalization> motifLocalizations = null;
 		Localization proteinLocalization = null;
 		if (localizationDataSource != null) {

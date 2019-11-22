@@ -45,8 +45,7 @@ public class SequenceMatchHandler implements ActionHandler<SequenceMatchAction, 
 			SequenceMatchFeature feature = new SequenceMatchFeature();
 			return feature.doSequenceMatch(action.getSequencePatterns(), action.getDataSource(),
 					action.getRestrictionProperties(), action.isLimitResultsToPhosphorylatedProteins(), true,
-					!loginHandler.isSessionValidLogin(action.getUserSessionId()),
-					contextProvider.get().getRealPath("/"));
+					loginHandler.getUserBySessionId(action.getUserSessionId()), contextProvider.get().getRealPath("/"));
 		} catch (DataAccessException e) {
 			logger.error("Error running sequence match: " + e.toString());
 			throw new ActionException(e);

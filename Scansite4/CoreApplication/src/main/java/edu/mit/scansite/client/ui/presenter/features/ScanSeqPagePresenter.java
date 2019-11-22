@@ -62,7 +62,7 @@ public class ScanSeqPagePresenter extends Presenter implements
 
 		SequenceMatchAction action = new SequenceMatchAction(sequencePatterns,
 				dataSource, properties, limitResultsToPhosphorylatedProteins,
-				user != null ? user.getSessionId() : "");
+				user == null ? "" : user.getSessionId());
 		dispatch.execute(action, new AsyncCallback<SequenceMatchResult>() {
 			@Override
 			public void onFailure(Throwable caught) {

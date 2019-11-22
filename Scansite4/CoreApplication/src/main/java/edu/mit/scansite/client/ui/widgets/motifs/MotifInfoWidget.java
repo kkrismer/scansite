@@ -200,7 +200,7 @@ public class MotifInfoWidget extends ScansiteWidget implements
 
 	private void getMotifs(MotifClass motifClass) {
 		dispatch.execute(new LightWeightMotifRetrieverAction(motifClass,
-				user != null ? user.getSessionId() : ""),
+				user == null ? "" : user.getSessionId()),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {

@@ -23,6 +23,7 @@ import edu.mit.scansite.shared.transferobjects.ProteinSequenceMatch;
 import edu.mit.scansite.shared.transferobjects.RestrictionProperties;
 import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import edu.mit.scansite.shared.transferobjects.SequencePattern;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Tobieh
@@ -36,10 +37,10 @@ public class SequenceMatchFeature {
 
 	public SequenceMatchResult doSequenceMatch(List<SequencePattern> sequencePatterns, DataSource dataSource,
 			RestrictionProperties restrictionProperties, boolean limitResultsToPhosphorylatedProteins,
-			boolean doCreateFiles, boolean publicOnly, String realPath) throws DataAccessException {
+			boolean doCreateFiles, User user, String realPath) throws DataAccessException {
 		return doSequenceMatch(sequencePatterns, dataSource, restrictionProperties,
 				restrictionProperties.getOrganismClass(), HistogramStringency.STRINGENCY_HIGH,
-				limitResultsToPhosphorylatedProteins, doCreateFiles, publicOnly, realPath);
+				limitResultsToPhosphorylatedProteins, doCreateFiles, user, realPath);
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class SequenceMatchFeature {
 	public SequenceMatchResult doSequenceMatch(List<SequencePattern> sequencePatterns, DataSource dataSource,
 			RestrictionProperties restrictionProperties, OrganismClass motifOrganismClass,
 			HistogramStringency stringency, boolean limitResultsToPhosphorylatedProteins, boolean doCreateFiles,
-			boolean publicOnly, String realPath) throws DataAccessException {
+			User user, String realPath) throws DataAccessException {
 		DaoFactory factory = ServiceLocator.getDaoFactory();
 		restrictionProperties.setSequenceRegEx(SequencePattern.getRegExs(sequencePatterns));
 		List<Protein> proteins = factory.getProteinDao().get(dataSource, restrictionProperties, true, true);
@@ -122,7 +123,7 @@ public class SequenceMatchFeature {
 						for (int j = 0; j < sequencePatterns.get(i).getPositions().size(); ++j) {
 							if (sequencePatterns.get(i).getPositions().get(j).isExpectedPhosphorylationSite()) {
 								phosphoSites.addAll(phosphoSiteFinder.checkPositionSpecificPhosphoSites(p,
-										patternStartPosition + j, stringency, motifOrganismClass, publicOnly));
+										patternStartPosition + j, stringency, motifOrganismClass, user));
 							}
 						}
 					}

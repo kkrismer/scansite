@@ -303,7 +303,7 @@ public class ProteinScanResultSiteTable extends ScansiteWidget {
                     OrthologScanMotifAction action = new OrthologScanMotifAction(
                             site.getMotif().getGroup(), site.getPosition(),
                             site.getProtein(), results.getHistogramThreshold(),
-                            40, user != null ? user.getSessionId() : "");
+                            40, user == null ? "" : user.getSessionId());
                     final WaitPopup waitPopup = new WaitPopup();
                     waitPopup.center();
                     dispatch.execute(action,

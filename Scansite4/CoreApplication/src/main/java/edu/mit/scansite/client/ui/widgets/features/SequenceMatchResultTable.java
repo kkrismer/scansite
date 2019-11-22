@@ -234,7 +234,7 @@ public class SequenceMatchResultTable extends Composite {
 								results.getSequencePatterns().get(0), match
 										.getProtein(),
 								HistogramStringency.STRINGENCY_MEDIUM, 40,
-								user != null ? user.getSessionId() : "");
+								user == null ? "" : user.getSessionId());
 
 						final WaitPopup waitPopup = new WaitPopup();
 						waitPopup.center();

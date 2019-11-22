@@ -85,7 +85,7 @@ public class MotifGroupSelector extends ScansiteWidget implements
 				motifGroupListBox.getElement().setId("motifGroupListBoxId");
 				motifGroupListBox.setEnabled(false);
 				dispatch.execute(new MotifGroupRetrieverAction(motifClass,
-						user != null ? user.getSessionId() : ""),
+						user == null ? "" : user.getSessionId()),
 						new AsyncCallback<MotifGroupRetrieverResult>() {
 							@Override
 							public void onFailure(Throwable caught) {

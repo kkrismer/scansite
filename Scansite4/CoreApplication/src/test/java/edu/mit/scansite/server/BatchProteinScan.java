@@ -88,7 +88,7 @@ public class BatchProteinScan {
 			Set<String> motifNicks = new HashSet<String>(
 					new ArrayList<String>(Arrays.asList(new String[] { motifName })));
 			List<Motif> motifs = new ArrayList<Motif>();
-			motifs = daoFac.getMotifDao().getAll(motifNicks, motifClass, false);
+			motifs = daoFac.getMotifDao().getAll(motifNicks, motifClass, null);
 			DataSource ds = daoFac.getDataSourceDao()
 					.get(ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[referenceHistogram]);
 			Taxon t = daoFac.getTaxonDao().getByName(ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[referenceHistogram],

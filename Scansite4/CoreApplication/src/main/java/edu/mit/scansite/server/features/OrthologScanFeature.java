@@ -39,6 +39,7 @@ import edu.mit.scansite.shared.transferobjects.ScanResultSite;
 import edu.mit.scansite.shared.transferobjects.SequenceAlignment;
 import edu.mit.scansite.shared.transferobjects.SequenceAlignmentElement;
 import edu.mit.scansite.shared.transferobjects.SequencePattern;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Konstantin Krismer
@@ -54,18 +55,18 @@ public class OrthologScanFeature {
 	private interface ProteinProcessor {
 		List<Integer> findPhosphoSitePositions(LightWeightProtein protein) throws DataAccessException;
 
-		List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
-				boolean publicOnly) throws DataAccessException;
+		List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position, User user)
+				throws DataAccessException;
 
 		int findSiteForAlignment(LightWeightProtein protein);
 
-		boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
+		boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, User user)
 				throws DataAccessException;
 	}
 
 	public OrthologScanSequencePatternResult scanOrthologsBySequencePattern(SequencePattern sequencePattern,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
-			int alignmentRadius, boolean publicOnly) throws DatabaseException {
+			int alignmentRadius, User user) throws DatabaseException {
 		Protein protein = ServiceLocator.getDaoFactory().getProteinDao().get(lightWeightProtein.getIdentifier(),
 				lightWeightProtein.getDataSource());
 		if (protein == null) {
@@ -109,9 +110,9 @@ public class OrthologScanFeature {
 
 			@Override
 			public List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
-					boolean publicOnly) throws DataAccessException {
+					User user) throws DataAccessException {
 				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(protein, position, result.getStringency(),
-						publicOnly);
+						user);
 			}
 
 			@Override
@@ -126,13 +127,13 @@ public class OrthologScanFeature {
 			}
 
 			@Override
-			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly)
+			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, User user)
 					throws DataAccessException {
 				Protein queryProtein = getProteinById(proteins, result.getProtein().getIdentifier());
 				List<Integer> queryProteinPhosphoSites = findPhosphoSitePositions(queryProtein);
 				List<ScanResultSite> sites = new LinkedList<ScanResultSite>();
 				for (Integer phosphoSite : queryProteinPhosphoSites) {
-					sites.addAll(checkSite(queryProtein, phosphoSiteFinder, phosphoSite, publicOnly));
+					sites.addAll(checkSite(queryProtein, phosphoSiteFinder, phosphoSite, user));
 				}
 				if (sites.size() > 0) {
 					targetSequence = sites.get(0).getSiteSequence().replaceAll("\\<.*?\\>", "").toUpperCase();
@@ -144,13 +145,13 @@ public class OrthologScanFeature {
 
 		};
 
-		findSites(processor, result, publicOnly);
+		findSites(processor, result, user);
 		return result;
 	}
 
 	public OrthologScanMotifResult scanOrthologsByMotifGroup(int sitePosition, LightWeightMotifGroup motifGroup,
 			DataSource orthologyDataSource, LightWeightProtein lightWeightProtein, HistogramStringency stringency,
-			int alignmentRadius, boolean publicOnly) throws DatabaseException {
+			int alignmentRadius, User user) throws DatabaseException {
 		Protein protein = ServiceLocator.getDaoFactory().getProteinDao().get(lightWeightProtein.getIdentifier(),
 				lightWeightProtein.getDataSource());
 		if (protein == null) {
@@ -186,9 +187,9 @@ public class OrthologScanFeature {
 
 			@Override
 			public List<ScanResultSite> checkSite(Protein protein, PhosphoSitesFeature phosphoSiteFinder, int position,
-					boolean publicOnly) throws DataAccessException {
+					User user) throws DataAccessException {
 				return phosphoSiteFinder.checkPositionSpecificPhosphoSites(protein, position, result.getStringency(),
-						result.getMotifGroup(), publicOnly);
+						result.getMotifGroup(), user);
 			}
 
 			@Override
@@ -197,7 +198,7 @@ public class OrthologScanFeature {
 			}
 
 			@Override
-			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, boolean publicOnly) {
+			public boolean init(List<Protein> proteins, PhosphoSitesFeature phosphoSiteFinder, User user) {
 				try {
 					targetSequence = extractSiteSequence(result.getProtein().getSequence(), result.getSitePosition());
 					return true;
@@ -207,13 +208,12 @@ public class OrthologScanFeature {
 			}
 		};
 
-		findSites(processor, result, publicOnly);
+		findSites(processor, result, user);
 
 		return result;
 	}
 
-	private void findSites(ProteinProcessor processor, OrthologScanResult result, boolean publicOnly)
-			throws DatabaseException {
+	private void findSites(ProteinProcessor processor, OrthologScanResult result, User user) throws DatabaseException {
 		List<Protein> proteins = ServiceLocator.getDaoFactory().getOrthologDao().getOrthologs(
 				result.getOrthologyDataSource(), result.getProtein().getDataSource(),
 				result.getProtein().getIdentifier());
@@ -231,7 +231,7 @@ public class OrthologScanFeature {
 				}
 			});
 
-			if (processor.init(proteins, phosphoSiteFinder, publicOnly)) {
+			if (processor.init(proteins, phosphoSiteFinder, user)) {
 				for (Protein protein : proteins) {
 					ortholog = new Ortholog();
 					List<Integer> phosphoSitePositions = processor.findPhosphoSitePositions(protein);
@@ -243,7 +243,7 @@ public class OrthologScanFeature {
 
 					for (Integer sitePosition : phosphoSitePositions) {
 						List<ScanResultSite> currentPhosphoSites = processor.checkSite(protein, phosphoSiteFinder,
-								sitePosition, publicOnly);
+								sitePosition, user);
 						if (currentPhosphoSites != null && currentPhosphoSites.size() > 0) {
 							phosphoSites.addAll(currentPhosphoSites);
 						} else {

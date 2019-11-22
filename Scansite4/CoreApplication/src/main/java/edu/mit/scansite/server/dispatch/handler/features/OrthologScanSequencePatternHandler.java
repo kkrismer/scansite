@@ -49,7 +49,7 @@ public class OrthologScanSequencePatternHandler
 				// specified
 				return feature.scanOrthologsBySequencePattern(action.getSequencePattern(),
 						action.getOrthologyDataSource(), action.getProtein(), action.getStringency(),
-						action.getAlignmentRadius(), !loginHandler.isSessionValidLogin(action.getUserSessionId()));
+						action.getAlignmentRadius(), loginHandler.getUserBySessionId(action.getUserSessionId()));
 			} else {
 				// sequence pattern scan form: orthology data source not
 				// specified,
@@ -61,7 +61,7 @@ public class OrthologScanSequencePatternHandler
 					// compatible orthology data source available
 					return feature.scanOrthologsBySequencePattern(action.getSequencePattern(),
 							orthologyDataSources.get(0), action.getProtein(), action.getStringency(),
-							action.getAlignmentRadius(), !loginHandler.isSessionValidLogin(action.getUserSessionId()));
+							action.getAlignmentRadius(), loginHandler.getUserBySessionId(action.getUserSessionId()));
 				} else {
 					return new OrthologScanSequencePatternResult(
 							"no compatible orthology data source available for data source "

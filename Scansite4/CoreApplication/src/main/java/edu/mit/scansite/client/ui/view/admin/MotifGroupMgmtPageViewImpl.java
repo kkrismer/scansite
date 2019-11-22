@@ -109,7 +109,7 @@ public class MotifGroupMgmtPageViewImpl extends MotifGroupMgmtPageView {
 	}
 
 	private void applyUserPrivileges() {
-		if (user == null || (!user.isAdmin() && !user.isSuperAdmin())) {
+		if (user == null || !user.isAdmin()) {
 			History.newItem(NavigationEvent.PageId.ADMIN.getId(), true);
 		}
 	}
