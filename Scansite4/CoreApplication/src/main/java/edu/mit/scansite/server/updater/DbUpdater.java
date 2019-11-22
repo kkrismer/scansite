@@ -121,13 +121,13 @@ public abstract class DbUpdater implements Runnable {
 				FileTransliterator transliterator = getDbFileTransliterator(tempFilePath, getFilePath(errFileName));
 				transliterator.transliterate();
 			}
-			try {
-				logger.info(
-						"Reestablishing database connection to be on the safe side (long download and transliteration times may cause issues)");
-				DbConnector.getInstance().resetConnections();
-			} catch (SQLException e) {
-				logger.error("Failed to reestablish the database connection after long period timeout", e);
-			}
+//			try {
+//				logger.info(
+//						"Reestablishing database connection to be on the safe side (long download and transliteration times may cause issues)");
+//				DbConnector.getInstance().resetConnections();
+//			} catch (SQLException e) {
+//				logger.error("Failed to reestablish the database connection after long period timeout", e);
+//			}
 		}
 
 		logger.info("Prepare file transliterator to transfer data to database");

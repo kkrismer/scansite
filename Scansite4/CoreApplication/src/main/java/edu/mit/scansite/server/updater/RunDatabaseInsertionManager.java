@@ -169,7 +169,8 @@ public class RunDatabaseInsertionManager {
 
         // single long time connection as previously used for setting up the database
         // also required for disabling auto commit and constraints
-        DbConnector.getInstance().resizeConnectionPool(1);
+        // DbConnector.getInstance().resizeConnectionPool(1);
+        // TODO disabled after DbConnector rework
         try {
             logger.info("Resetting database...");
             resetDatabase();

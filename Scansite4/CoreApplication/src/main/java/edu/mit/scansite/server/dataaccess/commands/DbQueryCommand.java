@@ -26,28 +26,41 @@ public abstract class DbQueryCommand<T> extends DbCommand<T> {
 	@Override
 	protected T doExecute() throws DataAccessException {
 		String query = "";
-		Connection connection = DbConnector.getInstance().getConnection();
+		DbConnector dbConnector = null;
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		try {
-			Statement statement = connection.createStatement();
+			dbConnector = DbConnector.getInstance();
+			connection = dbConnector.getConnection();
+			statement = connection.createStatement();
 			query = doGetSqlStatement();
-			ResultSet resultSet = statement.executeQuery(query);
+			resultSet = statement.executeQuery(query);
 
 			T result = null;
 			if (!resultSet.isLast()) {
 				result = doProcessResults(resultSet);
 			}
-			DbConnector.getInstance().close(resultSet);
-			DbConnector.getInstance().close(statement);
 
 			return result;
 		} catch (Exception e) {
-			DataAccessException e2 = new DataAccessException(
-					"executing SELECT-Statement failed: " + query + " (" + e.getMessage() + ")", e);
-			logger.error(e2.getMessage(), e2);
-			throw e2;
+			DataAccessException dataAccessException = new DataAccessException(
+					"executing SELECT statement failed: " + query + " (" + e.getMessage() + ")", e);
+			logger.error(dataAccessException.getMessage(), dataAccessException);
+			throw dataAccessException;
 		} finally {
-			//instead of closing the connection: reuse it
-			//DbConnector.getInstance().close(connection);
+			if (dbConnector != null) {
+				try {
+					dbConnector.close(resultSet);
+					dbConnector.close(statement);
+					dbConnector.close(connection);
+				} catch (Exception e) {
+					DataAccessException dataAccessException = new DataAccessException(
+							"closing result set, statement, and connection for SELECT statement failed: " + query + " (" + e.getMessage() + ")", e);
+					logger.error(dataAccessException.getMessage(), dataAccessException);
+					throw dataAccessException;
+				}
+			}
 		}
 	}
 

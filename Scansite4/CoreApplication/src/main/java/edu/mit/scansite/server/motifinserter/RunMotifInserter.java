@@ -49,7 +49,8 @@ public class RunMotifInserter {
 			dir += "/";
 		}
 		String motifFilePath = dir + "motifs.xml";
-        DbConnector.getInstance().resizeConnectionPool(1);
+        // DbConnector.getInstance().resizeConnectionPool(1);
+        // TODO disabled after DbConnector rework
 		try {
 			DaoFactory factory = ServiceLocator.getDaoFactory();
 			try {

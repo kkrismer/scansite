@@ -3,6 +3,9 @@ package edu.mit.scansite.server.dispatch;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -16,7 +19,7 @@ import net.customware.gwt.dispatch.server.guice.ServerDispatchModule;
  */
 @Singleton
 public class BootstrapListener extends GuiceServletContextListener {
-	// private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public static DbConnector getDbConnector(ServletContext context) {
 		return (DbConnector) context.getAttribute("db");
@@ -31,7 +34,12 @@ public class BootstrapListener extends GuiceServletContextListener {
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		super.contextInitialized(servletContextEvent);
 		ServletContext context = servletContextEvent.getServletContext();
-		context.setAttribute("db", DbConnector.getInstance());
+		try {
+			context.setAttribute("db", DbConnector.getInstance());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		
 	}
 
 	@Override
