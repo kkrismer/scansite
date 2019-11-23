@@ -56,8 +56,8 @@ public class MotifAddHandler implements ActionHandler<MotifAddAction, BooleanRes
 				for (Histogram histogram : action.getHistograms()) {
 					histogram.setImageFilePath(FilePaths.getHistogramFilePath(contextProvider.get().getRealPath("/"),
 							null, FilePaths.getFilePathNumber(histogram.getImageFilePath())));
-					ServerHistogram serverHistogram = new ServerHistogram(histogram);
 					histogram.setMotif(motif);
+					ServerHistogram serverHistogram = new ServerHistogram(histogram);
 					histogramDao.add(serverHistogram);
 				}
 				return new BooleanResult(true);

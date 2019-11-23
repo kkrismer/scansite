@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.mit.scansite.server.dataaccess.commands.CommandConstants;
 import edu.mit.scansite.server.dataaccess.commands.DbQueryCommand;
 import edu.mit.scansite.shared.DataAccessException;
@@ -24,8 +21,6 @@ import edu.mit.scansite.shared.transferobjects.Motif;
  * @author Konstantin Krismer
  */
 public class MotifLocalizationGetAllCommand extends DbQueryCommand<Map<Motif, LightWeightLocalization>> {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	private DataSource localizationDataSource;
 	private Map<String, List<Motif>> identifierToMotifsLUT;
 

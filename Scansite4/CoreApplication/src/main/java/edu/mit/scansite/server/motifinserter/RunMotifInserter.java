@@ -1,10 +1,15 @@
 package edu.mit.scansite.server.motifinserter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
 import edu.mit.scansite.server.dataaccess.MotifDao;
-import edu.mit.scansite.server.dataaccess.databaseconnector.DbConnector;
 import edu.mit.scansite.server.dataaccess.file.DirectoryManagement;
 import edu.mit.scansite.server.dataaccess.file.ImageInOut;
 import edu.mit.scansite.server.dataaccess.file.MotifFileReader;
@@ -16,12 +21,12 @@ import edu.mit.scansite.shared.DataAccessException;
 import edu.mit.scansite.shared.DatabaseException;
 import edu.mit.scansite.shared.FilePaths;
 import edu.mit.scansite.shared.ScansiteConstants;
-import edu.mit.scansite.shared.transferobjects.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
+import edu.mit.scansite.shared.transferobjects.DataSource;
+import edu.mit.scansite.shared.transferobjects.Histogram;
+import edu.mit.scansite.shared.transferobjects.LightWeightMotifGroup;
+import edu.mit.scansite.shared.transferobjects.Motif;
+import edu.mit.scansite.shared.transferobjects.Taxon;
+import edu.mit.scansite.shared.transferobjects.User;
 
 /**
  * @author Tobieh

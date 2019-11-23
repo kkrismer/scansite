@@ -15,6 +15,7 @@ import edu.mit.scansite.shared.dispatch.motif.LightWeightMotifRetrieverResult;
 import edu.mit.scansite.shared.dispatch.motif.MotifUpdateAction;
 import edu.mit.scansite.shared.transferobjects.LightWeightMotif;
 import edu.mit.scansite.shared.transferobjects.Motif;
+import edu.mit.scansite.shared.transferobjects.User;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.ActionException;
@@ -43,8 +44,9 @@ public class MotifUpdateHandler implements ActionHandler<MotifUpdateAction, Ligh
 			throws DispatchException {
 		try {
 			ServiceLocator.getDaoFactory().getMotifDao().updateMotif(action.getMotif());
+			User user = loginHandler.getUserBySessionId(action.getUserSessionId());
 			List<Motif> motifs = ServiceLocator.getDaoFactory().getMotifDao().getAll(action.getMotif().getMotifClass(),
-					loginHandler.getUserBySessionId(action.getUserSessionId()));
+					user, !user.isAdmin());
 			List<LightWeightMotif> lightWeightMotifs = new LinkedList<LightWeightMotif>();
 			for (Motif motif : motifs) {
 				lightWeightMotifs

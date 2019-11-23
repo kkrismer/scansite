@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -33,59 +34,52 @@ public class HistogramAddCommand {
 
 	public void execute() throws DataAccessException {
 		String query = "";
+		DbConnector dbConnector = null;
 		Connection connection = null;
+		PreparedStatement statement = null;
 		File f = new File(h.getImageFilePath());
 		try {
-			connection = DbConnector.getInstance().getConnection();
+			dbConnector = DbConnector.getInstance();
+			connection = dbConnector.getConnection();
 			query = getSqlStatement();
-			PreparedStatement statement = connection.prepareStatement(query);
+			statement = connection.prepareStatement(query);
 			statement.setBlob(1, new FileInputStream(f), f.length());
 			statement.executeUpdate();
-			DbConnector.getInstance().close(statement);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
 		} finally {
-
+			try {
+				if (dbConnector != null) {
+					dbConnector.close(statement);
+					dbConnector.close(connection);
+				}
+			} catch (SQLException e) {
+				logger.error(e.getMessage(), e);
+				throw new DataAccessException(e.getMessage(), e);
+			}
 		}
 	}
 
 	private String getSqlStatement() throws DataAccessException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(CommandConstants.INSERTINTO).append(c.gettHistograms())
-				.append('(').append(c.getcMotifsId())
-				.append(CommandConstants.COMMA).append(c.getcDataSourcesId())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsTaxonId())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsThreshHigh())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsThreshMed())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsThreshLow())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsMedian())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsMedianAbsDev())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsSitesScored())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsProteinsScored())
-				.append(CommandConstants.COMMA)
-				.append(c.getcHistogramsPlotImage()).append(')')
-				.append(CommandConstants.VALUES).append('(')
-				.append(h.getMotif().getId()).append(CommandConstants.COMMA)
-				.append(h.getDataSource().getId())
-				.append(CommandConstants.COMMA).append(h.getTaxon().getId())
-				.append(CommandConstants.COMMA).append(h.getThresholdHigh())
-				.append(CommandConstants.COMMA).append(h.getThresholdMedium())
-				.append(CommandConstants.COMMA).append(h.getThresholdLow())
-				.append(CommandConstants.COMMA).append(h.getMedian())
-				.append(CommandConstants.COMMA).append(h.getMedianAbsDev())
-				.append(CommandConstants.COMMA).append(h.getSitesScored())
-				.append(CommandConstants.COMMA).append(h.getProteinsScored())
-				.append(CommandConstants.COMMA).append('?').append(')');
+		sql.append(CommandConstants.INSERTINTO).append(c.gettHistograms()).append('(').append(c.getcMotifsId())
+				.append(CommandConstants.COMMA).append(c.getcDataSourcesId()).append(CommandConstants.COMMA)
+				.append(c.getcHistogramsTaxonId()).append(CommandConstants.COMMA).append(c.getcHistogramsThreshHigh())
+				.append(CommandConstants.COMMA).append(c.getcHistogramsThreshMed()).append(CommandConstants.COMMA)
+				.append(c.getcHistogramsThreshLow()).append(CommandConstants.COMMA).append(c.getcHistogramsMedian())
+				.append(CommandConstants.COMMA).append(c.getcHistogramsMedianAbsDev()).append(CommandConstants.COMMA)
+				.append(c.getcHistogramsSitesScored()).append(CommandConstants.COMMA)
+				.append(c.getcHistogramsProteinsScored()).append(CommandConstants.COMMA)
+				.append(c.getcHistogramsPlotImage()).append(')').append(CommandConstants.VALUES).append('(')
+				.append(h.getMotif().getId()).append(CommandConstants.COMMA).append(h.getDataSource().getId())
+				.append(CommandConstants.COMMA).append(h.getTaxon().getId()).append(CommandConstants.COMMA)
+				.append(h.getThresholdHigh()).append(CommandConstants.COMMA).append(h.getThresholdMedium())
+				.append(CommandConstants.COMMA).append(h.getThresholdLow()).append(CommandConstants.COMMA)
+				.append(h.getMedian()).append(CommandConstants.COMMA).append(h.getMedianAbsDev())
+				.append(CommandConstants.COMMA).append(h.getSitesScored()).append(CommandConstants.COMMA)
+				.append(h.getProteinsScored()).append(CommandConstants.COMMA).append('?').append(')');
 		return sql.toString();
 	}
 }

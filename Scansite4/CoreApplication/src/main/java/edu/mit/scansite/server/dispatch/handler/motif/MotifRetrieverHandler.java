@@ -41,10 +41,16 @@ public class MotifRetrieverHandler implements ActionHandler<MotifRetrieverAction
 			throws DispatchException {
 		try {
 			if (action.getMotifShortName() == null || action.getMotifShortName().isEmpty()) {
+				logger.info("short name is null");
+				logger.info(String.valueOf(ServiceLocator.getDaoFactory().getMotifDao()
+						.getAll(action.getMotifClass(), loginHandler.getUserBySessionId(action.getUserSessionId())) == null));
 				return new MotifRetrieverResult(new ArrayList<Motif>(ServiceLocator.getDaoFactory().getMotifDao()
 						.getAll(action.getMotifClass(), loginHandler.getUserBySessionId(action.getUserSessionId()))));
 			} else {
+				logger.info("short name is not null");
+				logger.info(action.getMotifShortName());
 				Motif m = ServiceLocator.getDaoFactory().getMotifDao().getByShortName(action.getMotifShortName());
+				logger.info(String.valueOf(m == null));
 				ArrayList<Motif> ms = new ArrayList<Motif>();
 				ms.add(m);
 				return new MotifRetrieverResult(ms);

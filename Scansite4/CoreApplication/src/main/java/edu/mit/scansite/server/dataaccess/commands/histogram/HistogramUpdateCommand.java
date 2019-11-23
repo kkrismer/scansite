@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -33,20 +34,30 @@ public class HistogramUpdateCommand {
 
 	public void execute() throws DataAccessException {
 		String query = "";
-		Connection connection;
+		DbConnector dbConnector = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 		File f = new File(hist.getImageFilePath());
 		try {
-			connection = DbConnector.getInstance().getConnection();
+			dbConnector = DbConnector.getInstance();
+			connection = dbConnector.getConnection();
 			query = getSqlStatement();
-			PreparedStatement statement = connection.prepareStatement(query);
+			statement = connection.prepareStatement(query);
 			statement.setBlob(1, new FileInputStream(f), f.length());
 			statement.executeUpdate();
-			DbConnector.getInstance().close(statement);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new DataAccessException(e.getMessage(), e);
 		} finally {
-
+			try {
+				if (dbConnector != null) {
+					dbConnector.close(statement);
+					dbConnector.close(connection);
+				}
+			} catch (SQLException e) {
+				logger.error(e.getMessage(), e);
+				throw new DataAccessException(e.getMessage(), e);
+			}
 		}
 	}
 

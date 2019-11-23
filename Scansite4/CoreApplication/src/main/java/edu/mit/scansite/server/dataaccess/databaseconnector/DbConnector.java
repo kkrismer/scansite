@@ -93,25 +93,35 @@ public class DbConnector {
 	 * @return The last automatically generated key value
 	 */
 	public int executeInsertQuery(final String query) throws DataAccessException {
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		try {
 			int id = 0;
-			Connection connection = getConnection();
-			Statement statement = connection.createStatement();
+			connection = getConnection();
+			statement = connection.createStatement();
 			statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-			ResultSet resultSet = statement.getGeneratedKeys();
+			resultSet = statement.getGeneratedKeys();
 			while (resultSet.next()) {
 				if (id < resultSet.getInt(1)) {
 					id = resultSet.getInt(1);
 				}
 			}
-			close(resultSet);
-			close(statement);
-			close(connection);
 			return id;
 		} catch (Exception e) {
-			DataAccessException dataAccessException = new DataAccessException("executing INSERT-Statement failed: " + query, e);
+			DataAccessException dataAccessException = new DataAccessException("executing INSERT statement failed: " + query, e);
 			logger.error(dataAccessException.getMessage(), dataAccessException);
 			throw dataAccessException;
+		} finally {
+			try {
+				close(resultSet);
+				close(statement);
+				close(connection);
+			} catch (SQLException e) {
+				DataAccessException dataAccessException = new DataAccessException("closing INSERT statement failed: " + query, e);
+				logger.error(dataAccessException.getMessage(), dataAccessException);
+				throw dataAccessException;
+			}
 		}
 	}
 
@@ -119,18 +129,25 @@ public class DbConnector {
 	 * @return The number of rows updated or, in case of DDL statements, zero.
 	 */
 	public int executeUpdateQuery(final String query) throws DataAccessException {
+		Connection connection = null;
+		Statement statement = null;
 		try {
-			int id;
-			Connection connection = getConnection();
-			Statement statement = connection.createStatement();
-			id = statement.executeUpdate(query);
-			close(statement);
-			close(connection);
-			return id;
+			connection = getConnection();
+			statement = connection.createStatement();
+			return statement.executeUpdate(query);
 		} catch (Exception e) {
-			DataAccessException dataAccessException = new DataAccessException("executing UPDATE-Statement failed: " + query, e);
+			DataAccessException dataAccessException = new DataAccessException("executing UPDATE statement failed: " + query, e);
 			logger.error(dataAccessException.getMessage(), dataAccessException);
 			throw dataAccessException;
+		} finally {
+			try {
+				close(statement);
+				close(connection);
+			} catch (SQLException e) {
+				DataAccessException dataAccessException = new DataAccessException("closing UPDATE statement failed: " + query, e);
+				logger.error(dataAccessException.getMessage(), dataAccessException);
+				throw dataAccessException;
+			}
 		}
 	}
 }

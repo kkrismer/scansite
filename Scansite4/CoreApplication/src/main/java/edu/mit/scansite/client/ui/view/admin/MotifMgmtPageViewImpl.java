@@ -28,6 +28,7 @@ import edu.mit.scansite.client.ui.widgets.admin.MotifIdentifierWidget;
 import edu.mit.scansite.client.ui.widgets.features.ChooseUserFileMotifWidget;
 import edu.mit.scansite.client.ui.widgets.motifs.MotifClassWidget;
 import edu.mit.scansite.shared.Breadcrumbs;
+import edu.mit.scansite.shared.transferobjects.Identifier;
 import edu.mit.scansite.shared.transferobjects.LightWeightMotif;
 import edu.mit.scansite.shared.transferobjects.Motif;
 import edu.mit.scansite.shared.transferobjects.MotifClass;
@@ -41,18 +42,15 @@ import edu.mit.scansite.shared.util.Validator;
 public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 	public static final int NR_OF_HISTOGRAMS = 2;
 
-	private static MotifMgmtPageViewImplUiBinder uiBinder = GWT
-			.create(MotifMgmtPageViewImplUiBinder.class);
+	private static MotifMgmtPageViewImplUiBinder uiBinder = GWT.create(MotifMgmtPageViewImplUiBinder.class);
 
-	interface MotifMgmtPageViewImplUiBinder extends
-			UiBinder<Widget, MotifMgmtPageViewImpl> {
+	interface MotifMgmtPageViewImplUiBinder extends UiBinder<Widget, MotifMgmtPageViewImpl> {
 	}
 
 	private Presenter presenter;
 	private Motif motif;
 	private User user;
-	private List<HistogramEditWidget> histogramWidgets = new ArrayList<HistogramEditWidget>(
-			NR_OF_HISTOGRAMS);
+	private List<HistogramEditWidget> histogramWidgets = new ArrayList<HistogramEditWidget>(NR_OF_HISTOGRAMS);
 
 	@UiField
 	MotifClassWidget motifClassWidgetSelect;
@@ -123,7 +121,7 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 
 		histogramWidgets.add(new HistogramEditWidget());
 		histogramWidgets.add(new HistogramEditWidget());
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
 
 		runCommandOnLoad(new Command() {
@@ -132,8 +130,7 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 				displayNameTextBox.getElement().setId("displayNameTextBoxId");
 				shortNameTextBox.getElement().setId("shortNameTextBoxId");
 				publicCheckBox.getElement().setId("publicCheckBoxId");
-				displayNameAddTextBox.getElement().setId(
-						"displayNameAddTextBoxId");
+				displayNameAddTextBox.getElement().setId("displayNameAddTextBoxId");
 				shortNameAddTextBox.getElement().setId("shortNameAddTextBoxId");
 				publicAddCheckBox.getElement().setId("publicAddCheckBoxId");
 
@@ -151,20 +148,16 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 					histWidget.setVisible(false);
 					histogramsPanel.add(histWidget);
 				}
-				
+
 				disableEditInputFields();
 				final SingleSelectionModel<LightWeightMotif> selectionModel = new SingleSelectionModel<LightWeightMotif>();
 				motifCellList.setSelectionModel(selectionModel);
-				selectionModel
-						.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-							public void onSelectionChange(
-									SelectionChangeEvent event) {
-								presenter
-										.onMotifCellListSelectionChange(selectionModel
-												.getSelectedObject());
-								hideMessage();
-							}
-						});
+				selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					public void onSelectionChange(SelectionChangeEvent event) {
+						presenter.onMotifCellListSelectionChange(selectionModel.getSelectedObject());
+						hideMessage();
+					}
+				});
 			}
 		});
 	}
@@ -200,23 +193,27 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 		Validator validator = new Validator();
 		if (validator.validateGivenString(displayNameAddTextBox.getValue())
 				&& validator.validateNoSpaces(shortNameAddTextBox.getValue())) {
-			hideMessage();
+			List<Identifier> identifiers = motifIdentifierWidgetAdd.getIdentifiers();
+			if (identifiers != null && identifiers.size() > 0) {
+				hideMessage();
 
-			if (chooseUserFileMotifWidget.getMotifSelection() != null) {
-				Motif motif = chooseUserFileMotifWidget.getMotifSelection()
-						.getUserMotif();
-				motif.setId(-1);
-				motif.setDisplayName(displayNameAddTextBox.getValue());
-				motif.setShortName(shortNameAddTextBox.getValue());
-				motif.setGroup(motifGroupSelectorAdd.getMotifGroup());
-				motif.setIdentifiers(motifIdentifierWidgetAdd.getIdentifiers());
-				motif.setMotifClass(motifClassWidgetAdd.getMotifClass());
-				motif.setPublic(publicAddCheckBox.getValue());
-				motif.setSubmitter(user.getEmail());
+				if (chooseUserFileMotifWidget.getMotifSelection() != null) {
+					Motif motif = chooseUserFileMotifWidget.getMotifSelection().getUserMotif();
+					motif.setId(-1);
+					motif.setDisplayName(displayNameAddTextBox.getValue());
+					motif.setShortName(shortNameAddTextBox.getValue());
+					motif.setGroup(motifGroupSelectorAdd.getMotifGroup());
+					motif.setIdentifiers(motifIdentifierWidgetAdd.getIdentifiers());
+					motif.setMotifClass(motifClassWidgetAdd.getMotifClass());
+					motif.setPublic(publicAddCheckBox.getValue());
+					motif.setSubmitter(user.getEmail());
 
-				confirmButton.setVisible(false);
-				presenter.onConfirmButtonClicked(motif);
-				addButton.setVisible(true);
+					confirmButton.setVisible(false);
+					presenter.onConfirmButtonClicked(motif);
+					addButton.setVisible(true);
+				} else {
+					showWarningMessage("Input validation failed: At least one identifier required");
+				}
 			} else {
 				showWarningMessage("Input validation failed: No motif has been uploaded");
 			}
@@ -233,8 +230,7 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 			hideMessage();
 
 			if (chooseUserFileMotifWidget.getMotifSelection() != null) {
-				Motif motif = chooseUserFileMotifWidget.getMotifSelection()
-						.getUserMotif();
+				Motif motif = chooseUserFileMotifWidget.getMotifSelection().getUserMotif();
 				motif.setId(-1);
 				motif.setDisplayName(displayNameAddTextBox.getValue());
 				motif.setShortName(shortNameAddTextBox.getValue());

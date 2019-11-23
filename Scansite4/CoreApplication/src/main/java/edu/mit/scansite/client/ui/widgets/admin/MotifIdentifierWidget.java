@@ -116,9 +116,9 @@ public class MotifIdentifierWidget extends ScansiteWidget {
 			List<Identifier> identifiers = new LinkedList<>();
 			for (Entry<IdentifierType, TextBox> identifier : identifierTextBoxes
 					.entrySet()) {
-				if (!identifier.getValue().getValue().isEmpty()) {
+				if (!identifier.getValue().getValue().trim().isEmpty()) {
 					identifiers.add(new Identifier(identifier.getValue()
-							.getValue(), identifier.getKey()));
+							.getValue().trim(), identifier.getKey()));
 				}
 			}
 			return identifiers;
