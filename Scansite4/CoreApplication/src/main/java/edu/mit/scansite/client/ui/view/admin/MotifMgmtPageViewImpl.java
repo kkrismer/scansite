@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -11,6 +12,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -155,7 +157,8 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 				selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						presenter.onMotifCellListSelectionChange(selectionModel.getSelectedObject());
-						hideMessage();
+						hideMessage(1);
+						hideMessage(2);
 					}
 				});
 			}
@@ -195,7 +198,8 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 				&& validator.validateNoSpaces(shortNameAddTextBox.getValue())) {
 			List<Identifier> identifiers = motifIdentifierWidgetAdd.getIdentifiers();
 			if (identifiers != null && identifiers.size() > 0) {
-				hideMessage();
+				hideMessage(1);
+				hideMessage(2);
 
 				if (chooseUserFileMotifWidget.getMotifSelection() != null) {
 					Motif motif = chooseUserFileMotifWidget.getMotifSelection().getUserMotif();
@@ -212,13 +216,13 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 					presenter.onConfirmButtonClicked(motif);
 					addButton.setVisible(true);
 				} else {
-					showWarningMessage("Input validation failed: At least one identifier required");
+					showWarningMessage("Input validation failed: no motif has been uploaded", 2);
 				}
 			} else {
-				showWarningMessage("Input validation failed: No motif has been uploaded");
+				showWarningMessage("Input validation failed: at least one identifier required", 2);
 			}
 		} else {
-			showWarningMessage("Input validation failed");
+			showWarningMessage("Input validation failed: invalid display or short name", 2);
 		}
 	}
 
@@ -227,25 +231,34 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 		Validator validator = new Validator();
 		if (validator.validateGivenString(displayNameAddTextBox.getValue())
 				&& validator.validateNoSpaces(shortNameAddTextBox.getValue())) {
-			hideMessage();
+			List<Identifier> identifiers = motifIdentifierWidgetAdd.getIdentifiers();
+			if (identifiers != null && identifiers.size() > 0) {
+				hideMessage(1);
+				hideMessage(2);
 
-			if (chooseUserFileMotifWidget.getMotifSelection() != null) {
-				Motif motif = chooseUserFileMotifWidget.getMotifSelection().getUserMotif();
-				motif.setId(-1);
-				motif.setDisplayName(displayNameAddTextBox.getValue());
-				motif.setShortName(shortNameAddTextBox.getValue());
-				motif.setGroup(motifGroupSelectorAdd.getMotifGroup());
-				motif.setIdentifiers(motifIdentifierWidgetAdd.getIdentifiers());
-				motif.setMotifClass(motifClassWidgetAdd.getMotifClass());
-				motif.setPublic(publicAddCheckBox.getValue());
-				motif.setSubmitter(user.getEmail());
+				if (chooseUserFileMotifWidget.getMotifSelection() != null) {
+					setAddButtonEnabled(false);
+					showWaitSymbol();
+					
+					Motif motif = chooseUserFileMotifWidget.getMotifSelection().getUserMotif();
+					motif.setId(-1);
+					motif.setDisplayName(displayNameAddTextBox.getValue());
+					motif.setShortName(shortNameAddTextBox.getValue());
+					motif.setGroup(motifGroupSelectorAdd.getMotifGroup());
+					motif.setIdentifiers(motifIdentifierWidgetAdd.getIdentifiers());
+					motif.setMotifClass(motifClassWidgetAdd.getMotifClass());
+					motif.setPublic(publicAddCheckBox.getValue());
+					motif.setSubmitter(user.getEmail());
 
-				presenter.onAddButtonClicked(motif);
+					presenter.onAddButtonClicked(motif);
+				} else {
+					showWarningMessage("Input validation failed: no motif has been uploaded", 2);
+				}
 			} else {
-				showWarningMessage("Input validation failed: No motif has been uploaded");
+				showWarningMessage("Input validation failed: at least one identifier required", 2);
 			}
 		} else {
-			showWarningMessage("Input validation failed");
+			showWarningMessage("Input validation failed: invalid display or short name", 2);
 		}
 	}
 
@@ -254,25 +267,36 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 		Validator validator = new Validator();
 		if (validator.validateGivenString(displayNameTextBox.getValue())
 				&& validator.validateNoSpaces(shortNameTextBox.getValue())) {
-			hideMessage();
+			List<Identifier> identifiers = motifIdentifierWidget.getIdentifiers();
+			if (identifiers != null && identifiers.size() > 0) {
+				if (motif != null) {
+					hideMessage(1);
+					hideMessage(2);
 
-			motif.setDisplayName(displayNameTextBox.getValue());
-			motif.setShortName(shortNameTextBox.getValue());
-			motif.setGroup(motifGroupSelector.getMotifGroup());
-			motif.setIdentifiers(motifIdentifierWidget.getIdentifiers());
-			motif.setMotifClass(motifClassWidget.getMotifClass());
-			motif.setPublic(publicCheckBox.getValue());
+					motif.setDisplayName(displayNameTextBox.getValue());
+					motif.setShortName(shortNameTextBox.getValue());
+					motif.setGroup(motifGroupSelector.getMotifGroup());
+					motif.setIdentifiers(motifIdentifierWidget.getIdentifiers());
+					motif.setMotifClass(motifClassWidget.getMotifClass());
+					motif.setPublic(publicCheckBox.getValue());
 
-			presenter.onUpdateButtonClicked(motif);
+					presenter.onUpdateButtonClicked(motif);
+				} else {
+					showWarningMessage("Could not update motif: no motif was selected");
+				}
+			} else {
+				showWarningMessage("Input validation failed: at least one identifier required", 1);
+			}
 		} else {
-			showWarningMessage("Input validation failed");
+			showWarningMessage("Input validation failed: invalid display or short name", 1);
 		}
 	}
 
 	@UiHandler("deleteButton")
 	public void onDeleteButtonClick(ClickEvent event) {
 		if (motif != null) {
-			hideMessage();
+			hideMessage(1);
+			hideMessage(2);
 			presenter.onDeleteButtonClicked(motif);
 		} else {
 			showWarningMessage("Could not delete motif: No motif was selected");
@@ -367,5 +391,38 @@ public class MotifMgmtPageViewImpl extends MotifMgmtPageView {
 		publicCheckBox.setEnabled(true);
 		updateMetaInfoButton.setEnabled(true);
 		deleteButton.setEnabled(true);
+	}
+
+	@Override
+	public void clearAddInputFields() {
+		displayNameAddTextBox.setValue("");
+		shortNameAddTextBox.setValue("");
+		shortNameAddTextBox.setValue("");
+		List<Identifier> identifiers = motifIdentifierWidgetAdd.getIdentifiers();
+		for (Identifier identifier : identifiers) {
+			identifier.setValue("");
+		}
+		motifIdentifierWidgetAdd.setIdentifiers(identifiers);
+		motifClassWidget.setMotifClass(MotifClass.MAMMALIAN);
+		publicCheckBox.setValue(false);
+		chooseUserFileMotifWidget.reset();
+	}
+	
+	@Override
+	public void setAddButtonEnabled(boolean enabled) {
+		addButton.setEnabled(enabled);
+	}
+
+
+	@Override
+	public void showWaitSymbol() {
+		Element waitSpanElement = DOM.getElementById("waitScan");
+		waitSpanElement.setAttribute("style", "display: inline;");
+	}
+
+	@Override
+	public void hideWaitSymbol() {
+		Element waitSpanElement = DOM.getElementById("waitScan");
+		waitSpanElement.setAttribute("style", "display: none;");
 	}
 }

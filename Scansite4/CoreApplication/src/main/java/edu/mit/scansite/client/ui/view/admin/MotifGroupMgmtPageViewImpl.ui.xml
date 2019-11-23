@@ -26,7 +26,7 @@
 					<g:SubmitButton ui:field="addButton">Add</g:SubmitButton>
 					<g:SubmitButton ui:field="updateButton" visible="false">Update</g:SubmitButton>
 					<g:SubmitButton ui:field="deleteButton" visible="false">Delete</g:SubmitButton>
-					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+					<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 				</li>
 				<g:Hidden ui:field="motifGroupId" />
 			</ol>

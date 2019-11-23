@@ -39,24 +39,37 @@ public abstract class ScansiteWidget extends Composite {
 	}
 
 	public void hideMessage() {
-		EventBus.instance().fireEvent(new MessageClearEvent());
+		hideMessage(0);
+	}
+
+	public void hideMessage(int messageDisplayWidgetID) {
+		EventBus.instance().fireEvent(new MessageClearEvent(messageDisplayWidgetID));
 	}
 
 	public void showErrorMessage(String message) {
-		EventBus.instance().fireEvent(
-				new MessageEvent(MessageEventPriority.ERROR, message, this
-						.getClass().toString(), null));
+		showErrorMessage(message, 0);
+	}
+
+	public void showErrorMessage(String message, int messageDisplayWidgetID) {
+		EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR, message, this.getClass().toString(),
+				null, messageDisplayWidgetID));
 	}
 
 	public void showWarningMessage(String message) {
-		EventBus.instance().fireEvent(
-				new MessageEvent(MessageEventPriority.WARNING, message, this
-						.getClass().toString(), null));
+		showWarningMessage(message, 0);
+	}
+
+	public void showWarningMessage(String message, int messageDisplayWidgetID) {
+		EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.WARNING, message,
+				this.getClass().toString(), null, messageDisplayWidgetID));
 	}
 
 	public void showInfoMessage(String message) {
-		EventBus.instance().fireEvent(
-				new MessageEvent(MessageEventPriority.INFO, message, this
-						.getClass().toString(), null));
+		showInfoMessage(message, 0);
+	}
+
+	public void showInfoMessage(String message, int messageDisplayWidgetID) {
+		EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.INFO, message, this.getClass().toString(),
+				null, messageDisplayWidgetID));
 	}
 }

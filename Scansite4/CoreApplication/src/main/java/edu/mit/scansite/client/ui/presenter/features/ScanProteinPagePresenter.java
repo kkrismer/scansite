@@ -60,7 +60,7 @@ public class ScanProteinPagePresenter extends Presenter implements
 				@Override
 				public void onFailure(Throwable caught) {
 					view.setSubmitButtonEnabled(true);
-					view.hideWaitImage();
+					view.hideWaitSymbol();
 					EventBus.instance().fireEvent(
 							new MessageEvent(MessageEventPriority.ERROR,
 									"Server-side error", this.getClass()
@@ -70,7 +70,7 @@ public class ScanProteinPagePresenter extends Presenter implements
 				@Override
 				public void onSuccess(ProteinScanResult result) {
 					view.setSubmitButtonEnabled(true);
-					view.hideWaitImage();
+					view.hideWaitSymbol();
 					view.hideMessage();
 					if (result.isSuccess()) {
 						EventBus.instance().fireEvent(

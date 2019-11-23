@@ -4,7 +4,7 @@
 	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Scan for evolutionary conserved phosphorylation sites - Result</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<h3>Scan properties</h3>
 		<div class="paramView">
 			<wf:DisplayGeneralPropertiesWidget

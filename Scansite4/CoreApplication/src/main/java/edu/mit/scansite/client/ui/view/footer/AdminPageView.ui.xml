@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Administrator and Collaborator Area</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		Welcome back, <g:Label ui:field="nameLabel" styleName="inline"></g:Label>! Your access level is <g:Label ui:field="levelLabel" styleName="inline"></g:Label>.
 		<g:SubmitButton ui:field="logoutButton" text="Logout" />
 		<br /><br />

@@ -183,7 +183,7 @@ public class PredictLocalizationPageViewImpl extends
 	}
 
 	@Override
-	public void hideWaitImage() {
+	public void hideWaitSymbol() {
 		Element waitSpanElement = DOM.getElementById("waitScan");
 		waitSpanElement.setAttribute("style", "display: none;");
 	}

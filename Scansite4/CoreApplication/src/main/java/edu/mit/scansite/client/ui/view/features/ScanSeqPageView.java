@@ -28,5 +28,5 @@ public abstract class ScanSeqPageView extends PageView implements
 
 	public abstract void showWaitSymbol();
 
-	public abstract void hideWaitImage();
+	public abstract void hideWaitSymbol();
 }

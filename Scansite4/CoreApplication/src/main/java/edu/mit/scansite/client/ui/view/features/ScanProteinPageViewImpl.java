@@ -265,7 +265,7 @@ public class ScanProteinPageViewImpl extends ScanProteinPageView {
 	}
 
 	@Override
-	public void hideWaitImage() {
+	public void hideWaitSymbol() {
 		Element waitSpanElement = DOM.getElementById("waitScan");
 		waitSpanElement.setAttribute("style", "display: none;");
 	}

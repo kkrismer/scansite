@@ -6,7 +6,6 @@
 	xmlns:wa="urn:import:edu.mit.scansite.client.ui.widgets.admin">
 	<g:HTMLPanel>
 		<h2>Motif Management</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
 		<h3>Update existing motifs</h3>
 		<wm:MotifClassWidget ui:field="motifClassWidgetSelect"
 			radioButtonGroupName="motifClassWidgetSelectGroupName" />
@@ -42,6 +41,7 @@
 				<li>
 					<g:SubmitButton ui:field="updateMetaInfoButton">Update motif meta info</g:SubmitButton>
 					<g:SubmitButton ui:field="deleteButton">Delete</g:SubmitButton>
+					<wg:MessageDisplayWidget ui:field="updateDeleteMessageDisplayWidget" messageDisplayWidgetID="1" />
 				</li>
 			</ol>
 		</fieldset>
@@ -79,6 +79,8 @@
 						motif</g:SubmitButton>
 					<g:SubmitButton ui:field="addButton" visible="false">Add
 						motif</g:SubmitButton>
+					<span id="waitScan" class="waitImage" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<wg:MessageDisplayWidget ui:field="confirmAddMessageDisplayWidget" messageDisplayWidgetID="2" />
 				</li>
 			</ol>
 		</fieldset>

@@ -7,14 +7,23 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class MessageClearEvent extends GwtEvent<MessageClearEventHandler> {
 	public static Type<MessageClearEventHandler> TYPE = new Type<MessageClearEventHandler>();
+	private int messageDisplayWidgetID = 0;
 
 	public MessageClearEvent() {
+		this(0);
+	}
 
+	public MessageClearEvent(int messageDisplayWidgetID) {
+		this.messageDisplayWidgetID = messageDisplayWidgetID;
 	}
 
 	@Override
 	public Type<MessageClearEventHandler> getAssociatedType() {
 		return TYPE;
+	}
+
+	public int getMessageDisplayWidgetID() {
+		return messageDisplayWidgetID;
 	}
 
 	@Override

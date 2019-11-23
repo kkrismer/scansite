@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Tutorial Overview</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<p>
 			The sections below give detailed instructions on how to use the programs that make up Scansite.</p>
 		<h3>

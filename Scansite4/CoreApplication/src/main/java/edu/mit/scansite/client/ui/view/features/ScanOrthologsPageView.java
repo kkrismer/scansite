@@ -35,7 +35,7 @@ public abstract class ScanOrthologsPageView extends PageView implements
 
 	public abstract void showWaitSymbol();
 
-	public abstract void hideWaitImage();
+	public abstract void hideWaitSymbol();
 
 	public abstract void initMotifGroups(List<LightWeightMotifGroup> motifGroups);
 }

@@ -5,7 +5,7 @@
 	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Scan Protein for Motifs - Result</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<h3>Protein properties</h3>
 		<div class="paramView">
 			<wf:DisplayGeneralPropertiesWidget

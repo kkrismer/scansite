@@ -15,7 +15,6 @@ import edu.mit.scansite.client.ui.presenter.Presenter;
 import edu.mit.scansite.client.ui.view.admin.MotifMgmtPageView;
 import edu.mit.scansite.client.ui.widgets.admin.HistogramEditWidget;
 import edu.mit.scansite.shared.ScansiteConstants;
-import edu.mit.scansite.shared.dispatch.BooleanResult;
 import edu.mit.scansite.shared.dispatch.datasource.DataSourcesRetrieverAction;
 import edu.mit.scansite.shared.dispatch.datasource.DataSourcesRetrieverResult;
 import edu.mit.scansite.shared.dispatch.motif.HistogramCreateAction;
@@ -62,7 +61,7 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 					@Override
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR, "Server-side error",
-								this.getClass().toString(), caught));
+								this.getClass().toString(), caught, 2));
 					}
 
 					@Override
@@ -85,11 +84,12 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 
 	private void retrieveMotifs(MotifClass motifClass) {
 		boolean isAdmin = user == null ? false : user.isAdmin();
-		dispatch.execute(new LightWeightMotifRetrieverAction(motifClass, user == null ? "" : user.getSessionId(), !isAdmin),
+		dispatch.execute(
+				new LightWeightMotifRetrieverAction(motifClass, user == null ? "" : user.getSessionId(), !isAdmin),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR,
-								"Unable to retrieve motifs from database", this.getClass().toString(), caught));
+								"Unable to retrieve motifs from database", this.getClass().toString(), caught, 2));
 					}
 
 					public void onSuccess(LightWeightMotifRetrieverResult result) {
@@ -124,15 +124,15 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 	@Override
 	public void onConfirmButtonClicked(Motif motif) {
 		view.setHistogramsVisible(true);
-		for (int histNr = 0; histNr < view.getHistogramWidgets().size(); ++histNr) {
-			String taxonName = ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[histNr];
-			String dataSourceShortName = ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[histNr];
+		for (int i = 0; i < view.getHistogramWidgets().size(); ++i) {
+			String taxonName = ScansiteConstants.HIST_DEFAULT_TAXON_NAMES[i];
+			String dataSourceShortName = ScansiteConstants.HIST_DEFAULT_DATASOURCE_SHORTS[i];
 
-			view.getHistogramEditWidget(histNr).setApplyButtonEnabled(false);
-			view.getHistogramEditWidget(histNr).init(histNr, dataSourceShortName, taxonName, motif.getShortName());
+			view.getHistogramEditWidget(i).setApplyButtonEnabled(false);
+			view.getHistogramEditWidget(i).init(i, dataSourceShortName, taxonName, motif.getShortName());
 
 			HistogramCreateAction action = new HistogramCreateAction();
-			action.setHistogramNr(histNr);
+			action.setHistogramNr(i);
 			action.setMotif(motif);
 			action.setTaxonName(taxonName);
 			action.setDataSource(dataSources.get(dataSourceShortName));
@@ -148,7 +148,7 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 					EventBus.instance()
 							.fireEvent(new MessageEvent(MessageEventPriority.INFO,
 									"Please adapt the stringency levels to your preferences",
-									this.getClass().toString(), null));
+									this.getClass().toString(), null, 2));
 					view.getHistogramEditWidget(result.getHistogramNr()).setApplyButtonEnabled(true);
 					view.getHistogramEditWidget(result.getHistogramNr()).setHistogram(result.getHistogram());
 				}
@@ -165,27 +165,31 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 			}
 		}
 		if (doContinue) {
-			MotifAddAction action = new MotifAddAction();
-			action.setMotif(motif);
+			MotifAddAction action = new MotifAddAction(motif, user == null ? "" : user.getSessionId());
 			for (HistogramEditWidget hew : view.getHistogramWidgets()) {
 				action.addHistogram(hew.getHistogram());
 			}
-			dispatch.execute(action, new AsyncCallback<BooleanResult>() {
+			dispatch.execute(action, new AsyncCallback<LightWeightMotifRetrieverResult>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR,
-							"Could not save motif and corresponding histograms", this.getClass().toString(), caught));
+					view.setAddButtonEnabled(true);
+					view.hideWaitSymbol();
+					EventBus.instance()
+							.fireEvent(new MessageEvent(MessageEventPriority.ERROR,
+									"Could not save motif and corresponding histograms", this.getClass().toString(),
+									caught, 2));
 				}
 
 				@Override
-				public void onSuccess(BooleanResult result) {
-					if (result.isSuccessful()) {
-						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.INFO,
-								"Motif and histograms successfully saved", this.getClass().toString(), null));
-					} else {
-						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR,
-								"Could not save motif and corresponding histograms", this.getClass().toString(), null));
-					}
+				public void onSuccess(LightWeightMotifRetrieverResult result) {
+					view.displayMotifList(result.getMotifs());
+					view.disableEditInputFields();
+					view.clearAddInputFields();
+					view.setHistogramsVisible(false);
+					view.setAddButtonEnabled(true);
+					view.hideWaitSymbol();
+					EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.INFO,
+							"Motif and histograms successfully saved", this.getClass().toString(), null, 2));
 				}
 			});
 		}
@@ -193,12 +197,12 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 
 	@Override
 	public void onUpdateButtonClicked(Motif motif) {
-		dispatch.execute(new MotifUpdateAction(motif, user == null ? null : user.getSessionId()),
+		dispatch.execute(new MotifUpdateAction(motif, user == null ? "" : user.getSessionId()),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR, caught.getMessage(),
-								this.getClass().toString(), caught));
+								this.getClass().toString(), caught, 1));
 					}
 
 					@Override
@@ -206,19 +210,20 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 						view.displayMotifList(result.getMotifs());
 						view.disableEditInputFields();
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.INFO,
-								"Motif successfully updated", this.getClass().toString(), null));
+								"Motif successfully updated", this.getClass().toString(), null, 1));
 					}
 				});
 	}
 
 	@Override
 	public void onDeleteButtonClicked(LightWeightMotif motif) {
-		dispatch.execute(new MotifDeleteAction(motif.getId(), motif.getMotifClass(), user == null ? "" : user.getSessionId()),
+		dispatch.execute(
+				new MotifDeleteAction(motif.getId(), motif.getMotifClass(), user == null ? "" : user.getSessionId()),
 				new AsyncCallback<LightWeightMotifRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR, caught.getMessage(),
-								this.getClass().toString(), caught));
+								this.getClass().toString(), caught, 1));
 					}
 
 					@Override
@@ -226,19 +231,19 @@ public class MotifMgmtPagePresenter extends Presenter implements MotifMgmtPageVi
 						view.displayMotifList(result.getMotifs());
 						view.disableEditInputFields();
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.INFO,
-								"Motif successfully deleted", this.getClass().toString(), null));
+								"Motif successfully deleted", this.getClass().toString(), null, 1));
 					}
 				});
 	}
 
 	@Override
 	public void onMotifCellListSelectionChange(LightWeightMotif motif) {
-		dispatch.execute(new MotifRetrieverAction(motif.getShortName(), motif.getMotifClass(), user == null ? "" : user.getSessionId()),
-				new AsyncCallback<MotifRetrieverResult>() {
+		dispatch.execute(new MotifRetrieverAction(motif.getShortName(), motif.getMotifClass(),
+				user == null ? "" : user.getSessionId()), new AsyncCallback<MotifRetrieverResult>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						EventBus.instance().fireEvent(new MessageEvent(MessageEventPriority.ERROR, caught.getMessage(),
-								this.getClass().toString(), caught));
+								this.getClass().toString(), caught, 1));
 					}
 
 					@Override

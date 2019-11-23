@@ -16,6 +16,7 @@ public class MessageEvent extends GwtEvent<MessageEventHandler> {
 	private MessageEventPriority priority;
 	private String message;
 	private String source;
+	private int messageDisplayWidgetID = 0;
 	private Throwable throwable;
 
 	public MessageEvent(MessageEventPriority priority, String message,
@@ -24,6 +25,15 @@ public class MessageEvent extends GwtEvent<MessageEventHandler> {
 		this.message = message;
 		this.source = source;
 		this.throwable = throwable;
+	}
+
+	public MessageEvent(MessageEventPriority priority, String message,
+			String source, Throwable throwable, int messageDisplayWidgetID) {
+		this.priority = priority;
+		this.message = message;
+		this.source = source;
+		this.throwable = throwable;
+		this.messageDisplayWidgetID = messageDisplayWidgetID;
 	}
 
 	@Override
@@ -46,6 +56,10 @@ public class MessageEvent extends GwtEvent<MessageEventHandler> {
 
 	public String getSource() {
 		return source;
+	}
+
+	public int getMessageDisplayWidgetID() {
+		return messageDisplayWidgetID;
 	}
 
 	public Throwable getThrowable() {

@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2 id="faq_top">Frequently Asked Questions (FAQ)</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<h3>How do I interpret the Scansite score for my site?</h3>
 		<p>
 			Scores in Scansite start at 0.000 if the sequence optimally matches

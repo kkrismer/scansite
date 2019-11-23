@@ -67,7 +67,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 							@Override
 							public void onFailure(Throwable caught) {
 								view.setSubmitButtonEnabled(true);
-								view.hideWaitImage();
+								view.hideWaitSymbol();
 								EventBus.instance().fireEvent(
 										new MessageEvent(MessageEventPriority.ERROR,
 												"Server-side error", this.getClass()
@@ -77,7 +77,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 							@Override
 							public void onSuccess(
 									OrthologScanSequencePatternResult result) {
-								view.hideWaitImage();
+								view.hideWaitSymbol();
 								view.setSubmitButtonEnabled(true);
 								if (result.isSuccess()) {
 									view.hideMessage();
@@ -125,7 +125,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 			@Override
 			public void onFailure(Throwable caught) {
 				view.setSubmitButtonEnabled(true);
-				view.hideWaitImage();
+				view.hideWaitSymbol();
 				EventBus.instance().fireEvent(
 						new MessageEvent(MessageEventPriority.ERROR,
 								"Server-side error", this.getClass()
@@ -135,7 +135,7 @@ public class ScanOrthologsPagePresenter extends Presenter implements
 			@Override
 			public void onSuccess(OrthologScanMotifResult result) {
 				view.setSubmitButtonEnabled(true);
-				view.hideWaitImage();
+				view.hideWaitSymbol();
 				if (result.isSuccess()) {
 					view.hideMessage();
 					EventBus.instance().fireEvent(

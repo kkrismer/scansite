@@ -68,7 +68,6 @@ public class ChooseUserFileMotifWidget extends ChooseMotifWidget implements
 				init();
 			}
 		});
-
 	}
 
 	protected void init() {
@@ -163,6 +162,22 @@ public class ChooseUserFileMotifWidget extends ChooseMotifWidget implements
 					DOM.getElementById("motifNameSection").setAttribute("style",
 							"display: none;");
 				}
+			}
+		});
+	}
+	
+	public void reset() {
+		runCommandOnLoad(new Command() {
+			@Override
+			public void execute() {
+				SingleUploader uploader = new SingleUploader();
+				uploader.addOnFinishUploadHandler(onFinishFileUploadHandler);
+				uploader.avoidRepeatFiles(false);
+				uploader.setAutoSubmit(true);
+				uploader.setEnabled(true);
+				singleUploaderFlowPanel.clear();
+				singleUploaderFlowPanel.add(uploader);
+				motifDisplayFlowPanel.clear();
 			}
 		});
 	}

@@ -32,6 +32,8 @@ public abstract class MotifMgmtPageView extends PageView {
 	public abstract void displayMotifList(List<LightWeightMotif> motifs);
 
 	public abstract void disableEditInputFields();
+	
+	public abstract void clearAddInputFields();
 
 	public abstract void displayMotif(Motif motif);
 
@@ -40,4 +42,10 @@ public abstract class MotifMgmtPageView extends PageView {
 	public abstract List<HistogramEditWidget> getHistogramWidgets();
 	
 	public abstract void setHistogramsVisible(boolean visible);
+
+	public abstract void setAddButtonEnabled(boolean enabled);
+
+	public abstract void showWaitSymbol();
+
+	public abstract void hideWaitSymbol();
 }

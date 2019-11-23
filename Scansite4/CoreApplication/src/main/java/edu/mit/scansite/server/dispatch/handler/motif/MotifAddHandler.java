@@ -1,5 +1,8 @@
 package edu.mit.scansite.server.dispatch.handler.motif;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
@@ -12,27 +15,33 @@ import edu.mit.scansite.server.ServiceLocator;
 import edu.mit.scansite.server.dataaccess.DaoFactory;
 import edu.mit.scansite.server.dataaccess.HistogramDao;
 import edu.mit.scansite.server.dataaccess.MotifDao;
+import edu.mit.scansite.server.dispatch.handler.user.LoginHandler;
 import edu.mit.scansite.server.images.histograms.ServerHistogram;
 import edu.mit.scansite.shared.FilePaths;
-import edu.mit.scansite.shared.dispatch.BooleanResult;
+import edu.mit.scansite.shared.dispatch.motif.LightWeightMotifRetrieverResult;
 import edu.mit.scansite.shared.dispatch.motif.MotifAddAction;
 import edu.mit.scansite.shared.transferobjects.Histogram;
+import edu.mit.scansite.shared.transferobjects.LightWeightMotif;
 import edu.mit.scansite.shared.transferobjects.Motif;
+import edu.mit.scansite.shared.transferobjects.User;
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 /**
  * @author Tobieh
  * @author Konstantin Krismer
  */
-public class MotifAddHandler implements ActionHandler<MotifAddAction, BooleanResult> {
+public class MotifAddHandler implements ActionHandler<MotifAddAction, LightWeightMotifRetrieverResult> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Provider<ServletContext> contextProvider;
+	private final LoginHandler loginHandler;
 
 	@Inject
-	public MotifAddHandler(final Provider<ServletContext> contextProvider) {
+	public MotifAddHandler(final Provider<ServletContext> contextProvider, final Provider<LoginHandler> loginHandler) {
 		this.contextProvider = contextProvider;
+		this.loginHandler = loginHandler.get();
 	}
 
 	@Override
@@ -41,13 +50,14 @@ public class MotifAddHandler implements ActionHandler<MotifAddAction, BooleanRes
 	}
 
 	@Override
-	public BooleanResult execute(MotifAddAction action, ExecutionContext context) throws DispatchException {
+	public LightWeightMotifRetrieverResult execute(MotifAddAction action, ExecutionContext context)
+			throws DispatchException {
 		try {
 			DaoFactory factory = ServiceLocator.getDaoFactory();
 			MotifDao motifDao = factory.getMotifDao();
 			HistogramDao histogramDao = factory.getHistogramDao();
 
-			if (!action.isUpdate()) { // ADD NEW HISTOGRAM TO DATABASE
+			if (!action.isUpdate()) { // add motif and histograms
 				Motif motif = action.getMotif();
 				int motifId = motifDao.addMotif(motif);
 				motif.setId(motifId);
@@ -60,8 +70,7 @@ public class MotifAddHandler implements ActionHandler<MotifAddAction, BooleanRes
 					ServerHistogram serverHistogram = new ServerHistogram(histogram);
 					histogramDao.add(serverHistogram);
 				}
-				return new BooleanResult(true);
-			} else { // IS UPDATE !
+			} else { // update motif and histograms
 				motifDao.updateMotifData(action.getMotif());
 				for (Histogram histogram : action.getHistograms()) {
 					histogram.setImageFilePath(FilePaths.getHistogramFilePath(contextProvider.get().getRealPath("/"),
@@ -69,17 +78,26 @@ public class MotifAddHandler implements ActionHandler<MotifAddAction, BooleanRes
 					ServerHistogram serverHistogram = new ServerHistogram(histogram);
 					histogramDao.updateHistogram(serverHistogram, true);
 				}
-				return new BooleanResult(true);
 			}
+			
+			// retrieve updated list of motifs
+			User user = loginHandler.getUserBySessionId(action.getUserSessionId());
+			List<Motif> motifs = ServiceLocator.getDaoFactory().getMotifDao().getAll(action.getMotif().getMotifClass(),
+					user, !user.isAdmin());
+			List<LightWeightMotif> lightWeightMotifs = new LinkedList<LightWeightMotif>();
+			for (Motif motif : motifs) {
+				lightWeightMotifs
+						.add(new LightWeightMotif(motif.getId(), motif.getDisplayName(), motif.getShortName()));
+			}
+			return new LightWeightMotifRetrieverResult(lightWeightMotifs);
 		} catch (Exception e) {
 			logger.error("Error adding motif: " + e.toString());
-			return new BooleanResult(false);
+			throw new ActionException(e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public void rollback(MotifAddAction action, BooleanResult result, ExecutionContext context)
+	public void rollback(MotifAddAction action, LightWeightMotifRetrieverResult result, ExecutionContext context)
 			throws DispatchException {
 	}
-
 }

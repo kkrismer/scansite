@@ -4,7 +4,7 @@
              xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
     <g:HTMLPanel>
         <h2>Database Search Tutorial</h2>
-        <wg:MessageDisplayWidget ui:field="messageDisplayWidget"/>
+        <wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 
         <h3>Search a Sequence Database for Motifs</h3>
         <p>This program searches all proteins in a selected (subset of a) database for

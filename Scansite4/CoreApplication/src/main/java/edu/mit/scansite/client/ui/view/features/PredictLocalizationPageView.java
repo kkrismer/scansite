@@ -26,5 +26,5 @@ public abstract class PredictLocalizationPageView extends PageView implements
 
 	public abstract void showWaitSymbol();
 
-	public abstract void hideWaitImage();
+	public abstract void hideWaitSymbol();
 }

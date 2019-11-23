@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>Citing Scansite</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" />
+		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		To cite Scansite, please use the following reference:
 		<p>
 			<span style="font-style: italic;">Scansite 2.0: proteome-wide prediction of cell signaling interactions using short sequence motifs</span><br />

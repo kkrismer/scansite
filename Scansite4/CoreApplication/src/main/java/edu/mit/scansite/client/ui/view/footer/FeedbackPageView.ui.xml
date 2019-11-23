@@ -5,7 +5,7 @@
 	<g:HTMLPanel>
 		<h2>Send Feedback</h2>
 		<wg:MessageDisplayWidget
-			ui:field="messageDisplayWidget" />
+			ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<p>Please help us improve Scansite by telling us what you think
 			about this site.
 		</p>

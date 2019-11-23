@@ -17,6 +17,7 @@ public class MotifUpdateAction implements Action<LightWeightMotifRetrieverResult
 
 	public MotifUpdateAction(Motif motif, String userSessionId) {
 		this.motif = motif;
+		this.userSessionId = userSessionId;
 	}
 
 	public Motif getMotif() {
