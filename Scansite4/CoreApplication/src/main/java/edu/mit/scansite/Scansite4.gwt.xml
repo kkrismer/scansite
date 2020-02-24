@@ -9,6 +9,7 @@
 
 	<!--# GWT-DISPATCH -->
 	<inherits name="net.customware.gwt.dispatch.Dispatch" />
+	<inherits name="com.google.gwt.inject.Inject" />
 
 	<!--# enable use ofResourcebundles -->
 	<inherits name="com.google.gwt.resources.Resources" />

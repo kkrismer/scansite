@@ -1,9 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:wg="urn:import:edu.mit.scansite.client.ui.widgets.general">
 	<g:HTMLPanel>
 		<h2>About Scansite</h2>
-		<wg:MessageDisplayWidget ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
+		<wg:MessageDisplayWidget
+			ui:field="messageDisplayWidget" messageDisplayWidgetID="0" />
 		<p>Scansite searches for motifs within proteins that are likely to be
 			phosphorylated by specific protein
 			kinases or bind to domains such as
@@ -88,8 +90,7 @@
 			[1] Obenauer JC, Cantley LC, Yaffe MB
 			<br />
 			<small>
-				<a
-					href="https://www.ncbi.nlm.nih.gov/pubmed/12824383"
+				<a href="https://www.ncbi.nlm.nih.gov/pubmed/12824383"
 					target="_blank">Scansite
 					2.0: Proteome-wide prediction of cell signaling
 					interactions using
@@ -104,8 +105,7 @@
 		<p>
 			[2] Yaffe MB, Leparc GG, Lai J, Obata T, Volinia S, Cantley LC
 			<br />
-			<a
-				href="https://www.ncbi.nlm.nih.gov/pubmed/11283593"
+			<a href="https://www.ncbi.nlm.nih.gov/pubmed/11283593"
 				target="_blank">
 				<small>A
 					motif-based profile scanning approach for genome-wide
@@ -123,8 +123,7 @@
 			Cantley LC
 			<br />
 			<small>
-				<a
-					href="https://www.ncbi.nlm.nih.gov/pubmed/7874496"
+				<a href="https://www.ncbi.nlm.nih.gov/pubmed/7874496"
 					target="_blank">Use
 					of an oriented peptide library to determine the optimal
 					substrates
@@ -154,43 +153,51 @@
 			<b>Scansite 4</b>
 			<table>
 				<tr>
-					<td colspan="2"><center><u>Developers</u></center></td>
+					<td colspan="2">
+						<center>
+							<u>Developers</u>
+						</center>
+					</td>
 				</tr>
 				<tr>
 					<td>
-                        <ul>
-                            <li>Konstantin Krismer</li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            <li>Thomas Bernwinkler</li>
-                        </ul>
-                    </td>
+						<ul>
+							<li>Konstantin Krismer</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>Thomas Bernwinkler</li>
+						</ul>
+					</td>
 				</tr>
-                <tr>
-                    <td colspan="3"><center><u>Testing and content contribution</u></center></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <td>
-                        <ul>
-                            <li>Anne van Vlimmeren</li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            <li>Bert van de Kooij</li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            <li>Pau Creixell</li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
+				<tr>
+					<td colspan="3">
+						<center>
+							<u>Testing and content contribution</u>
+						</center>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>
+						<ul>
+							<li>Anne van Vlimmeren</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>Bert van de Kooij</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>Pau Creixell</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
 			<b> Preceding versions </b>
 			<table>
 				<tr>
