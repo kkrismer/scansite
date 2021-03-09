@@ -70,6 +70,6 @@ public class MyUploadAction extends UploadAction {
 			renderXmlResponse(request, response, statusToString(stat), true);
 		}
 
-		finish(request);
+		finish(request, response.toString());
 	}
 }
