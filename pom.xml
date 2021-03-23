@@ -15,6 +15,12 @@
 		<revision>4.1.0-SNAPSHOT</revision>
 	</properties>
 
+	<modules>
+		<module>scansite-client</module>
+		<module>scansite-shared</module>
+		<module>scansite-server</module>
+	</modules>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -98,9 +104,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<modules>
-		<module>scansite-client</module>
-		<module>scansite-shared</module>
-		<module>scansite-server</module>
-	</modules>
 </project>
