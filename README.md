@@ -1,5 +1,5 @@
 <p>
-  <img src="Scansite4/CoreApplication/src/main/webapp/img/logo_scansite.png" alt="Scansite 4" style="height: 103px; width: 100%" />
+  <img src="scansite-server/src/main/webapp/img/logo_scansite.png" alt="Scansite 4" style="height: 103px; width: 100%" />
 </p>
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
