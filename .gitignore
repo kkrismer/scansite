@@ -1,15 +1,9 @@
-*.class
+*~
+.gwt
+.settings
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# IntelliJ - in case someone does not specify a separate directory #
-/out/
-*.iml
-.idea/
-/.project
+target
+scansite-server/src/main/resources/cfg
+.classpath
+.project
+scansite4_temp
