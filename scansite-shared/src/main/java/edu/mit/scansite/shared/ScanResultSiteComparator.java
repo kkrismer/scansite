@@ -82,8 +82,8 @@ public class ScanResultSiteComparator implements Comparator<ScanResultSite> {
 					.compareTo(m2.getDisplayName()) : nullCheck(m1, m2);
 			break;
 		case POSITION:
-			Integer p1 = new Integer(srs1.getPosition());
-			Integer p2 = new Integer(srs2.getPosition());
+			Integer p1 = Integer.valueOf(srs1.getPosition());
+			Integer p2 = Integer.valueOf(srs2.getPosition());
 			result = (p1 != null && p2 != null) ? p1.compareTo(p2) : nullCheck(
 					p1, p2);
 			break;
@@ -94,20 +94,20 @@ public class ScanResultSiteComparator implements Comparator<ScanResultSite> {
 					: nullCheck(id1, id2);
 			break;
 		case SCORE:
-			Double s1 = new Double(srs1.getScore());
-			Double s2 = new Double(srs2.getScore());
+			Double s1 = Double.valueOf(srs1.getScore());
+			Double s2 = Double.valueOf(srs2.getScore());
 			result = (s1 != null && s2 != null) ? s1.compareTo(s2) : nullCheck(
 					s1, s2);
 			break;
 		case PERCENTILE:
-			Double perc1 = new Double(srs1.getPercentile());
-			Double perc2 = new Double(srs2.getPercentile());
+			Double perc1 = Double.valueOf(srs1.getPercentile());
+			Double perc2 = Double.valueOf(srs2.getPercentile());
 			result = (perc1 != null && perc2 != null) ? perc1.compareTo(perc2)
 					: nullCheck(perc1, perc2);
 			break;
 		case SURFACE_ACCESSIBILITY:
-			Double sa1 = new Double(srs1.getSurfaceAccessValue());
-			Double sa2 = new Double(srs2.getSurfaceAccessValue());
+			Double sa1 = Double.valueOf(srs1.getSurfaceAccessValue());
+			Double sa2 = Double.valueOf(srs2.getSurfaceAccessValue());
 			result = (sa1 != null && sa2 != null) ? sa1.compareTo(sa2)
 					: nullCheck(sa1, sa2);
 			break;

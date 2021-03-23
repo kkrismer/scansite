@@ -669,7 +669,7 @@ public class ScansiteScoring {
         }
         char[] nonModifiedSequence = new char[sequence.length];
         for (int i=0; i < sequence.length; i++){
-            nonModifiedSequence[i] = new Character(sequence[i]);
+            nonModifiedSequence[i] = Character.valueOf(sequence[i]);
         }
         nonModifiedSequence[possibleModifiedResiduePositions.get(modResiduePosIdx)] =
                 Character.toUpperCase(nonModifiedSequence[possibleModifiedResiduePositions.get(modResiduePosIdx)]);

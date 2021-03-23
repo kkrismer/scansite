@@ -81,8 +81,8 @@ public class DbSearchScanResultSiteComparator implements Comparator<DatabaseSear
         if (p1 == null || p2 == null) {
           result = nullCheck(p1, p2);
         } else {
-          Double mw1 = new Double(p1.getMolecularWeight());
-          Double mw2 = new Double(p2.getMolecularWeight());
+          Double mw1 = Double.valueOf(p1.getMolecularWeight());
+          Double mw2 = Double.valueOf(p2.getMolecularWeight());
           result = (mw1 != null && mw2 != null) ? mw1.compareTo(mw2) : nullCheck(mw1, mw2);
         }
         break;
@@ -92,14 +92,14 @@ public class DbSearchScanResultSiteComparator implements Comparator<DatabaseSear
         if (p1 == null || p2 == null) {
           result = nullCheck(p1, p2);
         } else {
-          Double pi1 = new Double(p1.getpI());
-          Double pi2 = new Double(p2.getpI());
+          Double pi1 = Double.valueOf(p1.getpI());
+          Double pi2 = Double.valueOf(p2.getpI());
           result = (pi1 != null && pi2 != null) ? pi1.compareTo(pi2) : nullCheck(pi1, pi2);
         }
         break;
       default: // SCORE:  
-        Double s1 = new Double(srs1.getScore());
-        Double s2 = new Double(srs2.getScore());
+        Double s1 = Double.valueOf(srs1.getScore());
+        Double s2 = Double.valueOf(srs2.getScore());
         result = (s1 != null && s2 != null) ? s1.compareTo(s2) : nullCheck(s1, s2); 
         break;
     }
