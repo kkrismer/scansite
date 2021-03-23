@@ -159,14 +159,20 @@
 						<uriEncoding>UTF-8</uriEncoding>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>3.3.1</version>
+					<configuration>
+						<warSourceExcludes>scansite4_temp/**</warSourceExcludes>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 
 	<profiles>
 		<profile>
-			<!-- XXX: We want to exclude Scansite4-client from 'env-dev' profile, 
-				Maven forces us to make a 'env-prod' profile -->
 			<id>env-prod</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -182,6 +188,7 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<!-- exclude scansite-client from 'env-dev' -->
 			<id>env-dev</id>
 			<activation>
 				<property>
