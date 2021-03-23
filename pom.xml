@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<revision>4.0.24-SNAPSHOT</revision>
+		<revision>4.1.0-SNAPSHOT</revision>
 	</properties>
 
 	<dependencyManagement>
@@ -39,9 +39,7 @@
 				<directory>${basedir}/src/main/resources</directory>
 			</resource>
 		</resources>
-		<finalName>4.0</finalName> <!-- domain access using scansite4.mit.edu/4.0/ -->
-		<!-- This way you can easily deploy various Scansite versions on a single 
-			machine just by editing the version number -->
+		<finalName>ROOT</finalName>
 		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
@@ -61,7 +59,6 @@
 					<version>3.8.1</version>
 					<configuration>
 						<release>11</release>
-						<!-- <source>1.8</source> <target>1.8</target> -->
 					</configuration>
 				</plugin>
 				<plugin>

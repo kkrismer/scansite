@@ -107,7 +107,7 @@ import edu.mit.scansite.shared.transferobjects.states.State;
  */
 public class PresenterFactory {
 	private static PresenterFactory instance;
-	private static final String titleSuffix = " - Scansite 4.0";
+	private static final String titleSuffix = " - Scansite 4";
 
 	private PresenterFactory() {
 	}

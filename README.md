@@ -10,7 +10,7 @@ Scansite searches for motifs within proteins that are likely to be phosphorylate
 
 Putative protein phosphorylation sites can be further investigated by evaluating evolutionary conservation of the site sequence or subcellular colocalization of protein and kinase.
 
-Scansite 4 was developed with GWT 2.8.2, Java 1.8, and MySQL 5.7.
+The current version of Scansite was built with GWT 2.9.0, Java 11, and MySQL 8.
 
 ## About
 
