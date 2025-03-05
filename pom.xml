@@ -54,6 +54,7 @@
 				<inherited>false</inherited>
 				<configuration>
 					<launcherDir>${project.build.directory}/gwt/launcherDir</launcherDir>
+					<moduleName/>
 				</configuration>
 			</plugin>
 		</plugins>
